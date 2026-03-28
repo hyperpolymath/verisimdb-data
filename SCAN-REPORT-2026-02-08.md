@@ -189,7 +189,7 @@ cat /tmp/scan_facts.lgt | less
 
 - **Integration Guide:** `~/Documents/hyperpolymath-repos/verisimdb-data/INTEGRATION.md`
 - **Helper Scripts:** `~/Documents/hyperpolymath-repos/verisimdb-data/scripts/`
-- **panic-attack Tool:** `/var/mnt/eclipse/repos/panic-attacker/target/release/panic-attack`
+- **panic-attack Tool:** `/var$REPOS_DIR/panic-attacker/target/release/panic-attack`
 
 ---
 

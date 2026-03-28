@@ -13,7 +13,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VERISIMDB_DATA="$(dirname "$SCRIPT_DIR")"
-REPOS_BASE="/var/mnt/eclipse/repos"
+REPOS_BASE="/var$REPOS_DIR"
 SCAN_TMP="/tmp/verisimdb-batch-scans"
 
 # Parse args
@@ -360,5 +360,5 @@ echo "Next steps:"
 echo "  cd ${VERISIMDB_DATA}"
 echo "  git add -A && git commit -m 'scan: full fleet scan (${total_repos} repos)'"
 echo "  git push && git push gitlab main"
-echo "  cd /var/mnt/eclipse/repos/hypatia"
+echo "  cd /var$REPOS_DIR/hypatia"
 echo "  mix run -e 'Hypatia.PatternAnalyzer.analyze_all_scans()'"

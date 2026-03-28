@@ -16,8 +16,8 @@ DEFAULT_REPOS=(
 )
 
 REPOS_TO_SCAN=("${@:-${DEFAULT_REPOS[@]}}")
-if [[ -d "/var/mnt/eclipse/repos" ]]; then
-    REPOS_BASE="/var/mnt/eclipse/repos"
+if [[ -d "/var$REPOS_DIR" ]]; then
+    REPOS_BASE="/var$REPOS_DIR"
 else
     REPOS_BASE="$HOME/Documents/hyperpolymath-repos"
 fi
