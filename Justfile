@@ -2,6 +2,8 @@
 # Justfile for verisimdb-data
 
 # Default recipe — list available commands
+import? "contractile.just"
+
 default:
     @just --list
 
