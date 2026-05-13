@@ -5,30 +5,50 @@
 
 ## Purpose
 
-VeriSimDB Data Repository is a git-backed flat-file storage system for scan results and drift detection data. Receives panic-attack scan results, hardware-crash-team findings, and drift detection snapshots via GitHub Actions workflow_dispatch events. Maintains master index and enables historical analysis of repository health and compliance drift over time.
+This repository serves two explicit purposes per
+[`docs/decisions/ADR-0001-repo-purpose.adoc`](docs/decisions/ADR-0001-repo-purpose.adoc):
 
-## Module Map
+1. **Flat-file data store** for panic-attacker scan results,
+   hardware-crash-team findings, and drift snapshots received via
+   GitHub Actions `workflow_dispatch` events. Maintains a master
+   index for historical analysis of repository health and compliance
+   drift over time.
+2. **ABI dogfood** for the hyperpolymath Idris2 + Zig ABI standard
+   (shared with `proven`, `burble`, `gossamer`). Lives in `ffi/zig/`.
+
+## Module map
 
 ```
 verisimdb-data/
-├── scans/               # panic-attack scan results per repo
-├── hardware/            # hardware-crash-team findings
-├── drift/               # drift detection snapshots
-├── index.json           # Master index of all stored data
-└── .github/workflows/   # Ingest workflows (receive results)
+├── scans/             # panic-attacker scan results per repo (data)
+├── dispatch/          # dispatch records (data)
+├── patterns/          # drift / scan pattern definitions (data)
+├── recipes/           # ingest and aggregation recipes (data)
+├── outcomes/          # outcome records (data)
+├── policy/            # storage and retention policy notes (data)
+├── health/            # health-state snapshots (data)
+├── index.json         # master index of stored data (data)
+├── ffi/
+│   └── zig/           # Zig FFI implementation (ABI dogfood)
+├── scripts/           # ingest + index regen scripts (data)
+├── docs/
+│   └── decisions/     # ADRs
+└── .github/workflows/ # ingest + governance workflows
 ```
 
-## Data Flow
+## Data flow (Purpose 1)
 
 ```
 [Workflow Dispatch] ──► [Ingest Handler] ──► [JSON Validation] ──► [File Storage]
-                                                    ↓
-                                            [Index Update] ──► [Query Ready]
+                                                                    │
+                                                        [Index Regen on push] ──► [Query Ready]
 ```
 
-## Integration Points
+## Integration points
 
-- **panic-attack**: Upstream scanner sending results
-- **hardware-crash-team**: Hardware failure analysis
-- **Drift detection**: Compliance change tracking
-- **Hyperpolymath CI/CD**: Automated data aggregation
+- **panic-attacker**: Upstream scanner sending results into `scans/`.
+- **hardware-crash-team**: Hardware failure analysis (Purpose 1 consumer).
+- **Drift detection**: Compliance change tracking against `scans/` history.
+- **verisimiser**: Consumes scan/drift data when wired to this repo as
+  its sidecar storage. Not a runtime dependency.
+- **hyperpolymath CI/CD**: Automated data aggregation.

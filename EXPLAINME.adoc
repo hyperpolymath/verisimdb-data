@@ -7,35 +7,53 @@ The README makes claims. This file backs them up.
 
 [quote, README]
 ____
-Git-backed flat-file storage for scan results and drift detection data.
+This repository serves two explicit purposes: (1) a flat-file data
+store for panic-attacker scan results, hardware-crash-team findings,
+and drift snapshots; (2) an ABI dogfood site for the hyperpolymath
+Idris2 + Zig ABI shared with `proven`, `burble`, `gossamer`.
 ____
 
-== Technology Choices
+See `docs/decisions/ADR-0001-repo-purpose.adoc` for why both purposes
+live in one repo.
+
+== Technology choices (Purpose 2 — ABI)
 
 [cols="1,2"]
 |===
 | Technology | Learn More
 
-| **Zig** | https://ziglang.org
+| **Zig**       | https://ziglang.org
 | **Idris2 ABI** | https://www.idris-lang.org
 |===
 
-== Dogfooded Across The Account
-
-Uses the hyperpolymath ABI/FFI standard (Idris2 + Zig). Same pattern used across
+The Zig FFI implementation lives in `ffi/zig/` and follows the same
+pattern as
 https://github.com/hyperpolymath/proven[proven],
 https://github.com/hyperpolymath/burble[burble], and
 https://github.com/hyperpolymath/gossamer[gossamer].
 
-== File Map
+== File map
 
-[cols="1,2"]
+[cols="1,2,1"]
 |===
-| Path | What's There
+| Path | What's there | Purpose
 
-| `src/` | Source code
-| `ffi/` | Foreign function interface
+| `scans/`           | Per-repo scan results (JSON; ~301 files) | data
+| `dispatch/`        | Dispatch records                          | data
+| `patterns/`        | Drift / scan pattern definitions          | data
+| `recipes/`         | Ingest and aggregation recipes            | data
+| `outcomes/`        | Outcome records                           | data
+| `policy/`          | Storage and retention policy notes        | data
+| `health/`          | Health-state snapshots                    | data
+| `index.json`       | Master index of stored data               | data
+| `ffi/zig/`         | Zig FFI implementation                    | ABI dogfood
 |===
+
+== Related
+
+`verisimiser` (https://github.com/hyperpolymath/verisimiser) is the
+augmentation CLI; this repo holds its scan/drift output but is not a
+runtime dependency.
 
 == Questions?
 
