@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+#
+# Fails if the committed index.json drifts from what scripts/regen-index.sh
+# produces from scans/ on disk. Pair with branch protection so this check
+# is required on PRs touching scans/ or index.json.
+#
+# Closes V-L3-M1.
+
+name: index.json freshness
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scans/**'
+      - 'index.json'
+      - 'scripts/regen-index.sh'
+      - '.github/workflows/index-freshness.yml'
+
+concurrency:
+  group: index-freshness-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: index.json matches scans/
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout (with history; regen-index needs git log on scans/)
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Regenerate index.json
+        run: bash scripts/regen-index.sh
+
+      - name: Fail if index.json drifted
+        run: |
+          if ! git diff --quiet --exit-code index.json; then
+            echo "::error::index.json is out of sync with scans/."
+            echo "Run 'bash scripts/regen-index.sh' locally and commit the result."
+            echo ""
+            echo "----- diff -----"
+            git --no-pager diff index.json
+            exit 1
+          fi
+          echo "index.json is in sync with scans/."

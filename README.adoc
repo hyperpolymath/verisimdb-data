@@ -1,25 +1,49 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 = VeriSimDB Data Repository
 
-Git-backed flat-file storage for scan results and drift detection data.
+This repository serves *two explicit purposes*, per
+`docs/decisions/ADR-0001-repo-purpose.adoc`:
 
-== Structure
+. **Flat-file data store** for panic-attacker scan results,
+  hardware-crash-team findings, and drift snapshots.
+. **ABI dogfood** for the hyperpolymath Idris2 + Zig ABI standard
+  shared with https://github.com/hyperpolymath/proven[`proven`],
+  https://github.com/hyperpolymath/burble[`burble`], and
+  https://github.com/hyperpolymath/gossamer[`gossamer`].
 
-- `scans/` - panic-attack scan results per repo
-- `hardware/` - hardware-crash-team findings
-- `drift/` - drift detection snapshots
-- `index.json` - Master index of all stored data
+== Related repos
 
-== Usage
+* https://github.com/hyperpolymath/verisimiser[`verisimiser`] — the
+  augmentation CLI. This repo holds its scan and drift output;
+  standalone consumers (`panic-attacker`, `hardware-crash-team`) also
+  write here. Verisimiser does not require this repo at runtime.
 
-This repo receives scan results via GitHub Actions workflow_dispatch events
-and stores them as JSON files. The ingest workflow updates the index
-automatically.
+== Layout (by purpose)
 
-== Integration
+[cols="1,2,1"]
+|===
+| Path | What's there | Purpose
 
-=== Sending Scan Results
+| `scans/`               | Per-repo scan results (JSON; ~301 files)         | data
+| `dispatch/`            | Dispatch records                                  | data
+| `patterns/`            | Drift / scan pattern definitions                  | data
+| `recipes/`             | Ingest and aggregation recipes                    | data
+| `outcomes/`            | Outcome records                                   | data
+| `policy/`              | Storage and retention policy notes                | data
+| `health/`              | Health-state snapshots                             | data
+| `index.json`           | Master index of stored data                        | data
+| `ffi/zig/`             | Zig FFI implementation                             | ABI dogfood
+| `.machine_readable/`   | Contractile machinery (org-wide)                  | both
+| `.github/workflows/`   | CI (ingest, mirrors, governance)                  | both
+| `docs/decisions/`      | ADRs                                              | both
+|===
 
-Other repos can send scan results using the reusable workflow:
+== Purpose 1 — flat-file data store
+
+=== Receiving scan results
+
+Other repos send scan results using the reusable workflow:
 
 [source,yaml]
 ----
@@ -35,7 +59,7 @@ jobs:
     uses: hyperpolymath/panic-attacker/.github/workflows/scan-and-report.yml@main
 ----
 
-=== Querying Results
+=== Querying results
 
 Clone this repo and read the JSON files:
 
@@ -43,11 +67,11 @@ Clone this repo and read the JSON files:
 ----
 git clone https://github.com/hyperpolymath/verisimdb-data
 cd verisimdb-data
-cat scans/echidna.json  # View specific repo results
-jq '.repos' index.json   # View all scan summaries
+cat scans/echidna.json  # specific repo
+jq '.repos' index.json   # all scan summaries
 ----
 
-== File Format
+=== File format
 
 Each scan result in `scans/` is a JSON file with the structure:
 
@@ -74,6 +98,19 @@ Each scan result in `scans/` is a JSON file with the structure:
   }
 }
 ----
+
+=== Index freshness
+
+`index.json` is the master summary. A CI lane regenerates it from
+`scans/` on every push and fails if the working tree changes (i.e. the
+committed index must match what the regen script produces from the
+files on disk). See `scripts/regen-index.sh`.
+
+== Purpose 2 — ABI dogfood
+
+`ffi/zig/` is a working Zig FFI implementation of the hyperpolymath
+Idris2 + Zig ABI standard. The same pattern is used in `proven`,
+`burble`, and `gossamer`; this repo serves as the dogfood instance.
 
 == License
 

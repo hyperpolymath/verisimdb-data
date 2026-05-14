@@ -1,0 +1,72 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+= ADR-0001: verisimdb-data carries two explicit purposes
+:revdate: 2026-05-13
+:status: Accepted
+
+== Status
+
+Accepted — 2026-05-13.
+
+Resolves: https://github.com/hyperpolymath/verisimdb-data/issues/2[V-L1-J1].
+
+== Context
+
+This repository advertised three different identities across its top-level
+docs:
+
+. `README.adoc` — "Git-backed flat-file storage for scan results and drift
+  detection data" with panic-attacker scan ingest workflow.
+. `EXPLAINME.adoc` — "Uses the hyperpolymath ABI/FFI standard
+  (Idris2 + Zig). Same pattern used across `proven`, `burble`, and
+  `gossamer`."
+. `TOPOLOGY.md` — "Receives panic-attack scan results,
+  hardware-crash-team findings, and drift detection snapshots… enables
+  historical analysis of repository health and compliance drift over time."
+
+The directory layout backs two of these stories with real content:
+
+* `scans/` holds ~301 JSON files of scan results (production data).
+* `ffi/zig/` holds working Zig FFI code (`build.zig` + three `.zig` files).
+
+The contractile and `.machine_readable/` scaffolding is org-wide
+infrastructure that applies to either purpose.
+
+== Decision
+
+The repository serves **two purposes**, explicitly declared in `README.adoc`:
+
+. **Flat-file data store** for panic-attacker scan output and drift
+  snapshots (`scans/`, `dispatch/`, `patterns/`, `recipes/`, `outcomes/`,
+  `policy/`, `health/`).
+. **ABI dogfood site** for the hyperpolymath Idris2 + Zig ABI standard
+  shared with `proven`, `burble`, and `gossamer` (`ffi/zig/`).
+
+Both purposes coexist; neither is moved out. The acceptable layout is
+documented at the top of `README.adoc` and reflected in `TOPOLOGY.md`.
+
+Verisimiser does *not* depend on `ffi/zig/` here; if a downstream consumer
+needs the Zig FFI extracted, that is a future ADR.
+
+== Consequences
+
+. `README.adoc`, `EXPLAINME.adoc`, and `TOPOLOGY.md` are brought into
+  agreement on the two-purpose framing (one PR with this ADR).
+. The directory layout document in `README.adoc` lists which subtrees
+  serve which purpose.
+. Future expansions to either purpose are fine — the repo is explicitly
+  multi-purpose, not "drifting" between purposes.
+
+== Alternatives considered
+
+Scan-store only (move `ffi/zig/` out)::
+Rejected. The Zig FFI lives here for dogfooding reasons that predate
+verisimiser; relocating it costs more than documenting the dual purpose.
+
+ABI dogfood only (move `scans/` out)::
+Rejected. The scan ingest workflow is wired up and producing data;
+moving 301 JSON files plus the ingest pipeline elsewhere has no payoff.
+
+Split into two repos::
+Rejected for the same combined reason. Maybe revisit in a year if either
+purpose grows large enough to warrant its own repo and CI surface.
