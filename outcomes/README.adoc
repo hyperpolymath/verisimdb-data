@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= outcomes/ — applied-fix outcome ledger
+:status: populated data store (see docs/decisions/ADR-0002-data-subdir-population.adoc)
+
+Append-only JSONL ledger of what happened when a recipe was applied to a
+repo. Feeds the recipe success/fail counters and health reporting.
+
+Files::
+* `YYYY-MM.jsonl` — one month of outcomes (immutable once the month closes).
+* `*-fleet-import.jsonl` — bulk historical imports.
+* `.gitkeep` — retained on purpose: the ledger is monthly, so at the start
+  of a month this directory can legitimately hold only `.gitkeep`. That is
+  the expected steady state, *not* an empty placeholder (see ADR-0002).
+
+Record shape::
+`pattern`, `repo`, `bot`, `outcome` (`success` / failure), `fixed_at`.
+
+Writer: the autofix/review bots after each attempt. Reader: recipe
+counter rollup and `health/`. Append-only.

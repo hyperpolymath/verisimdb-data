@@ -1,0 +1,17 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= health/ — operational telemetry
+:status: populated data store (see docs/decisions/ADR-0002-data-subdir-population.adoc)
+
+Latest-state operational telemetry for the data store and its pipeline.
+These are *snapshots* (rewritten in place each run), not append-only logs —
+history lives in `outcomes/` and `dispatch/`.
+
+Files::
+* `sitrep.txt` — human-readable situation report: last-run timestamp,
+  counts (scans / patterns / actions / outcomes / recipes), the
+  auto/review/report split, process up/down, contingency status, run time.
+* `hypatia.json` — machine-readable health snapshot consumed by the
+  Hypatia scanner / Scorecard surface.
+
+Writer: the pipeline's reporting stage. Reader: humans (sitrep) and the
+Hypatia / health-monitoring tooling (json).

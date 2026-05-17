@@ -1,0 +1,89 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+= ADR-0002: data subdirectories are populated and self-documented, not removed
+:revdate: 2026-05-17
+:status: Accepted
+
+== Status
+
+Accepted — 2026-05-17.
+
+Resolves: https://github.com/hyperpolymath/verisimdb-data/issues/5[V-L3-S1].
+
+Builds on: xref:ADR-0001-repo-purpose.adoc[ADR-0001] (the two-purpose framing;
+these directories are purpose 1, the flat-file data store).
+
+== Context
+
+Issue #5 observed that `dispatch/`, `patterns/`, `recipes/`, `outcomes/`,
+`policy/`, `health/` and `.well-known/` looked like "mostly empty placeholder
+directories" and asked for a binary decision: *populate* them (one issue per
+subdir to make the contents concrete) or *delete* them and rebuild as content
+lands.
+
+That premise is now stale. ADR-0001 already declared all of these subtrees as
+the repository's flat-file data store, and the panic-attacker → triage →
+autofix pipeline has since filled every one of them with production data:
+
+* `dispatch/` — dated work-queue JSONL plus `pending.jsonl` / `held.jsonl`
+* `patterns/` — `registry.json` (the cross-repo pattern registry)
+* `recipes/` — ~46 `recipe-*.json` remediation recipes
+* `outcomes/` — monthly applied-fix ledgers plus a fleet import
+* `policy/` — `policy.ncl` (the Nickel baseline policy contract)
+* `health/` — `sitrep.txt` and `hypatia.json` operational telemetry
+* `.well-known/` — RFC 8615 web metadata (`ai.txt`, `humans.txt`,
+  `security.txt`)
+
+There are no empty placeholder directories left in the tree. The only real
+gap against the issue's acceptance criteria was the absence of a per-directory
+README explaining what each one holds.
+
+== Decision
+
+**Populate, not remove.** The data subdirectories are a permanent, declared
+part of the repository (per ADR-0001) and are now backed by real, actively
+written content. They are *not* placeholders and must not be deleted.
+
+To make the contents concrete and self-documenting — the spirit of the issue's
+"one issue per subdir" alternative, achieved in one PR — each data directory
+carries a `README.adoc` that states:
+
+. what artefact(s) it holds and their on-disk format,
+. who writes it (which pipeline stage / bot) and who reads it,
+. whether it is append-only or rewritten in place,
+. its retention / `.gitkeep` behaviour.
+
+Splitting this into seven tracking issues was rejected: the directories are
+already populated, so seven issues would each open and immediately close as
+"add a README" with no design content. One ADR plus seven READMEs records the
+decision and discharges the acceptance criteria together.
+
+== Consequences
+
+. The `dispatch/ patterns/ recipes/ outcomes/ policy/ health/ .well-known/`
+  directories each gain a `README.adoc`; no data files are moved or removed.
+. `outcomes/.gitkeep` is retained: the ledger is monthly, so the directory
+  can legitimately contain only `.gitkeep` at the start of a month, and that
+  is now documented rather than mistaken for an empty placeholder.
+. Future data directories under purpose 1 must ship with a `README.adoc`
+  from the first commit (close the "is this a placeholder?" question at
+  creation time).
+. ADR-0001's directory-layout list remains authoritative for *which* subtree
+  serves *which* purpose; this ADR documents the *contents* of the data
+  subtree.
+
+== Alternatives considered
+
+Delete the directories and rebuild as content lands::
+Rejected. The content has already landed and is being written continuously by
+the ingest/triage/autofix pipeline; deleting live data sinks would break that
+pipeline and lose history. This alternative only made sense under the (now
+false) assumption that the directories were empty.
+
+One tracking issue per subdirectory::
+Rejected as busywork. The directories are populated; each issue would reduce
+to "add a README." Folded into this single ADR + the seven READMEs instead.
+
+Move telemetry / web metadata out of the data store::
+Out of scope. `health/` and `.well-known/` are small and co-located by
+design; relocating them is a separate decision if either grows.

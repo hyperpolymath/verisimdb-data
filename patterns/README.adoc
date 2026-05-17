@@ -1,0 +1,16 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= patterns/ — canonical cross-repo pattern registry
+:status: populated data store (see docs/decisions/ADR-0002-data-subdir-population.adoc)
+
+`registry.json` — the single canonical pattern registry. It deduplicates
+raw findings across every scanned repo into trackable, long-lived patterns.
+
+Shape::
+Top-level `description`, `last_updated`, and a `patterns` map keyed by
+pattern id. Each entry: `id`, `category`, `description`, `pa_rule`,
+`occurrences`, `first_seen`, `last_seen`, `recipe_id` (the remediation
+recipe, or `null` if none yet), `repo_paths`.
+
+Writer: the pattern-aggregation stage of the ingest pipeline (rewritten in
+place on each run — it is a registry, not a log). Reader: triage (to attach
+`recipe_id`) and reporting/health.
