@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= recipes/ — remediation recipe knowledge base
+:status: populated data store (see docs/decisions/ADR-0002-data-subdir-population.adoc)
+
+One `recipe-*.json` file per remediation recipe — the knowledge base the
+autofix bot consults to turn a matched pattern into a fix.
+
+Shape (per file)::
+`id`, `action`, `description`, `confidence`, `auto_fixable`, `fix_script`
+(or `null`), `languages`, `match`, `replacement`, `pattern_ids` (the
+patterns this recipe remediates), `proven_module`, `triangle_tier`
+(eliminate / substitute / …), and running counters
+`total_attempts` / `successful_fixes` / `failed_fixes`.
+
+Naming::
+`recipe-<slug>.json`; the `recipe-scorecard-*` family maps to OpenSSF
+Scorecard checks.
+
+Writer: curated, plus counter updates from outcome ingest. Reader: the
+autofix bot and triage (recipe lookup by `pattern_id`).

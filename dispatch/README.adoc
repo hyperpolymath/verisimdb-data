@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= dispatch/ — scan→triage work queue
+:status: populated data store (see docs/decisions/ADR-0002-data-subdir-population.adoc)
+
+Append-only JSONL work queue emitted by the panic-attacker scan → triage
+stage. One JSON object per line; one finding per object.
+
+Files::
+* `dispatch-YYYY-MM-DD.jsonl` — the day's dispatched findings (immutable once
+  written).
+* `pending.jsonl` — findings accepted but not yet actioned by a bot.
+* `held.jsonl` — findings deferred or quarantined (e.g. low confidence,
+  manual-review required).
+
+Record shape::
+`action`, `category`, `confidence`, `auto_fixable`, `description`,
+`pattern_id`, `recipe_id`, `replacement`, `repo`, `program_path`, `severity`,
+`strategy`, `tier`, `timestamp`.
+
+Writer: the triage stage of the ingest pipeline. Reader: the autofix /
+review bots. Append-only — never rewritten in place.
