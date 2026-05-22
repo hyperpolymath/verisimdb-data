@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: MPL-2.0
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+#
+# zig-ffi.yml — builds the verisimdb-data Zig FFI, runs its unit tests,
+# and runs the OctadDimension + ProvenanceEntry round-trip consumer that
+# links the library (#6, V-L3-N1). Zig is pinned by tarball sha256 (no
+# third-party action) so the lane is Scorecard pinned-dependencies clean.
+name: Zig FFI
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'ffi/zig/**'
+      - '.github/workflows/zig-ffi.yml'
+  pull_request:
+    branches: ['**']
+    paths:
+      - 'ffi/zig/**'
+      - '.github/workflows/zig-ffi.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  ffi-roundtrip:
+    name: Build + round-trip consumer
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      ZIG_VERSION: 0.15.2
+      ZIG_TARBALL: https://ziglang.org/download/0.15.2/zig-x86_64-linux-0.15.2.tar.xz
+      ZIG_SHA256: 02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Install Zig ${{ env.ZIG_VERSION }} (sha256-pinned)
+        run: |
+          set -euo pipefail
+          curl -fsSL "$ZIG_TARBALL" -o /tmp/zig.tar.xz
+          echo "${ZIG_SHA256}  /tmp/zig.tar.xz" | sha256sum -c -
+          mkdir -p "$HOME/zig"
+          tar -xJf /tmp/zig.tar.xz -C "$HOME/zig" --strip-components=1
+          echo "$HOME/zig" >> "$GITHUB_PATH"
+
+      - name: Show Zig version
+        run: zig version
+
+      - name: Build, unit-test, and run the FFI round-trip consumer
+        working-directory: ffi/zig
+        run: zig build check

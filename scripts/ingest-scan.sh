@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 #
 # Manual scan ingestion helper for verisimdb-data
 # Usage: ./scripts/ingest-scan.sh <repo-name> <scan-result.json>

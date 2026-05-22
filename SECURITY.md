@@ -16,4 +16,4 @@ Do NOT open a public issue for security vulnerabilities.
 
 - All dependencies are monitored via Dependabot
 - CodeQL analysis runs on every push
-- SPDX-License-Identifier: PMPL-1.0-or-later
+- SPDX-License-Identifier: MPL-2.0
