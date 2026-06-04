@@ -1,6 +1,6 @@
-// verisimdb-data FFI consumer demo
 // SPDX-License-Identifier: MPL-2.0
-// Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+// verisimdb-data FFI consumer demo
 //
 // #6 (V-L3-N1). A standalone executable that LINKS the Zig FFI static
 // library (build.zig: `consumer.linkLibrary(lib)`) and drives the
