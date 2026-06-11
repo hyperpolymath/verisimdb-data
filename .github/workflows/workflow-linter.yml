@@ -2,7 +2,6 @@
 # workflow-linter.yml - Validates GitHub workflows against RSR security standards
 # This workflow can be copied to other repos for consistent enforcement
 name: Workflow Security Linter
-
 on:
   push:
     paths:
@@ -11,21 +10,17 @@ on:
     paths:
       - '.github/workflows/**'
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
   lint-workflows:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
-
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
       - name: Check SPDX Headers
         run: |
           echo "=== Checking SPDX License Headers ==="
@@ -42,7 +37,6 @@ jobs:
             exit 1
           fi
           echo "All workflows have SPDX headers"
-
       - name: Check Permissions Declaration
         run: |
           echo "=== Checking Permissions ==="
@@ -59,7 +53,6 @@ jobs:
             exit 1
           fi
           echo "All workflows have permissions declared"
-
       - name: Check SHA-Pinned Actions
         run: |
           echo "=== Checking Action Pinning ==="
@@ -78,7 +71,6 @@ jobs:
             exit 1
           fi
           echo "All actions are SHA-pinned"
-
       - name: Check for Duplicate Workflows
         run: |
           echo "=== Checking for Duplicates ==="
@@ -93,7 +85,6 @@ jobs:
             echo "Consider consolidating rust.yml and rust-ci.yml"
           fi
           echo "No critical duplicates found"
-
       - name: Check CodeQL Language Matrix
         run: |
           echo "=== Checking CodeQL Configuration ==="
@@ -133,7 +124,6 @@ jobs:
           fi
 
           echo "CodeQL check complete"
-
       - name: Check Secrets Guards
         run: |
           echo "=== Checking Secrets Usage ==="
@@ -147,7 +137,6 @@ jobs:
             fi
           fi
           echo "Secrets check complete"
-
       - name: Summary
         run: |
           echo ""
