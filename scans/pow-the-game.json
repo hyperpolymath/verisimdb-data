@@ -1,0 +1,113 @@
+{
+  "schema_version": "2.5",
+  "program_path": "pow-the-game",
+  "language": "shell",
+  "frameworks": [],
+  "weak_points": [
+    {
+      "category": "InsecureProtocol",
+      "location": "tests/schema/reject_http_url.ncl",
+      "file": "tests/schema/reject_http_url.ncl",
+      "severity": "Medium",
+      "description": "1 HTTP (non-HTTPS) URLs in tests/schema/reject_http_url.ncl",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "tests/schema/run_schema_tests.sh",
+      "file": "tests/schema/run_schema_tests.sh",
+      "severity": "Critical",
+      "description": "eval usage in tests/schema/run_schema_tests.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "Cargo.toml",
+      "file": "Cargo.toml",
+      "severity": "Low",
+      "description": "Rust project has test infrastructure but no mutation-test configuration (cargo-mutants/.cargo-mutants.toml) — add `cargo mutants` to verify test suite kills mutations",
+      "recommended_attack": [],
+      "test_context": "production"
+    }
+  ],
+  "statistics": {
+    "total_lines": 2411,
+    "unsafe_blocks": 0,
+    "panic_sites": 0,
+    "unwrap_calls": 0,
+    "allocation_sites": 4,
+    "io_operations": 0,
+    "threading_constructs": 0
+  },
+  "file_statistics": [
+    {
+      "file_path": "crates/fragmenter/src/graph.rs",
+      "lines": 79,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/fragmenter/tests/property_tests.rs",
+      "lines": 77,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    }
+  ],
+  "recommended_attacks": [
+    "disk",
+    "network",
+    "cpu"
+  ],
+  "dependency_graph": {
+    "edges": []
+  },
+  "taint_matrix": {
+    "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "tests/schema/run_schema_tests.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "tests/schema/reject_http_url.ncl"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "tests/schema/run_schema_tests.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      }
+    ]
+  }
+}

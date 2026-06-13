@@ -1,25 +1,26 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "ipfs-overlay",
   "language": "shell",
   "frameworks": [],
   "weak_points": [
     {
-      "category": "CommandInjection",
-      "location": "scripts/connect-peers.sh",
-      "severity": "Medium",
-      "description": "21 potentially unquoted variable expansions in scripts/connect-peers.sh",
-      "recommended_attack": [
-        "cpu"
-      ]
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 916,
+    "total_lines": 2523,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 0,
-    "io_operations": 2,
+    "io_operations": 7,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -34,34 +35,51 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
-    "edges": []
-  },
-  "taint_matrix": {
-    "rows": [
+    "edges": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/connect-peers.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
+  },
+  "taint_matrix": {
+    "rows": []
   }
 }

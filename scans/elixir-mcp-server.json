@@ -1,40 +1,42 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "elixir-mcp-server",
   "language": "elixir",
   "frameworks": [
     "OTP"
   ],
-  "weak_points": [],
+  "weak_points": [
+    {
+      "category": "MutationGap",
+      "location": "test/elixir_mcp_server_test.exs",
+      "file": "test/elixir_mcp_server_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file test/elixir_mcp_server_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    }
+  ],
   "statistics": {
-    "total_lines": 2888,
-    "unsafe_blocks": 13,
+    "total_lines": 1806,
+    "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 2,
+    "io_operations": 3,
     "threading_constructs": 4
   },
   "file_statistics": [
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "lib/elixir_mcp_server/server.ex",
-      "lines": 135,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 2
-    },
     {
       "file_path": "ffi/zig/src/main.zig",
       "lines": 274,
@@ -56,23 +58,23 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
+      "file_path": "lib/elixir_mcp_server/server.ex",
+      "lines": 163,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
+      "io_operations": 1,
+      "threading_constructs": 2
     },
     {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     }
   ],
@@ -82,24 +84,6 @@
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "contractiles/trust/Trustfile.hs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/elixir_mcp_server/server.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 4.0
-      },
       {
         "from": "ffi/zig/src/main.zig",
         "to": "OTP",
@@ -113,20 +97,33 @@
         "weight": 4.0
       },
       {
-        "from": "src/abi/Types.idr",
+        "from": "lib/elixir_mcp_server/server.ex",
         "to": "OTP",
         "relation": "framework",
-        "weight": 3.0
+        "weight": 4.0
       },
       {
-        "from": "src/abi/Foreign.idr",
+        "from": "flake.nix",
         "to": "OTP",
         "relation": "framework",
-        "weight": 36.0
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "test/elixir_mcp_server_test.exs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "MutationGap->Cpu"
+      }
+    ]
   }
 }

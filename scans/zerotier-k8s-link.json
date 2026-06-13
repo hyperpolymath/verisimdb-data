@@ -1,15 +1,59 @@
 {
-  "program_path": ".",
-  "language": "shell",
+  "schema_version": "2.5",
+  "program_path": "zerotier-k8s-link",
+  "language": "idris",
   "frameworks": [],
-  "weak_points": [],
+  "weak_points": [
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    },
+    {
+      "category": "HardcodedSecret",
+      "location": "tests/e2e/network_e2e_test.ts",
+      "file": "tests/e2e/network_e2e_test.ts",
+      "severity": "Critical",
+      "description": "Possible hardcoded secret in tests/e2e/network_e2e_test.ts",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "HardcodedSecret",
+      "location": "tests/idris2/AspectSecurityTest.idr",
+      "file": "tests/idris2/AspectSecurityTest.idr",
+      "severity": "Critical",
+      "description": "Possible hardcoded secret in tests/idris2/AspectSecurityTest.idr",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "HardcodedSecret",
+      "location": "tests/idris2/E2ENetworkTest.idr",
+      "file": "tests/idris2/E2ENetworkTest.idr",
+      "severity": "Critical",
+      "description": "Possible hardcoded secret in tests/idris2/E2ENetworkTest.idr",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    }
+  ],
   "statistics": {
-    "total_lines": 2656,
+    "total_lines": 4996,
     "unsafe_blocks": 13,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 3,
+    "io_operations": 8,
     "threading_constructs": 2
   },
   "file_statistics": [
@@ -21,16 +65,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -55,7 +89,7 @@
     },
     {
       "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
+      "lines": 217,
       "unsafe_blocks": 12,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -65,17 +99,49 @@
     },
     {
       "file_path": "src/abi/Types.idr",
-      "lines": 231,
+      "lines": 232,
       "unsafe_blocks": 1,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu"
+    "cpu",
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -84,10 +150,29 @@
         "to": "src/abi/Types.idr",
         "relation": "shared_dir:src/abi",
         "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "tests/e2e/network_e2e_test.ts",
+          "tests/idris2/AspectSecurityTest.idr",
+          "tests/idris2/E2ENetworkTest.idr"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      }
+    ]
   }
 }

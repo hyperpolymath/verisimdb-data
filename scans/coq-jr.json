@@ -1,47 +1,42 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "coq-jr",
   "language": "rescript",
   "frameworks": [],
   "weak_points": [
     {
       "category": "InsecureProtocol",
-      "location": "src/Components.res",
-      "severity": "Medium",
-      "description": "1 HTTP (non-HTTPS) URLs in src/Components.res",
-      "recommended_attack": [
-        "network"
-      ]
-    },
-    {
-      "category": "InsecureProtocol",
       "location": "src/Page.res",
+      "file": "src/Page.res",
       "severity": "Medium",
       "description": "2 HTTP (non-HTTPS) URLs in src/Page.res",
       "recommended_attack": [
         "network"
-      ]
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "InsecureProtocol",
+      "location": "src/Components.res",
+      "file": "src/Components.res",
+      "severity": "Medium",
+      "description": "1 HTTP (non-HTTPS) URLs in src/Components.res",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 2732,
-    "unsafe_blocks": 35,
+    "total_lines": 1432,
+    "unsafe_blocks": 22,
     "panic_sites": 0,
     "unwrap_calls": 0,
-    "allocation_sites": 1,
+    "allocation_sites": 0,
     "io_operations": 1,
-    "threading_constructs": 2
+    "threading_constructs": 0
   },
   "file_statistics": [
-    {
-      "file_path": "src/Deno.res",
-      "lines": 31,
-      "unsafe_blocks": 2,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
     {
       "file_path": "src/Dom.res",
       "lines": 54,
@@ -53,19 +48,9 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
+      "file_path": "src/Deno.res",
+      "lines": 31,
+      "unsafe_blocks": 2,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -81,43 +66,17 @@
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu"
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/Deno.res",
-        "to": "src/Dom.res",
+        "from": "src/Dom.res",
+        "to": "src/Deno.res",
         "relation": "shared_dir:src",
         "weight": 1.0
       }
@@ -130,12 +89,98 @@
         "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/Components.res",
-          "src/Page.res"
+          "src/Page.res",
+          "src/Components.res"
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
       }
     ]
+  },
+  "migration_metrics": {
+    "deprecated_api_count": 28,
+    "modern_api_count": 13,
+    "api_migration_ratio": 0.3170731707317073,
+    "health_score": 0.48,
+    "config_format": "RescriptJson",
+    "version_bracket": "V12Stable",
+    "file_count": 7,
+    "rescript_lines": 589,
+    "deprecated_patterns": [
+      {
+        "pattern": "Js.Array2",
+        "replacement": "Array",
+        "file_path": "src/Page.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Nullable.",
+        "replacement": "Nullable",
+        "file_path": "src/Dom.res",
+        "line_number": 0,
+        "category": "OldNullable",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Array2",
+        "replacement": "Array",
+        "file_path": "src/Components.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 11
+      },
+      {
+        "pattern": "Js.Promise.",
+        "replacement": "Promise",
+        "file_path": "src/JsCoq.res",
+        "line_number": 0,
+        "category": "OldPromise",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Promise.",
+        "replacement": "Promise",
+        "file_path": "src/Deno.res",
+        "line_number": 0,
+        "category": "OldPromise",
+        "count": 2
+      },
+      {
+        "pattern": "Js.String2",
+        "replacement": "String",
+        "file_path": "src/Server.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "src/Server.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 3
+      },
+      {
+        "pattern": "Belt.Int",
+        "replacement": "Int",
+        "file_path": "src/Server.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Js.log",
+        "replacement": "Console.log",
+        "file_path": "src/Main.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 2
+      }
+    ],
+    "uncurried": false,
+    "module_format": "esmodule"
   }
 }

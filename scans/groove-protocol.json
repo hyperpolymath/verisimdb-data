@@ -1,0 +1,216 @@
+{
+  "schema_version": "2.5",
+  "program_path": "groove-protocol",
+  "language": "rust",
+  "frameworks": [],
+  "weak_points": [
+    {
+      "category": "UnsafeCode",
+      "location": "reference/ipv6t/src/grv6.zig",
+      "file": "reference/ipv6t/src/grv6.zig",
+      "severity": "High",
+      "description": "2 unsafe pointer casts in reference/ipv6t/src/grv6.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "reference/ipv6t/test/grv6_test.zig",
+      "file": "reference/ipv6t/test/grv6_test.zig",
+      "severity": "High",
+      "description": "3 unsafe pointer casts in reference/ipv6t/test/grv6_test.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "cli/src/detect.rs",
+      "file": "cli/src/detect.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in cli/src/detect.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "cli/src/probe.rs",
+      "file": "cli/src/probe.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in cli/src/probe.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "cli/src/validate.rs",
+      "file": "cli/src/validate.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in cli/src/validate.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    }
+  ],
+  "statistics": {
+    "total_lines": 3493,
+    "unsafe_blocks": 5,
+    "panic_sites": 0,
+    "unwrap_calls": 6,
+    "allocation_sites": 21,
+    "io_operations": 2,
+    "threading_constructs": 3
+  },
+  "file_statistics": [
+    {
+      "file_path": "harness/groove-harness.js",
+      "lines": 563,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "reference/ipv6t/src/grv6.zig",
+      "lines": 387,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "reference/ipv6t/test/grv6_test.zig",
+      "lines": 433,
+      "unsafe_blocks": 3,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 3
+    },
+    {
+      "file_path": "cli/src/detect.rs",
+      "lines": 470,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "safe_unwrap_calls": 7,
+      "allocation_sites": 8,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "cli/src/registry.rs",
+      "lines": 304,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "cli/src/probe.rs",
+      "lines": 353,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 10,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "cli/src/validate.rs",
+      "lines": 365,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    }
+  ],
+  "recommended_attacks": [
+    "cpu",
+    "memory"
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "from": "cli/src/detect.rs",
+        "to": "cli/src/registry.rs",
+        "relation": "shared_dir:cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "cli/src/registry.rs",
+        "to": "cli/src/probe.rs",
+        "relation": "shared_dir:cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "cli/src/probe.rs",
+        "to": "cli/src/validate.rs",
+        "relation": "shared_dir:cli/src",
+        "weight": 1.0
+      }
+    ]
+  },
+  "taint_matrix": {
+    "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "cli/src/detect.rs",
+          "cli/src/probe.rs",
+          "cli/src/validate.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "reference/ipv6t/src/grv6.zig",
+          "reference/ipv6t/test/grv6_test.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "cli/src/detect.rs",
+          "cli/src/probe.rs",
+          "cli/src/validate.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      }
+    ]
+  }
+}

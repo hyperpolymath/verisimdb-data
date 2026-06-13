@@ -1,102 +1,77 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "hesiod-dns-map",
   "language": "rust",
   "frameworks": [
-    "WebServer",
     "Networking"
   ],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "crates/hesiod-lib/src/records.rs",
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "crates/hesiod-lib/src/config.rs",
+      "file": "crates/hesiod-lib/src/config.rs",
       "severity": "Medium",
-      "description": "8 unwrap/expect calls in crates/hesiod-lib/src/records.rs",
+      "description": "Potential unbounded allocation pattern detected in crates/hesiod-lib/src/config.rs",
       "recommended_attack": [
         "memory",
-        "disk"
-      ]
+        "cpu"
+      ],
+      "test_context": "production"
     },
     {
       "category": "PanicPath",
-      "location": "crates/hesiod-lib/src/zone.rs",
+      "location": "crates/hesiod-lib/tests/e2e_test.rs",
+      "file": "crates/hesiod-lib/tests/e2e_test.rs",
       "severity": "Medium",
-      "description": "6 unwrap/expect calls in crates/hesiod-lib/src/zone.rs",
+      "description": "7 unwrap/expect calls in crates/hesiod-lib/tests/e2e_test.rs",
       "recommended_attack": [
         "memory",
         "disk"
-      ]
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "crates/hesinfo/src/main.rs",
+      "file": "crates/hesinfo/src/main.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in crates/hesinfo/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "MutationGap",
+      "location": "Cargo.toml",
+      "file": "Cargo.toml",
+      "severity": "Low",
+      "description": "Rust project has test infrastructure but no mutation-test configuration (cargo-mutants/.cargo-mutants.toml) — add `cargo mutants` to verify test suite kills mutations",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 2190,
+    "total_lines": 3996,
     "unsafe_blocks": 0,
     "panic_sites": 0,
-    "unwrap_calls": 20,
-    "allocation_sites": 1,
-    "io_operations": 5,
+    "unwrap_calls": 7,
+    "allocation_sites": 2,
+    "io_operations": 10,
     "threading_constructs": 6
   },
   "file_statistics": [
-    {
-      "file_path": "crates/hesiod-lib/src/records.rs",
-      "lines": 368,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 8,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/hesiod-lib/src/config.rs",
-      "lines": 137,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/hesiod-lib/src/zone.rs",
-      "lines": 242,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 6,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/hesiod-lib/src/server.rs",
-      "lines": 205,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 4,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 4
-    },
-    {
-      "file_path": "crates/hesiod-lib/src/health.rs",
-      "lines": 76,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "crates/hesinfo/src/main.rs",
-      "lines": 269,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
     {
       "file_path": "configs/hesiod/flatracoon.ncl",
       "lines": 90,
@@ -108,101 +83,159 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/hesiod-lib/src/records.rs",
+      "lines": 386,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/hesiod-lib/src/health.rs",
+      "lines": 74,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "crates/hesiod-lib/src/server.rs",
+      "lines": 203,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 4
+    },
+    {
+      "file_path": "crates/hesiod-lib/src/config.rs",
+      "lines": 137,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/hesiod-lib/tests/e2e_test.rs",
+      "lines": 337,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 7,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/hesinfo/src/main.rs",
+      "lines": 271,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 4,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "disk",
     "cpu",
-    "memory"
+    "memory",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
         "from": "crates/hesiod-lib/src/records.rs",
-        "to": "crates/hesiod-lib/src/config.rs",
+        "to": "crates/hesiod-lib/src/health.rs",
         "relation": "shared_dir:crates/hesiod-lib/src",
         "weight": 1.0
       },
       {
-        "from": "crates/hesiod-lib/src/config.rs",
-        "to": "crates/hesiod-lib/src/zone.rs",
-        "relation": "shared_dir:crates/hesiod-lib/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/zone.rs",
+        "from": "crates/hesiod-lib/src/health.rs",
         "to": "crates/hesiod-lib/src/server.rs",
         "relation": "shared_dir:crates/hesiod-lib/src",
         "weight": 1.0
       },
       {
         "from": "crates/hesiod-lib/src/server.rs",
-        "to": "crates/hesiod-lib/src/health.rs",
+        "to": "crates/hesiod-lib/src/config.rs",
         "relation": "shared_dir:crates/hesiod-lib/src",
         "weight": 1.0
       },
       {
+        "from": "configs/hesiod/flatracoon.ncl",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "flake.nix",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "crates/hesiod-lib/src/records.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 8.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/records.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 8.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/config.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/config.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/zone.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/zone.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/server.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 12.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/server.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 12.0
-      },
-      {
-        "from": "crates/hesiod-lib/src/health.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 4.0
+        "weight": 1.0
       },
       {
         "from": "crates/hesiod-lib/src/health.rs",
@@ -211,37 +244,25 @@
         "weight": 4.0
       },
       {
-        "from": "crates/hesinfo/src/main.rs",
-        "to": "WebServer",
+        "from": "crates/hesiod-lib/src/server.rs",
+        "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 8.0
       },
       {
-        "from": "crates/hesinfo/src/main.rs",
+        "from": "crates/hesiod-lib/src/config.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "configs/hesiod/flatracoon.ncl",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "configs/hesiod/flatracoon.ncl",
+        "from": "crates/hesiod-lib/tests/e2e_test.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 7.0
       },
       {
-        "from": "contractiles/trust/Trustfile.hs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "contractiles/trust/Trustfile.hs",
+        "from": "crates/hesinfo/src/main.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -251,32 +272,54 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/hesiod-lib/src/records.rs",
-          "crates/hesiod-lib/src/zone.rs"
+          "crates/hesiod-lib/src/config.rs",
+          "crates/hesinfo/src/main.rs"
         ],
         "frameworks": [
-          "WebServer",
           "Networking"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/hesiod-lib/src/config.rs",
+          "crates/hesinfo/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/hesiod-lib/src/records.rs",
-          "crates/hesiod-lib/src/zone.rs"
+          "crates/hesiod-lib/tests/e2e_test.rs"
         ],
         "frameworks": [
-          "WebServer",
           "Networking"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/hesiod-lib/tests/e2e_test.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

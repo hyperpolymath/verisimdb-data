@@ -1,0 +1,211 @@
+{
+  "schema_version": "2.5",
+  "program_path": "Skein.jl",
+  "language": "julia",
+  "frameworks": [],
+  "weak_points": [
+    {
+      "category": "DynamicCodeExecution",
+      "location": "src/backends/abstract.jl",
+      "file": "src/backends/abstract.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/backends/abstract.jl",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "test/runtests.jl",
+      "file": "test/runtests.jl",
+      "severity": "Medium",
+      "description": "11 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
+      "severity": "Medium",
+      "description": "3 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "test/knot_theory_ext_test.jl",
+      "file": "test/knot_theory_ext_test.jl",
+      "severity": "Medium",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/knot_theory_ext_test.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    }
+  ],
+  "statistics": {
+    "total_lines": 8147,
+    "unsafe_blocks": 12,
+    "panic_sites": 0,
+    "unwrap_calls": 0,
+    "allocation_sites": 1,
+    "io_operations": 17,
+    "threading_constructs": 0
+  },
+  "file_statistics": [
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 276,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/storage.jl",
+      "lines": 541,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/import_export.jl",
+      "lines": 356,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/abi/Foreign.idr",
+      "lines": 217,
+      "unsafe_blocks": 12,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "test/runtests.jl",
+      "lines": 1278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "test/e2e_test.jl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    }
+  ],
+  "recommended_attacks": [
+    "cpu",
+    "memory",
+    "disk"
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "from": "test/runtests.jl",
+        "to": "test/e2e_test.jl",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "src/storage.jl",
+        "to": "src/import_export.jl",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      }
+    ]
+  },
+  "taint_matrix": {
+    "rows": [
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/runtests.jl",
+          "test/e2e_test.jl",
+          "test/knot_theory_ext_test.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/backends/abstract.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/backends/abstract.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      }
+    ]
+  }
+}

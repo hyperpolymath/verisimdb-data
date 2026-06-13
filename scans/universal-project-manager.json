@@ -1,41 +1,59 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "universal-project-manager",
   "language": "shell",
   "frameworks": [],
-  "weak_points": [],
+  "weak_points": [
+    {
+      "category": "CommandInjection",
+      "location": "ci-scripts/build.sh",
+      "file": "ci-scripts/build.sh",
+      "severity": "Critical",
+      "description": "eval usage in ci-scripts/build.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "ci-scripts/test.sh",
+      "file": "ci-scripts/test.sh",
+      "severity": "Critical",
+      "description": "eval usage in ci-scripts/test.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "ci-scripts/lint.sh",
+      "file": "ci-scripts/lint.sh",
+      "severity": "Critical",
+      "description": "eval usage in ci-scripts/lint.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
+    }
+  ],
   "statistics": {
-    "total_lines": 4455,
-    "unsafe_blocks": 13,
+    "total_lines": 4338,
+    "unsafe_blocks": 12,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 3,
+    "io_operations": 5,
     "threading_constructs": 2
   },
   "file_statistics": [
     {
-      "file_path": "ci-scripts/detect.sh",
-      "lines": 264,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
+      "lines": 275,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -45,7 +63,7 @@
     },
     {
       "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
+      "lines": 183,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -54,9 +72,9 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
+      "file_path": "src/abi/Foreign.idr",
+      "lines": 219,
+      "unsafe_blocks": 12,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -64,30 +82,59 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ci-scripts/detect.sh",
+      "lines": 264,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
-    "edges": [
-      {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      }
-    ]
+    "edges": []
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "ci-scripts/build.sh",
+          "ci-scripts/test.sh",
+          "ci-scripts/lint.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "ci-scripts/build.sh",
+          "ci-scripts/test.sh",
+          "ci-scripts/lint.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      }
+    ]
   }
 }

@@ -1,195 +1,112 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "anamnesis",
   "language": "elixir",
   "frameworks": [
-    "Phoenix",
     "OTP"
   ],
   "weak_points": [
     {
       "category": "InsecureProtocol",
       "location": "learning/src/rdf/schema.jl",
+      "file": "learning/src/rdf/schema.jl",
       "severity": "Medium",
       "description": "4 HTTP (non-HTTPS) URLs in learning/src/rdf/schema.jl",
       "recommended_attack": [
         "network"
-      ]
-    },
-    {
-      "category": "InsecureProtocol",
-      "location": "learning/src/rdf/serialization.jl",
-      "severity": "Medium",
-      "description": "1 HTTP (non-HTTPS) URLs in learning/src/rdf/serialization.jl",
-      "recommended_attack": [
-        "network"
-      ]
-    },
-    {
-      "category": "InsecureProtocol",
-      "location": "learning/src/rdf/sparql.jl",
-      "severity": "Medium",
-      "description": "6 HTTP (non-HTTPS) URLs in learning/src/rdf/sparql.jl",
-      "recommended_attack": [
-        "network"
-      ]
-    },
-    {
-      "category": "InsecureProtocol",
-      "location": "learning/src/rdf/virtuoso.jl",
-      "severity": "Medium",
-      "description": "3 HTTP (non-HTTPS) URLs in learning/src/rdf/virtuoso.jl",
-      "recommended_attack": [
-        "network"
-      ]
-    },
-    {
-      "category": "InsecureProtocol",
-      "location": "learning/src/graphs/conversion.jl",
-      "severity": "Medium",
-      "description": "1 HTTP (non-HTTPS) URLs in learning/src/graphs/conversion.jl",
-      "recommended_attack": [
-        "network"
-      ]
+      ],
+      "test_context": "production"
     },
     {
       "category": "InsecureProtocol",
       "location": "learning/test/runtests.jl",
+      "file": "learning/test/runtests.jl",
       "severity": "Medium",
-      "description": "3 HTTP (non-HTTPS) URLs in learning/test/runtests.jl",
+      "description": "1 HTTP (non-HTTPS) URLs in learning/test/runtests.jl",
       "recommended_attack": [
         "network"
-      ]
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    },
+    {
+      "category": "MutationGap",
+      "location": "orchestrator/test/anamnesis/pipelines/ingestion_pipeline_test.exs",
+      "file": "orchestrator/test/anamnesis/pipelines/ingestion_pipeline_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file orchestrator/test/anamnesis/pipelines/ingestion_pipeline_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "orchestrator/test/anamnesis/ports/parser_port_test.exs",
+      "file": "orchestrator/test/anamnesis/ports/parser_port_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file orchestrator/test/anamnesis/ports/parser_port_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
     },
     {
       "category": "CommandInjection",
       "location": "orchestrator/lib/anamnesis/ports/parser_port.ex",
+      "file": "orchestrator/lib/anamnesis/ports/parser_port.ex",
       "severity": "Medium",
       "description": "System command execution in orchestrator/lib/anamnesis/ports/parser_port.ex",
       "recommended_attack": [
         "cpu",
         "disk"
-      ]
-    },
-    {
-      "category": "CommandInjection",
-      "location": "orchestrator/lib/anamnesis/ports/julia_port.ex",
-      "severity": "Medium",
-      "description": "System command execution in orchestrator/lib/anamnesis/ports/julia_port.ex",
-      "recommended_attack": [
-        "cpu",
-        "disk"
-      ]
+      ],
+      "test_context": "production"
     },
     {
       "category": "CommandInjection",
       "location": "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
+      "file": "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
       "severity": "Medium",
       "description": "System command execution in orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
       "recommended_attack": [
         "cpu",
         "disk"
-      ]
+      ],
+      "test_context": "production"
     },
     {
-      "category": "InsecureProtocol",
-      "location": "orchestrator/lib/anamnesis/virtuoso/client.ex",
+      "category": "CommandInjection",
+      "location": "orchestrator/lib/anamnesis/ports/julia_port.ex",
+      "file": "orchestrator/lib/anamnesis/ports/julia_port.ex",
       "severity": "Medium",
-      "description": "4 HTTP (non-HTTPS) URLs in orchestrator/lib/anamnesis/virtuoso/client.ex",
+      "description": "System command execution in orchestrator/lib/anamnesis/ports/julia_port.ex",
       "recommended_attack": [
-        "network"
-      ]
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 6994,
-    "unsafe_blocks": 13,
+    "total_lines": 4006,
+    "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 36,
-    "threading_constructs": 6
+    "io_operations": 8,
+    "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "learning/src/port_interface.jl",
-      "lines": 131,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "orchestrator/lib/anamnesis/pipelines/ingestion_pipeline.ex",
-      "lines": 117,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "orchestrator/lib/anamnesis/ports/parser_port.ex",
-      "lines": 124,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "orchestrator/lib/anamnesis/ports/julia_port.ex",
-      "lines": 254,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
-      "lines": 218,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "orchestrator/lib/anamnesis/virtuoso/client.ex",
-      "lines": 265,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 24,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "orchestrator/test/anamnesis/pipelines/ingestion_pipeline_test.exs",
-      "lines": 233,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
     {
       "file_path": "ffi/zig/src/main.zig",
       "lines": 274,
@@ -211,127 +128,74 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "orchestrator/test/anamnesis/pipelines/ingestion_pipeline_test.exs",
+      "lines": 233,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "orchestrator/lib/anamnesis/pipelines/ingestion_pipeline.ex",
+      "lines": 56,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "network",
     "cpu",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "orchestrator/lib/anamnesis/ports/parser_port.ex",
-        "to": "orchestrator/lib/anamnesis/ports/julia_port.ex",
-        "relation": "shared_dir:orchestrator/lib/anamnesis/ports",
-        "weight": 1.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/ports/julia_port.ex",
-        "to": "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
-        "relation": "shared_dir:orchestrator/lib/anamnesis/ports",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "learning/src/port_interface.jl",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "learning/src/port_interface.jl",
+        "from": "ffi/zig/src/main.zig",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "orchestrator/lib/anamnesis/pipelines/ingestion_pipeline.ex",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/pipelines/ingestion_pipeline.ex",
+        "from": "ffi/zig/test/integration_test.zig",
         "to": "OTP",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 4.0
       },
       {
-        "from": "orchestrator/lib/anamnesis/ports/parser_port.ex",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/ports/parser_port.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/ports/julia_port.ex",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/ports/julia_port.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/virtuoso/client.ex",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "orchestrator/lib/anamnesis/virtuoso/client.ex",
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "orchestrator/test/anamnesis/pipelines/ingestion_pipeline_test.exs",
-        "to": "Phoenix",
+        "from": "flake.nix",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
@@ -342,64 +206,10 @@
         "weight": 1.0
       },
       {
-        "from": "contractiles/trust/Trustfile.hs",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "contractiles/trust/Trustfile.hs",
+        "from": "orchestrator/lib/anamnesis/pipelines/ingestion_pipeline.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/main.zig",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/main.zig",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/test/integration_test.zig",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "ffi/zig/test/integration_test.zig",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "src/abi/Types.idr",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "src/abi/Types.idr",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "src/abi/Foreign.idr",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 36.0
-      },
-      {
-        "from": "src/abi/Foreign.idr",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 36.0
       }
     ]
   },
@@ -411,29 +221,26 @@
         "severity_value": 2.5,
         "files": [
           "orchestrator/lib/anamnesis/ports/parser_port.ex",
-          "orchestrator/lib/anamnesis/ports/julia_port.ex",
-          "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex"
+          "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
+          "orchestrator/lib/anamnesis/ports/julia_port.ex"
         ],
         "frameworks": [
-          "Phoenix",
           "OTP"
         ],
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "MutationGap",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 1.0,
         "files": [
-          "orchestrator/lib/anamnesis/ports/parser_port.ex",
-          "orchestrator/lib/anamnesis/ports/julia_port.ex",
-          "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex"
+          "orchestrator/test/anamnesis/pipelines/ingestion_pipeline_test.exs",
+          "orchestrator/test/anamnesis/ports/parser_port_test.exs"
         ],
         "frameworks": [
-          "Phoenix",
           "OTP"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -441,18 +248,26 @@
         "severity_value": 2.5,
         "files": [
           "learning/src/rdf/schema.jl",
-          "learning/src/rdf/serialization.jl",
-          "learning/src/rdf/sparql.jl",
-          "learning/src/rdf/virtuoso.jl",
-          "learning/src/graphs/conversion.jl",
-          "learning/test/runtests.jl",
-          "orchestrator/lib/anamnesis/virtuoso/client.ex"
+          "learning/test/runtests.jl"
         ],
         "frameworks": [
-          "Phoenix",
           "OTP"
         ],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "orchestrator/lib/anamnesis/ports/parser_port.ex",
+          "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
+          "orchestrator/lib/anamnesis/ports/julia_port.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }

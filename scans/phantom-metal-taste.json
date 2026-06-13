@@ -1,32 +1,48 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "phantom-metal-taste",
   "language": "rescript",
   "frameworks": [],
   "weak_points": [
     {
+      "category": "InputBoundary",
+      "location": "src/analytics/impact_analysis.jl",
+      "file": "src/analytics/impact_analysis.jl",
+      "severity": "Medium",
+      "description": "1 JSON3.read/JSON.parse call(s) with 0 try block(s) in src/analytics/impact_analysis.jl — these throw on malformed input; wrap in try/catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "PanicPath",
       "location": "src/orchestrator/db/ArangoDb.res",
+      "file": "src/orchestrator/db/ArangoDb.res",
       "severity": "Medium",
       "description": "1 unsafe get calls in src/orchestrator/db/ArangoDb.res",
       "recommended_attack": [
         "memory"
-      ]
+      ],
+      "test_context": "production"
     },
     {
       "category": "InsecureProtocol",
       "location": "src/orchestrator/Config.res",
+      "file": "src/orchestrator/Config.res",
       "severity": "Medium",
       "description": "1 HTTP (non-HTTPS) URLs in src/orchestrator/Config.res",
       "recommended_attack": [
         "network"
-      ]
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 1704,
+    "total_lines": 1467,
     "unsafe_blocks": 8,
     "panic_sites": 0,
-    "unwrap_calls": 2,
+    "unwrap_calls": 1,
     "allocation_sites": 0,
     "io_operations": 19,
     "threading_constructs": 0
@@ -43,16 +59,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/analytics/causal_inference.jl",
-      "lines": 193,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "src/analytics/impact_analysis.jl",
       "lines": 333,
       "unsafe_blocks": 0,
@@ -63,13 +69,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/core/src/lib.rs",
-      "lines": 227,
+      "file_path": "src/analytics/causal_inference.jl",
+      "lines": 193,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 1,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -94,8 +100,8 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
+    "memory",
     "disk",
     "network"
   ],
@@ -108,8 +114,8 @@
         "weight": 1.0
       },
       {
-        "from": "src/analytics/causal_inference.jl",
-        "to": "src/analytics/impact_analysis.jl",
+        "from": "src/analytics/impact_analysis.jl",
+        "to": "src/analytics/causal_inference.jl",
         "relation": "shared_dir:src/analytics",
         "weight": 1.0
       }
@@ -118,14 +124,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/orchestrator/Config.res"
+          "src/analytics/impact_analysis.jl"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -136,7 +142,142 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/orchestrator/Config.res"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       }
     ]
+  },
+  "migration_metrics": {
+    "deprecated_api_count": 76,
+    "modern_api_count": 62,
+    "api_migration_ratio": 0.4492753623188406,
+    "health_score": 0.54,
+    "config_format": "RescriptJson",
+    "version_bracket": "V12Stable",
+    "file_count": 5,
+    "rescript_lines": 608,
+    "deprecated_patterns": [
+      {
+        "pattern": "Js.Array2",
+        "replacement": "Array",
+        "file_path": "src/orchestrator/db/ArangoDb.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "src/orchestrator/db/ArangoDb.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 13
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "src/orchestrator/db/ArangoDb.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "src/orchestrator/db/ArangoDb.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 22
+      },
+      {
+        "pattern": "Belt.Array",
+        "replacement": "Array",
+        "file_path": "src/orchestrator/db/ArangoDb.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Belt.Option",
+        "replacement": "Option",
+        "file_path": "src/orchestrator/db/ArangoDb.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "src/orchestrator/db/Bindings.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "src/orchestrator/db/Bindings.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "src/orchestrator/Types.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 6
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "src/orchestrator/Types.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 6
+      },
+      {
+        "pattern": "Belt.Option",
+        "replacement": "Option",
+        "file_path": "src/orchestrator/Config.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 11
+      },
+      {
+        "pattern": "Belt.Int",
+        "replacement": "Int",
+        "file_path": "src/orchestrator/Config.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Js.String2",
+        "replacement": "String",
+        "file_path": "src/orchestrator/Index.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 5
+      },
+      {
+        "pattern": "Belt.Int",
+        "replacement": "Int",
+        "file_path": "src/orchestrator/Index.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 2
+      }
+    ],
+    "uncurried": false
   }
 }

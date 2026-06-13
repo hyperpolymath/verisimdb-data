@@ -1,26 +1,48 @@
 {
-  "program_path": ".",
-  "language": "nickel",
+  "schema_version": "2.5",
+  "program_path": "cloudflare-dns-terraform",
+  "language": "shell",
   "frameworks": [],
-  "weak_points": [],
+  "weak_points": [
+    {
+      "category": "InputBoundary",
+      "location": "workers/consent-aware-http.js",
+      "file": "workers/consent-aware-http.js",
+      "severity": "Medium",
+      "description": "1 JSON.parse call(s) with 0 try block(s) in workers/consent-aware-http.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    }
+  ],
   "statistics": {
-    "total_lines": 2487,
+    "total_lines": 2517,
     "unsafe_blocks": 13,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 9,
+    "io_operations": 11,
     "threading_constructs": 2
   },
   "file_statistics": [
     {
-      "file_path": "extract-current-dns.sh",
-      "lines": 52,
+      "file_path": "workers/consent-aware-http.js",
+      "lines": 85,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -34,18 +56,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "workers/consent-aware-http.js",
-      "lines": 85,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "workers/http-capability-gateway.js",
-      "lines": 139,
+      "lines": 152,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -61,26 +73,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "auto-add-new-sites.sh",
-      "lines": 63,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -104,8 +96,18 @@
       "threading_constructs": 2
     },
     {
+      "file_path": "src/abi/Foreign.idr",
+      "lines": 217,
+      "unsafe_blocks": 12,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "src/abi/Types.idr",
-      "lines": 231,
+      "lines": 232,
       "unsafe_blocks": 1,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -114,55 +116,102 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "extract-current-dns.sh",
+      "lines": 52,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "auto-add-new-sites.sh",
+      "lines": 63,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "extract-current-dns.sh",
-        "to": "generate-domains-csv.sh",
+        "from": "generate-domains-csv.sh",
+        "to": "extract-current-dns.sh",
         "relation": "shared_dir:",
         "weight": 1.0
       },
       {
-        "from": "generate-domains-csv.sh",
+        "from": "extract-current-dns.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "flake.nix",
         "to": "auto-add-new-sites.sh",
         "relation": "shared_dir:",
         "weight": 1.0
       },
       {
-        "from": "workers/security-headers.js",
-        "to": "workers/consent-aware-http.js",
+        "from": "workers/consent-aware-http.js",
+        "to": "workers/security-headers.js",
         "relation": "shared_dir:workers",
         "weight": 1.0
       },
       {
-        "from": "workers/consent-aware-http.js",
+        "from": "workers/security-headers.js",
         "to": "workers/http-capability-gateway.js",
         "relation": "shared_dir:workers",
         "weight": 1.0
       },
       {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
         "relation": "shared_dir:src/abi",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "workers/consent-aware-http.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      }
+    ]
   }
 }

@@ -1,28 +1,64 @@
 {
-  "program_path": ".",
-  "language": "nickel",
+  "schema_version": "2.5",
+  "program_path": "Exnovation.jl",
+  "language": "julia",
   "frameworks": [],
-  "weak_points": [],
+  "weak_points": [
+    {
+      "category": "ProofDrift",
+      "location": "test/runtests.jl",
+      "file": "test/runtests.jl",
+      "severity": "Medium",
+      "description": "2 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "test/property_test.jl",
+      "file": "test/property_test.jl",
+      "severity": "Medium",
+      "description": "6 @test assertion(s) in test/property_test.jl are all type-only (no value/equality checks) — mutation tests will pass trivially; add @test x == expected assertions",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
+      "severity": "Medium",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "examples/02_portfolio_management.jl",
+      "file": "examples/02_portfolio_management.jl",
+      "severity": "Medium",
+      "description": "1 JSON3.read/JSON.parse call(s) with 0 try block(s) in examples/02_portfolio_management.jl — these throw on malformed input; wrap in try/catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    }
+  ],
   "statistics": {
-    "total_lines": 2191,
+    "total_lines": 1723,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 0,
-    "io_operations": 5,
+    "io_operations": 2,
     "threading_constructs": 0
   },
   "file_statistics": [
-    {
-      "file_path": "src/Exnovation.jl",
-      "lines": 408,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
     {
       "file_path": "examples/02_portfolio_management.jl",
       "lines": 214,
@@ -31,16 +67,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
@@ -51,6 +77,38 @@
     "edges": []
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "examples/02_portfolio_management.jl"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/runtests.jl",
+          "test/e2e_test.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/property_test.jl"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      }
+    ]
   }
 }

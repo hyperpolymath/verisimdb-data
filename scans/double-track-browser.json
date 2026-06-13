@@ -1,89 +1,100 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "double-track-browser",
   "language": "rescript",
   "frameworks": [],
   "weak_points": [
     {
+      "category": "DynamicCodeExecution",
+      "location": "src/dashboard/Dashboard.res.js",
+      "file": "src/dashboard/Dashboard.res.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in src/dashboard/Dashboard.res.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    },
+    {
+      "category": "InsecureProtocol",
+      "location": "tests/property/extension_properties_test.ts",
+      "file": "tests/property/extension_properties_test.ts",
+      "severity": "Medium",
+      "description": "1 HTTP (non-HTTPS) URLs in tests/property/extension_properties_test.ts",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "tests/e2e/extension_lifecycle_test.ts",
+      "file": "tests/e2e/extension_lifecycle_test.ts",
+      "severity": "Medium",
+      "description": "2 JSON.parse call(s) with 0 try block(s) in tests/e2e/extension_lifecycle_test.ts — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InsecureProtocol",
+      "location": "tests/aspect/security_test.ts",
+      "file": "tests/aspect/security_test.ts",
+      "severity": "Medium",
+      "description": "1 HTTP (non-HTTPS) URLs in tests/aspect/security_test.ts",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
       "category": "PanicPath",
       "location": "rust_core/src/interests.rs",
+      "file": "rust_core/src/interests.rs",
       "severity": "Medium",
-      "description": "20 unwrap/expect calls in rust_core/src/interests.rs",
+      "description": "31 unwrap/expect calls in rust_core/src/interests.rs",
       "recommended_attack": [
         "memory",
         "disk"
-      ]
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "rust_core/src/lib.rs",
+      "file": "rust_core/src/lib.rs",
+      "severity": "Medium",
+      "description": "7 unwrap/expect calls in rust_core/src/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 5350,
-    "unsafe_blocks": 31,
+    "total_lines": 12034,
+    "unsafe_blocks": 54,
     "panic_sites": 1,
-    "unwrap_calls": 32,
-    "allocation_sites": 17,
-    "io_operations": 2,
+    "unwrap_calls": 46,
+    "allocation_sites": 51,
+    "io_operations": 4,
     "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "rust_core/src/activity.rs",
-      "lines": 197,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "rust_core/src/interests.rs",
-      "lines": 305,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 20,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "rust_core/src/lib.rs",
-      "lines": 78,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 5,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "rust_core/src/profile.rs",
-      "lines": 375,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 5,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "rust_core/src/schedule.rs",
-      "lines": 197,
-      "unsafe_blocks": 0,
-      "panic_sites": 1,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "rust_core/tests/integration_tests.rs",
-      "lines": 189,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
     {
       "file_path": "scripts/build.sh",
       "lines": 95,
@@ -95,8 +106,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/background/Background.res",
-      "lines": 191,
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 274,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -105,7 +116,27 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/bindings/Dom.res",
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "src/content/Content.res",
+      "lines": 204,
+      "unsafe_blocks": 8,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 5,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/bindings/DomBindings.res",
       "lines": 47,
       "unsafe_blocks": 18,
       "panic_sites": 0,
@@ -115,8 +146,28 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "src/background/Background.res",
+      "lines": 324,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/utils/Wasm.res",
+      "lines": 298,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "src/dashboard/Dashboard.res",
-      "lines": 258,
+      "lines": 254,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -145,38 +196,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/utils/Wasm.res",
-      "lines": 104,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -185,61 +206,229 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
+      "file_path": "lib/ocaml/Wasm.res",
+      "lines": 298,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
+      "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
+      "file_path": "lib/ocaml/Options.res",
+      "lines": 270,
       "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/ocaml/DomBindings.res",
+      "lines": 47,
+      "unsafe_blocks": 18,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
-      "threading_constructs": 2
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/ocaml/Dashboard.res",
+      "lines": 254,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/ocaml/Content.res",
+      "lines": 204,
+      "unsafe_blocks": 8,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 5,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/ocaml/Popup.res",
+      "lines": 269,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/ocaml/Background.res",
+      "lines": 324,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "rust_core/src/form_data.rs",
+      "lines": 245,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 3,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "rust_core/src/interests.rs",
+      "lines": 1041,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 31,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "rust_core/src/profile.rs",
+      "lines": 453,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 5,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "rust_core/src/lib.rs",
+      "lines": 100,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 7,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "rust_core/src/schedule.rs",
+      "lines": 254,
+      "unsafe_blocks": 0,
+      "panic_sites": 1,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "rust_core/src/activity.rs",
+      "lines": 198,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "rust_core/tests/integration_tests.rs",
+      "lines": 187,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "network",
     "memory",
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "rust_core/src/activity.rs",
+        "from": "rust_core/src/form_data.rs",
         "to": "rust_core/src/interests.rs",
         "relation": "shared_dir:rust_core/src",
         "weight": 1.0
       },
       {
         "from": "rust_core/src/interests.rs",
-        "to": "rust_core/src/lib.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/lib.rs",
         "to": "rust_core/src/profile.rs",
         "relation": "shared_dir:rust_core/src",
         "weight": 1.0
       },
       {
         "from": "rust_core/src/profile.rs",
+        "to": "rust_core/src/lib.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/lib.rs",
         "to": "rust_core/src/schedule.rs",
         "relation": "shared_dir:rust_core/src",
         "weight": 1.0
       },
       {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "rust_core/src/schedule.rs",
+        "to": "rust_core/src/activity.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Wasm.res",
+        "to": "lib/ocaml/Options.res",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Options.res",
+        "to": "lib/ocaml/DomBindings.res",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/DomBindings.res",
+        "to": "lib/ocaml/Dashboard.res",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Dashboard.res",
+        "to": "lib/ocaml/Content.res",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Content.res",
+        "to": "lib/ocaml/Popup.res",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Popup.res",
+        "to": "lib/ocaml/Background.res",
+        "relation": "shared_dir:lib/ocaml",
         "weight": 1.0
       }
     ]
@@ -247,25 +436,81 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "rust_core/src/interests.rs"
+          "tests/property/extension_properties_test.ts",
+          "tests/aspect/security_test.ts"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/dashboard/Dashboard.res.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e/extension_lifecycle_test.ts"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/dashboard/Dashboard.res.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "rust_core/src/interests.rs"
+          "rust_core/src/interests.rs",
+          "rust_core/src/lib.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rust_core/src/interests.rs",
+          "rust_core/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
+  },
+  "migration_metrics": {
+    "deprecated_api_count": 0,
+    "modern_api_count": 750,
+    "api_migration_ratio": 1.0,
+    "health_score": 0.82,
+    "config_format": "RescriptJson",
+    "version_bracket": "V12Current",
+    "file_count": 20,
+    "rescript_lines": 4286,
+    "deprecated_patterns": [],
+    "uncurried": false,
+    "module_format": "esmodule"
   }
 }

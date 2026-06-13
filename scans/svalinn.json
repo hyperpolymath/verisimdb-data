@@ -1,153 +1,360 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "svalinn",
   "language": "rescript",
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "src/gateway/Gateway.res",
-      "severity": "Medium",
-      "description": "10 unsafe get calls in src/gateway/Gateway.res",
+      "category": "UnsafeDeserialization",
+      "location": "src/auth/Jwt.res",
+      "file": "src/auth/Jwt.res",
+      "severity": "High",
+      "description": "1 JSON.parseExn calls in src/auth/Jwt.res (use JSON.parse for safe Result)",
       "recommended_attack": [
-        "memory"
-      ]
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
     },
     {
       "category": "PanicPath",
-      "location": "src/validation/Validation.res",
+      "location": "src/auth/Jwt.res",
+      "file": "src/auth/Jwt.res",
       "severity": "Medium",
-      "description": "1 unsafe get calls in src/validation/Validation.res",
+      "description": "3 unsafe get calls in src/auth/Jwt.res",
       "recommended_attack": [
         "memory"
-      ]
+      ],
+      "test_context": "production"
     },
     {
       "category": "PanicPath",
-      "location": "src/mcp/McpClient.res",
+      "location": "src/auth/AuthMiddleware.res",
+      "file": "src/auth/AuthMiddleware.res",
       "severity": "Medium",
-      "description": "2 unsafe get calls in src/mcp/McpClient.res",
+      "description": "1 unsafe get calls in src/auth/AuthMiddleware.res",
       "recommended_attack": [
         "memory"
-      ]
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "src/auth/Jwt.res.mjs",
+      "file": "src/auth/Jwt.res.mjs",
+      "severity": "Medium",
+      "description": "1 JSON.parse call(s) with 0 try block(s) in src/auth/Jwt.res.mjs — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/auth/Jwt.res.mjs",
+      "file": "src/auth/Jwt.res.mjs",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/auth/Jwt.res.mjs — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeDeserialization",
+      "location": "src/lib/bs/auth/Jwt.res",
+      "file": "src/lib/bs/auth/Jwt.res",
+      "severity": "High",
+      "description": "1 JSON.parseExn calls in src/lib/bs/auth/Jwt.res (use JSON.parse for safe Result)",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
     },
     {
       "category": "PanicPath",
-      "location": "src/policy/PolicyEngine.res",
+      "location": "src/lib/bs/auth/Jwt.res",
+      "file": "src/lib/bs/auth/Jwt.res",
       "severity": "Medium",
-      "description": "8 unsafe get calls in src/policy/PolicyEngine.res",
+      "description": "2 unsafe get calls in src/lib/bs/auth/Jwt.res",
       "recommended_attack": [
         "memory"
-      ]
+      ],
+      "test_context": "production"
     },
     {
       "category": "PanicPath",
-      "location": "src/auth/JWT.res",
+      "location": "src/lib/bs/auth/AuthMiddleware.res",
+      "file": "src/lib/bs/auth/AuthMiddleware.res",
       "severity": "Medium",
-      "description": "11 unsafe get calls in src/auth/JWT.res",
+      "description": "1 unsafe get calls in src/lib/bs/auth/AuthMiddleware.res",
       "recommended_attack": [
         "memory"
-      ]
+      ],
+      "test_context": "production"
     },
     {
-      "category": "PathTraversal",
-      "location": "test-server.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in test-server.sh",
+      "category": "CryptoMisuse",
+      "location": "src/lib/bs/auth/AuthMiddleware.res.mjs",
+      "file": "src/lib/bs/auth/AuthMiddleware.res.mjs",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/lib/bs/auth/AuthMiddleware.res.mjs — decodeJwt() does not verify the signature; use jwtVerify() instead",
       "recommended_attack": [
-        "disk"
-      ]
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "src/lib/bs/auth/Jwt.res.mjs",
+      "file": "src/lib/bs/auth/Jwt.res.mjs",
+      "severity": "Medium",
+      "description": "1 JSON.parse call(s) with 0 try block(s) in src/lib/bs/auth/Jwt.res.mjs — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/lib/bs/auth/Jwt.res.mjs",
+      "file": "src/lib/bs/auth/Jwt.res.mjs",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/lib/bs/auth/Jwt.res.mjs — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/lib/bs/policy/PolicyEvaluator.res",
+      "file": "src/lib/bs/policy/PolicyEvaluator.res",
+      "severity": "Medium",
+      "description": "1 unsafe get calls in src/lib/bs/policy/PolicyEvaluator.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeDeserialization",
+      "location": "src/lib/bs/policy/PolicyStore.res",
+      "file": "src/lib/bs/policy/PolicyStore.res",
+      "severity": "High",
+      "description": "1 JSON.parseExn calls in src/lib/bs/policy/PolicyStore.res (use JSON.parse for safe Result)",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/lib/bs/tests/AuthTest.res.mjs",
+      "file": "src/lib/bs/tests/AuthTest.res.mjs",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/lib/bs/tests/AuthTest.res.mjs — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/lib/bs/tests/AuthSecurityTest.res.mjs",
+      "file": "src/lib/bs/tests/AuthSecurityTest.res.mjs",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/lib/bs/tests/AuthSecurityTest.res.mjs — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "UnsafeDeserialization",
+      "location": "src/lib/ocaml/Jwt.res",
+      "file": "src/lib/ocaml/Jwt.res",
+      "severity": "High",
+      "description": "1 JSON.parseExn calls in src/lib/ocaml/Jwt.res (use JSON.parse for safe Result)",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/lib/ocaml/Jwt.res",
+      "file": "src/lib/ocaml/Jwt.res",
+      "severity": "Medium",
+      "description": "2 unsafe get calls in src/lib/ocaml/Jwt.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/lib/ocaml/AuthMiddleware.res",
+      "file": "src/lib/ocaml/AuthMiddleware.res",
+      "severity": "Medium",
+      "description": "1 unsafe get calls in src/lib/ocaml/AuthMiddleware.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/lib/ocaml/PolicyEvaluator.res",
+      "file": "src/lib/ocaml/PolicyEvaluator.res",
+      "severity": "Medium",
+      "description": "1 unsafe get calls in src/lib/ocaml/PolicyEvaluator.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeDeserialization",
+      "location": "src/lib/ocaml/PolicyStore.res",
+      "file": "src/lib/ocaml/PolicyStore.res",
+      "severity": "High",
+      "description": "1 JSON.parseExn calls in src/lib/ocaml/PolicyStore.res (use JSON.parse for safe Result)",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/benches/svalinn_bench.ts",
+      "file": "src/benches/svalinn_bench.ts",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/benches/svalinn_bench.ts — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/policy/PolicyEvaluator.res",
+      "file": "src/policy/PolicyEvaluator.res",
+      "severity": "Medium",
+      "description": "1 unsafe get calls in src/policy/PolicyEvaluator.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeDeserialization",
+      "location": "src/policy/PolicyStore.res",
+      "file": "src/policy/PolicyStore.res",
+      "severity": "High",
+      "description": "1 JSON.parseExn calls in src/policy/PolicyStore.res (use JSON.parse for safe Result)",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/tests/PropertyTests.test.ts",
+      "file": "src/tests/PropertyTests.test.ts",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/tests/PropertyTests.test.ts — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/tests/AuthTest.res.mjs",
+      "file": "src/tests/AuthTest.res.mjs",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/tests/AuthTest.res.mjs — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/tests/IntegrationTests.test.ts",
+      "file": "src/tests/IntegrationTests.test.ts",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/tests/IntegrationTests.test.ts — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "src/tests/AuthSecurityTest.res.mjs",
+      "file": "src/tests/AuthSecurityTest.res.mjs",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in src/tests/AuthSecurityTest.res.mjs — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "tests/schema/schema_test.js",
+      "file": "tests/schema/schema_test.js",
+      "severity": "Medium",
+      "description": "1 JSON.parse call(s) with 0 try block(s) in tests/schema/schema_test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "tests/bench/gateway_bench.js",
+      "file": "tests/bench/gateway_bench.js",
+      "severity": "Medium",
+      "description": "2 JSON.parse call(s) with 1 try block(s) in tests/bench/gateway_bench.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "tests/bench/gateway_bench.js",
+      "file": "tests/bench/gateway_bench.js",
+      "severity": "Critical",
+      "description": "jose decodeJwt() without jwtVerify() in tests/bench/gateway_bench.js — decodeJwt() does not verify the signature; use jwtVerify() instead",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
     }
   ],
   "statistics": {
-    "total_lines": 10858,
-    "unsafe_blocks": 57,
-    "panic_sites": 0,
-    "unwrap_calls": 32,
+    "total_lines": 19183,
+    "unsafe_blocks": 86,
+    "panic_sites": 6,
+    "unwrap_calls": 13,
     "allocation_sites": 6,
-    "io_operations": 33,
+    "io_operations": 40,
     "threading_constructs": 0
   },
   "file_statistics": [
-    {
-      "file_path": "tools/mvp/svalinn_gate.py",
-      "lines": 226,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/gateway/Gateway.res",
-      "lines": 882,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 10,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/gateway/Gateway.res.js",
-      "lines": 878,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/validation/Validation.res",
-      "lines": 237,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/vordr/Client.res",
-      "lines": 253,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/vordr/Client.res.js",
-      "lines": 237,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/mcp/McpClient.res",
-      "lines": 306,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/mcp/McpClient.res.js",
-      "lines": 290,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
     {
       "file_path": "src/bindings/Deno.res",
       "lines": 94,
@@ -169,9 +376,9 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/bindings/Hono.res",
-      "lines": 92,
-      "unsafe_blocks": 31,
+      "file_path": "src/integrations/CerroTorre.res",
+      "lines": 136,
+      "unsafe_blocks": 1,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -179,58 +386,148 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/policy/PolicyEngine.res",
-      "lines": 328,
-      "unsafe_blocks": 1,
+      "file_path": "src/integrations/PolyContainerMcp.res",
+      "lines": 95,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 8,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/auth/JWT.res",
-      "lines": 407,
-      "unsafe_blocks": 2,
+      "file_path": "src/integrations/PolyContainerMcp.res.mjs",
+      "lines": 71,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 11,
-      "allocation_sites": 3,
-      "io_operations": 2,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/auth/OAuth2.res.mjs",
+      "lines": 62,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
       "file_path": "src/auth/OAuth2.res",
-      "lines": 363,
-      "unsafe_blocks": 1,
+      "lines": 84,
+      "unsafe_blocks": 2,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 6,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/auth/Middleware.res",
-      "lines": 539,
-      "unsafe_blocks": 1,
+      "file_path": "src/auth/Jwt.res",
+      "lines": 249,
+      "unsafe_blocks": 2,
+      "panic_sites": 1,
+      "unwrap_calls": 3,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/auth/AuthMiddleware.res",
+      "lines": 90,
+      "unsafe_blocks": 4,
       "panic_sites": 0,
-      "unwrap_calls": 0,
+      "unwrap_calls": 1,
       "allocation_sites": 1,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/auth/OAuth2.res.js",
-      "lines": 409,
+      "file_path": "src/auth/Jwt.res.mjs",
+      "lines": 202,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 6,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/auth/JWT.res.js",
-      "lines": 393,
+      "file_path": "src/lib/bs/bindings/Deno.res",
+      "lines": 94,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/bindings/Fetch.res",
+      "lines": 78,
+      "unsafe_blocks": 16,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/auth/OAuth2.res.mjs",
+      "lines": 61,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/auth/OAuth2.res",
+      "lines": 79,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/auth/Jwt.res",
+      "lines": 136,
+      "unsafe_blocks": 1,
+      "panic_sites": 1,
+      "unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/auth/AuthMiddleware.res",
+      "lines": 84,
+      "unsafe_blocks": 4,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/auth/Jwt.res.mjs",
+      "lines": 92,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/vordr/Client.res",
+      "lines": 234,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -239,9 +536,49 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tests/integration_test.res",
-      "lines": 256,
+      "file_path": "src/lib/bs/vordr/Client.res.mjs",
+      "lines": 219,
       "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/policy/PolicyEvaluator.res",
+      "lines": 101,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/policy/PolicyStore.res",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 1,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/tests/AuthTest.res",
+      "lines": 101,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/bs/tests/AuthSecurityTest.res",
+      "lines": 345,
+      "unsafe_blocks": 1,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 1,
@@ -249,57 +586,430 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "test-server.sh",
-      "lines": 68,
+      "file_path": "src/lib/bs/gateway/GatewayServer.res",
+      "lines": 67,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/OAuth2.res",
+      "lines": 79,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/Jwt.res",
+      "lines": 136,
+      "unsafe_blocks": 1,
+      "panic_sites": 1,
+      "unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/Client.res",
+      "lines": 234,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/AuthMiddleware.res",
+      "lines": 84,
+      "unsafe_blocks": 4,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/PolicyEvaluator.res",
+      "lines": 101,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/GatewayServer.res",
+      "lines": 67,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/Deno.res",
+      "lines": 94,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/AuthTest.res",
+      "lines": 101,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/PolicyStore.res",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 1,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/AuthSecurityTest.res",
+      "lines": 345,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lib/ocaml/Fetch.res",
+      "lines": 78,
+      "unsafe_blocks": 16,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/vordr/Client.res",
+      "lines": 234,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/vordr/Client.res.mjs",
+      "lines": 219,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/compose/ComposeOrchestrator.res",
+      "lines": 85,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/compose/ComposeOrchestrator.res.mjs",
+      "lines": 74,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/policy/PolicyEvaluator.res",
+      "lines": 101,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/policy/PolicyStore.res",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 1,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/tests/AuthTest.res",
+      "lines": 103,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/tests/AuthSecurityTest.res",
+      "lines": 345,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/gateway/GatewayServer.res",
+      "lines": 67,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e/gateway_test.js",
+      "lines": 459,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/bench/gateway_bench.js",
+      "lines": 440,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/mvp/svalinn_gate.py",
+      "lines": 227,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "disk",
+    "memory",
     "cpu",
-    "memory"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/mcp/McpClient.res",
-        "to": "src/mcp/McpClient.res.js",
-        "relation": "shared_dir:src/mcp",
+        "from": "src/compose/ComposeOrchestrator.res",
+        "to": "src/compose/ComposeOrchestrator.res.mjs",
+        "relation": "shared_dir:src/compose",
         "weight": 1.0
       },
       {
-        "from": "src/auth/JWT.res",
+        "from": "src/lib/bs/vordr/Client.res",
+        "to": "src/lib/bs/vordr/Client.res.mjs",
+        "relation": "shared_dir:src/lib/bs/vordr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/auth/OAuth2.res.mjs",
         "to": "src/auth/OAuth2.res",
         "relation": "shared_dir:src/auth",
         "weight": 1.0
       },
       {
         "from": "src/auth/OAuth2.res",
-        "to": "src/auth/Middleware.res",
+        "to": "src/auth/Jwt.res",
         "relation": "shared_dir:src/auth",
         "weight": 1.0
       },
       {
-        "from": "src/auth/Middleware.res",
-        "to": "src/auth/OAuth2.res.js",
+        "from": "src/auth/Jwt.res",
+        "to": "src/auth/AuthMiddleware.res",
         "relation": "shared_dir:src/auth",
         "weight": 1.0
       },
       {
-        "from": "src/auth/OAuth2.res.js",
-        "to": "src/auth/JWT.res.js",
+        "from": "src/auth/AuthMiddleware.res",
+        "to": "src/auth/Jwt.res.mjs",
         "relation": "shared_dir:src/auth",
+        "weight": 1.0
+      },
+      {
+        "from": "src/policy/PolicyEvaluator.res",
+        "to": "src/policy/PolicyStore.res",
+        "relation": "shared_dir:src/policy",
+        "weight": 1.0
+      },
+      {
+        "from": "src/integrations/CerroTorre.res",
+        "to": "src/integrations/PolyContainerMcp.res",
+        "relation": "shared_dir:src/integrations",
+        "weight": 1.0
+      },
+      {
+        "from": "src/integrations/PolyContainerMcp.res",
+        "to": "src/integrations/PolyContainerMcp.res.mjs",
+        "relation": "shared_dir:src/integrations",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/bindings/Deno.res",
+        "to": "src/lib/bs/bindings/Fetch.res",
+        "relation": "shared_dir:src/lib/bs/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/policy/PolicyEvaluator.res",
+        "to": "src/lib/bs/policy/PolicyStore.res",
+        "relation": "shared_dir:src/lib/bs/policy",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/OAuth2.res",
+        "to": "src/lib/ocaml/Jwt.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/Jwt.res",
+        "to": "src/lib/ocaml/Client.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/Client.res",
+        "to": "src/lib/ocaml/AuthMiddleware.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/AuthMiddleware.res",
+        "to": "src/lib/ocaml/PolicyEvaluator.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/PolicyEvaluator.res",
+        "to": "src/lib/ocaml/GatewayServer.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/GatewayServer.res",
+        "to": "src/lib/ocaml/Deno.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/Deno.res",
+        "to": "src/lib/ocaml/AuthTest.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/AuthTest.res",
+        "to": "src/lib/ocaml/PolicyStore.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/PolicyStore.res",
+        "to": "src/lib/ocaml/AuthSecurityTest.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/AuthSecurityTest.res",
+        "to": "src/lib/ocaml/Fetch.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/tests/AuthTest.res",
+        "to": "src/lib/bs/tests/AuthSecurityTest.res",
+        "relation": "shared_dir:src/lib/bs/tests",
         "weight": 1.0
       },
       {
         "from": "src/vordr/Client.res",
-        "to": "src/vordr/Client.res.js",
+        "to": "src/vordr/Client.res.mjs",
         "relation": "shared_dir:src/vordr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/auth/OAuth2.res.mjs",
+        "to": "src/lib/bs/auth/OAuth2.res",
+        "relation": "shared_dir:src/lib/bs/auth",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/auth/OAuth2.res",
+        "to": "src/lib/bs/auth/Jwt.res",
+        "relation": "shared_dir:src/lib/bs/auth",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/auth/Jwt.res",
+        "to": "src/lib/bs/auth/AuthMiddleware.res",
+        "relation": "shared_dir:src/lib/bs/auth",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/auth/AuthMiddleware.res",
+        "to": "src/lib/bs/auth/Jwt.res.mjs",
+        "relation": "shared_dir:src/lib/bs/auth",
+        "weight": 1.0
+      },
+      {
+        "from": "src/tests/AuthTest.res",
+        "to": "src/tests/AuthSecurityTest.res",
+        "relation": "shared_dir:src/tests",
         "weight": 1.0
       },
       {
@@ -307,47 +1017,226 @@
         "to": "src/bindings/Fetch.res",
         "relation": "shared_dir:src/bindings",
         "weight": 1.0
-      },
-      {
-        "from": "src/bindings/Fetch.res",
-        "to": "src/bindings/Hono.res",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
-      {
-        "from": "src/gateway/Gateway.res",
-        "to": "src/gateway/Gateway.res.js",
-        "relation": "shared_dir:src/gateway",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "test-server.sh"
+          "src/auth/Jwt.res.mjs",
+          "src/lib/bs/auth/Jwt.res.mjs",
+          "tests/schema/schema_test.js",
+          "tests/bench/gateway_bench.js"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "CryptoMisuse",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "src/auth/Jwt.res.mjs",
+          "src/lib/bs/auth/AuthMiddleware.res.mjs",
+          "src/lib/bs/auth/Jwt.res.mjs",
+          "src/lib/bs/tests/AuthTest.res.mjs",
+          "src/lib/bs/tests/AuthSecurityTest.res.mjs",
+          "src/benches/svalinn_bench.ts",
+          "src/tests/PropertyTests.test.ts",
+          "src/tests/AuthTest.res.mjs",
+          "src/tests/IntegrationTests.test.ts",
+          "src/tests/AuthSecurityTest.res.mjs",
+          "tests/bench/gateway_bench.js"
+        ],
+        "frameworks": [],
+        "relation": "CryptoMisuse->Network"
       },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/gateway/Gateway.res",
-          "src/validation/Validation.res",
-          "src/mcp/McpClient.res",
-          "src/policy/PolicyEngine.res",
-          "src/auth/JWT.res"
+          "src/auth/Jwt.res",
+          "src/auth/AuthMiddleware.res",
+          "src/lib/bs/auth/Jwt.res",
+          "src/lib/bs/auth/AuthMiddleware.res",
+          "src/lib/bs/policy/PolicyEvaluator.res",
+          "src/lib/ocaml/Jwt.res",
+          "src/lib/ocaml/AuthMiddleware.res",
+          "src/lib/ocaml/PolicyEvaluator.res",
+          "src/policy/PolicyEvaluator.res"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/auth/Jwt.res",
+          "src/lib/bs/auth/Jwt.res",
+          "src/lib/bs/policy/PolicyStore.res",
+          "src/lib/ocaml/Jwt.res",
+          "src/lib/ocaml/PolicyStore.res",
+          "src/policy/PolicyStore.res"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeDeserialization->Memory"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/auth/Jwt.res",
+          "src/lib/bs/auth/Jwt.res",
+          "src/lib/bs/policy/PolicyStore.res",
+          "src/lib/ocaml/Jwt.res",
+          "src/lib/ocaml/PolicyStore.res",
+          "src/policy/PolicyStore.res"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeDeserialization->Cpu"
       }
     ]
+  },
+  "migration_metrics": {
+    "deprecated_api_count": 44,
+    "modern_api_count": 781,
+    "api_migration_ratio": 0.9466666666666667,
+    "health_score": 0.9,
+    "config_format": "RescriptJson",
+    "version_bracket": "V12Current",
+    "file_count": 78,
+    "rescript_lines": 10425,
+    "deprecated_patterns": [
+      {
+        "pattern": "Belt.Array",
+        "replacement": "Array",
+        "file_path": "src/auth/AuthMiddleware.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Belt.Array",
+        "replacement": "Array",
+        "file_path": "src/lib/bs/auth/AuthMiddleware.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Belt.Array",
+        "replacement": "Array",
+        "file_path": "src/lib/bs/policy/PolicyEvaluator.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Belt.Array",
+        "replacement": "Array",
+        "file_path": "src/lib/ocaml/AuthMiddleware.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Belt.Array",
+        "replacement": "Array",
+        "file_path": "src/lib/ocaml/PolicyEvaluator.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "src/compose/ComposeOrchestrator.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 1
+      },
+      {
+        "pattern": "Belt.Array",
+        "replacement": "Array",
+        "file_path": "src/policy/PolicyEvaluator.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Array2",
+        "replacement": "Array",
+        "file_path": "ui/src/Main.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "ui/src/Main.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 1
+      },
+      {
+        "pattern": "Js.log",
+        "replacement": "Console.log",
+        "file_path": "ui/src/Main.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "ui/src/Main.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 3
+      },
+      {
+        "pattern": "Belt.Array",
+        "replacement": "Array",
+        "file_path": "ui/src/Main.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 17
+      },
+      {
+        "pattern": "Belt.Map",
+        "replacement": "Map",
+        "file_path": "ui/src/Main.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 7
+      },
+      {
+        "pattern": "Belt.Option",
+        "replacement": "Option",
+        "file_path": "ui/src/Main.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 4
+      },
+      {
+        "pattern": "Belt.Int",
+        "replacement": "Int",
+        "file_path": "ui/src/Main.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 1
+      }
+    ],
+    "uncurried": true,
+    "module_format": "esmodule"
   }
 }

@@ -1,279 +1,285 @@
 {
-  "program_path": "/var$REPOS_DIR/betlang",
+  "schema_version": "2.5",
+  "program_path": "betlang",
   "language": "rust",
   "frameworks": [
+    "Concurrent",
     "Networking"
   ],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "repl/shell.rkt",
-      "severity": "High",
-      "description": "eval usage in repl/shell.rkt",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ]
-    },
-    {
-      "category": "CommandInjection",
-      "location": "repl/shell.rkt",
-      "severity": "High",
-      "description": "System/process call in repl/shell.rkt",
-      "recommended_attack": [
-        "cpu",
-        "disk"
-      ]
-    },
-    {
-      "category": "PanicPath",
-      "location": "tools/bet-lsp/tests/integration_test.rs",
-      "severity": "Medium",
-      "description": "6 unwrap/expect calls in tools/bet-lsp/tests/integration_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ]
-    },
-    {
       "category": "UnsafeCode",
       "location": "bindings/chapel/src/lib.rs",
+      "file": "bindings/chapel/src/lib.rs",
       "severity": "High",
       "description": "10 unsafe blocks in bindings/chapel/src/lib.rs",
       "recommended_attack": [
         "memory",
         "concurrency"
-      ]
+      ],
+      "test_context": "production"
     },
     {
       "category": "UnsafeCode",
       "location": "bindings/chapel/src/lib.rs",
+      "file": "bindings/chapel/src/lib.rs",
       "severity": "High",
       "description": "Raw pointer cast in bindings/chapel/src/lib.rs",
       "recommended_attack": [
-        "memory"
-      ]
+        "memory",
+        "concurrency"
+      ],
+      "test_context": "production"
     },
     {
       "category": "UnsafeFFI",
       "location": "bindings/julia/src/Betlang.jl",
+      "file": "bindings/julia/src/Betlang.jl",
       "severity": "Medium",
       "description": "36 ccall/FFI calls in bindings/julia/src/Betlang.jl",
       "recommended_attack": [
         "memory"
-      ]
+      ],
+      "test_context": "production"
     },
     {
       "category": "UnsafeCode",
       "location": "bindings/julia/src/lib.rs",
+      "file": "bindings/julia/src/lib.rs",
       "severity": "High",
       "description": "19 unsafe blocks in bindings/julia/src/lib.rs",
       "recommended_attack": [
         "memory",
         "concurrency"
-      ]
+      ],
+      "test_context": "production"
     },
     {
       "category": "UnsafeCode",
       "location": "bindings/julia/src/lib.rs",
+      "file": "bindings/julia/src/lib.rs",
       "severity": "High",
       "description": "Raw pointer cast in bindings/julia/src/lib.rs",
       "recommended_attack": [
-        "memory"
-      ]
-    },
-    {
-      "category": "PanicPath",
-      "location": "compiler/bet-codegen/src/lib.rs",
-      "severity": "Medium",
-      "description": "34 unwrap/expect calls in compiler/bet-codegen/src/lib.rs",
-      "recommended_attack": [
         "memory",
-        "disk"
-      ]
-    },
-    {
-      "category": "PanicPath",
-      "location": "compiler/bet-eval/src/lib.rs",
-      "severity": "Medium",
-      "description": "10 unwrap/expect calls in compiler/bet-eval/src/lib.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ]
-    },
-    {
-      "category": "PanicPath",
-      "location": "compiler/bet-parse/src/lexer.rs",
-      "severity": "Medium",
-      "description": "6 unwrap/expect calls in compiler/bet-parse/src/lexer.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ]
+        "concurrency"
+      ],
+      "test_context": "production"
     },
     {
       "category": "CommandInjection",
-      "location": "containers/build.sh",
+      "location": "ui/INSTALL.sh",
+      "file": "ui/INSTALL.sh",
       "severity": "Medium",
-      "description": "36 potentially unquoted variable expansions in containers/build.sh",
+      "description": "24 potentially unquoted variable expansions in ui/INSTALL.sh",
       "recommended_attack": [
         "cpu"
-      ]
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "ui/INSTALL.sh",
+      "file": "ui/INSTALL.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in ui/INSTALL.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "InsecureProtocol",
+      "location": "ui/INSTALL.sh",
+      "file": "ui/INSTALL.sh",
+      "severity": "Medium",
+      "description": "1 HTTP (non-HTTPS) URLs in ui/INSTALL.sh",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "ui/launcher/betlang-playground.sh",
+      "file": "ui/launcher/betlang-playground.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in ui/launcher/betlang-playground.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
     },
     {
       "category": "CommandInjection",
-      "location": "packaging/scripts/build-all.sh",
-      "severity": "Medium",
-      "description": "71 potentially unquoted variable expansions in packaging/scripts/build-all.sh",
+      "location": "ui/launcher/keepopen.sh",
+      "file": "ui/launcher/keepopen.sh",
+      "severity": "Critical",
+      "description": "eval usage in ui/launcher/keepopen.sh",
       "recommended_attack": [
-        "cpu"
-      ]
+        "cpu",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "ui/launcher/keepopen.sh",
+      "file": "ui/launcher/keepopen.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in ui/launcher/keepopen.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "ui/public/app.js",
+      "file": "ui/public/app.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in ui/public/app.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "test_context": "production"
     },
     {
       "category": "InsecureProtocol",
       "location": "packaging/scripts/build-all.sh",
+      "file": "packaging/scripts/build-all.sh",
       "severity": "Medium",
       "description": "1 HTTP (non-HTTPS) URLs in packaging/scripts/build-all.sh",
       "recommended_attack": [
         "network"
-      ]
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "bench/bench_lexer.rs",
+      "file": "bench/bench_lexer.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in bench/bench_lexer.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "compiler/bet-wasm/src/lib.rs",
+      "file": "compiler/bet-wasm/src/lib.rs",
+      "severity": "Medium",
+      "description": "7 unwrap/expect calls in compiler/bet-wasm/src/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "compiler/bet-parse/src/tests.rs",
+      "file": "compiler/bet-parse/src/tests.rs",
+      "severity": "Medium",
+      "description": "101 unwrap/expect calls in compiler/bet-parse/src/tests.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "repl/shell.rkt",
+      "file": "repl/shell.rkt",
+      "severity": "High",
+      "description": "eval usage in repl/shell.rkt",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "production"
     },
     {
       "category": "CommandInjection",
-      "location": "packaging/scripts/release.sh",
-      "severity": "Medium",
-      "description": "42 potentially unquoted variable expansions in packaging/scripts/release.sh",
+      "location": "repl/shell.rkt",
+      "file": "repl/shell.rkt",
+      "severity": "High",
+      "description": "System/process call in repl/shell.rkt",
       "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "verification/benchmarks/bench_lexer.rs",
+      "file": "verification/benchmarks/bench_lexer.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in verification/benchmarks/bench_lexer.rs",
+      "recommended_attack": [
+        "memory",
         "cpu"
-      ]
+      ],
+      "test_context": "production"
     },
     {
-      "category": "PanicPath",
-      "location": "runtime/bet-rt/src/random.rs",
+      "category": "UnboundedAllocation",
+      "location": "tools/bet-cli/src/main.rs",
+      "file": "tools/bet-cli/src/main.rs",
       "severity": "Medium",
-      "description": "7 unwrap/expect calls in runtime/bet-rt/src/random.rs",
+      "description": "Potential unbounded allocation pattern detected in tools/bet-cli/src/main.rs",
       "recommended_attack": [
         "memory",
-        "disk"
-      ]
+        "cpu"
+      ],
+      "test_context": "production"
     },
     {
-      "category": "PanicPath",
-      "location": "runtime/bet-rt/src/serial.rs",
-      "severity": "Medium",
-      "description": "11 unwrap/expect calls in runtime/bet-rt/src/serial.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ]
-    },
-    {
-      "category": "UnsafeCode",
-      "location": "playground/src/abi/Foreign.idr",
-      "severity": "Critical",
-      "description": "1 believe_me (type checker bypass) in playground/src/abi/Foreign.idr",
-      "recommended_attack": [
-        "memory"
-      ]
+      "category": "MutationGap",
+      "location": "Cargo.toml",
+      "file": "Cargo.toml",
+      "severity": "Low",
+      "description": "Rust project has test infrastructure but no mutation-test configuration (cargo-mutants/.cargo-mutants.toml) — add `cargo mutants` to verify test suite kills mutations",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 28883,
-    "unsafe_blocks": 100,
-    "panic_sites": 3,
-    "unwrap_calls": 93,
-    "allocation_sites": 295,
-    "io_operations": 25,
-    "threading_constructs": 16
+    "total_lines": 32339,
+    "unsafe_blocks": 70,
+    "panic_sites": 50,
+    "unwrap_calls": 119,
+    "allocation_sites": 588,
+    "io_operations": 27,
+    "threading_constructs": 8
   },
   "file_statistics": [
     {
-      "file_path": "tools/bet-cli/src/main.rs",
-      "lines": 169,
-      "unsafe_blocks": 0,
+      "file_path": "bindings/chapel/src/lib.rs",
+      "lines": 418,
+      "unsafe_blocks": 10,
       "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/bet-cli/src/repl.rs",
-      "lines": 195,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/bet-lsp/src/handlers/completion.rs",
-      "lines": 119,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/bet-lsp/src/handlers/diagnostics.rs",
-      "lines": 62,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/bet-lsp/src/handlers/formatting.rs",
-      "lines": 83,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/bet-lsp/src/backend.rs",
-      "lines": 128,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "tools/bet-lsp/tests/integration_test.rs",
-      "lines": 129,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 6,
+      "unwrap_calls": 1,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
       "file_path": "bindings/chapel/build.rs",
-      "lines": 17,
+      "lines": 18,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "bindings/chapel/src/lib.rs",
-      "lines": 417,
-      "unsafe_blocks": 10,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
@@ -290,80 +296,31 @@
     },
     {
       "file_path": "bindings/julia/src/lib.rs",
-      "lines": 572,
+      "lines": 573,
       "unsafe_blocks": 19,
       "panic_sites": 0,
       "unwrap_calls": 1,
+      "safe_unwrap_calls": 2,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "compiler/bet-codegen/src/lib.rs",
-      "lines": 1808,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 34,
-      "allocation_sites": 93,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "compiler/bet-core/src/env.rs",
-      "lines": 79,
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 275,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "compiler/bet-eval/src/lib.rs",
-      "lines": 520,
-      "unsafe_blocks": 0,
-      "panic_sites": 1,
-      "unwrap_calls": 10,
-      "allocation_sites": 19,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "compiler/bet-parse/build.rs",
-      "lines": 4,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "compiler/bet-parse/src/lexer.rs",
-      "lines": 441,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 6,
       "allocation_sites": 1,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "compiler/bet-syntax/src/ast.rs",
-      "lines": 517,
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 183,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "compiler/bet-syntax/src/symbol.rs",
-      "lines": 156,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 2
@@ -379,163 +336,23 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangColorSettingsPage.java",
-      "lines": 99,
+      "file_path": "ui/INSTALL.sh",
+      "lines": 534,
       "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 13,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangElementTypes.java",
-      "lines": 22,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 5,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangFileType.java",
-      "lines": 43,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangLanguage.java",
-      "lines": 15,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangLspServerSupportProvider.java",
-      "lines": 122,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 5,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangParserDefinition.java",
-      "lines": 65,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangSyntaxHighlighter.java",
-      "lines": 108,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 13,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangSyntaxHighlighterFactory.java",
-      "lines": 20,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangTokenTypes.java",
-      "lines": 22,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 12,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/repl/BetlangReplToolWindowFactory.java",
-      "lines": 284,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 27,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangConfigurationFactory.java",
-      "lines": 36,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangConfigurationType.java",
-      "lines": 44,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangRunConfiguration.java",
-      "lines": 187,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 8,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangSettingsEditor.java",
-      "lines": 94,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 14,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "editors/vscode/src/VSCode.res",
-      "lines": 71,
-      "unsafe_blocks": 3,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 4,
       "threading_constructs": 0
     },
     {
-      "file_path": "editors/vscode/src/Extension.res",
-      "lines": 97,
+      "file_path": "ui/launcher/betlang-playground.sh",
+      "lines": 400,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -559,148 +376,19 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "runtime/bet-rt/src/data.rs",
-      "lines": 991,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 5,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "runtime/bet-rt/src/io.rs",
-      "lines": 756,
+      "file_path": "bench/bench_lexer.rs",
+      "lines": 138,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 8,
-      "io_operations": 4,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "runtime/bet-rt/src/parallel.rs",
-      "lines": 567,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 3,
-      "allocation_sites": 6,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "runtime/bet-rt/src/random.rs",
-      "lines": 668,
-      "unsafe_blocks": 0,
-      "panic_sites": 1,
-      "unwrap_calls": 7,
-      "allocation_sites": 24,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "runtime/bet-rt/src/serial.rs",
-      "lines": 936,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 11,
-      "allocation_sites": 11,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "runtime/bet-rt/src/value.rs",
-      "lines": 498,
-      "unsafe_blocks": 0,
-      "panic_sites": 1,
-      "unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "runtime/bet-viz/src/lib.rs",
-      "lines": 691,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 6,
-      "io_operations": 1,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "runtime/bet-viz/src/terminal.rs",
-      "lines": 395,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 7,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ui/src/App.res",
-      "lines": 304,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
       "allocation_sites": 0,
       "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
       "threading_constructs": 0
     },
     {
       "file_path": "playground/ffi/zig/src/main.zig",
-      "lines": 274,
+      "lines": 275,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -710,7 +398,7 @@
     },
     {
       "file_path": "playground/ffi/zig/test/integration_test.zig",
-      "lines": 182,
+      "lines": 183,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -719,83 +407,233 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "playground/src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 13,
+      "file_path": "compiler/bet-eval/src/lib.rs",
+      "lines": 522,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 4,
+      "allocation_sites": 38,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "compiler/bet-wasm/src/lib.rs",
+      "lines": 751,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 7,
+      "allocation_sites": 8,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bet-core/src/env.rs",
+      "lines": 80,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bet-codegen/src/lib.rs",
+      "lines": 1810,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 186,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bet-parse/src/lexer.rs",
+      "lines": 444,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bet-parse/src/tests.rs",
+      "lines": 1277,
+      "unsafe_blocks": 0,
+      "panic_sites": 50,
+      "unwrap_calls": 101,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bet-parse/src/lib.rs",
+      "lines": 309,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bet-parse/build.rs",
+      "lines": 5,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "playground/src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
+      "file_path": "compiler/bet-syntax/src/pretty.rs",
+      "lines": 903,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bet-syntax/src/symbol.rs",
+      "lines": 157,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "compiler/bet-syntax/src/ast.rs",
+      "lines": 542,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bet-check/src/lib.rs",
+      "lines": 1551,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 324,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/benchmarks/bench_lexer.rs",
+      "lines": 138,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bet-cli/src/main.rs",
+      "lines": 727,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bet-cli/src/repl.rs",
+      "lines": 256,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bet-dap/src/main.rs",
+      "lines": 168,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bet-lsp/src/handlers/completion.rs",
+      "lines": 120,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bet-lsp/src/handlers/diagnostics.rs",
+      "lines": 228,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bet-lsp/src/handlers/symbols.rs",
+      "lines": 157,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 6,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bet-lsp/src/handlers/formatting.rs",
+      "lines": 84,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bet-lsp/src/backend.rs",
+      "lines": 133,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
-      "threading_constructs": 0
+      "threading_constructs": 1
     }
   ],
   "recommended_attacks": [
     "disk",
     "concurrency",
+    "cpu",
     "network",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "tools/bet-cli/src/main.rs",
-        "to": "tools/bet-cli/src/repl.rs",
-        "relation": "shared_dir:tools/bet-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/vscode/src/VSCode.res",
-        "to": "editors/vscode/src/Extension.res",
-        "relation": "shared_dir:editors/vscode/src",
-        "weight": 1.0
-      },
-      {
-        "from": "runtime/bet-rt/src/data.rs",
-        "to": "runtime/bet-rt/src/io.rs",
-        "relation": "shared_dir:runtime/bet-rt/src",
-        "weight": 1.0
-      },
-      {
-        "from": "runtime/bet-rt/src/io.rs",
-        "to": "runtime/bet-rt/src/parallel.rs",
-        "relation": "shared_dir:runtime/bet-rt/src",
-        "weight": 1.0
-      },
-      {
-        "from": "runtime/bet-rt/src/parallel.rs",
-        "to": "runtime/bet-rt/src/random.rs",
-        "relation": "shared_dir:runtime/bet-rt/src",
-        "weight": 1.0
-      },
-      {
-        "from": "runtime/bet-rt/src/random.rs",
-        "to": "runtime/bet-rt/src/serial.rs",
-        "relation": "shared_dir:runtime/bet-rt/src",
-        "weight": 1.0
-      },
-      {
-        "from": "runtime/bet-rt/src/serial.rs",
-        "to": "runtime/bet-rt/src/value.rs",
-        "relation": "shared_dir:runtime/bet-rt/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
       {
         "from": "bindings/julia/src/Betlang.jl",
         "to": "bindings/julia/src/lib.rs",
@@ -803,87 +641,33 @@
         "weight": 1.0
       },
       {
-        "from": "compiler/bet-syntax/src/ast.rs",
+        "from": "compiler/bet-parse/src/lexer.rs",
+        "to": "compiler/bet-parse/src/tests.rs",
+        "relation": "shared_dir:compiler/bet-parse/src",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-parse/src/tests.rs",
+        "to": "compiler/bet-parse/src/lib.rs",
+        "relation": "shared_dir:compiler/bet-parse/src",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-syntax/src/pretty.rs",
         "to": "compiler/bet-syntax/src/symbol.rs",
         "relation": "shared_dir:compiler/bet-syntax/src",
         "weight": 1.0
       },
       {
-        "from": "playground/src/abi/Foreign.idr",
-        "to": "playground/src/abi/Types.idr",
-        "relation": "shared_dir:playground/src/abi",
+        "from": "compiler/bet-syntax/src/symbol.rs",
+        "to": "compiler/bet-syntax/src/ast.rs",
+        "relation": "shared_dir:compiler/bet-syntax/src",
         "weight": 1.0
       },
       {
-        "from": "runtime/bet-viz/src/lib.rs",
-        "to": "runtime/bet-viz/src/terminal.rs",
-        "relation": "shared_dir:runtime/bet-viz/src",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangColorSettingsPage.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangElementTypes.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangElementTypes.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangFileType.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangFileType.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangLanguage.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangLanguage.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangLspServerSupportProvider.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangLspServerSupportProvider.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangParserDefinition.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangParserDefinition.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangSyntaxHighlighter.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangSyntaxHighlighter.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangSyntaxHighlighterFactory.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangSyntaxHighlighterFactory.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangTokenTypes.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangConfigurationFactory.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangConfigurationType.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangConfigurationType.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangRunConfiguration.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangRunConfiguration.java",
-        "to": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangSettingsEditor.java",
-        "relation": "shared_dir:editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run",
+        "from": "tools/bet-cli/src/main.rs",
+        "to": "tools/bet-cli/src/repl.rs",
+        "relation": "shared_dir:tools/bet-cli/src",
         "weight": 1.0
       },
       {
@@ -894,51 +678,33 @@
       },
       {
         "from": "tools/bet-lsp/src/handlers/diagnostics.rs",
+        "to": "tools/bet-lsp/src/handlers/symbols.rs",
+        "relation": "shared_dir:tools/bet-lsp/src/handlers",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/symbols.rs",
         "to": "tools/bet-lsp/src/handlers/formatting.rs",
         "relation": "shared_dir:tools/bet-lsp/src/handlers",
         "weight": 1.0
       },
       {
-        "from": "tools/bet-cli/src/main.rs",
-        "to": "Networking",
+        "from": "bindings/chapel/src/lib.rs",
+        "to": "Concurrent",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 31.0
       },
       {
-        "from": "tools/bet-cli/src/repl.rs",
+        "from": "bindings/chapel/src/lib.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 31.0
       },
       {
-        "from": "tools/bet-lsp/src/handlers/completion.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/bet-lsp/src/handlers/diagnostics.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/bet-lsp/src/handlers/formatting.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/bet-lsp/src/backend.rs",
-        "to": "Networking",
+        "from": "bindings/chapel/build.rs",
+        "to": "Concurrent",
         "relation": "framework",
         "weight": 2.0
-      },
-      {
-        "from": "tools/bet-lsp/tests/integration_test.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
       },
       {
         "from": "bindings/chapel/build.rs",
@@ -947,10 +713,10 @@
         "weight": 2.0
       },
       {
-        "from": "bindings/chapel/src/lib.rs",
-        "to": "Networking",
+        "from": "bindings/julia/src/Betlang.jl",
+        "to": "Concurrent",
         "relation": "framework",
-        "weight": 31.0
+        "weight": 108.0
       },
       {
         "from": "bindings/julia/src/Betlang.jl",
@@ -960,223 +726,19 @@
       },
       {
         "from": "bindings/julia/src/lib.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 58.0
+      },
+      {
+        "from": "bindings/julia/src/lib.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 58.0
       },
       {
-        "from": "compiler/bet-codegen/src/lib.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 34.0
-      },
-      {
-        "from": "compiler/bet-core/src/env.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "compiler/bet-eval/src/lib.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 14.0
-      },
-      {
-        "from": "compiler/bet-parse/build.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "compiler/bet-parse/src/lexer.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "compiler/bet-syntax/src/ast.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "compiler/bet-syntax/src/symbol.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "containers/build.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangColorSettingsPage.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangElementTypes.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangFileType.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangLanguage.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangLspServerSupportProvider.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangParserDefinition.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangSyntaxHighlighter.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangSyntaxHighlighterFactory.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/BetlangTokenTypes.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/repl/BetlangReplToolWindowFactory.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangConfigurationFactory.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangConfigurationType.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangRunConfiguration.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/jetbrains/src/main/java/com/hyperpolymath/betlang/run/BetlangSettingsEditor.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "editors/vscode/src/VSCode.res",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 9.0
-      },
-      {
-        "from": "editors/vscode/src/Extension.res",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "lsp/bet-lsp/src/bet_lsp.gleam",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 15.0
-      },
-      {
-        "from": "packaging/scripts/build-all.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "runtime/bet-rt/src/data.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 7.0
-      },
-      {
-        "from": "runtime/bet-rt/src/io.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "runtime/bet-rt/src/parallel.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 5.0
-      },
-      {
-        "from": "runtime/bet-rt/src/random.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 11.0
-      },
-      {
-        "from": "runtime/bet-rt/src/serial.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 13.0
-      },
-      {
-        "from": "runtime/bet-rt/src/value.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 5.0
-      },
-      {
-        "from": "runtime/bet-viz/src/lib.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "runtime/bet-viz/src/terminal.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/App.res",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "contractiles/trust/Trustfile.hs",
-        "to": "Networking",
+        "from": "ffi/zig/src/main.zig",
+        "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1188,21 +750,93 @@
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
         "to": "Networking",
         "relation": "framework",
         "weight": 4.0
       },
       {
-        "from": "src/abi/Types.idr",
-        "to": "Networking",
+        "from": "containers/build.sh",
+        "to": "Concurrent",
         "relation": "framework",
-        "weight": 3.0
+        "weight": 1.0
       },
       {
-        "from": "src/abi/Foreign.idr",
+        "from": "containers/build.sh",
         "to": "Networking",
         "relation": "framework",
-        "weight": 36.0
+        "weight": 1.0
+      },
+      {
+        "from": "ui/INSTALL.sh",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/INSTALL.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/launcher/betlang-playground.sh",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/launcher/betlang-playground.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lsp/bet-lsp/src/bet_lsp.gleam",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 15.0
+      },
+      {
+        "from": "lsp/bet-lsp/src/bet_lsp.gleam",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 15.0
+      },
+      {
+        "from": "packaging/scripts/build-all.sh",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "packaging/scripts/build-all.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "bench/bench_lexer.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "bench/bench_lexer.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "playground/ffi/zig/src/main.zig",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
       },
       {
         "from": "playground/ffi/zig/src/main.zig",
@@ -1212,110 +846,360 @@
       },
       {
         "from": "playground/ffi/zig/test/integration_test.zig",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "playground/ffi/zig/test/integration_test.zig",
         "to": "Networking",
         "relation": "framework",
         "weight": 4.0
       },
       {
-        "from": "playground/src/abi/Foreign.idr",
-        "to": "Networking",
+        "from": "compiler/bet-eval/src/lib.rs",
+        "to": "Concurrent",
         "relation": "framework",
-        "weight": 39.0
+        "weight": 6.0
       },
       {
-        "from": "playground/src/abi/Types.idr",
+        "from": "compiler/bet-eval/src/lib.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 3.0
+        "weight": 6.0
+      },
+      {
+        "from": "compiler/bet-wasm/src/lib.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 7.0
+      },
+      {
+        "from": "compiler/bet-wasm/src/lib.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 7.0
+      },
+      {
+        "from": "compiler/bet-core/src/env.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-core/src/env.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-codegen/src/lib.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-codegen/src/lib.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-parse/src/lexer.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-parse/src/lexer.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-parse/src/tests.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 201.0
+      },
+      {
+        "from": "compiler/bet-parse/src/tests.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 201.0
+      },
+      {
+        "from": "compiler/bet-parse/src/lib.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-parse/src/lib.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-parse/build.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-parse/build.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-syntax/src/pretty.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-syntax/src/pretty.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-syntax/src/symbol.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "compiler/bet-syntax/src/symbol.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "compiler/bet-syntax/src/ast.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-syntax/src/ast.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-check/src/lib.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/bet-check/src/lib.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/benchmarks/bench_lexer.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/benchmarks/bench_lexer.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-cli/src/main.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-cli/src/main.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-cli/src/repl.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-cli/src/repl.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-dap/src/main.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-dap/src/main.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/completion.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/completion.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/diagnostics.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/diagnostics.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/symbols.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/symbols.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/formatting.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/handlers/formatting.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bet-lsp/src/backend.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "tools/bet-lsp/src/backend.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "repl/shell.rkt",
-          "containers/build.sh",
-          "packaging/scripts/build-all.sh",
-          "packaging/scripts/release.sh"
+          "bindings/chapel/src/lib.rs",
+          "bindings/chapel/src/lib.rs",
+          "bindings/julia/src/lib.rs",
+          "bindings/julia/src/lib.rs"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
-        "severity_value": 3.5,
+        "severity_value": 5.0,
         "files": [
+          "ui/launcher/keepopen.sh",
           "repl/shell.rkt"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "CommandInjection",
         "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "severity_value": 5.0,
         "files": [
+          "ui/INSTALL.sh",
+          "ui/launcher/keepopen.sh",
           "repl/shell.rkt"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ui/public/app.js",
+          "repl/shell.rkt"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tools/bet-lsp/tests/integration_test.rs",
-          "compiler/bet-codegen/src/lib.rs",
-          "compiler/bet-eval/src/lib.rs",
-          "compiler/bet-parse/src/lexer.rs",
-          "runtime/bet-rt/src/random.rs",
-          "runtime/bet-rt/src/serial.rs"
+          "bench/bench_lexer.rs",
+          "verification/benchmarks/bench_lexer.rs",
+          "tools/bet-cli/src/main.rs"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "bindings/chapel/src/lib.rs",
-          "bindings/julia/src/lib.rs"
+          "bench/bench_lexer.rs",
+          "verification/benchmarks/bench_lexer.rs",
+          "tools/bet-cli/src/main.rs"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "bindings/chapel/src/lib.rs",
-          "bindings/chapel/src/lib.rs",
-          "bindings/julia/src/lib.rs",
-          "bindings/julia/src/lib.rs",
-          "playground/src/abi/Foreign.idr"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnsafeFFI",
@@ -1325,50 +1209,109 @@
           "bindings/julia/src/Betlang.jl"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "packaging/scripts/build-all.sh"
+          "bindings/chapel/src/lib.rs",
+          "bindings/chapel/src/lib.rs",
+          "bindings/julia/src/lib.rs",
+          "bindings/julia/src/lib.rs"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
+        "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
-          "repl/shell.rkt"
+          "ui/public/app.js"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tools/bet-lsp/tests/integration_test.rs",
-          "compiler/bet-codegen/src/lib.rs",
-          "compiler/bet-eval/src/lib.rs",
-          "compiler/bet-parse/src/lexer.rs",
-          "runtime/bet-rt/src/random.rs",
-          "runtime/bet-rt/src/serial.rs"
+          "compiler/bet-wasm/src/lib.rs",
+          "compiler/bet-parse/src/tests.rs"
         ],
         "frameworks": [
+          "Concurrent",
           "Networking"
         ],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "ui/INSTALL.sh",
+          "packaging/scripts/build-all.sh"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "ui/INSTALL.sh",
+          "ui/launcher/betlang-playground.sh",
+          "ui/launcher/keepopen.sh"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "compiler/bet-wasm/src/lib.rs",
+          "compiler/bet-parse/src/tests.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "repl/shell.rkt"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

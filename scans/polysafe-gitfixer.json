@@ -1,58 +1,65 @@
 {
-  "program_path": ".",
-  "language": "nickel",
+  "schema_version": "2.5",
+  "program_path": "polysafe-gitfixer",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "crates/capability/src/audit_log.rs",
-      "severity": "Medium",
-      "description": "30 unwrap/expect calls in crates/capability/src/audit_log.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ]
-    },
-    {
-      "category": "PanicPath",
-      "location": "crates/capability/src/dir_capability.rs",
-      "severity": "Medium",
-      "description": "26 unwrap/expect calls in crates/capability/src/dir_capability.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ]
-    },
-    {
-      "category": "PanicPath",
-      "location": "crates/git_ops/src/lib.rs",
-      "severity": "Medium",
-      "description": "28 unwrap/expect calls in crates/git_ops/src/lib.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ]
-    },
-    {
-      "category": "UncheckedError",
-      "location": "crates/polysafe_nifs/src/lib.rs",
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
       "severity": "Low",
-      "description": "12 TODO/FIXME/HACK markers in crates/polysafe_nifs/src/lib.rs",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "crates/polysafe_e2e/tests/e2e_test.rs",
+      "file": "crates/polysafe_e2e/tests/e2e_test.rs",
+      "severity": "Medium",
+      "description": "14 unwrap/expect calls in crates/polysafe_e2e/tests/e2e_test.rs",
       "recommended_attack": [
-        "cpu"
-      ]
+        "memory",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "PanicPath",
+      "location": "crates/capability/tests/capability_test.rs",
+      "file": "crates/capability/tests/capability_test.rs",
+      "severity": "Medium",
+      "description": "8 unwrap/expect calls in crates/capability/tests/capability_test.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
     }
   ],
   "statistics": {
-    "total_lines": 2658,
+    "total_lines": 2812,
     "unsafe_blocks": 0,
-    "panic_sites": 2,
-    "unwrap_calls": 84,
-    "allocation_sites": 5,
-    "io_operations": 8,
+    "panic_sites": 0,
+    "unwrap_calls": 31,
+    "allocation_sites": 6,
+    "io_operations": 11,
     "threading_constructs": 0
   },
   "file_statistics": [
+    {
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
     {
       "file_path": "config/default.ncl",
       "lines": 54,
@@ -64,53 +71,109 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "crates/capability/src/audit_log.rs",
-      "lines": 448,
-      "unsafe_blocks": 0,
-      "panic_sites": 2,
-      "unwrap_calls": 30,
-      "allocation_sites": 2,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/capability/src/dir_capability.rs",
-      "lines": 399,
+      "file_path": "flake.nix",
+      "lines": 116,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 26,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/git_ops/src/lib.rs",
-      "lines": 533,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 28,
-      "allocation_sites": 3,
       "io_operations": 2,
       "threading_constructs": 0
     },
     {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
+      "file_path": "crates/fs_ops/src/transaction.rs",
+      "lines": 139,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/git_ops/src/lib.rs",
+      "lines": 172,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/git_ops/tests/git_ops_test.rs",
+      "lines": 140,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 5,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/polysafe_e2e/benches/polysafe_bench.rs",
+      "lines": 99,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/polysafe_e2e/tests/e2e_test.rs",
+      "lines": 149,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 14,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/capability/src/audit_log.rs",
+      "lines": 193,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/capability/src/dir_capability.rs",
+      "lines": 138,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/capability/tests/capability_test.rs",
+      "lines": 151,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 8,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "crates/capability/src/audit_log.rs",
         "to": "crates/capability/src/dir_capability.rs",
@@ -122,23 +185,12 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "crates/polysafe_nifs/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/capability/src/audit_log.rs",
-          "crates/capability/src/dir_capability.rs",
-          "crates/git_ops/src/lib.rs"
+          "crates/polysafe_e2e/tests/e2e_test.rs",
+          "crates/capability/tests/capability_test.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
@@ -148,9 +200,8 @@
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/capability/src/audit_log.rs",
-          "crates/capability/src/dir_capability.rs",
-          "crates/git_ops/src/lib.rs"
+          "crates/polysafe_e2e/tests/e2e_test.rs",
+          "crates/capability/tests/capability_test.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"

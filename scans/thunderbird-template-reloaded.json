@@ -1,28 +1,51 @@
 {
-  "program_path": ".",
-  "language": "nickel",
+  "schema_version": "2.5",
+  "program_path": "thunderbird-template-reloaded",
+  "language": "idris",
   "frameworks": [],
-  "weak_points": [],
+  "weak_points": [
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "tests/bench_test.ts",
+      "file": "tests/bench_test.ts",
+      "severity": "Medium",
+      "description": "1 JSON.parse call(s) with 0 try block(s) in tests/bench_test.ts — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "HardcodedSecret",
+      "location": "tests/idris2/AspectTest.idr",
+      "file": "tests/idris2/AspectTest.idr",
+      "severity": "Critical",
+      "description": "Possible hardcoded secret in tests/idris2/AspectTest.idr",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    }
+  ],
   "statistics": {
-    "total_lines": 2271,
-    "unsafe_blocks": 13,
+    "total_lines": 4110,
+    "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 1,
+    "io_operations": 6,
     "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
     {
       "file_path": "ffi/zig/src/main.zig",
       "lines": 274,
@@ -44,40 +67,73 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu"
+    "disk",
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/bench_test.ts"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "tests/idris2/AspectTest.idr"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      }
+    ]
   }
 }

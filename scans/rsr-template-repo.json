@@ -1,50 +1,33 @@
 {
-  "program_path": ".",
-  "language": "nickel",
+  "schema_version": "2.5",
+  "program_path": "rsr-template-repo",
+  "language": "shell",
   "frameworks": [],
-  "weak_points": [],
+  "weak_points": [
+    {
+      "category": "PathTraversal",
+      "location": "tests/e2e.sh",
+      "file": "tests/e2e.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in tests/e2e.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "test_only"
+    }
+  ],
   "statistics": {
-    "total_lines": 2285,
-    "unsafe_blocks": 13,
+    "total_lines": 4099,
+    "unsafe_blocks": 4,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 1,
-    "threading_constructs": 2
+    "io_operations": 10,
+    "threading_constructs": 0
   },
   "file_statistics": [
     {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
+      "file_path": "src/interface/ffi/src/main.zig",
       "lines": 274,
       "unsafe_blocks": 0,
       "panic_sites": 0,
@@ -54,30 +37,65 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/Abi/Foreign.idr",
+      "lines": 82,
+      "unsafe_blocks": 4,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
-      "threading_constructs": 2
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e.sh",
+      "lines": 142,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "session/dispatch.sh",
+      "lines": 137,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
-    "edges": [
-      {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      }
-    ]
+    "edges": []
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      }
+    ]
   }
 }

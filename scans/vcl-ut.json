@@ -20,7 +20,7 @@
       "category": "UnboundedAllocation",
       "location": "src/interface/lint/src/main.rs",
       "file": "src/interface/lint/src/main.rs",
-      "severity": "Critical",
+      "severity": "Medium",
       "description": "Potential unbounded allocation pattern detected in src/interface/lint/src/main.rs",
       "recommended_attack": [
         "memory",
@@ -57,7 +57,7 @@
       "category": "UnboundedAllocation",
       "location": "src/interface/fmt/src/main.rs",
       "file": "src/interface/fmt/src/main.rs",
-      "severity": "Critical",
+      "severity": "Medium",
       "description": "Potential unbounded allocation pattern detected in src/interface/fmt/src/main.rs",
       "recommended_attack": [
         "memory",
@@ -441,23 +441,29 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "concurrency",
-    "memory",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/lint/src/lib.rs",
-        "to": "src/interface/lint/src/main.rs",
-        "relation": "shared_dir:src/interface/lint/src",
+        "from": "src/interface/fmt/src/lib.rs",
+        "to": "src/interface/fmt/src/main.rs",
+        "relation": "shared_dir:src/interface/fmt/src",
         "weight": 1.0
       },
       {
-        "from": "src/interface/lsp/src/lib.rs",
-        "to": "src/interface/lsp/src/main.rs",
-        "relation": "shared_dir:src/interface/lsp/src",
+        "from": "src/interface/parse/tests/conformance_emit.rs",
+        "to": "src/interface/parse/tests/wire.rs",
+        "relation": "shared_dir:src/interface/parse/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -479,21 +485,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/fmt/src/lib.rs",
-        "to": "src/interface/fmt/src/main.rs",
-        "relation": "shared_dir:src/interface/fmt/src",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/parse/tests/conformance_emit.rs",
-        "to": "src/interface/parse/tests/wire.rs",
-        "relation": "shared_dir:src/interface/parse/tests",
+        "from": "src/interface/lint/src/lib.rs",
+        "to": "src/interface/lint/src/main.rs",
+        "relation": "shared_dir:src/interface/lint/src",
         "weight": 1.0
       },
       {
@@ -501,38 +495,21 @@
         "to": "tests/integration_test.rs",
         "relation": "shared_dir:tests",
         "weight": 1.0
+      },
+      {
+        "from": "src/interface/lsp/src/lib.rs",
+        "to": "src/interface/lsp/src/main.rs",
+        "relation": "shared_dir:src/interface/lsp/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/src/lib.zig",
-          "src/interface/recompute-wasm/src/lib.rs",
-          "src/interface/attest/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "src/interface/lint/src/main.rs",
-          "src/interface/fmt/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
           "src/interface/lint/src/main.rs",
           "src/interface/fmt/src/main.rs"
@@ -550,6 +527,29 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/src/lib.zig",
+          "src/interface/recompute-wasm/src/lib.rs",
+          "src/interface/attest/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/interface/lint/src/main.rs",
+          "src/interface/fmt/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "ResourceLeak",

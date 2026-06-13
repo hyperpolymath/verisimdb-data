@@ -1,119 +1,159 @@
 {
-  "program_path": ".",
+  "schema_version": "2.5",
+  "program_path": "accessibility-everywhere",
   "language": "javascript",
   "frameworks": [
     "WebServer"
   ],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "tools/browser-extension/axe.min.js",
-      "severity": "High",
-      "description": "innerHTML/outerHTML usage (XSS risk) in tools/browser-extension/axe.min.js",
-      "recommended_attack": [
-        "network"
-      ]
-    },
-    {
-      "category": "InsecureProtocol",
-      "location": "tools/browser-extension/axe.min.js",
-      "severity": "Medium",
-      "description": "1 HTTP (non-HTTPS) URLs in tools/browser-extension/axe.min.js",
-      "recommended_attack": [
-        "network"
-      ]
-    },
-    {
-      "category": "CommandInjection",
-      "location": "tools/browser-extension/axe.min.js",
-      "severity": "Critical",
-      "description": "SQL string concatenation (injection risk) in tools/browser-extension/axe.min.js",
-      "recommended_attack": [
-        "network"
-      ]
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
     },
     {
       "category": "DynamicCodeExecution",
       "location": "tools/browser-extension/popup.js",
+      "file": "tools/browser-extension/popup.js",
       "severity": "High",
-      "description": "innerHTML/outerHTML usage (XSS risk) in tools/browser-extension/popup.js",
+      "description": "DOM manipulation (innerHTML/document.write) in tools/browser-extension/popup.js",
       "recommended_attack": [
+        "memory",
         "network"
-      ]
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "tools/browser-extension/axe.min.js",
+      "file": "tools/browser-extension/axe.min.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in tools/browser-extension/axe.min.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "tools/stale/packages/core/src/database/Arangodb.res",
+      "file": "tools/stale/packages/core/src/database/Arangodb.res",
+      "severity": "Medium",
+      "description": "2 unsafe get calls in tools/stale/packages/core/src/database/Arangodb.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "tools/stale/packages/stale/components/react/src/Modal.res",
+      "file": "tools/stale/packages/stale/components/react/src/Modal.res",
+      "severity": "Medium",
+      "description": "2 unsafe get calls in tools/stale/packages/stale/components/react/src/Modal.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
     },
     {
       "category": "DynamicCodeExecution",
       "location": "tools/testing-dashboard/app.js",
+      "file": "tools/testing-dashboard/app.js",
       "severity": "High",
-      "description": "innerHTML/outerHTML usage (XSS risk) in tools/testing-dashboard/app.js",
+      "description": "DOM manipulation (innerHTML/document.write) in tools/testing-dashboard/app.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "tools/monitoring-api/src/Server.res",
+      "file": "tools/monitoring-api/src/Server.res",
+      "severity": "Medium",
+      "description": "15 unsafe get calls in tools/monitoring-api/src/Server.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "tools/monitoring-api/tests/aspect/security_test.js",
+      "file": "tools/monitoring-api/tests/aspect/security_test.js",
+      "severity": "Critical",
+      "description": "eval() usage in tools/monitoring-api/tests/aspect/security_test.js",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InsecureProtocol",
+      "location": "tools/monitoring-api/tests/aspect/security_test.js",
+      "file": "tools/monitoring-api/tests/aspect/security_test.js",
+      "severity": "Medium",
+      "description": "7 HTTP (non-HTTPS) URLs in tools/monitoring-api/tests/aspect/security_test.js",
       "recommended_attack": [
         "network"
-      ]
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "PanicPath",
+      "location": "tools/cli/src/Cli.res",
+      "file": "tools/cli/src/Cli.res",
+      "severity": "Medium",
+      "description": "1 unsafe get calls in tools/cli/src/Cli.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "tools/safe-dom/src/SafeDOM.mjs",
+      "file": "tools/safe-dom/src/SafeDOM.mjs",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in tools/safe-dom/src/SafeDOM.mjs",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "deno.json",
+      "file": "deno.json",
+      "severity": "Medium",
+      "description": "1 import map entry/ies in deno.json without a version pin — specifiers are not reproducibly resolved",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 6004,
-    "unsafe_blocks": 13,
+    "total_lines": 10137,
+    "unsafe_blocks": 103,
     "panic_sites": 0,
-    "unwrap_calls": 0,
-    "allocation_sites": 1,
-    "io_operations": 9,
+    "unwrap_calls": 20,
+    "allocation_sites": 4,
+    "io_operations": 7,
     "threading_constructs": 2
   },
   "file_statistics": [
     {
-      "file_path": "packages/scanner/src/scanner.ts",
-      "lines": 403,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "scripts/check-rsr-compliance.js",
       "lines": 409,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/browser-extension/background.js",
-      "lines": 147,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/cli/src/cli.ts",
-      "lines": 246,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/testing-dashboard/app.js",
-      "lines": 410,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 105,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -142,9 +182,29 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "src/abi/Types.idr",
-      "lines": 231,
-      "unsafe_blocks": 1,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "flake.nix",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/github-action/src/Action.res",
+      "lines": 263,
+      "unsafe_blocks": 2,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -152,61 +212,134 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 216,
-      "unsafe_blocks": 12,
+      "file_path": "tools/browser-extension/background.js",
+      "lines": 147,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/stale/packages/core/src/database/Arangodb.res",
+      "lines": 446,
+      "unsafe_blocks": 15,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/stale/packages/stale/components/react/src/Modal.res",
+      "lines": 199,
+      "unsafe_blocks": 7,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/stale/packages/scanner/src/Scanner.res",
+      "lines": 119,
+      "unsafe_blocks": 4,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/testing-dashboard/app.js",
+      "lines": 410,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/monitoring-api/src/Db.res",
+      "lines": 127,
+      "unsafe_blocks": 8,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/monitoring-api/src/Joi.res",
+      "lines": 16,
+      "unsafe_blocks": 6,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/monitoring-api/src/Express.res",
+      "lines": 63,
+      "unsafe_blocks": 21,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/monitoring-api/src/Server.res",
+      "lines": 631,
+      "unsafe_blocks": 3,
+      "panic_sites": 0,
+      "unwrap_calls": 15,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/cli/src/Cli.res",
+      "lines": 401,
+      "unsafe_blocks": 37,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "disk",
     "network",
+    "memory",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "tools/monitoring-api/src/Db.res",
+        "to": "tools/monitoring-api/src/Joi.res",
+        "relation": "shared_dir:tools/monitoring-api/src",
         "weight": 1.0
       },
       {
-        "from": "packages/scanner/src/scanner.ts",
-        "to": "WebServer",
-        "relation": "framework",
+        "from": "tools/monitoring-api/src/Joi.res",
+        "to": "tools/monitoring-api/src/Express.res",
+        "relation": "shared_dir:tools/monitoring-api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/monitoring-api/src/Express.res",
+        "to": "tools/monitoring-api/src/Server.res",
+        "relation": "shared_dir:tools/monitoring-api/src",
         "weight": 1.0
       },
       {
         "from": "scripts/check-rsr-compliance.js",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/browser-extension/background.js",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/cli/src/cli.ts",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/testing-dashboard/app.js",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "contractiles/trust/Trustfile.hs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -224,27 +357,135 @@
         "weight": 4.0
       },
       {
-        "from": "src/abi/Types.idr",
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 3.0
+        "weight": 1.0
       },
       {
-        "from": "src/abi/Foreign.idr",
+        "from": "flake.nix",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 36.0
+        "weight": 1.0
+      },
+      {
+        "from": "tools/github-action/src/Action.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "tools/browser-extension/background.js",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/stale/packages/core/src/database/Arangodb.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 47.0
+      },
+      {
+        "from": "tools/stale/packages/stale/components/react/src/Modal.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 23.0
+      },
+      {
+        "from": "tools/stale/packages/scanner/src/Scanner.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "tools/testing-dashboard/app.js",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/monitoring-api/src/Db.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 24.0
+      },
+      {
+        "from": "tools/monitoring-api/src/Joi.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 18.0
+      },
+      {
+        "from": "tools/monitoring-api/src/Express.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 63.0
+      },
+      {
+        "from": "tools/monitoring-api/src/Server.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 24.0
+      },
+      {
+        "from": "tools/cli/src/Cli.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 112.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "tools/browser-extension/popup.js",
+          "tools/browser-extension/axe.min.js",
+          "tools/testing-dashboard/app.js",
+          "tools/safe-dom/src/SafeDOM.mjs"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "tools/monitoring-api/tests/aspect/security_test.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tools/stale/packages/core/src/database/Arangodb.res",
+          "tools/stale/packages/stale/components/react/src/Modal.res",
+          "tools/monitoring-api/src/Server.res",
+          "tools/cli/src/Cli.res"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "tools/browser-extension/axe.min.js"
+          "tools/monitoring-api/tests/aspect/security_test.js"
         ],
         "frameworks": [
           "WebServer"
@@ -252,30 +493,20 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "network",
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
         "severity_value": 5.0,
         "files": [
-          "tools/browser-extension/axe.min.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "CommandInjection->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "tools/browser-extension/axe.min.js",
           "tools/browser-extension/popup.js",
-          "tools/testing-dashboard/app.js"
+          "tools/browser-extension/axe.min.js",
+          "tools/testing-dashboard/app.js",
+          "tools/monitoring-api/tests/aspect/security_test.js",
+          "tools/safe-dom/src/SafeDOM.mjs"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

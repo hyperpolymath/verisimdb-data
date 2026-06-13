@@ -1,66 +1,169 @@
 {
-  "program_path": ".",
-  "language": "rust",
-  "frameworks": [
-    "WebServer",
-    "Networking"
-  ],
+  "schema_version": "2.5",
+  "program_path": "affinescript",
+  "language": "javascript",
+  "frameworks": [],
   "weak_points": [
     {
-      "category": "UnsafeCode",
-      "location": "runtime/src/alloc.rs",
-      "severity": "High",
-      "description": "1 unsafe blocks in runtime/src/alloc.rs",
+      "category": "PanicPath",
+      "location": "affinescriptiser/src/codegen/wasm_gen.rs",
+      "file": "affinescriptiser/src/codegen/wasm_gen.rs",
+      "severity": "Medium",
+      "description": "32 unwrap/expect calls in affinescriptiser/src/codegen/wasm_gen.rs",
       "recommended_attack": [
         "memory",
-        "concurrency"
-      ]
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
     },
     {
-      "category": "UnsafeCode",
-      "location": "runtime/src/ffi.rs",
-      "severity": "High",
-      "description": "5 unsafe blocks in runtime/src/ffi.rs",
+      "category": "UnboundedAllocation",
+      "location": "affinescriptiser/src/codegen/parser.rs",
+      "file": "affinescriptiser/src/codegen/parser.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in affinescriptiser/src/codegen/parser.rs",
       "recommended_attack": [
         "memory",
-        "concurrency"
-      ]
+        "cpu"
+      ],
+      "suppressed": true,
+      "test_context": "production"
     },
     {
-      "category": "UnsafeCode",
-      "location": "runtime/src/gc.rs",
-      "severity": "High",
-      "description": "11 unsafe blocks in runtime/src/gc.rs",
+      "category": "PanicPath",
+      "location": "affinescriptiser/src/codegen/affine_gen.rs",
+      "file": "affinescriptiser/src/codegen/affine_gen.rs",
+      "severity": "Medium",
+      "description": "29 unwrap/expect calls in affinescriptiser/src/codegen/affine_gen.rs",
       "recommended_attack": [
         "memory",
-        "concurrency"
-      ]
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
     },
     {
-      "category": "UnsafeCode",
-      "location": "runtime/src/panic.rs",
+      "category": "InputBoundary",
+      "location": "tests/codegen-deno/aggregate_smoke.harness.mjs",
+      "file": "tests/codegen-deno/aggregate_smoke.harness.mjs",
+      "severity": "Medium",
+      "description": "2 JSON.parse call(s) with 0 try block(s) in tests/codegen-deno/aggregate_smoke.harness.mjs — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "tests/codegen-deno/sqlite_smoke.harness.mjs",
+      "file": "tests/codegen-deno/sqlite_smoke.harness.mjs",
+      "severity": "Medium",
+      "description": "2 JSON.parse call(s) with 0 try block(s) in tests/codegen-deno/sqlite_smoke.harness.mjs — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "tests/codegen-deno/sqlite_introspect_bulk.harness.mjs",
+      "file": "tests/codegen-deno/sqlite_introspect_bulk.harness.mjs",
+      "severity": "Medium",
+      "description": "2 JSON.parse call(s) with 0 try block(s) in tests/codegen-deno/sqlite_introspect_bulk.harness.mjs — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "affinescript-vite/flake.nix",
+      "file": "affinescript-vite/flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in affinescript-vite/flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "tools/affine-doc/assets/search.js",
+      "file": "tools/affine-doc/assets/search.js",
       "severity": "High",
-      "description": "2 unsafe blocks in runtime/src/panic.rs",
+      "description": "DOM manipulation (innerHTML/document.write) in tools/affine-doc/assets/search.js",
       "recommended_attack": [
         "memory",
-        "concurrency"
-      ]
+        "network"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "tools/affine-pkg/src/lockfile.rs",
+      "file": "tools/affine-pkg/src/lockfile.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in tools/affine-pkg/src/lockfile.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "tools/affine-pkg/src/manifest.rs",
+      "file": "tools/affine-pkg/src/manifest.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in tools/affine-pkg/src/manifest.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "tools/affine-pkg/src/config.rs",
+      "file": "tools/affine-pkg/src/config.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in tools/affine-pkg/src/config.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "UncheckedError",
+      "location": "tools/affine-pkg/src/main.rs",
+      "file": "tools/affine-pkg/src/main.rs",
+      "severity": "Low",
+      "description": "18 TODO/FIXME/HACK markers in tools/affine-pkg/src/main.rs",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 203797,
-    "unsafe_blocks": 19,
+    "total_lines": 81038,
+    "unsafe_blocks": 30,
     "panic_sites": 0,
-    "unwrap_calls": 8,
-    "allocation_sites": 18,
-    "io_operations": 37,
-    "threading_constructs": 1
+    "unwrap_calls": 76,
+    "allocation_sites": 65,
+    "io_operations": 138,
+    "threading_constructs": 6
   },
   "file_statistics": [
     {
-      "file_path": "runtime/src/alloc.rs",
-      "lines": 162,
-      "unsafe_blocks": 1,
+      "file_path": "affinescript-dom/src/abi/DOM.idr",
+      "lines": 79,
+      "unsafe_blocks": 6,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -68,9 +171,60 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "runtime/src/ffi.rs",
-      "lines": 277,
-      "unsafe_blocks": 5,
+      "file_path": "distributions/rattlescript/build.rs",
+      "lines": 50,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescriptiser/src/codegen/wasm_gen.rs",
+      "lines": 270,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 32,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescriptiser/src/codegen/parser.rs",
+      "lines": 268,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescriptiser/src/codegen/affine_gen.rs",
+      "lines": 372,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 29,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescriptiser/src/interface/ffi/src/main.zig",
+      "lines": 441,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescriptiser/src/interface/abi/Foreign.idr",
+      "lines": 318,
+      "unsafe_blocks": 20,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -78,9 +232,379 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "runtime/src/gc.rs",
+      "file_path": "affinescriptiser/src/manifest/mod.rs",
+      "lines": 360,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescriptiser/tests/integration_tests.rs",
+      "lines": 409,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "packages/affine-js/loader.js",
+      "lines": 245,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "packages/affine-js/mod.js",
       "lines": 282,
-      "unsafe_blocks": 11,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "packages/affine-vscode/mod.js",
+      "lines": 492,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "test/test_golden.ml",
+      "lines": 132,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "test/test_e2e.ml",
+      "lines": 5216,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "test/test_deno_builtins_consistency.ml",
+      "lines": 134,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "editors/vscode/out/extension.cjs",
+      "lines": 618,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/trust/Trustfile.hs",
+      "lines": 105,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/parse_driver.ml",
+      "lines": 230,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/interp.ml",
+      "lines": 1159,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/lsp_server.ml",
+      "lines": 562,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/parse.ml",
+      "lines": 221,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/cafe_face.ml",
+      "lines": 519,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/wasm_gc_encode.ml",
+      "lines": 368,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/lucid_face.ml",
+      "lines": 680,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/python_face.ml",
+      "lines": 343,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/face_pragma.ml",
+      "lines": 156,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lib/wasm_encode.ml",
+      "lines": 388,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "bin/main.ml",
+      "lines": 1820,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 26,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ai-cli-crash-capture/recoverer-setup.sh",
+      "lines": 155,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/componentize/sockets_smoke.sh",
+      "lines": 104,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen/test_http_cps_chain.mjs",
+      "lines": 110,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen/test_http_response_reader.mjs",
+      "lines": 143,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen/test_http_thenable_skeleton.mjs",
+      "lines": 71,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen/test_http_cps_base.mjs",
+      "lines": 135,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen/test_http_cps_capture.mjs",
+      "lines": 107,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen-deno/bytes_binary_io.deno.js",
+      "lines": 325,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen-deno/http_fetch.harness.mjs",
+      "lines": 83,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen-deno/deno_scripting_part2.deno.js",
+      "lines": 318,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen-deno/random_smoke.deno.js",
+      "lines": 302,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/codegen-deno/sqlite_introspect_bulk.harness.mjs",
+      "lines": 216,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "run_wasm.js",
+      "lines": 24,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescript-vite/src/interface/ffi/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescript-vite/src/interface/abi/Foreign.idr",
+      "lines": 82,
+      "unsafe_blocks": 4,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -88,13 +612,83 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "runtime/src/panic.rs",
-      "lines": 242,
-      "unsafe_blocks": 2,
+      "file_path": "affinescript-vite/setup.sh",
+      "lines": 18,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "affinescript-vite/flake.nix",
+      "lines": 170,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/alib_conformance_gen.jl",
+      "lines": 176,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/res-to-affine/test/test_walker.ml",
+      "lines": 556,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/res-to-affine/test/fixtures/phase3c.res",
+      "lines": 27,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
       "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/res-to-affine/test/fixtures/sample.res",
+      "lines": 28,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/res-to-affine/test/test_emit.ml",
+      "lines": 77,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/res-to-affine/main.ml",
+      "lines": 172,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -103,7 +697,7 @@
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 2,
+      "allocation_sites": 4,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -118,43 +712,90 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/affine-doc/src/index.rs",
-      "lines": 220,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tools/affine-doc/src/render.rs",
       "lines": 122,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/affine-doc/src/index.rs",
+      "lines": 220,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 5,
+      "allocation_sites": 4,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/affinescript-lsp/src/document.rs",
+      "lines": 180,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 5,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "tools/affinescript-lsp/src/diagnostics.rs",
+      "lines": 181,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
       "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/affine-pkg/src/build.rs",
-      "lines": 235,
+      "file_path": "tools/affinescript-lsp/src/text_index.rs",
+      "lines": 383,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 1,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/affine-pkg/src/config.rs",
-      "lines": 235,
+      "file_path": "tools/affinescript-lsp/src/compiler.rs",
+      "lines": 205,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 9,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 6,
+      "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/affinescript-lsp/src/main.rs",
+      "lines": 536,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 5,
+      "safe_unwrap_calls": 14,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "tools/affinescript-lsp/src/handlers.rs",
+      "lines": 831,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 8,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -163,7 +804,7 @@
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
+      "allocation_sites": 2,
       "io_operations": 2,
       "threading_constructs": 0
     },
@@ -178,12 +819,22 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "tools/affine-pkg/src/build.rs",
+      "lines": 235,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "tools/affine-pkg/src/resolve.rs",
       "lines": 192,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
+      "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -198,38 +849,19 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/affine-pkg/src/workspace.rs",
-      "lines": 165,
+      "file_path": "tools/affine-pkg/src/config.rs",
+      "lines": 235,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/affinescript-lsp/src/diagnostics.rs",
-      "lines": 185,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/affinescript-lsp/src/document.rs",
-      "lines": 183,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 5,
+      "safe_unwrap_calls": 1,
       "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
+      "io_operations": 9,
+      "threading_constructs": 0
     },
     {
-      "file_path": "tools/affinescript-lsp/src/handlers.rs",
-      "lines": 364,
+      "file_path": "tools/affine-pkg/src/workspace.rs",
+      "lines": 165,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -238,20 +870,369 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/affinescript-lsp/src/main.rs",
-      "lines": 322,
+      "file_path": "tools/affinescript-dap/src/main.rs",
+      "lines": 171,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "tools/provision-component-toolchain.sh",
+      "lines": 95,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "concurrency",
     "memory",
-    "cpu"
-  ]
+    "cpu",
+    "concurrency",
+    "disk",
+    "network"
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "from": "affinescriptiser/src/codegen/wasm_gen.rs",
+        "to": "affinescriptiser/src/codegen/parser.rs",
+        "relation": "shared_dir:affinescriptiser/src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescriptiser/src/codegen/parser.rs",
+        "to": "affinescriptiser/src/codegen/affine_gen.rs",
+        "relation": "shared_dir:affinescriptiser/src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-doc/src/extract.rs",
+        "to": "tools/affine-doc/src/html.rs",
+        "relation": "shared_dir:tools/affine-doc/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-doc/src/html.rs",
+        "to": "tools/affine-doc/src/render.rs",
+        "relation": "shared_dir:tools/affine-doc/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-doc/src/render.rs",
+        "to": "tools/affine-doc/src/index.rs",
+        "relation": "shared_dir:tools/affine-doc/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/res-to-affine/test/fixtures/phase3c.res",
+        "to": "tools/res-to-affine/test/fixtures/sample.res",
+        "relation": "shared_dir:tools/res-to-affine/test/fixtures",
+        "weight": 1.0
+      },
+      {
+        "from": "test/test_golden.ml",
+        "to": "test/test_e2e.ml",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/test_e2e.ml",
+        "to": "test/test_deno_builtins_consistency.ml",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-pkg/src/lockfile.rs",
+        "to": "tools/affine-pkg/src/manifest.rs",
+        "relation": "shared_dir:tools/affine-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-pkg/src/manifest.rs",
+        "to": "tools/affine-pkg/src/build.rs",
+        "relation": "shared_dir:tools/affine-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-pkg/src/build.rs",
+        "to": "tools/affine-pkg/src/resolve.rs",
+        "relation": "shared_dir:tools/affine-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-pkg/src/resolve.rs",
+        "to": "tools/affine-pkg/src/storage.rs",
+        "relation": "shared_dir:tools/affine-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-pkg/src/storage.rs",
+        "to": "tools/affine-pkg/src/config.rs",
+        "relation": "shared_dir:tools/affine-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affine-pkg/src/config.rs",
+        "to": "tools/affine-pkg/src/workspace.rs",
+        "relation": "shared_dir:tools/affine-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/codegen/test_http_cps_chain.mjs",
+        "to": "tests/codegen/test_http_response_reader.mjs",
+        "relation": "shared_dir:tests/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/codegen/test_http_response_reader.mjs",
+        "to": "tests/codegen/test_http_thenable_skeleton.mjs",
+        "relation": "shared_dir:tests/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/codegen/test_http_thenable_skeleton.mjs",
+        "to": "tests/codegen/test_http_cps_base.mjs",
+        "relation": "shared_dir:tests/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/codegen/test_http_cps_base.mjs",
+        "to": "tests/codegen/test_http_cps_capture.mjs",
+        "relation": "shared_dir:tests/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/codegen-deno/bytes_binary_io.deno.js",
+        "to": "tests/codegen-deno/http_fetch.harness.mjs",
+        "relation": "shared_dir:tests/codegen-deno",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/codegen-deno/http_fetch.harness.mjs",
+        "to": "tests/codegen-deno/deno_scripting_part2.deno.js",
+        "relation": "shared_dir:tests/codegen-deno",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/codegen-deno/deno_scripting_part2.deno.js",
+        "to": "tests/codegen-deno/random_smoke.deno.js",
+        "relation": "shared_dir:tests/codegen-deno",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/codegen-deno/random_smoke.deno.js",
+        "to": "tests/codegen-deno/sqlite_introspect_bulk.harness.mjs",
+        "relation": "shared_dir:tests/codegen-deno",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/alib_conformance_gen.jl",
+        "to": "tools/provision-component-toolchain.sh",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/res-to-affine/test/test_walker.ml",
+        "to": "tools/res-to-affine/test/test_emit.ml",
+        "relation": "shared_dir:tools/res-to-affine/test",
+        "weight": 1.0
+      },
+      {
+        "from": "packages/affine-js/loader.js",
+        "to": "packages/affine-js/mod.js",
+        "relation": "shared_dir:packages/affine-js",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript-vite/setup.sh",
+        "to": "affinescript-vite/flake.nix",
+        "relation": "shared_dir:affinescript-vite",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/parse_driver.ml",
+        "to": "lib/interp.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/interp.ml",
+        "to": "lib/lsp_server.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/lsp_server.ml",
+        "to": "lib/parse.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/parse.ml",
+        "to": "lib/cafe_face.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/cafe_face.ml",
+        "to": "lib/wasm_gc_encode.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/wasm_gc_encode.ml",
+        "to": "lib/lucid_face.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/lucid_face.ml",
+        "to": "lib/python_face.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/python_face.ml",
+        "to": "lib/face_pragma.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/face_pragma.ml",
+        "to": "lib/wasm_encode.ml",
+        "relation": "shared_dir:lib",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affinescript-lsp/src/document.rs",
+        "to": "tools/affinescript-lsp/src/diagnostics.rs",
+        "relation": "shared_dir:tools/affinescript-lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affinescript-lsp/src/diagnostics.rs",
+        "to": "tools/affinescript-lsp/src/text_index.rs",
+        "relation": "shared_dir:tools/affinescript-lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affinescript-lsp/src/text_index.rs",
+        "to": "tools/affinescript-lsp/src/compiler.rs",
+        "relation": "shared_dir:tools/affinescript-lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affinescript-lsp/src/compiler.rs",
+        "to": "tools/affinescript-lsp/src/main.rs",
+        "relation": "shared_dir:tools/affinescript-lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/affinescript-lsp/src/main.rs",
+        "to": "tools/affinescript-lsp/src/handlers.rs",
+        "relation": "shared_dir:tools/affinescript-lsp/src",
+        "weight": 1.0
+      }
+    ]
+  },
+  "taint_matrix": {
+    "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "affinescriptiser/src/codegen/parser.rs",
+          "tools/affine-pkg/src/lockfile.rs",
+          "tools/affine-pkg/src/manifest.rs",
+          "tools/affine-pkg/src/config.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "affinescriptiser/src/codegen/wasm_gen.rs",
+          "affinescriptiser/src/codegen/affine_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "affinescriptiser/src/codegen/wasm_gen.rs",
+          "affinescriptiser/src/codegen/affine_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "tools/affine-pkg/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "tools/affine-doc/assets/search.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/codegen-deno/aggregate_smoke.harness.mjs",
+          "tests/codegen-deno/sqlite_smoke.harness.mjs",
+          "tests/codegen-deno/sqlite_introspect_bulk.harness.mjs"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "tools/affine-doc/assets/search.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "affinescriptiser/src/codegen/parser.rs",
+          "tools/affine-pkg/src/lockfile.rs",
+          "tools/affine-pkg/src/manifest.rs",
+          "tools/affine-pkg/src/config.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      }
+    ]
+  }
 }
