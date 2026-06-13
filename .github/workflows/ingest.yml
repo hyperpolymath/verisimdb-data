@@ -17,6 +17,12 @@ on:
 permissions:
   contents: write
 
+# Serialize ingests: concurrent repository_dispatch deliveries race on
+# the commit+push and one writer loses. Queue them instead.
+concurrency:
+  group: verisimdb-data-ingest
+  cancel-in-progress: false
+
 jobs:
   ingest:
     runs-on: ubuntu-latest
