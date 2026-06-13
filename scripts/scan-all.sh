@@ -16,8 +16,9 @@ DEFAULT_REPOS=(
 )
 
 REPOS_TO_SCAN=("${@:-${DEFAULT_REPOS[@]}}")
-if [[ -d "/var$REPOS_DIR" ]]; then
-    REPOS_BASE="/var$REPOS_DIR"
+# REPOS_DIR (if set) must be an absolute path to the repo collection.
+if [[ -n "${REPOS_DIR:-}" && -d "${REPOS_DIR}" ]]; then
+    REPOS_BASE="${REPOS_DIR}"
 else
     REPOS_BASE="$HOME/Documents/hyperpolymath-repos"
 fi
