@@ -331,12 +331,18 @@
   ],
   "recommended_attacks": [
     "network",
-    "disk",
     "cpu",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "hinfo_loc_fluctuator_ada/src/dns_records.ads",
         "to": "hinfo_loc_fluctuator_ada/src/scheduler.adb",
@@ -474,17 +480,21 @@
         "to": "hinfo_loc_fluctuator_ada/src/protocol_manager.adb",
         "relation": "shared_dir:hinfo_loc_fluctuator_ada/src",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/rsr-verify.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -514,16 +524,6 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/rsr-verify.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       }
     ]
   }

@@ -207,9 +207,9 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -226,21 +226,32 @@
         "weight": 1.0
       },
       {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/integration_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "setup.sh",
         "to": "flake.nix",
         "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e_test.rs",
+        "to": "tests/integration_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -254,17 +265,6 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e_test.rs",
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -275,15 +275,15 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
+          "tests/e2e_test.rs",
+          "tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

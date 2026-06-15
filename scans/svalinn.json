@@ -838,22 +838,22 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
+    "network",
     "cpu",
-    "network"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/compose/ComposeOrchestrator.res",
-        "to": "src/compose/ComposeOrchestrator.res.mjs",
-        "relation": "shared_dir:src/compose",
+        "from": "src/tests/AuthTest.res",
+        "to": "src/tests/AuthSecurityTest.res",
+        "relation": "shared_dir:src/tests",
         "weight": 1.0
       },
       {
-        "from": "src/lib/bs/vordr/Client.res",
-        "to": "src/lib/bs/vordr/Client.res.mjs",
-        "relation": "shared_dir:src/lib/bs/vordr",
+        "from": "src/vordr/Client.res",
+        "to": "src/vordr/Client.res.mjs",
+        "relation": "shared_dir:src/vordr",
         "weight": 1.0
       },
       {
@@ -881,9 +881,33 @@
         "weight": 1.0
       },
       {
+        "from": "src/lib/bs/vordr/Client.res",
+        "to": "src/lib/bs/vordr/Client.res.mjs",
+        "relation": "shared_dir:src/lib/bs/vordr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/bindings/Deno.res",
+        "to": "src/bindings/Fetch.res",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "src/compose/ComposeOrchestrator.res",
+        "to": "src/compose/ComposeOrchestrator.res.mjs",
+        "relation": "shared_dir:src/compose",
+        "weight": 1.0
+      },
+      {
         "from": "src/policy/PolicyEvaluator.res",
         "to": "src/policy/PolicyStore.res",
         "relation": "shared_dir:src/policy",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/policy/PolicyEvaluator.res",
+        "to": "src/lib/bs/policy/PolicyStore.res",
+        "relation": "shared_dir:src/lib/bs/policy",
         "weight": 1.0
       },
       {
@@ -905,9 +929,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/lib/bs/policy/PolicyEvaluator.res",
-        "to": "src/lib/bs/policy/PolicyStore.res",
-        "relation": "shared_dir:src/lib/bs/policy",
+        "from": "src/lib/bs/tests/AuthTest.res",
+        "to": "src/lib/bs/tests/AuthSecurityTest.res",
+        "relation": "shared_dir:src/lib/bs/tests",
         "weight": 1.0
       },
       {
@@ -971,18 +995,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/lib/bs/tests/AuthTest.res",
-        "to": "src/lib/bs/tests/AuthSecurityTest.res",
-        "relation": "shared_dir:src/lib/bs/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/vordr/Client.res",
-        "to": "src/vordr/Client.res.mjs",
-        "relation": "shared_dir:src/vordr",
-        "weight": 1.0
-      },
-      {
         "from": "src/lib/bs/auth/OAuth2.res.mjs",
         "to": "src/lib/bs/auth/OAuth2.res",
         "relation": "shared_dir:src/lib/bs/auth",
@@ -1005,35 +1017,58 @@
         "to": "src/lib/bs/auth/Jwt.res.mjs",
         "relation": "shared_dir:src/lib/bs/auth",
         "weight": 1.0
-      },
-      {
-        "from": "src/tests/AuthTest.res",
-        "to": "src/tests/AuthSecurityTest.res",
-        "relation": "shared_dir:src/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/bindings/Deno.res",
-        "to": "src/bindings/Fetch.res",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/auth/Jwt.res.mjs",
-          "src/lib/bs/auth/Jwt.res.mjs",
-          "tests/schema/schema_test.js",
-          "tests/bench/gateway_bench.js"
+          "src/auth/Jwt.res",
+          "src/auth/AuthMiddleware.res",
+          "src/lib/bs/auth/Jwt.res",
+          "src/lib/bs/auth/AuthMiddleware.res",
+          "src/lib/bs/policy/PolicyEvaluator.res",
+          "src/lib/ocaml/Jwt.res",
+          "src/lib/ocaml/AuthMiddleware.res",
+          "src/lib/ocaml/PolicyEvaluator.res",
+          "src/policy/PolicyEvaluator.res"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/auth/Jwt.res",
+          "src/lib/bs/auth/Jwt.res",
+          "src/lib/bs/policy/PolicyStore.res",
+          "src/lib/ocaml/Jwt.res",
+          "src/lib/ocaml/PolicyStore.res",
+          "src/policy/PolicyStore.res"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeDeserialization->Cpu"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/auth/Jwt.res",
+          "src/lib/bs/auth/Jwt.res",
+          "src/lib/bs/policy/PolicyStore.res",
+          "src/lib/ocaml/Jwt.res",
+          "src/lib/ocaml/PolicyStore.res",
+          "src/policy/PolicyStore.res"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeDeserialization->Memory"
       },
       {
         "source_category": "CryptoMisuse",
@@ -1056,52 +1091,17 @@
         "relation": "CryptoMisuse->Network"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/auth/Jwt.res",
-          "src/auth/AuthMiddleware.res",
-          "src/lib/bs/auth/Jwt.res",
-          "src/lib/bs/auth/AuthMiddleware.res",
-          "src/lib/bs/policy/PolicyEvaluator.res",
-          "src/lib/ocaml/Jwt.res",
-          "src/lib/ocaml/AuthMiddleware.res",
-          "src/lib/ocaml/PolicyEvaluator.res",
-          "src/policy/PolicyEvaluator.res"
+          "src/auth/Jwt.res.mjs",
+          "src/lib/bs/auth/Jwt.res.mjs",
+          "tests/schema/schema_test.js",
+          "tests/bench/gateway_bench.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeDeserialization",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/auth/Jwt.res",
-          "src/lib/bs/auth/Jwt.res",
-          "src/lib/bs/policy/PolicyStore.res",
-          "src/lib/ocaml/Jwt.res",
-          "src/lib/ocaml/PolicyStore.res",
-          "src/policy/PolicyStore.res"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeDeserialization->Memory"
-      },
-      {
-        "source_category": "UnsafeDeserialization",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "src/auth/Jwt.res",
-          "src/lib/bs/auth/Jwt.res",
-          "src/lib/bs/policy/PolicyStore.res",
-          "src/lib/ocaml/Jwt.res",
-          "src/lib/ocaml/PolicyStore.res",
-          "src/policy/PolicyStore.res"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeDeserialization->Cpu"
+        "relation": "InputBoundary->Cpu"
       }
     ]
   },

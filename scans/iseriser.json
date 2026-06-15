@@ -271,13 +271,19 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "disk",
     "memory",
-    "network",
-    "cpu"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "src/abi/idris_emitter.rs",
         "to": "src/abi/verify.rs",
@@ -288,12 +294,6 @@
         "from": "src/abi/verify.rs",
         "to": "src/abi/zig_ffi_parser.rs",
         "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -318,19 +318,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs",
-          "src/scan/mod.rs",
-          "src/abi/idris_emitter.rs",
-          "src/abi/verify.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -373,6 +360,19 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs",
+          "src/scan/mod.rs",
+          "src/abi/idris_emitter.rs",
+          "src/abi/verify.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

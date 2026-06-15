@@ -383,24 +383,12 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "concurrency",
     "disk",
-    "memory"
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/doctor.rs",
-        "to": "src/gc.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/gc.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
       {
         "from": "src/tier1/temporal.rs",
         "to": "src/tier1/provenance.rs",
@@ -414,21 +402,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/codegen/overlay.rs",
-        "to": "src/codegen/query.rs",
-        "relation": "shared_dir:src/codegen",
+        "from": "src/doctor.rs",
+        "to": "src/gc.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
-        "from": "src/codegen/query.rs",
-        "to": "src/codegen/ident.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
-        "from": "src/codegen/ident.rs",
-        "to": "src/codegen/parser.rs",
-        "relation": "shared_dir:src/codegen",
+        "from": "src/gc.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -460,11 +442,53 @@
         "to": "flake.nix",
         "relation": "shared_dir:",
         "weight": 1.0
+      },
+      {
+        "from": "src/codegen/overlay.rs",
+        "to": "src/codegen/query.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/query.rs",
+        "to": "src/codegen/ident.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/ident.rs",
+        "to": "src/codegen/parser.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/provenance_fork_test.rs",
+          "tests/logging_test.rs",
+          "tests/sqlite_intercept_e2e.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/sidecar/json.rs",
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -498,30 +522,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/sidecar/json.rs",
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/logging_test.rs",
-          "tests/sqlite_intercept_e2e.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

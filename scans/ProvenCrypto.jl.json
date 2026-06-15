@@ -171,12 +171,18 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "memory",
     "cpu",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "test/runtests.jl",
+        "to": "test/e2e_test.jl",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
       {
         "from": "ext/ProvenCryptoMetalExt.jl",
         "to": "ext/ProvenCryptoCUDAExt.jl",
@@ -196,12 +202,6 @@
         "weight": 1.0
       },
       {
-        "from": "test/runtests.jl",
-        "to": "test/e2e_test.jl",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
         "from": "src/backends/advanced_hardware.jl",
         "to": "src/backends/hardware.jl",
         "relation": "shared_dir:src/backends",
@@ -212,6 +212,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/primitives/ffi_wrappers.jl"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -221,16 +231,6 @@
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/primitives/ffi_wrappers.jl"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

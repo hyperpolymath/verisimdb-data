@@ -445,13 +445,79 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "concurrency",
     "cpu",
     "memory",
-    "concurrency"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/scheduler/retry.rs",
+        "to": "src/scheduler/job_queue.rs",
+        "relation": "shared_dir:src/scheduler",
+        "weight": 1.0
+      },
+      {
+        "from": "src/scheduler/job_queue.rs",
+        "to": "src/scheduler/limiter.rs",
+        "relation": "shared_dir:src/scheduler",
+        "weight": 1.0
+      },
+      {
+        "from": "src/result_formatter.rs",
+        "to": "src/shutdown.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/shutdown.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/main.rs",
+        "to": "src/error.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/error.rs",
+        "to": "src/observability.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/graphql.rs",
+        "to": "src/api/webhooks.rs",
+        "relation": "shared_dir:src/api",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/webhooks.rs",
+        "to": "src/api/rate_limit.rs",
+        "relation": "shared_dir:src/api",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/lifecycle.rs",
+        "to": "tests/smoke.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/smoke.rs",
+        "to": "tests/integration_tests.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration_tests.rs",
+        "to": "tests/seam_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
       {
         "from": "src/abi/Foreign.idr",
         "to": "src/abi/Types.idr",
@@ -480,72 +546,6 @@
         "from": "src/adapters/codeberg.rs",
         "to": "src/adapters/mod.rs",
         "relation": "shared_dir:src/adapters",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scheduler/retry.rs",
-        "to": "src/scheduler/job_queue.rs",
-        "relation": "shared_dir:src/scheduler",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scheduler/job_queue.rs",
-        "to": "src/scheduler/limiter.rs",
-        "relation": "shared_dir:src/scheduler",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/lifecycle.rs",
-        "to": "tests/smoke.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/smoke.rs",
-        "to": "tests/integration_tests.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/integration_tests.rs",
-        "to": "tests/seam_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/graphql.rs",
-        "to": "src/api/webhooks.rs",
-        "relation": "shared_dir:src/api",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/webhooks.rs",
-        "to": "src/api/rate_limit.rs",
-        "relation": "shared_dir:src/api",
-        "weight": 1.0
-      },
-      {
-        "from": "src/result_formatter.rs",
-        "to": "src/shutdown.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/shutdown.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/main.rs",
-        "to": "src/error.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/error.rs",
-        "to": "src/observability.rs",
-        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -1165,20 +1165,19 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
         "files": [
-          "tests/lifecycle.rs",
-          "tests/integration_tests.rs",
-          "tests/seam_test.rs"
+          "proofs/coq/admitted_stub.v",
+          "proofs/lean/sorry_stub.lean"
         ],
         "frameworks": [
           "Database",
           "WebServer",
           "Networking"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -1197,19 +1196,20 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "proofs/coq/admitted_stub.v",
-          "proofs/lean/sorry_stub.lean"
+          "tests/lifecycle.rs",
+          "tests/integration_tests.rs",
+          "tests/seam_test.rs"
         ],
         "frameworks": [
           "Database",
           "WebServer",
           "Networking"
         ],
-        "relation": "ProofDrift->Cpu"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

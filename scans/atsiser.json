@@ -198,9 +198,9 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
-    "memory",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -227,14 +227,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "examples/safe-malloc/include/stdlib_subset.h"
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -248,15 +249,24 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
+          "tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UncheckedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "examples/safe-malloc/include/stdlib_subset.h"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -267,16 +277,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

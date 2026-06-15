@@ -267,32 +267,14 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "network",
+    "memory",
     "concurrency",
     "cpu",
-    "memory",
-    "network"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "dipstick/services/collector/src/platforms.rs",
-        "to": "dipstick/services/collector/src/lib.rs",
-        "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/src/lib.rs",
-        "to": "dipstick/services/collector/src/main.rs",
-        "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/src/main.rs",
-        "to": "dipstick/services/collector/src/scheduler.rs",
-        "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
       {
         "from": "dipstick/services/collector/tests/aspect_tests.rs",
         "to": "dipstick/services/collector/tests/reflexive_tests.rs",
@@ -309,6 +291,24 @@
         "from": "setup.sh",
         "to": "flake.nix",
         "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/src/platforms.rs",
+        "to": "dipstick/services/collector/src/lib.rs",
+        "relation": "shared_dir:dipstick/services/collector/src",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/src/lib.rs",
+        "to": "dipstick/services/collector/src/main.rs",
+        "relation": "shared_dir:dipstick/services/collector/src",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/src/main.rs",
+        "to": "dipstick/services/collector/src/scheduler.rs",
+        "relation": "shared_dir:dipstick/services/collector/src",
         "weight": 1.0
       },
       {
@@ -538,18 +538,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "polygraph/browser-extension/src/content.js",
-          "polygraph/browser-extension/src/popup.js"
+          "dipstick/services/gateway-rescript/src/Gateway.res"
         ],
         "frameworks": [
           "Phoenix",
           "OTP"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -579,17 +578,18 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "dipstick/services/gateway-rescript/src/Gateway.res"
+          "polygraph/browser-extension/src/content.js",
+          "polygraph/browser-extension/src/popup.js"
         ],
         "frameworks": [
           "Phoenix",
           "OTP"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

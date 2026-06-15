@@ -44,6 +44,18 @@
     },
     {
       "category": "CommandInjection",
+      "location": "proofs/check-tg3-differential.sh",
+      "file": "proofs/check-tg3-differential.sh",
+      "severity": "Critical",
+      "description": "eval usage in proofs/check-tg3-differential.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
       "location": "proofs/bootstrap-lean.sh",
       "file": "proofs/bootstrap-lean.sh",
       "severity": "Critical",
@@ -80,13 +92,13 @@
     }
   ],
   "statistics": {
-    "total_lines": 25466,
+    "total_lines": 29535,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 104,
-    "allocation_sites": 107,
-    "io_operations": 7,
-    "threading_constructs": 3
+    "allocation_sites": 113,
+    "io_operations": 14,
+    "threading_constructs": 4
   },
   "file_statistics": [
     {
@@ -233,25 +245,65 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "compiler/bin/main.ml",
-      "lines": 224,
+      "file_path": "compiler/test/tg3/tg3_emit.ml",
+      "lines": 397,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/test/tg5/tg5_invariants.ml",
+      "lines": 225,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "compiler/bin/main.ml",
+      "lines": 288,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
       "threading_constructs": 0
     },
     {
       "file_path": "compiler/tangle-lsp/src/backend.rs",
-      "lines": 638,
+      "lines": 683,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "safe_unwrap_calls": 14,
-      "allocation_sites": 8,
-      "io_operations": 0,
-      "threading_constructs": 1
+      "allocation_sites": 14,
+      "io_operations": 2,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "verification/tests/tg3/tg3_emit.ml",
+      "lines": 397,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/tg5/tg5_invariants.ml",
+      "lines": 225,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
     },
     {
       "file_path": "verification/benchmarks/bench_lexer.rs",
@@ -275,12 +327,19 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "concurrency",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "verification/benchmarks/bench_lexer.rs",
+        "to": "verification/benchmarks/bench_sigma_ops.rs",
+        "relation": "shared_dir:verification/benchmarks",
+        "weight": 1.0
+      },
       {
         "from": "src/rust/src/parser_jtv.rs",
         "to": "src/rust/src/eval.rs",
@@ -322,26 +381,44 @@
         "to": "bench/bench_sigma_ops.rs",
         "relation": "shared_dir:bench",
         "weight": 1.0
-      },
-      {
-        "from": "verification/benchmarks/bench_lexer.rs",
-        "to": "verification/benchmarks/bench_sigma_ops.rs",
-        "relation": "shared_dir:verification/benchmarks",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/main.rs",
+          "bench/bench_lexer.rs",
+          "verification/benchmarks/bench_lexer.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
+          "proofs/check-tg3-differential.sh",
           "proofs/bootstrap-lean.sh"
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/parser_jtv.rs",
+          "src/rust/src/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -356,21 +433,11 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/src/parser_jtv.rs",
-          "src/rust/src/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
+          "proofs/check-tg3-differential.sh",
           "proofs/bootstrap-lean.sh"
         ],
         "frameworks": [],
@@ -386,18 +453,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/src/main.rs",
-          "bench/bench_lexer.rs",
-          "verification/benchmarks/bench_lexer.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
