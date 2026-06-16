@@ -176,19 +176,13 @@
     }
   ],
   "recommended_attacks": [
+    "concurrency",
     "cpu",
-    "disk",
     "memory",
-    "concurrency"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "crates/hesiod-lib/src/records.rs",
         "to": "crates/hesiod-lib/src/health.rs",
@@ -205,6 +199,12 @@
         "from": "crates/hesiod-lib/src/server.rs",
         "to": "crates/hesiod-lib/src/config.rs",
         "relation": "shared_dir:crates/hesiod-lib/src",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -285,17 +285,16 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/hesiod-lib/src/config.rs",
-          "crates/hesinfo/src/main.rs"
+          "crates/hesiod-lib/tests/e2e_test.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -310,16 +309,17 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/hesiod-lib/tests/e2e_test.rs"
+          "crates/hesiod-lib/src/config.rs",
+          "crates/hesinfo/src/main.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

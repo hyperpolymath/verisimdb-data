@@ -142,22 +142,22 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "core/src/storage.rs",
         "to": "core/src/note.rs",
         "relation": "shared_dir:core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       }
     ]
@@ -173,16 +173,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "core/src/storage.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -204,6 +194,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "core/src/storage.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   },

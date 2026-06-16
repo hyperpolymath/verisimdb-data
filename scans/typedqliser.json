@@ -208,11 +208,17 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "disk",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "src/plugins/wasm.rs",
         "to": "src/plugins/sql.rs",
@@ -226,12 +232,6 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "tests/e2e_test.rs",
         "to": "tests/integration_test.rs",
         "relation": "shared_dir:tests",
@@ -241,28 +241,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -284,6 +262,28 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

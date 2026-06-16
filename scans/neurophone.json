@@ -360,11 +360,11 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "network",
-    "disk",
+    "concurrency",
+    "cpu",
     "memory",
-    "concurrency"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -372,24 +372,6 @@
         "from": "setup.sh",
         "to": "flake.nix",
         "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/setup.sh",
-        "to": "scripts/install-on-phone.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-on-phone.sh",
-        "to": "scripts/install-termux.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-termux.sh",
-        "to": "scripts/build-android.sh",
-        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -420,6 +402,24 @@
         "from": "crates/neurophone-core/tests/integration_pipeline.rs",
         "to": "crates/neurophone-core/tests/property_test.rs",
         "relation": "shared_dir:crates/neurophone-core/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/setup.sh",
+        "to": "scripts/install-on-phone.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-on-phone.sh",
+        "to": "scripts/install-termux.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-termux.sh",
+        "to": "scripts/build-android.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -691,34 +691,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/install-termux.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/uninstall.sh",
-          "scripts/setup.sh",
-          "scripts/install-on-phone.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -736,6 +708,19 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/install-termux.sh"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -751,6 +736,21 @@
           "Concurrent"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/uninstall.sh",
+          "scripts/setup.sh",
+          "scripts/install-on-phone.sh"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

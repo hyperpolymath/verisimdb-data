@@ -327,10 +327,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "concurrency",
-    "disk"
+    "disk",
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -387,38 +387,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/src/main.rs",
-          "bench/bench_lexer.rs",
-          "verification/benchmarks/bench_lexer.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "proofs/check-tg3-differential.sh",
-          "proofs/bootstrap-lean.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "src/rust/src/parser_jtv.rs",
           "src/rust/src/parser.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -433,6 +410,29 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/main.rs",
+          "bench/bench_lexer.rs",
+          "verification/benchmarks/bench_lexer.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/parser_jtv.rs",
+          "src/rust/src/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 5.0,
@@ -444,15 +444,15 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "src/rust/src/parser_jtv.rs",
-          "src/rust/src/parser.rs"
+          "proofs/check-tg3-differential.sh",
+          "proofs/bootstrap-lean.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

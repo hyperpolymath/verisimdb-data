@@ -475,38 +475,14 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
+    "memory",
     "cpu",
-    "disk",
+    "concurrency",
     "network",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "affinescript/test/test_golden.ml",
-        "to": "affinescript/test/test_e2e.ml",
-        "relation": "shared_dir:affinescript/test",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affine-doc/src/extract.rs",
-        "to": "affinescript/tools/affine-doc/src/html.rs",
-        "relation": "shared_dir:affinescript/tools/affine-doc/src",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affine-doc/src/html.rs",
-        "to": "affinescript/tools/affine-doc/src/render.rs",
-        "relation": "shared_dir:affinescript/tools/affine-doc/src",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affine-doc/src/render.rs",
-        "to": "affinescript/tools/affine-doc/src/index.rs",
-        "relation": "shared_dir:affinescript/tools/affine-doc/src",
-        "weight": 1.0
-      },
       {
         "from": "affinescript/tools/affine-pkg/src/lockfile.rs",
         "to": "affinescript/tools/affine-pkg/src/manifest.rs",
@@ -544,6 +520,12 @@
         "weight": 1.0
       },
       {
+        "from": "affinescript/test/test_golden.ml",
+        "to": "affinescript/test/test_e2e.ml",
+        "relation": "shared_dir:affinescript/test",
+        "weight": 1.0
+      },
+      {
         "from": "affinescript/tools/affinescript-lsp/src/document.rs",
         "to": "affinescript/tools/affinescript-lsp/src/diagnostics.rs",
         "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
@@ -565,6 +547,24 @@
         "from": "affinescript/tools/affinescript-lsp/src/main.rs",
         "to": "affinescript/tools/affinescript-lsp/src/handlers.rs",
         "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affine-doc/src/extract.rs",
+        "to": "affinescript/tools/affine-doc/src/html.rs",
+        "relation": "shared_dir:affinescript/tools/affine-doc/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affine-doc/src/html.rs",
+        "to": "affinescript/tools/affine-doc/src/render.rs",
+        "relation": "shared_dir:affinescript/tools/affine-doc/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affine-doc/src/render.rs",
+        "to": "affinescript/tools/affine-doc/src/index.rs",
+        "relation": "shared_dir:affinescript/tools/affine-doc/src",
         "weight": 1.0
       },
       {
@@ -608,14 +608,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "tests/e2e.sh"
+          "affinescript/tools/affine-doc/assets/search.js"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -629,7 +629,7 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "affinescript/tools/affine-pkg/src/lockfile.rs",
@@ -637,17 +637,7 @@
           "affinescript/tools/affine-pkg/src/config.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "affinescript/tools/affine-doc/assets/search.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UncheckedError",
@@ -660,8 +650,18 @@
         "relation": "UncheckedError->Cpu"
       },
       {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "affinescript/tools/affine-pkg/src/lockfile.rs",
@@ -669,7 +669,7 @@
           "affinescript/tools/affine-pkg/src/config.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

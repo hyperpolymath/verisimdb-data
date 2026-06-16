@@ -138,18 +138,12 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/scorer.rs",
         "to": "src/codegen/mod.rs",
@@ -161,21 +155,17 @@
         "to": "src/codegen/layer_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -185,6 +175,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

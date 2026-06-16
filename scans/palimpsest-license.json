@@ -292,8 +292,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "network",
+    "cpu",
     "disk",
     "memory"
   ],
@@ -449,7 +449,7 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tools/pmpl-verify/src/main.rs"
@@ -457,7 +457,20 @@
         "frameworks": [
           "Ecto"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "bof-meetings/presentations/demo-http-headers.sh",
+          "bof-meetings/presentations/demo-dns-discovery.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -476,17 +489,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "bof-meetings/presentations/demo-http-headers.sh",
-          "bof-meetings/presentations/demo-dns-discovery.sh"
+          "tools/pmpl-verify/src/main.rs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -500,18 +512,6 @@
           "Ecto"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-verify/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

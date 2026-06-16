@@ -270,47 +270,17 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
     "disk",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "safety_kernel/src/robofishy_io.adb",
-        "to": "safety_kernel/src/robofishy_write_guard.adb",
-        "relation": "shared_dir:safety_kernel/src",
-        "weight": 1.0
-      },
-      {
-        "from": "safety_kernel/src/robofishy_write_guard.adb",
-        "to": "safety_kernel/src/robofishy_c_api.adb",
-        "relation": "shared_dir:safety_kernel/src",
-        "weight": 1.0
-      },
-      {
-        "from": "build.rs",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "tests/scanners.rs",
         "to": "tests/e2e.sh",
         "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/report.rs",
-        "to": "src/scene.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scene.rs",
-        "to": "src/safe_io.rs",
-        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -330,31 +300,41 @@
         "to": "src/scanners/agent_files.rs",
         "relation": "shared_dir:src/scanners",
         "weight": 1.0
+      },
+      {
+        "from": "safety_kernel/src/robofishy_io.adb",
+        "to": "safety_kernel/src/robofishy_write_guard.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
+      {
+        "from": "safety_kernel/src/robofishy_write_guard.adb",
+        "to": "safety_kernel/src/robofishy_c_api.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/report.rs",
+        "to": "src/scene.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/scene.rs",
+        "to": "src/safe_io.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "build.rs",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/scanners.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
@@ -377,6 +357,26 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/scanners.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",

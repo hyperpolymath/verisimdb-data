@@ -181,9 +181,9 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "disk",
     "memory",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -191,6 +191,12 @@
         "from": "setup.sh",
         "to": "flake.nix",
         "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
         "weight": 1.0
       },
       {
@@ -210,17 +216,21 @@
         "to": "src/codegen/build_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -230,16 +240,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -252,14 +252,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/manifest/mod.rs"
+          "tests/integration_tests.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }
