@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "error-lang",
-  "language": "errorlang",
+  "language": "rescript",
   "frameworks": [],
   "weak_points": [
     {
@@ -465,12 +465,18 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "error-pkg/src/install.rs",
+        "to": "error-pkg/src/resolve.rs",
+        "relation": "shared_dir:error-pkg/src",
+        "weight": 1.0
+      },
       {
         "from": "compiler/src/IncrementalParser.res",
         "to": "compiler/src/TypeChecker.res",
@@ -520,6 +526,12 @@
         "weight": 1.0
       },
       {
+        "from": "compiler/test/TestHelpers.res",
+        "to": "compiler/test/CstTest.res",
+        "relation": "shared_dir:compiler/test",
+        "weight": 1.0
+      },
+      {
         "from": "bench/BenchLexer.res",
         "to": "bench/BenchParser.res",
         "relation": "shared_dir:bench",
@@ -532,21 +544,9 @@
         "weight": 1.0
       },
       {
-        "from": "levels/03-unterminated-string.err",
-        "to": "levels/09-operators.err",
-        "relation": "shared_dir:levels",
-        "weight": 1.0
-      },
-      {
-        "from": "compiler/test/TestHelpers.res",
-        "to": "compiler/test/CstTest.res",
-        "relation": "shared_dir:compiler/test",
-        "weight": 1.0
-      },
-      {
-        "from": "compiler/fuzz/FuzzLexer.res",
-        "to": "compiler/fuzz/FuzzParser.res",
-        "relation": "shared_dir:compiler/fuzz",
+        "from": "verification/fuzzing/FuzzLexer.res",
+        "to": "verification/fuzzing/FuzzParser.res",
+        "relation": "shared_dir:verification/fuzzing",
         "weight": 1.0
       },
       {
@@ -562,21 +562,21 @@
         "weight": 1.0
       },
       {
-        "from": "error-pkg/src/install.rs",
-        "to": "error-pkg/src/resolve.rs",
-        "relation": "shared_dir:error-pkg/src",
-        "weight": 1.0
-      },
-      {
         "from": "verification/tests/TestHelpers.res",
         "to": "verification/tests/CstTest.res",
         "relation": "shared_dir:verification/tests",
         "weight": 1.0
       },
       {
-        "from": "verification/fuzzing/FuzzLexer.res",
-        "to": "verification/fuzzing/FuzzParser.res",
-        "relation": "shared_dir:verification/fuzzing",
+        "from": "levels/03-unterminated-string.err",
+        "to": "levels/09-operators.err",
+        "relation": "shared_dir:levels",
+        "weight": 1.0
+      },
+      {
+        "from": "compiler/fuzz/FuzzLexer.res",
+        "to": "compiler/fuzz/FuzzParser.res",
+        "relation": "shared_dir:compiler/fuzz",
         "weight": 1.0
       }
     ]
@@ -618,5 +618,74 @@
         "relation": "UnboundedAllocation->Memory"
       }
     ]
+  },
+  "migration_metrics": {
+    "deprecated_api_count": 34,
+    "modern_api_count": 1210,
+    "api_migration_ratio": 0.9726688102893891,
+    "health_score": 0.71,
+    "config_format": "None",
+    "version_bracket": "V12Current",
+    "file_count": 50,
+    "rescript_lines": 17406,
+    "deprecated_patterns": [
+      {
+        "pattern": "Js.log",
+        "replacement": "Console.log",
+        "file_path": "ide/src/Main.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 2
+      },
+      {
+        "pattern": "Js.log",
+        "replacement": "Console.log",
+        "file_path": "bench/BenchParser.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 9
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "bench/BenchParser.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 2
+      },
+      {
+        "pattern": "Js.String2",
+        "replacement": "String",
+        "file_path": "playground/compiler/src/errors/ErrorInjector.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 9
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "playground/compiler/src/errors/ErrorInjector.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 1
+      },
+      {
+        "pattern": "Js.log",
+        "replacement": "Console.log",
+        "file_path": "verification/benchmarks/BenchParser.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 9
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "verification/benchmarks/BenchParser.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 2
+      }
+    ],
+    "uncurried": false
   }
 }

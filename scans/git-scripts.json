@@ -328,8 +328,8 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -386,24 +386,23 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "launchers/git-scripts-launcher.sh"
+          "scripts/lib/common.sh",
+          "lib/script_manager/repo_cleanup.ex",
+          "lib/script_manager/git_syncer.ex",
+          "lib/script_manager/dependency_fixer.ex",
+          "lib/script_manager/media_finder.ex",
+          "lib/script_manager/tui.ex",
+          "lib/script_manager/ownership_guard.ex",
+          "lib/script_manager/estate_deployer.ex",
+          "lib/script_manager/script_runner.ex",
+          "lib/script_manager/toolchain_linker.ex"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "lib/script_manager/tui.ex"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -425,23 +424,24 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "scripts/lib/common.sh",
-          "lib/script_manager/repo_cleanup.ex",
-          "lib/script_manager/git_syncer.ex",
-          "lib/script_manager/dependency_fixer.ex",
-          "lib/script_manager/media_finder.ex",
-          "lib/script_manager/tui.ex",
-          "lib/script_manager/ownership_guard.ex",
-          "lib/script_manager/estate_deployer.ex",
-          "lib/script_manager/script_runner.ex",
-          "lib/script_manager/toolchain_linker.ex"
+          "lib/script_manager/tui.ex"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "launchers/git-scripts-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

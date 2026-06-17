@@ -221,10 +221,10 @@
   ],
   "recommended_attacks": [
     "network",
-    "disk",
     "memory",
-    "cpu",
-    "concurrency"
+    "disk",
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -232,6 +232,18 @@
         "from": "src/interface/abi/Foreign.idr",
         "to": "src/interface/abi/Types.idr",
         "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/main.zig",
+        "to": "src/interface/ffi/src/verisimdb.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/verisimdb.zig",
+        "to": "src/interface/ffi/src/dbus.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
         "weight": 1.0
       },
       {
@@ -269,18 +281,6 @@
         "to": "src/core/diagnostics.eph",
         "relation": "shared_dir:src/core",
         "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/main.zig",
-        "to": "src/interface/ffi/src/verisimdb.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/verisimdb.zig",
-        "to": "src/interface/ffi/src/dbus.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
       }
     ]
   },
@@ -295,16 +295,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/dbus.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "PathTraversal",
@@ -325,6 +315,16 @@
         ],
         "frameworks": [],
         "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/dbus.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

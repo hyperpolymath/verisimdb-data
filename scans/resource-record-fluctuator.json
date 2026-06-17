@@ -331,12 +331,18 @@
   ],
   "recommended_attacks": [
     "network",
-    "disk",
     "cpu",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "hinfo_loc_fluctuator_ada/src/dns_records.ads",
         "to": "hinfo_loc_fluctuator_ada/src/scheduler.adb",
@@ -474,27 +480,11 @@
         "to": "hinfo_loc_fluctuator_ada/src/protocol_manager.adb",
         "relation": "shared_dir:hinfo_loc_fluctuator_ada/src",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/rsr-verify.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -506,14 +496,14 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
-          "hinfo_loc_fluctuator_ada/src/tui.adb"
+          "scripts/rsr-verify.sh"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -524,6 +514,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "hinfo_loc_fluctuator_ada/src/tui.adb"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

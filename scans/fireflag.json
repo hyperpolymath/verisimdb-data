@@ -263,8 +263,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "disk",
     "network"
   ],
@@ -281,16 +281,35 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "tests/property/FlagPropertiesTest.res",
-          "tests/e2e/ExtensionLifecycleTest.res",
-          "tests/aspect/SecurityTest.res"
+          ".screenshots/generate-mockups.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "extension/lib/rescript/DevTools.res.js",
+          "extension/devtools/panel.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "extension/lib/dom-utils.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -315,24 +334,16 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          ".screenshots/generate-mockups.sh"
+          "tests/property/FlagPropertiesTest.res",
+          "tests/e2e/ExtensionLifecycleTest.res",
+          "tests/aspect/SecurityTest.res"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "extension/lib/dom-utils.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "InputBoundary",
@@ -344,17 +355,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "extension/lib/rescript/DevTools.res.js",
-          "extension/devtools/panel.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

@@ -254,20 +254,14 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "network",
-    "concurrency",
     "memory",
-    "cpu"
+    "concurrency",
+    "cpu",
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "launcher.sh",
-        "to": "test_verisimdb_simple.js",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "gossamer/app_gossamer.js",
         "to": "gossamer/verisimdb.js",
@@ -279,45 +273,17 @@
         "to": "gossamer/launch.sh",
         "relation": "shared_dir:gossamer",
         "weight": 1.0
+      },
+      {
+        "from": "launcher.sh",
+        "to": "test_verisimdb_simple.js",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "gossamer/launch.sh",
-          "install.sh",
-          "launcher.sh",
-          "desktop/install.sh",
-          "desktop/install-debug.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "ExcessivePermissions",
         "sink_axis": "network",
@@ -341,6 +307,16 @@
         "relation": "ExcessivePermissions->Disk"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -349,6 +325,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "InputBoundary",
@@ -362,14 +348,28 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
           "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "gossamer/launch.sh",
+          "install.sh",
+          "launcher.sh",
+          "desktop/install.sh",
+          "desktop/install-debug.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

@@ -473,10 +473,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "network",
     "memory",
-    "disk"
+    "disk",
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -496,6 +496,42 @@
         "from": "src/core/Bridge.eph",
         "to": "src/core/Types.eph",
         "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "game-server-admin-launcher.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "flake.nix",
+        "to": "play.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/build-typed.sh",
+        "to": "src/wasm/launch-gsa.sh",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/launch-gsa.sh",
+        "to": "src/wasm/build.sh",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/build.sh",
+        "to": "src/wasm/probe.zig",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/probe.zig",
+        "to": "src/wasm/build-complete.sh",
+        "relation": "shared_dir:src/wasm",
         "weight": 1.0
       },
       {
@@ -575,42 +611,6 @@
         "to": "src/interface/ffi/src/game_profiles.zig",
         "relation": "shared_dir:src/interface/ffi/src",
         "weight": 1.0
-      },
-      {
-        "from": "game-server-admin-launcher.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "play.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/build-typed.sh",
-        "to": "src/wasm/launch-gsa.sh",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/launch-gsa.sh",
-        "to": "src/wasm/build.sh",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/build.sh",
-        "to": "src/wasm/probe.zig",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/probe.zig",
-        "to": "src/wasm/build-complete.sh",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
       }
     ]
   },
@@ -618,13 +618,13 @@
     "rows": [
       {
         "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
+        "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
           "run.js"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
+        "relation": "ExcessivePermissions->Network"
       },
       {
         "source_category": "PathTraversal",
@@ -649,17 +649,25 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "HardcodedSecret",
         "sink_axis": "network",
-        "severity_value": 3.5,
+        "severity_value": 5.0,
         "files": [
-          "src/gui/fli/fli-tooltip.js",
-          "src/gui/fli/fli-editable.js",
-          "src/gui/fli/fli-terminal.js",
-          "src/gui/fli/fli-gauge.js"
+          "scripts/wizard.sh",
+          "scripts/steam-stage.sh"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "disk",
+        "severity_value": 3.5,
+        "files": [
+          "run.js"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Disk"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -675,25 +683,17 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/wizard.sh",
-          "scripts/steam-stage.sh"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "ExcessivePermissions",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
-          "run.js"
+          "src/gui/fli/fli-tooltip.js",
+          "src/gui/fli/fli-editable.js",
+          "src/gui/fli/fli-terminal.js",
+          "src/gui/fli/fli-gauge.js"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

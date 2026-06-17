@@ -270,10 +270,10 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "disk",
-    "cpu",
-    "memory"
+    "concurrency",
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -281,24 +281,6 @@
         "from": "tests/scanners.rs",
         "to": "tests/e2e.sh",
         "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scanners/panic_attack.rs",
-        "to": "src/scanners/banned_patterns.rs",
-        "relation": "shared_dir:src/scanners",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scanners/banned_patterns.rs",
-        "to": "src/scanners/commit_trailers.rs",
-        "relation": "shared_dir:src/scanners",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scanners/commit_trailers.rs",
-        "to": "src/scanners/agent_files.rs",
-        "relation": "shared_dir:src/scanners",
         "weight": 1.0
       },
       {
@@ -330,22 +312,29 @@
         "to": "setup.sh",
         "relation": "shared_dir:",
         "weight": 1.0
+      },
+      {
+        "from": "src/scanners/panic_attack.rs",
+        "to": "src/scanners/banned_patterns.rs",
+        "relation": "shared_dir:src/scanners",
+        "weight": 1.0
+      },
+      {
+        "from": "src/scanners/banned_patterns.rs",
+        "to": "src/scanners/commit_trailers.rs",
+        "relation": "shared_dir:src/scanners",
+        "weight": 1.0
+      },
+      {
+        "from": "src/scanners/commit_trailers.rs",
+        "to": "src/scanners/agent_files.rs",
+        "relation": "shared_dir:src/scanners",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "src/safe_io.rs",
-          "src/safe_io.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
-      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -357,6 +346,27 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/scanners.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src/safe_io.rs",
+          "src/safe_io.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "PathTraversal",
@@ -377,16 +387,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/scanners.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

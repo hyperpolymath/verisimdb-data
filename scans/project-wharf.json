@@ -3,8 +3,8 @@
   "program_path": "project-wharf",
   "language": "rust",
   "frameworks": [
-    "Networking",
-    "WebServer"
+    "WebServer",
+    "Networking"
   ],
   "weak_points": [
     {
@@ -444,20 +444,14 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "network",
-    "memory",
+    "disk",
     "concurrency",
-    "disk"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "project-wharf-launcher.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "crates/wharf-core/src/errors.rs",
         "to": "crates/wharf-core/src/mooring_client.rs",
@@ -513,6 +507,12 @@
         "weight": 1.0
       },
       {
+        "from": "bin/yacht-agent/src/ebpf.rs",
+        "to": "bin/yacht-agent/src/main.rs",
+        "relation": "shared_dir:bin/yacht-agent/src",
+        "weight": 1.0
+      },
+      {
         "from": "scripts/deploy_yacht.sh",
         "to": "scripts/smoke_test.sh",
         "relation": "shared_dir:scripts",
@@ -522,12 +522,6 @@
         "from": "scripts/smoke_test.sh",
         "to": "scripts/render_zone.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/yacht-agent/src/ebpf.rs",
-        "to": "bin/yacht-agent/src/main.rs",
-        "relation": "shared_dir:bin/yacht-agent/src",
         "weight": 1.0
       },
       {
@@ -543,13 +537,25 @@
         "weight": 1.0
       },
       {
+        "from": "project-wharf-launcher.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/deploy_yacht.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "scripts/deploy_yacht.sh",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "scripts/deploy_yacht.sh",
+        "from": "scripts/smoke_test.sh",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -561,7 +567,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/smoke_test.sh",
+        "from": "scripts/render_zone.sh",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -573,7 +579,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/render_zone.sh",
+        "from": "deploy/local-test.sh",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -585,7 +591,7 @@
         "weight": 1.0
       },
       {
-        "from": "deploy/local-test.sh",
+        "from": "deploy/verify-sqli.sh",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -597,7 +603,7 @@
         "weight": 1.0
       },
       {
-        "from": "deploy/verify-sqli.sh",
+        "from": "deploy/setup.sh",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -609,7 +615,7 @@
         "weight": 1.0
       },
       {
-        "from": "deploy/setup.sh",
+        "from": "project-wharf-launcher.sh",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -621,7 +627,7 @@
         "weight": 1.0
       },
       {
-        "from": "project-wharf-launcher.sh",
+        "from": "bin/wharf-cli/src/ops/moor.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -633,7 +639,7 @@
         "weight": 1.0
       },
       {
-        "from": "bin/wharf-cli/src/ops/moor.rs",
+        "from": "bin/wharf-cli/src/main.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -645,7 +651,7 @@
         "weight": 1.0
       },
       {
-        "from": "bin/wharf-cli/src/main.rs",
+        "from": "bin/yacht-agent/src/ebpf.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -657,10 +663,10 @@
         "weight": 1.0
       },
       {
-        "from": "bin/yacht-agent/src/ebpf.rs",
+        "from": "bin/yacht-agent/src/main.rs",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 5.0
       },
       {
         "from": "bin/yacht-agent/src/main.rs",
@@ -669,10 +675,10 @@
         "weight": 5.0
       },
       {
-        "from": "bin/yacht-agent/src/main.rs",
+        "from": "flake.nix",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 5.0
+        "weight": 1.0
       },
       {
         "from": "flake.nix",
@@ -681,10 +687,10 @@
         "weight": 1.0
       },
       {
-        "from": "flake.nix",
+        "from": "xtask/src/main.rs",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 3.0
       },
       {
         "from": "xtask/src/main.rs",
@@ -693,10 +699,10 @@
         "weight": 3.0
       },
       {
-        "from": "xtask/src/main.rs",
+        "from": "crates/wharf-ebpf/src/main.rs",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 3.0
+        "weight": 42.0
       },
       {
         "from": "crates/wharf-ebpf/src/main.rs",
@@ -705,25 +711,13 @@
         "weight": 42.0
       },
       {
-        "from": "crates/wharf-ebpf/src/main.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 42.0
-      },
-      {
-        "from": "crates/wharf-core/src/errors.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "crates/wharf-core/src/errors.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "crates/wharf-core/src/mooring_client.rs",
+        "from": "crates/wharf-core/src/errors.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -735,7 +729,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/wharf-core/src/snapshot.rs",
+        "from": "crates/wharf-core/src/mooring_client.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -747,7 +741,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/wharf-core/src/mooring.rs",
+        "from": "crates/wharf-core/src/snapshot.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -759,7 +753,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/wharf-core/src/sync.rs",
+        "from": "crates/wharf-core/src/mooring.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -771,7 +765,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/wharf-core/src/integrity.rs",
+        "from": "crates/wharf-core/src/sync.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -783,7 +777,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/wharf-core/src/config.rs",
+        "from": "crates/wharf-core/src/integrity.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -795,16 +789,28 @@
         "weight": 1.0
       },
       {
-        "from": "crates/wharf-core/src/crypto.rs",
+        "from": "crates/wharf-core/src/config.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 4.0
+        "weight": 1.0
       },
       {
         "from": "crates/wharf-core/src/crypto.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 4.0
+      },
+      {
+        "from": "crates/wharf-core/src/crypto.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "crates/wharf-core/src/nebula.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
       },
       {
         "from": "crates/wharf-core/src/nebula.rs",
@@ -813,7 +819,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/wharf-core/src/nebula.rs",
+        "from": "crates/wharf-core/src/fleet.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -821,24 +827,18 @@
       {
         "from": "crates/wharf-core/src/fleet.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/fleet.rs",
-        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "crates/wharf-core/tests/integration.rs",
-        "to": "Networking",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 44.0
       },
       {
         "from": "crates/wharf-core/tests/integration.rs",
-        "to": "WebServer",
+        "to": "Networking",
         "relation": "framework",
         "weight": 44.0
       }
@@ -846,19 +846,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -871,10 +858,77 @@
           "crates/wharf-core/src/fleet.rs"
         ],
         "frameworks": [
-          "Networking",
-          "WebServer"
+          "WebServer",
+          "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "crates/wharf-ebpf/src/main.rs",
+          "crates/wharf-ebpf/src/main.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/wharf-core/tests/integration.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "crates/wharf-core/tests/integration.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "crates/wharf-ebpf/src/main.rs",
+          "crates/wharf-ebpf/src/main.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/wharf-core/tests/integration.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PathTraversal",
@@ -887,8 +941,8 @@
           "project-wharf-launcher.sh"
         ],
         "frameworks": [
-          "Networking",
-          "WebServer"
+          "WebServer",
+          "Networking"
         ],
         "relation": "PathTraversal->Disk"
       },
@@ -904,64 +958,10 @@
           "crates/wharf-core/src/fleet.rs"
         ],
         "frameworks": [
-          "Networking",
-          "WebServer"
+          "WebServer",
+          "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "crates/wharf-ebpf/src/main.rs",
-          "crates/wharf-ebpf/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "crates/wharf-ebpf/src/main.rs",
-          "crates/wharf-ebpf/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

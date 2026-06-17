@@ -799,19 +799,13 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
     "disk",
-    "network",
-    "concurrency"
+    "concurrency",
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/security/mod.rs",
-        "to": "src/security/consent.rs",
-        "relation": "shared_dir:src/security",
-        "weight": 1.0
-      },
       {
         "from": "src/stdlib/string.rs",
         "to": "src/stdlib/net.rs",
@@ -849,30 +843,6 @@
         "weight": 1.0
       },
       {
-        "from": "conformance/valid/v05_consent.woke",
-        "to": "conformance/valid/v23_nested_consent.woke",
-        "relation": "shared_dir:conformance/valid",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interpreter/value.rs",
-        "to": "src/interpreter/mod.rs",
-        "relation": "shared_dir:src/interpreter",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lexer/token.rs",
-        "to": "src/lexer/mod.rs",
-        "relation": "shared_dir:src/lexer",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lsp/stdlib_metadata.rs",
-        "to": "src/lsp/backend.rs",
-        "relation": "shared_dir:src/lsp",
-        "weight": 1.0
-      },
-      {
         "from": "src/vm/bytecode.rs",
         "to": "src/vm/compiler.rs",
         "relation": "shared_dir:src/vm",
@@ -891,6 +861,12 @@
         "weight": 1.0
       },
       {
+        "from": "src/security/mod.rs",
+        "to": "src/security/consent.rs",
+        "relation": "shared_dir:src/security",
+        "weight": 1.0
+      },
+      {
         "from": "tests/lsp_integration_test.rs",
         "to": "tests/codegen_test.rs",
         "relation": "shared_dir:tests",
@@ -903,9 +879,33 @@
         "weight": 1.0
       },
       {
-        "from": "verification/conformance/valid/v05_consent.woke",
-        "to": "verification/conformance/valid/v23_nested_consent.woke",
-        "relation": "shared_dir:verification/conformance/valid",
+        "from": "src/interpreter/value.rs",
+        "to": "src/interpreter/mod.rs",
+        "relation": "shared_dir:src/interpreter",
+        "weight": 1.0
+      },
+      {
+        "from": "conformance/valid/v05_consent.woke",
+        "to": "conformance/valid/v23_nested_consent.woke",
+        "relation": "shared_dir:conformance/valid",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lsp/stdlib_metadata.rs",
+        "to": "src/lsp/backend.rs",
+        "relation": "shared_dir:src/lsp",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lexer/token.rs",
+        "to": "src/lexer/mod.rs",
+        "relation": "shared_dir:src/lexer",
+        "weight": 1.0
+      },
+      {
+        "from": "src/main.rs",
+        "to": "src/sexpr.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -924,6 +924,12 @@
         "from": "verification/tests/codegen_test.rs",
         "to": "verification/tests/lsp_handler_test.rs",
         "relation": "shared_dir:verification/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/conformance/valid/v05_consent.woke",
+        "to": "verification/conformance/valid/v23_nested_consent.woke",
+        "relation": "shared_dir:verification/conformance/valid",
         "weight": 1.0
       },
       {
@@ -990,12 +996,6 @@
         "from": "examples/27_worker_with_delay.woke",
         "to": "examples/23_consent_auto_grant.woke",
         "relation": "shared_dir:examples",
-        "weight": 1.0
-      },
-      {
-        "from": "src/main.rs",
-        "to": "src/sexpr.rs",
-        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -1379,18 +1379,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "src/ffi/c_api.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -1407,23 +1395,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/interpreter/value.rs",
-          "src/dap/mod.rs",
-          "src/main.rs",
-          "src/parser/mod.rs",
-          "tests/lsp_handler_test.rs",
-          "verification/tests/lsp_handler_test.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -1434,6 +1405,30 @@
           "Networking"
         ],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src/ffi/c_api.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/ffi/c_api.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -1453,16 +1448,21 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/ffi/c_api.rs"
+          "src/interpreter/value.rs",
+          "src/dap/mod.rs",
+          "src/main.rs",
+          "src/parser/mod.rs",
+          "tests/lsp_handler_test.rs",
+          "verification/tests/lsp_handler_test.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

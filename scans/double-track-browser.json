@@ -358,43 +358,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "network",
-    "disk",
-    "cpu"
+    "cpu",
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "rust_core/src/form_data.rs",
-        "to": "rust_core/src/interests.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/interests.rs",
-        "to": "rust_core/src/profile.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/profile.rs",
-        "to": "rust_core/src/lib.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/lib.rs",
-        "to": "rust_core/src/schedule.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/schedule.rs",
-        "to": "rust_core/src/activity.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
       {
         "from": "lib/ocaml/Wasm.res",
         "to": "lib/ocaml/Options.res",
@@ -430,11 +400,73 @@
         "to": "lib/ocaml/Background.res",
         "relation": "shared_dir:lib/ocaml",
         "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/form_data.rs",
+        "to": "rust_core/src/interests.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/interests.rs",
+        "to": "rust_core/src/profile.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/profile.rs",
+        "to": "rust_core/src/lib.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/lib.rs",
+        "to": "rust_core/src/schedule.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/schedule.rs",
+        "to": "rust_core/src/activity.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "tests/property/extension_properties_test.ts",
+          "tests/aspect/security_test.ts"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rust_core/src/interests.rs",
+          "rust_core/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e/extension_lifecycle_test.ts"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -465,38 +497,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "rust_core/src/interests.rs",
-          "rust_core/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "tests/property/extension_properties_test.ts",
-          "tests/aspect/security_test.ts"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e/extension_lifecycle_test.ts"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   },
