@@ -201,30 +201,12 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "memory",
-    "cpu",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/launcher/src/cmd_config.rs",
-        "to": "crates/launcher/src/cmd_realign.rs",
-        "relation": "shared_dir:crates/launcher/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher/src/cmd_realign.rs",
-        "to": "crates/launcher/src/cmd_provision.rs",
-        "relation": "shared_dir:crates/launcher/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher/src/cmd_provision.rs",
-        "to": "crates/launcher/src/cmd_mint.rs",
-        "relation": "shared_dir:crates/launcher/src",
-        "weight": 1.0
-      },
       {
         "from": "crates/launcher-common/src/config.rs",
         "to": "crates/launcher-common/src/standard.rs",
@@ -260,11 +242,39 @@
         "to": "docs/ruleset-audit-2026-04-10/wave1-apply.sh",
         "relation": "shared_dir:docs/ruleset-audit-2026-04-10",
         "weight": 1.0
+      },
+      {
+        "from": "crates/launcher/src/cmd_config.rs",
+        "to": "crates/launcher/src/cmd_realign.rs",
+        "relation": "shared_dir:crates/launcher/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher/src/cmd_realign.rs",
+        "to": "crates/launcher/src/cmd_provision.rs",
+        "relation": "shared_dir:crates/launcher/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher/src/cmd_provision.rs",
+        "to": "crates/launcher/src/cmd_mint.rs",
+        "relation": "shared_dir:crates/launcher/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "docs/ruleset-audit-2026-04-10/wave2-apply.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -277,16 +287,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "docs/ruleset-audit-2026-04-10/wave2-apply.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnboundedAllocation",

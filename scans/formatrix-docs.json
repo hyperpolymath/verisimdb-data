@@ -7,24 +7,6 @@
   ],
   "weak_points": [
     {
-      "category": "SupplyChain",
-      "location": "nix/flake.nix",
-      "file": "nix/flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in nix/flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "crates/formatrix-core/src/traits.rs",
       "file": "crates/formatrix-core/src/traits.rs",
@@ -50,18 +32,18 @@
     }
   ],
   "statistics": {
-    "total_lines": 6985,
+    "total_lines": 6131,
     "unsafe_blocks": 4,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 30,
-    "io_operations": 33,
+    "io_operations": 29,
     "threading_constructs": 7
   },
   "file_statistics": [
     {
       "file_path": "bindings/zig/formatrix.zig",
-      "lines": 313,
+      "lines": 314,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -71,7 +53,7 @@
     },
     {
       "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
+      "lines": 275,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -81,7 +63,7 @@
     },
     {
       "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
+      "lines": 183,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -120,28 +102,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "nix/flake.nix",
-      "lines": 134,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "crates/formatrix-core/src/traits.rs",
-      "lines": 181,
+      "lines": 182,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -151,7 +113,7 @@
     },
     {
       "file_path": "crates/formatrix-core/src/file_ops.rs",
-      "lines": 447,
+      "lines": 448,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -162,7 +124,7 @@
     },
     {
       "file_path": "crates/formatrix-core/src/formats/plaintext.rs",
-      "lines": 164,
+      "lines": 165,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -204,7 +166,7 @@
     },
     {
       "file_path": "crates/formatrix-pipeline/src/lib.rs",
-      "lines": 108,
+      "lines": 109,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -214,7 +176,7 @@
     },
     {
       "file_path": "crates/formatrix-gui/src/commands.rs",
-      "lines": 480,
+      "lines": 481,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -225,10 +187,10 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
+    "memory",
     "disk",
-    "cpu",
-    "memory"
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -287,18 +249,6 @@
         "weight": 1.0
       },
       {
-        "from": "nix/flake.nix",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "crates/formatrix-core/src/traits.rs",
         "to": "Networking",
         "relation": "framework",
@@ -352,19 +302,6 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/formatrix-core/src/traits.rs",
-          "crates/formatrix-core/src/file_ops.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
@@ -375,6 +312,19 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/formatrix-core/src/traits.rs",
+          "crates/formatrix-core/src/file_ops.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

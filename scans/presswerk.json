@@ -473,10 +473,10 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "concurrency",
-    "disk",
     "memory",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -484,6 +484,12 @@
         "from": "crates/presswerk-security/src/audit.rs",
         "to": "crates/presswerk-security/src/storage.rs",
         "relation": "shared_dir:crates/presswerk-security/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/state.rs",
+        "to": "crates/presswerk-app/src/main.rs",
+        "relation": "shared_dir:crates/presswerk-app/src",
         "weight": 1.0
       },
       {
@@ -535,6 +541,18 @@
         "weight": 1.0
       },
       {
+        "from": "crates/presswerk-core/src/types.rs",
+        "to": "crates/presswerk-core/src/human_errors.rs",
+        "relation": "shared_dir:crates/presswerk-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-core/src/human_errors.rs",
+        "to": "crates/presswerk-core/src/error.rs",
+        "relation": "shared_dir:crates/presswerk-core/src",
+        "weight": 1.0
+      },
+      {
         "from": "crates/presswerk-app/src/pages/edit.rs",
         "to": "crates/presswerk-app/src/pages/print.rs",
         "relation": "shared_dir:crates/presswerk-app/src/pages",
@@ -565,33 +583,15 @@
         "weight": 1.0
       },
       {
-        "from": "crates/presswerk-core/src/types.rs",
-        "to": "crates/presswerk-core/src/human_errors.rs",
-        "relation": "shared_dir:crates/presswerk-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-core/src/human_errors.rs",
-        "to": "crates/presswerk-core/src/error.rs",
-        "relation": "shared_dir:crates/presswerk-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/state.rs",
-        "to": "crates/presswerk-app/src/main.rs",
-        "relation": "shared_dir:crates/presswerk-app/src",
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
         "from": "crates/presswerk-app/src/services/data_dir.rs",
         "to": "crates/presswerk-app/src/services/app_services.rs",
         "relation": "shared_dir:crates/presswerk-app/src/services",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -833,6 +833,18 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/presswerk-security/src/storage.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -859,18 +871,6 @@
           "Networking"
         ],
         "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/presswerk-security/src/storage.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

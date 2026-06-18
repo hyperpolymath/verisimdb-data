@@ -567,14 +567,20 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu",
-    "disk",
     "memory",
-    "concurrency"
+    "concurrency",
+    "network",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/scraper.exs",
+        "to": "scripts/sync-state.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/mailman.ex",
         "to": "elixir-mcp/lib/feedback_a_tron/channels/bugzilla.ex",
@@ -627,12 +633,6 @@
         "from": "elixir-mcp/lib/feedback_a_tron/channels/reddit.ex",
         "to": "elixir-mcp/lib/feedback_a_tron/channels/bitbucket.ex",
         "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/channels",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/scraper.exs",
-        "to": "scripts/sync-state.sh",
-        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -1072,51 +1072,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
-          "elixir-mcp/lib/feedback_a_tron/channels/gitlab.ex",
-          "elixir-mcp/lib/feedback_a_tron/channels/github.ex",
-          "elixir-mcp/lib/feedback_a_tron/network_verifier.ex"
-        ],
-        "frameworks": [
-          "OTP",
-          "MessageQueue"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
-          "elixir-mcp/lib/feedback_a_tron/channels/gitlab.ex",
-          "elixir-mcp/lib/feedback_a_tron/channels/github.ex",
-          "elixir-mcp/lib/feedback_a_tron/network_verifier.ex"
-        ],
-        "frameworks": [
-          "OTP",
-          "MessageQueue"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
-        ],
-        "frameworks": [
-          "OTP",
-          "MessageQueue"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -1142,6 +1097,22 @@
         "relation": "MutationGap->Cpu"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
+          "elixir-mcp/lib/feedback_a_tron/channels/gitlab.ex",
+          "elixir-mcp/lib/feedback_a_tron/channels/github.ex",
+          "elixir-mcp/lib/feedback_a_tron/network_verifier.ex"
+        ],
+        "frameworks": [
+          "OTP",
+          "MessageQueue"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "AtomExhaustion",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -1153,6 +1124,32 @@
           "MessageQueue"
         ],
         "relation": "AtomExhaustion->Memory"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
+        ],
+        "frameworks": [
+          "OTP",
+          "MessageQueue"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "julia-stats/src/FeedbackStats.jl"
+        ],
+        "frameworks": [
+          "OTP",
+          "MessageQueue"
+        ],
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -1168,17 +1165,20 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "julia-stats/src/FeedbackStats.jl"
+          "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
+          "elixir-mcp/lib/feedback_a_tron/channels/gitlab.ex",
+          "elixir-mcp/lib/feedback_a_tron/channels/github.ex",
+          "elixir-mcp/lib/feedback_a_tron/network_verifier.ex"
         ],
         "frameworks": [
           "OTP",
           "MessageQueue"
         ],
-        "relation": "InputBoundary->Cpu"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

@@ -205,8 +205,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
@@ -242,6 +242,12 @@
         "weight": 1.0
       },
       {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
         "from": "bivouac/src/config.rs",
         "to": "bivouac/src/main.rs",
         "relation": "shared_dir:bivouac/src",
@@ -252,37 +258,11 @@
         "to": "bivouac/src/error.rs",
         "relation": "shared_dir:bivouac/src",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "bivouac/tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "bivouac/src/playbook/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -295,6 +275,16 @@
       },
       {
         "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "bivouac/src/playbook/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -302,6 +292,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "bivouac/tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

@@ -7,27 +7,6 @@
   ],
   "weak_points": [
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "tools/browser-extension/popup.js",
-      "file": "tools/browser-extension/popup.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in tools/browser-extension/popup.js",
-      "recommended_attack": [
-        "memory",
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "DynamicCodeExecution",
       "location": "tools/browser-extension/axe.min.js",
       "file": "tools/browser-extension/axe.min.js",
@@ -120,18 +99,6 @@
       "test_context": "production"
     },
     {
-      "category": "DynamicCodeExecution",
-      "location": "tools/safe-dom/src/SafeDOM.mjs",
-      "file": "tools/safe-dom/src/SafeDOM.mjs",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in tools/safe-dom/src/SafeDOM.mjs",
-      "recommended_attack": [
-        "memory",
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "SupplyChain",
       "location": "deno.json",
       "file": "deno.json",
@@ -142,18 +109,18 @@
     }
   ],
   "statistics": {
-    "total_lines": 10137,
-    "unsafe_blocks": 103,
+    "total_lines": 9992,
+    "unsafe_blocks": 107,
     "panic_sites": 0,
     "unwrap_calls": 20,
     "allocation_sites": 4,
-    "io_operations": 7,
+    "io_operations": 4,
     "threading_constructs": 2
   },
   "file_statistics": [
     {
       "file_path": "scripts/check-rsr-compliance.js",
-      "lines": 409,
+      "lines": 411,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -163,7 +130,7 @@
     },
     {
       "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
+      "lines": 275,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -173,33 +140,13 @@
     },
     {
       "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
+      "lines": 183,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 2
-    },
-    {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
     },
     {
       "file_path": "tools/github-action/src/Action.res",
@@ -213,7 +160,7 @@
     },
     {
       "file_path": "tools/browser-extension/background.js",
-      "lines": 147,
+      "lines": 149,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -253,7 +200,7 @@
     },
     {
       "file_path": "tools/testing-dashboard/app.js",
-      "lines": 410,
+      "lines": 412,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -310,11 +257,20 @@
       "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/safe-dom/src/SafeDOM.res",
+      "lines": 157,
+      "unsafe_blocks": 4,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "cpu",
-    "disk",
     "memory",
     "network"
   ],
@@ -355,18 +311,6 @@
         "to": "WebServer",
         "relation": "framework",
         "weight": 4.0
-      },
-      {
-        "from": ".machine_readable/contractiles/bust/bust.ncl",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
       },
       {
         "from": "tools/github-action/src/Action.res",
@@ -433,11 +377,30 @@
         "to": "WebServer",
         "relation": "framework",
         "weight": 112.0
+      },
+      {
+        "from": "tools/safe-dom/src/SafeDOM.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 12.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "tools/browser-extension/axe.min.js",
+          "tools/testing-dashboard/app.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -455,18 +418,17 @@
       },
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
+        "sink_axis": "memory",
+        "severity_value": 5.0,
         "files": [
-          "tools/browser-extension/popup.js",
           "tools/browser-extension/axe.min.js",
           "tools/testing-dashboard/app.js",
-          "tools/safe-dom/src/SafeDOM.mjs"
+          "tools/monitoring-api/tests/aspect/security_test.js"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -479,22 +441,6 @@
           "WebServer"
         ],
         "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "tools/browser-extension/popup.js",
-          "tools/browser-extension/axe.min.js",
-          "tools/testing-dashboard/app.js",
-          "tools/monitoring-api/tests/aspect/security_test.js",
-          "tools/safe-dom/src/SafeDOM.mjs"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "InsecureProtocol",

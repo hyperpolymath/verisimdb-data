@@ -3,9 +3,9 @@
   "program_path": "laniakea",
   "language": "elixir",
   "frameworks": [
+    "OTP",
     "WebServer",
-    "Phoenix",
-    "OTP"
+    "Phoenix"
   ],
   "weak_points": [
     {
@@ -218,8 +218,8 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "disk",
-    "network"
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -231,6 +231,12 @@
       },
       {
         "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -242,7 +248,7 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "from": "setup.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -260,10 +266,10 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
+        "from": "server/lib/laniakea/policy/engine.ex",
         "to": "OTP",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
       },
       {
         "from": "server/lib/laniakea/policy/engine.ex",
@@ -278,7 +284,7 @@
         "weight": 2.0
       },
       {
-        "from": "server/lib/laniakea/policy/engine.ex",
+        "from": "server/lib/laniakea/crdt/registry.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
@@ -296,7 +302,7 @@
         "weight": 2.0
       },
       {
-        "from": "server/lib/laniakea/crdt/registry.ex",
+        "from": "server/lib/laniakea/command/bus.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
@@ -314,10 +320,10 @@
         "weight": 2.0
       },
       {
-        "from": "server/lib/laniakea/command/bus.ex",
+        "from": "flake.nix",
         "to": "OTP",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
         "from": "flake.nix",
@@ -332,7 +338,7 @@
         "weight": 1.0
       },
       {
-        "from": "flake.nix",
+        "from": "cli/laniakea.ts",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -350,10 +356,10 @@
         "weight": 1.0
       },
       {
-        "from": "cli/laniakea.ts",
+        "from": "client/src/adapters/Capabilities.res",
         "to": "OTP",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 9.0
       },
       {
         "from": "client/src/adapters/Capabilities.res",
@@ -368,10 +374,10 @@
         "weight": 9.0
       },
       {
-        "from": "client/src/adapters/Capabilities.res",
+        "from": "client/src/transport/Channel.res",
         "to": "OTP",
         "relation": "framework",
-        "weight": 9.0
+        "weight": 27.0
       },
       {
         "from": "client/src/transport/Channel.res",
@@ -386,7 +392,7 @@
         "weight": 27.0
       },
       {
-        "from": "client/src/transport/Channel.res",
+        "from": "client/lib/bs/src/transport/Channel.res",
         "to": "OTP",
         "relation": "framework",
         "weight": 27.0
@@ -404,7 +410,7 @@
         "weight": 27.0
       },
       {
-        "from": "client/lib/bs/src/transport/Channel.res",
+        "from": "client/lib/ocaml/Channel.res",
         "to": "OTP",
         "relation": "framework",
         "weight": 27.0
@@ -418,12 +424,6 @@
       {
         "from": "client/lib/ocaml/Channel.res",
         "to": "Phoenix",
-        "relation": "framework",
-        "weight": 27.0
-      },
-      {
-        "from": "client/lib/ocaml/Channel.res",
-        "to": "OTP",
         "relation": "framework",
         "weight": 27.0
       }
@@ -431,6 +431,20 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "schemas/config.ncl"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer",
+          "Phoenix"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -443,9 +457,9 @@
           "server/test/crdt/g_counter_test.exs"
         ],
         "frameworks": [
+          "OTP",
           "WebServer",
-          "Phoenix",
-          "OTP"
+          "Phoenix"
         ],
         "relation": "MutationGap->Cpu"
       },
@@ -457,25 +471,11 @@
           "server/lib/laniakea_web.ex"
         ],
         "frameworks": [
+          "OTP",
           "WebServer",
-          "Phoenix",
-          "OTP"
+          "Phoenix"
         ],
         "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "schemas/config.ncl"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "HardcodedSecret->Network"
       }
     ]
   }

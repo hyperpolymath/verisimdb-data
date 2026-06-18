@@ -618,30 +618,12 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
+    "network",
     "memory",
-    "network"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/visualization/report_generator.jl",
-        "to": "src/visualization/charts.rs",
-        "relation": "shared_dir:src/visualization",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rescript/adapters/UnoAdapter.res",
-        "to": "src/rescript/adapters/OfficeJsAdapter.res",
-        "relation": "shared_dir:src/rescript/adapters",
-        "weight": 1.0
-      },
-      {
-        "from": "src/julia/server/authentication.jl",
-        "to": "src/julia/server/rate_limiting.jl",
-        "relation": "shared_dir:src/julia/server",
-        "weight": 1.0
-      },
       {
         "from": "src/julia/data_sources/WorldBank.jl",
         "to": "src/julia/data_sources/DBnomics.jl",
@@ -697,6 +679,12 @@
         "weight": 1.0
       },
       {
+        "from": "src/visualization/report_generator.jl",
+        "to": "src/visualization/charts.rs",
+        "relation": "shared_dir:src/visualization",
+        "weight": 1.0
+      },
+      {
         "from": "src/plugins/plugin_system.jl",
         "to": "src/plugins/marketplace.jl",
         "relation": "shared_dir:src/plugins",
@@ -706,6 +694,18 @@
         "from": "src/plugins/marketplace.jl",
         "to": "src/plugins/webhooks.jl",
         "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/julia/server/authentication.jl",
+        "to": "src/julia/server/rate_limiting.jl",
+        "relation": "shared_dir:src/julia/server",
+        "weight": 1.0
+      },
+      {
+        "from": "src/collaboration/comments.res",
+        "to": "src/collaboration/websocket_server.jl",
+        "relation": "shared_dir:src/collaboration",
         "weight": 1.0
       },
       {
@@ -721,9 +721,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/collaboration/comments.res",
-        "to": "src/collaboration/websocket_server.jl",
-        "relation": "shared_dir:src/collaboration",
+        "from": "src/rescript/adapters/UnoAdapter.res",
+        "to": "src/rescript/adapters/OfficeJsAdapter.res",
+        "relation": "shared_dir:src/rescript/adapters",
         "weight": 1.0
       }
     ]
@@ -731,16 +731,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "src/julia/data_sources/Census.jl",
-          "src/julia/data_sources/BEA.jl",
           "tests/julia/test_client.jl"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -777,16 +775,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/julia/test_client.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
-      },
-      {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -802,6 +790,18 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "src/julia/data_sources/Census.jl",
+          "src/julia/data_sources/BEA.jl",
+          "tests/julia/test_client.jl"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

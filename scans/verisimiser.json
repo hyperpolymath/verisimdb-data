@@ -382,10 +382,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk",
     "memory",
-    "concurrency"
+    "disk",
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -396,27 +396,9 @@
         "weight": 1.0
       },
       {
-        "from": "tests/sidecar_cli_test.rs",
-        "to": "tests/provenance_fork_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/provenance_fork_test.rs",
-        "to": "tests/logging_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/logging_test.rs",
-        "to": "tests/sqlite_intercept_e2e.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/sqlite_intercept_e2e.rs",
-        "to": "tests/integration_test.rs",
-        "relation": "shared_dir:tests",
+        "from": "src/tier1/temporal.rs",
+        "to": "src/tier1/provenance.rs",
+        "relation": "shared_dir:src/tier1",
         "weight": 1.0
       },
       {
@@ -456,15 +438,43 @@
         "weight": 1.0
       },
       {
-        "from": "src/tier1/temporal.rs",
-        "to": "src/tier1/provenance.rs",
-        "relation": "shared_dir:src/tier1",
+        "from": "tests/sidecar_cli_test.rs",
+        "to": "tests/provenance_fork_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/provenance_fork_test.rs",
+        "to": "tests/logging_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/logging_test.rs",
+        "to": "tests/sqlite_intercept_e2e.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/sqlite_intercept_e2e.rs",
+        "to": "tests/integration_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -488,16 +498,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
