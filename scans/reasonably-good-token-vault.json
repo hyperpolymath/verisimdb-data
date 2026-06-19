@@ -97,25 +97,15 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "rgtv-cli/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -125,6 +115,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "vault-broker/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -147,14 +147,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "ResourceLeak",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "vault-broker/src/main.rs"
+          "rgtv-cli/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "ResourceLeak->Memory"
       }
     ]
   }

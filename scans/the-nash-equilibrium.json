@@ -194,10 +194,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu",
     "memory",
-    "network"
+    "network",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -212,14 +212,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "tests/e2e.sh"
+          "mvt/src/engine/utils.js",
+          "mvt/src/engine/gameState.js",
+          "mvt/src/kernel/index.js"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -242,18 +244,6 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "mvt/src/engine/utils.js",
-          "mvt/src/engine/gameState.js",
-          "mvt/src/kernel/index.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -262,6 +252,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

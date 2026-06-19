@@ -6,6 +6,29 @@
   "weak_points": [
     {
       "category": "ExcessivePermissions",
+      "location": "scripts/validate-cartridges.js",
+      "file": "scripts/validate-cartridges.js",
+      "severity": "High",
+      "description": "Deno -A (all permissions) in scripts/validate-cartridges.js",
+      "recommended_attack": [
+        "network",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "scripts/validate-cartridges.js",
+      "file": "scripts/validate-cartridges.js",
+      "severity": "Medium",
+      "description": "2 JSON.parse call(s) with 0 try block(s) in scripts/validate-cartridges.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "ExcessivePermissions",
       "location": "scripts/launch-gui.sh",
       "file": "scripts/launch-gui.sh",
       "severity": "High",
@@ -93,7 +116,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 5233,
+    "total_lines": 5679,
     "unsafe_blocks": 3,
     "panic_sites": 0,
     "unwrap_calls": 4,
@@ -214,13 +237,31 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
     "network",
-    "disk"
+    "memory",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "test/Patterns_test.res",
+        "to": "test/Scanner_test.res",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/Scanner_test.res",
+        "to": "test/Analyser_test.res",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "src/Glyphs.res",
         "to": "src/Narrative.res",
@@ -244,34 +285,27 @@
         "to": "src/Patterns.res",
         "relation": "shared_dir:src",
         "weight": 1.0
-      },
-      {
-        "from": "test/Patterns_test.res",
-        "to": "test/Scanner_test.res",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/Scanner_test.res",
-        "to": "test/Analyser_test.res",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/rescript-build.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
         "source_category": "ExcessivePermissions",
         "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
+          "scripts/validate-cartridges.js",
           "scripts/launch-gui.sh",
           "scripts/rescript-build.sh"
         ],
@@ -283,6 +317,7 @@
         "sink_axis": "disk",
         "severity_value": 3.5,
         "files": [
+          "scripts/validate-cartridges.js",
           "scripts/launch-gui.sh",
           "scripts/rescript-build.sh"
         ],
@@ -290,14 +325,14 @@
         "relation": "ExcessivePermissions->Disk"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "scripts/rescript-build.sh"
+          "scripts/validate-cartridges.js"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "PanicPath",

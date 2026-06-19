@@ -1,9 +1,20 @@
 {
   "schema_version": "2.5",
-  "program_path": "pandoc-a2ml",
-  "language": "lua",
+  "program_path": "jaffascript",
+  "language": "shell",
   "frameworks": [],
   "weak_points": [
+    {
+      "category": "PathTraversal",
+      "location": "setup.sh",
+      "file": "setup.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in setup.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
     {
       "category": "SupplyChain",
       "location": "flake.nix",
@@ -14,42 +25,30 @@
       "test_context": "production"
     },
     {
-      "category": "InsecureProtocol",
-      "location": "tests/test_a2ml.lua",
-      "file": "tests/test_a2ml.lua",
+      "category": "PathTraversal",
+      "location": "tests/e2e.sh",
+      "file": "tests/e2e.sh",
       "severity": "Medium",
-      "description": "1 HTTP (non-HTTPS) URLs in tests/test_a2ml.lua",
+      "description": "Hardcoded /tmp/ path without mktemp in tests/e2e.sh",
       "recommended_attack": [
-        "network"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "CommandInjection",
-      "location": "a2ml-filter.lua",
-      "file": "a2ml-filter.lua",
-      "severity": "High",
-      "description": "os.execute/io.popen in a2ml-filter.lua",
-      "recommended_attack": [
-        "cpu",
         "disk"
       ],
-      "test_context": "production"
+      "test_context": "test_only"
     }
   ],
   "statistics": {
-    "total_lines": 3883,
-    "unsafe_blocks": 0,
+    "total_lines": 4792,
+    "unsafe_blocks": 4,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 6,
-    "threading_constructs": 2
+    "io_operations": 13,
+    "threading_constructs": 0
   },
   "file_statistics": [
     {
       "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 274,
+      "lines": 275,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -58,23 +57,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/ffi/test/integration_test.zig",
-      "lines": 182,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/Abi/Foreign.idr",
+      "lines": 83,
+      "unsafe_blocks": 4,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -98,19 +87,28 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "a2ml-filter.lua",
-      "lines": 464,
+      "file_path": "tests/e2e.sh",
+      "lines": 142,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "session/dispatch.sh",
+      "lines": 137,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "disk",
-    "network",
     "cpu"
   ],
   "dependency_graph": {
@@ -120,46 +118,21 @@
         "to": "flake.nix",
         "relation": "shared_dir:",
         "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "a2ml-filter.lua",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tests/test_a2ml.lua"
+          "setup.sh",
+          "tests/e2e.sh"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "a2ml-filter.lua"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "a2ml-filter.lua"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

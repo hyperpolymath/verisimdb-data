@@ -473,8 +473,8 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "network",
+    "disk",
     "cpu",
     "memory"
   ],
@@ -529,30 +529,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/wasm/build-typed.sh",
-        "to": "src/wasm/launch-gsa.sh",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/launch-gsa.sh",
-        "to": "src/wasm/build.sh",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/build.sh",
-        "to": "src/wasm/probe.zig",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/probe.zig",
-        "to": "src/wasm/build-complete.sh",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/ffi/src/server_actions.zig",
         "to": "src/interface/ffi/src/groove_client.zig",
         "relation": "shared_dir:src/interface/ffi/src",
@@ -583,18 +559,6 @@
         "weight": 1.0
       },
       {
-        "from": "game-server-admin-launcher.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "play.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "src/core/GrooveClient.eph",
         "to": "src/core/Shell.eph",
         "relation": "shared_dir:src/core",
@@ -611,6 +575,42 @@
         "to": "src/core/Types.eph",
         "relation": "shared_dir:src/core",
         "weight": 1.0
+      },
+      {
+        "from": "src/wasm/build-typed.sh",
+        "to": "src/wasm/launch-gsa.sh",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/launch-gsa.sh",
+        "to": "src/wasm/build.sh",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/build.sh",
+        "to": "src/wasm/probe.zig",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/probe.zig",
+        "to": "src/wasm/build-complete.sh",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "game-server-admin-launcher.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "flake.nix",
+        "to": "play.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
@@ -626,6 +626,19 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/gui/fli/fli-tooltip.js",
+          "src/gui/fli/fli-editable.js",
+          "src/gui/fli/fli-terminal.js",
+          "src/gui/fli/fli-gauge.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -661,19 +674,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/gui/fli/fli-tooltip.js",
-          "src/gui/fli/fli-editable.js",
-          "src/gui/fli/fli-terminal.js",
-          "src/gui/fli/fli-gauge.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "ExcessivePermissions",

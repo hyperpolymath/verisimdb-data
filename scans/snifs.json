@@ -338,13 +338,19 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
-    "cpu",
-    "disk"
+    "memory",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "zig/src/buffer_abi.zig",
+        "to": "zig/src/safe_nif.zig",
+        "relation": "shared_dir:zig/src",
+        "weight": 1.0
+      },
       {
         "from": "demo/lib/snif_demo/rust_guest.ex",
         "to": "demo/lib/snif_demo/safe_nif.ex",
@@ -367,12 +373,6 @@
         "from": "demo/lib/snif_demo/loader.ex",
         "to": "demo/lib/snif_demo/pool.ex",
         "relation": "shared_dir:demo/lib/snif_demo",
-        "weight": 1.0
-      },
-      {
-        "from": "zig/src/buffer_abi.zig",
-        "to": "zig/src/safe_nif.zig",
-        "relation": "shared_dir:zig/src",
         "weight": 1.0
       },
       {
@@ -488,16 +488,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "tests/e2e.sh"
+          "demo/bench/snif_bench.exs",
+          "benches/snif_eval.sh"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "PathTraversal->Disk"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "MutationGap",
@@ -515,16 +516,15 @@
       },
       {
         "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "demo/bench/snif_bench.exs",
-          "benches/snif_eval.sh"
+          "demo/bench/snif_bench.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -544,16 +544,16 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "demo/bench/snif_bench.exs"
+          "tests/e2e.sh"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnsafeCode",

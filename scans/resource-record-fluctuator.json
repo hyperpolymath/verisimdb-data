@@ -331,12 +331,18 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "network",
     "memory",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "hinfo_loc_fluctuator_ada/src/dns_records.ads",
         "to": "hinfo_loc_fluctuator_ada/src/scheduler.adb",
@@ -474,12 +480,6 @@
         "to": "hinfo_loc_fluctuator_ada/src/protocol_manager.adb",
         "relation": "shared_dir:hinfo_loc_fluctuator_ada/src",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
@@ -496,14 +496,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "hinfo_loc_fluctuator_ada/src/tui.adb"
+          "hinfo_loc_fluctuator/test/dns_records_test.exs"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -516,14 +516,14 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "hinfo_loc_fluctuator/test/dns_records_test.exs"
+          "hinfo_loc_fluctuator_ada/src/tui.adb"
         ],
         "frameworks": [],
-        "relation": "MutationGap->Cpu"
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

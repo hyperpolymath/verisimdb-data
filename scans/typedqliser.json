@@ -74,7 +74,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 6208,
+    "total_lines": 6094,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 121,
@@ -95,7 +95,7 @@
     },
     {
       "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 274,
+      "lines": 273,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -207,12 +207,18 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "memory",
-    "cpu",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "tests/e2e_test.rs",
         "to": "tests/integration_test.rs",
@@ -230,38 +236,21 @@
         "to": "src/plugins/mod.rs",
         "relation": "shared_dir:src/plugins",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
+          "tests/e2e_test.rs",
+          "tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -275,15 +264,26 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/e2e_test.rs",
-          "tests/integration_test.rs"
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

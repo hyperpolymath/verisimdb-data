@@ -140,18 +140,12 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "network",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "ipv6-only/scripts/he-cert-check.sh",
         "to": "ipv6-only/scripts/he-check-status.sh",
@@ -169,21 +163,17 @@
         "to": "ipv6-only/scripts/he-update-endpoint.sh",
         "relation": "shared_dir:ipv6-only/scripts",
         "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "ipv6-only/src/scripts/ipv6-config.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -213,6 +203,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "ipv6-only/src/scripts/ipv6-config.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

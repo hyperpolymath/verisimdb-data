@@ -5,6 +5,17 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "CommandInjection",
+      "location": "scripts/verify-same-cube.sh",
+      "file": "scripts/verify-same-cube.sh",
+      "severity": "Medium",
+      "description": "35 potentially unquoted variable expansions in scripts/verify-same-cube.sh",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "PathTraversal",
       "location": "test_multi_root.sh",
       "file": "test_multi_root.sh",
@@ -66,7 +77,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 2541,
+    "total_lines": 2778,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 9,
@@ -174,6 +185,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "test_multi_root.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -196,6 +217,16 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/verify-same-cube.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -216,16 +247,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "test_multi_root.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }

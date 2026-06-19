@@ -445,29 +445,47 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "concurrency",
     "memory",
-    "disk"
+    "disk",
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/scheduler/retry.rs",
-        "to": "src/scheduler/job_queue.rs",
-        "relation": "shared_dir:src/scheduler",
+        "from": "src/adapters/bitbucket.rs",
+        "to": "src/adapters/gitlab.rs",
+        "relation": "shared_dir:src/adapters",
         "weight": 1.0
       },
       {
-        "from": "src/scheduler/job_queue.rs",
-        "to": "src/scheduler/limiter.rs",
-        "relation": "shared_dir:src/scheduler",
+        "from": "src/adapters/gitlab.rs",
+        "to": "src/adapters/codeberg.rs",
+        "relation": "shared_dir:src/adapters",
         "weight": 1.0
       },
       {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "src/adapters/codeberg.rs",
+        "to": "src/adapters/mod.rs",
+        "relation": "shared_dir:src/adapters",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/lifecycle.rs",
+        "to": "tests/smoke.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/smoke.rs",
+        "to": "tests/integration_tests.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration_tests.rs",
+        "to": "tests/seam_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -495,30 +513,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/feedback/reranker.rs",
-        "to": "src/feedback/corpus_delta.rs",
-        "relation": "shared_dir:src/feedback",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/lifecycle.rs",
-        "to": "tests/smoke.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/smoke.rs",
-        "to": "tests/integration_tests.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/integration_tests.rs",
-        "to": "tests/seam_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "src/api/graphql.rs",
         "to": "src/api/webhooks.rs",
         "relation": "shared_dir:src/api",
@@ -531,21 +525,27 @@
         "weight": 1.0
       },
       {
-        "from": "src/adapters/bitbucket.rs",
-        "to": "src/adapters/gitlab.rs",
-        "relation": "shared_dir:src/adapters",
+        "from": "src/feedback/reranker.rs",
+        "to": "src/feedback/corpus_delta.rs",
+        "relation": "shared_dir:src/feedback",
         "weight": 1.0
       },
       {
-        "from": "src/adapters/gitlab.rs",
-        "to": "src/adapters/codeberg.rs",
-        "relation": "shared_dir:src/adapters",
+        "from": "src/scheduler/retry.rs",
+        "to": "src/scheduler/job_queue.rs",
+        "relation": "shared_dir:src/scheduler",
         "weight": 1.0
       },
       {
-        "from": "src/adapters/codeberg.rs",
-        "to": "src/adapters/mod.rs",
-        "relation": "shared_dir:src/adapters",
+        "from": "src/scheduler/job_queue.rs",
+        "to": "src/scheduler/limiter.rs",
+        "relation": "shared_dir:src/scheduler",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -1166,7 +1166,7 @@
     "rows": [
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "tests/lifecycle.rs",
@@ -1178,7 +1178,7 @@
           "WebServer",
           "Database"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "ProofDrift",
@@ -1197,7 +1197,7 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tests/lifecycle.rs",
@@ -1209,7 +1209,7 @@
           "WebServer",
           "Database"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       }
     ]
   }
