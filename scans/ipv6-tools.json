@@ -141,11 +141,17 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "network",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "ipv6-only/scripts/he-cert-check.sh",
         "to": "ipv6-only/scripts/he-check-status.sh",
@@ -163,27 +169,11 @@
         "to": "ipv6-only/scripts/he-update-endpoint.sh",
         "relation": "shared_dir:ipv6-only/scripts",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "ipv6-only/scripts/he-cert-check.sh"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
       {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
@@ -195,14 +185,14 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "ipv6-only/src/scripts/ipv6-config.sh"
+          "ipv6-only/scripts/he-cert-check.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -213,6 +203,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "ipv6-only/src/scripts/ipv6-config.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }

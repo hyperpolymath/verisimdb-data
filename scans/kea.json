@@ -205,36 +205,12 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "bivouac/src/config.rs",
-        "to": "bivouac/src/main.rs",
-        "relation": "shared_dir:bivouac/src",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/src/main.rs",
-        "to": "bivouac/src/error.rs",
-        "relation": "shared_dir:bivouac/src",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/src/playbook/mod.rs",
-        "to": "bivouac/src/playbook/executor.rs",
-        "relation": "shared_dir:bivouac/src/playbook",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/src/playbook/executor.rs",
-        "to": "bivouac/src/playbook/parser.rs",
-        "relation": "shared_dir:bivouac/src/playbook",
-        "weight": 1.0
-      },
       {
         "from": "bivouac/tests/aspect_tests.rs",
         "to": "bivouac/tests/contract_tests.rs",
@@ -258,21 +234,35 @@
         "to": "flake.nix",
         "relation": "shared_dir:",
         "weight": 1.0
+      },
+      {
+        "from": "bivouac/src/config.rs",
+        "to": "bivouac/src/main.rs",
+        "relation": "shared_dir:bivouac/src",
+        "weight": 1.0
+      },
+      {
+        "from": "bivouac/src/main.rs",
+        "to": "bivouac/src/error.rs",
+        "relation": "shared_dir:bivouac/src",
+        "weight": 1.0
+      },
+      {
+        "from": "bivouac/src/playbook/mod.rs",
+        "to": "bivouac/src/playbook/executor.rs",
+        "relation": "shared_dir:bivouac/src/playbook",
+        "weight": 1.0
+      },
+      {
+        "from": "bivouac/src/playbook/executor.rs",
+        "to": "bivouac/src/playbook/parser.rs",
+        "relation": "shared_dir:bivouac/src/playbook",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "bivouac/tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -284,14 +274,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "bivouac/src/playbook/parser.rs"
+          "bivouac/tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -302,6 +292,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "bivouac/src/playbook/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

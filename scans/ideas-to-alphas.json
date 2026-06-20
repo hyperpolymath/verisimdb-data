@@ -5,6 +5,18 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "DynamicCodeExecution",
+      "location": "a-sounder-constitution/web/ui.js",
+      "file": "a-sounder-constitution/web/ui.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in a-sounder-constitution/web/ui.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "SupplyChain",
       "location": "flake.nix",
       "file": "flake.nix",
@@ -26,7 +38,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 5062,
+    "total_lines": 6573,
     "unsafe_blocks": 4,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -107,8 +119,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu"
+    "network",
+    "memory",
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -123,6 +137,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "a-sounder-constitution/web/ui.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -131,6 +155,16 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "a-sounder-constitution/web/ui.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

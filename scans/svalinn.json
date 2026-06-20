@@ -497,13 +497,73 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "memory",
     "disk",
     "network",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/bindings/Deno.res",
+        "to": "src/bindings/Fetch.res",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "src/tests/AuthTest.res",
+        "to": "src/tests/AuthSecurityTest.res",
+        "relation": "shared_dir:src/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/integrations/CerroTorre.res",
+        "to": "src/integrations/PolyContainerMcp.res",
+        "relation": "shared_dir:src/integrations",
+        "weight": 1.0
+      },
+      {
+        "from": "src/integrations/PolyContainerMcp.res",
+        "to": "src/integrations/PolyContainerMcp.res.mjs",
+        "relation": "shared_dir:src/integrations",
+        "weight": 1.0
+      },
+      {
+        "from": "src/vordr/Client.res",
+        "to": "src/vordr/Client.res.mjs",
+        "relation": "shared_dir:src/vordr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/policy/PolicyEvaluator.res",
+        "to": "src/policy/PolicyStore.res",
+        "relation": "shared_dir:src/policy",
+        "weight": 1.0
+      },
+      {
+        "from": "src/auth/OAuth2.res.mjs",
+        "to": "src/auth/OAuth2.res",
+        "relation": "shared_dir:src/auth",
+        "weight": 1.0
+      },
+      {
+        "from": "src/auth/OAuth2.res",
+        "to": "src/auth/Jwt.res",
+        "relation": "shared_dir:src/auth",
+        "weight": 1.0
+      },
+      {
+        "from": "src/auth/Jwt.res",
+        "to": "src/auth/AuthMiddleware.res",
+        "relation": "shared_dir:src/auth",
+        "weight": 1.0
+      },
+      {
+        "from": "src/auth/AuthMiddleware.res",
+        "to": "src/auth/Jwt.res.mjs",
+        "relation": "shared_dir:src/auth",
+        "weight": 1.0
+      },
       {
         "from": "lib/ocaml/OAuth2.res",
         "to": "lib/ocaml/Jwt.res",
@@ -583,69 +643,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/bindings/Deno.res",
-        "to": "src/bindings/Fetch.res",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
-      {
-        "from": "src/tests/AuthTest.res",
-        "to": "src/tests/AuthSecurityTest.res",
-        "relation": "shared_dir:src/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/auth/OAuth2.res.mjs",
-        "to": "src/auth/OAuth2.res",
-        "relation": "shared_dir:src/auth",
-        "weight": 1.0
-      },
-      {
-        "from": "src/auth/OAuth2.res",
-        "to": "src/auth/Jwt.res",
-        "relation": "shared_dir:src/auth",
-        "weight": 1.0
-      },
-      {
-        "from": "src/auth/Jwt.res",
-        "to": "src/auth/AuthMiddleware.res",
-        "relation": "shared_dir:src/auth",
-        "weight": 1.0
-      },
-      {
-        "from": "src/auth/AuthMiddleware.res",
-        "to": "src/auth/Jwt.res.mjs",
-        "relation": "shared_dir:src/auth",
-        "weight": 1.0
-      },
-      {
-        "from": "src/integrations/CerroTorre.res",
-        "to": "src/integrations/PolyContainerMcp.res",
-        "relation": "shared_dir:src/integrations",
-        "weight": 1.0
-      },
-      {
-        "from": "src/integrations/PolyContainerMcp.res",
-        "to": "src/integrations/PolyContainerMcp.res.mjs",
-        "relation": "shared_dir:src/integrations",
-        "weight": 1.0
-      },
-      {
-        "from": "src/vordr/Client.res",
-        "to": "src/vordr/Client.res.mjs",
-        "relation": "shared_dir:src/vordr",
-        "weight": 1.0
-      },
-      {
         "from": "src/compose/ComposeOrchestrator.res",
         "to": "src/compose/ComposeOrchestrator.res.mjs",
         "relation": "shared_dir:src/compose",
-        "weight": 1.0
-      },
-      {
-        "from": "src/policy/PolicyEvaluator.res",
-        "to": "src/policy/PolicyStore.res",
-        "relation": "shared_dir:src/policy",
         "weight": 1.0
       }
     ]
@@ -663,6 +663,18 @@
         "relation": "CryptoMisuse->Network"
       },
       {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/auth/Jwt.res.mjs",
+          "tests/schema/schema_test.js",
+          "tests/bench/gateway_bench.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -676,18 +688,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/auth/Jwt.res.mjs",
-          "tests/schema/schema_test.js",
-          "tests/bench/gateway_bench.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   },

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "nexia-list",
-  "language": "rescript",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -143,27 +143,37 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "disk",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "core/src/storage.rs",
-        "to": "core/src/note.rs",
-        "relation": "shared_dir:core/src",
-        "weight": 1.0
-      },
-      {
         "from": "setup.sh",
         "to": "flake.nix",
         "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/storage.rs",
+        "to": "core/src/note.rs",
+        "relation": "shared_dir:core/src",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "desktop/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -186,16 +196,6 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "desktop/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -206,106 +206,5 @@
         "relation": "PanicPath->Memory"
       }
     ]
-  },
-  "migration_metrics": {
-    "deprecated_api_count": 44,
-    "modern_api_count": 84,
-    "api_migration_ratio": 0.65625,
-    "health_score": 0.55,
-    "config_format": "None",
-    "version_bracket": "V12Current",
-    "file_count": 6,
-    "rescript_lines": 883,
-    "deprecated_patterns": [
-      {
-        "pattern": "ReactDOMStyle.make / ReactDOM.Style.make",
-        "replacement": "inline record style={{...}}",
-        "file_path": "ui/src/View.res",
-        "line_number": 0,
-        "category": "OldReactStyle",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Dict.",
-        "replacement": "Dict",
-        "file_path": "ui/src/Model.res",
-        "line_number": 0,
-        "category": "OldDict",
-        "count": 6
-      },
-      {
-        "pattern": "Js.Date.",
-        "replacement": "Date (no core replacement yet)",
-        "file_path": "ui/src/Model.res",
-        "line_number": 0,
-        "category": "OldDate",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Dict.",
-        "replacement": "Dict",
-        "file_path": "ui/src/Update.res",
-        "line_number": 0,
-        "category": "OldDict",
-        "count": 17
-      },
-      {
-        "pattern": "Js.Math.",
-        "replacement": "Math",
-        "file_path": "ui/src/Update.res",
-        "line_number": 0,
-        "category": "OldNumeric",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Date.",
-        "replacement": "Date (no core replacement yet)",
-        "file_path": "ui/src/Update.res",
-        "line_number": 0,
-        "category": "OldDate",
-        "count": 6
-      },
-      {
-        "pattern": "Js.Dict.",
-        "replacement": "Dict",
-        "file_path": "ui/src/Types.res",
-        "line_number": 0,
-        "category": "OldDict",
-        "count": 4
-      },
-      {
-        "pattern": "Js.Math.",
-        "replacement": "Math",
-        "file_path": "ui/src/Types.res",
-        "line_number": 0,
-        "category": "OldNumeric",
-        "count": 1
-      },
-      {
-        "pattern": "Js.Json.",
-        "replacement": "JSON",
-        "file_path": "ui/src/Types.res",
-        "line_number": 0,
-        "category": "OldJson",
-        "count": 1
-      },
-      {
-        "pattern": "Js.Date.",
-        "replacement": "Date (no core replacement yet)",
-        "file_path": "ui/src/Types.res",
-        "line_number": 0,
-        "category": "OldDate",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Console.",
-        "replacement": "Console",
-        "file_path": "ui/src/Main.res",
-        "line_number": 0,
-        "category": "OldConsole",
-        "count": 1
-      }
-    ],
-    "uncurried": false
   }
 }

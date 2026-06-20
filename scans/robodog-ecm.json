@@ -152,11 +152,17 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "src/rust/tests/aspect.rs",
         "to": "src/rust/tests/point_to_point.rs",
@@ -167,12 +173,6 @@
         "from": "src/rust/tests/point_to_point.rs",
         "to": "src/rust/tests/end_to_end.rs",
         "relation": "shared_dir:src/rust/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
         "weight": 1.0
       }
     ]
@@ -188,16 +188,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/tests/end_to_end.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -218,6 +208,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/tests/end_to_end.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

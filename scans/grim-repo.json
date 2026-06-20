@@ -965,13 +965,55 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
-    "network",
-    "cpu"
+    "memory",
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/src/scripts/license/GrimLicenseChecker.res.mjs",
+        "to": "scripts/src/scripts/license/GrimLicenseChecker.res",
+        "relation": "shared_dir:scripts/src/scripts/license",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/src/scripts/license/GrimLicenseChecker.res",
+        "to": "scripts/src/scripts/license/GrimLicenseChecker.mjs",
+        "relation": "shared_dir:scripts/src/scripts/license",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/src/core/GrimCore.res",
+        "to": "scripts/src/core/GrimCore.res.mjs",
+        "relation": "shared_dir:scripts/src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/src/core/GrimCore.res.mjs",
+        "to": "scripts/src/core/GrimCore.mjs",
+        "relation": "shared_dir:scripts/src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/src/scripts/aibdp/AibdpChecker.res.mjs",
+        "to": "scripts/src/scripts/aibdp/AibdpChecker.res",
+        "relation": "shared_dir:scripts/src/scripts/aibdp",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/src/scripts/aibdp/AibdpChecker.res",
+        "to": "scripts/src/scripts/aibdp/AibdpChecker.mjs",
+        "relation": "shared_dir:scripts/src/scripts/aibdp",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "scripts/lib/ocaml/publish-greasyfork.res",
         "to": "scripts/lib/ocaml/build-userscripts.res",
@@ -1057,12 +1099,6 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/publish.res.mjs",
         "to": "scripts/build.res.mjs",
         "relation": "shared_dir:scripts",
@@ -1093,18 +1129,6 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/src/core/GrimCore.res",
-        "to": "scripts/src/core/GrimCore.res.mjs",
-        "relation": "shared_dir:scripts/src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/src/core/GrimCore.res.mjs",
-        "to": "scripts/src/core/GrimCore.mjs",
-        "relation": "shared_dir:scripts/src/core",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/src/scripts/code/GitlabEnhanced.mjs",
         "to": "scripts/src/scripts/code/GitlabEnhanced.res.mjs",
         "relation": "shared_dir:scripts/src/scripts/code",
@@ -1115,61 +1139,11 @@
         "to": "scripts/src/scripts/code/GitlabEnhanced.res",
         "relation": "shared_dir:scripts/src/scripts/code",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/src/scripts/license/GrimLicenseChecker.res.mjs",
-        "to": "scripts/src/scripts/license/GrimLicenseChecker.res",
-        "relation": "shared_dir:scripts/src/scripts/license",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/src/scripts/license/GrimLicenseChecker.res",
-        "to": "scripts/src/scripts/license/GrimLicenseChecker.mjs",
-        "relation": "shared_dir:scripts/src/scripts/license",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/src/scripts/aibdp/AibdpChecker.res.mjs",
-        "to": "scripts/src/scripts/aibdp/AibdpChecker.res",
-        "relation": "shared_dir:scripts/src/scripts/aibdp",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/src/scripts/aibdp/AibdpChecker.res",
-        "to": "scripts/src/scripts/aibdp/AibdpChecker.mjs",
-        "relation": "shared_dir:scripts/src/scripts/aibdp",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/src/scripts/security/GrimSecurityScanner.mjs",
-          "scripts/src/scripts/security/GrimSecurityScanner.res.mjs",
-          "scripts/userscripts/GrimSecurityScanner.user.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/src/core/GrimCore.res.mjs",
-          "scripts/src/core/GrimCore.mjs",
-          "scripts/src/scripts/template/GrimTemplateEngine.res.mjs",
-          "scripts/src/scripts/template/GrimTemplateEngine.mjs",
-          "scripts/userscripts/GrimTemplateEngine.user.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
@@ -1203,6 +1177,20 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/src/core/GrimCore.res.mjs",
+          "scripts/src/core/GrimCore.mjs",
+          "scripts/src/scripts/template/GrimTemplateEngine.res.mjs",
+          "scripts/src/scripts/template/GrimTemplateEngine.mjs",
+          "scripts/userscripts/GrimTemplateEngine.user.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -1257,6 +1245,18 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/src/scripts/security/GrimSecurityScanner.mjs",
+          "scripts/src/scripts/security/GrimSecurityScanner.res.mjs",
+          "scripts/userscripts/GrimSecurityScanner.user.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   },
