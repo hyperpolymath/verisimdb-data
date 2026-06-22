@@ -244,18 +244,12 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
+    "disk",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/benchmark.rs",
         "to": "src/codegen/julia_gen.rs",
@@ -273,6 +267,12 @@
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
@@ -289,6 +289,17 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/codegen/benchmark.rs",
+          "src/codegen/julia_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -312,17 +323,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/codegen/benchmark.rs",
-          "src/codegen/julia_gen.rs"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",

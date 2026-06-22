@@ -239,13 +239,19 @@
     }
   ],
   "recommended_attacks": [
-    "network",
+    "cpu",
     "disk",
-    "memory",
-    "cpu"
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "modules/extensionUtils.mjs.js",
+        "to": "modules/virusTotalIntegration.mjs.js",
+        "relation": "shared_dir:modules",
+        "weight": 1.0
+      },
       {
         "from": "scripts/pack.js",
         "to": "scripts/update-thirdparty.js",
@@ -257,28 +263,11 @@
         "to": "scripts/atnChangelog.js",
         "relation": "shared_dir:scripts",
         "weight": 1.0
-      },
-      {
-        "from": "modules/extensionUtils.mjs.js",
-        "to": "modules/virusTotalIntegration.mjs.js",
-        "relation": "shared_dir:modules",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/verify-rsr.js",
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
@@ -305,6 +294,16 @@
         "relation": "InputBoundary->Cpu"
       },
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "modules/dnsbl.mjs.js"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -315,14 +314,15 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
         "files": [
-          "modules/dnsbl.mjs.js"
+          "scripts/verify-rsr.js",
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

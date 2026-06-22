@@ -153,22 +153,22 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/codegen/reporter.rs",
-        "to": "src/codegen/parser.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/abi/Foreign.idr",
         "to": "src/interface/abi/Types.idr",
         "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/reporter.rs",
+        "to": "src/codegen/parser.rs",
+        "relation": "shared_dir:src/codegen",
         "weight": 1.0
       }
     ]
@@ -177,13 +177,13 @@
     "rows": [
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tests/integration_tests.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -194,6 +194,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -207,23 +217,13 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "tests/integration_tests.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

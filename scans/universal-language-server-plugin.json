@@ -234,14 +234,44 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu",
-    "network",
     "memory",
-    "concurrency"
+    "network",
+    "disk",
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "server/src/formats/xml.rs",
+        "to": "server/src/formats/toml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/formats/toml.rs",
+        "to": "server/src/formats/yaml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
+      },
+      {
+        "from": "server/tests/aspect_tests.rs",
+        "to": "server/tests/contract_tests.rs",
+        "relation": "shared_dir:server/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "server/tests/contract_tests.rs",
+        "to": "server/tests/core_tests.rs",
+        "relation": "shared_dir:server/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "server/tests/core_tests.rs",
+        "to": "server/tests/e2e_tests.rs",
+        "relation": "shared_dir:server/tests",
+        "weight": 1.0
+      },
       {
         "from": "server/src/document_store.rs",
         "to": "server/src/lib.rs",
@@ -283,61 +313,11 @@
         "to": "server/src/monitoring.rs",
         "relation": "shared_dir:server/src",
         "weight": 1.0
-      },
-      {
-        "from": "server/src/formats/xml.rs",
-        "to": "server/src/formats/toml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
-      },
-      {
-        "from": "server/src/formats/toml.rs",
-        "to": "server/src/formats/yaml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
-      },
-      {
-        "from": "server/tests/aspect_tests.rs",
-        "to": "server/tests/contract_tests.rs",
-        "relation": "shared_dir:server/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "server/tests/contract_tests.rs",
-        "to": "server/tests/core_tests.rs",
-        "relation": "shared_dir:server/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "server/tests/core_tests.rs",
-        "to": "server/tests/e2e_tests.rs",
-        "relation": "shared_dir:server/tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "server/tests/core_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "server/tests/core_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
@@ -357,6 +337,26 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "server/tests/core_tests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "server/tests/core_tests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

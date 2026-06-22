@@ -237,9 +237,9 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "memory",
     "cpu",
+    "memory",
+    "network",
     "disk"
   ],
   "dependency_graph": {
@@ -269,6 +269,12 @@
         "weight": 1.0
       },
       {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
         "from": "test/Patterns_test.res",
         "to": "test/Scanner_test.res",
         "relation": "shared_dir:test",
@@ -279,38 +285,20 @@
         "to": "test/Analyser_test.res",
         "relation": "shared_dir:test",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "scripts/validate-cartridges.js"
+          "scripts/rescript-build.sh"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/Narrative.res",
-          "src/Cli.res",
-          "test/Scanner_test.res"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "ExcessivePermissions",
@@ -325,16 +313,6 @@
         "relation": "ExcessivePermissions->Network"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/rescript-build.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "ExcessivePermissions",
         "sink_axis": "disk",
         "severity_value": 3.5,
@@ -345,6 +323,28 @@
         ],
         "frameworks": [],
         "relation": "ExcessivePermissions->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/Narrative.res",
+          "src/Cli.res",
+          "test/Scanner_test.res"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/validate-cartridges.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
       }
     ]
   },

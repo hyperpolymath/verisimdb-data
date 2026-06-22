@@ -252,11 +252,23 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "network",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "augmented/examples/nickel/ci.ncl",
+        "to": "augmented/examples/nickel/build.ncl",
+        "relation": "shared_dir:augmented/examples/nickel",
+        "weight": 1.0
+      },
+      {
+        "from": "augmented/examples/nickel/build.ncl",
+        "to": "augmented/examples/nickel/infra.ncl",
+        "relation": "shared_dir:augmented/examples/nickel",
+        "weight": 1.0
+      },
       {
         "from": "augmented/lib/ci.ncl",
         "to": "augmented/lib/proven.ncl",
@@ -282,18 +294,6 @@
         "weight": 1.0
       },
       {
-        "from": "augmented/examples/nickel/ci.ncl",
-        "to": "augmented/examples/nickel/build.ncl",
-        "relation": "shared_dir:augmented/examples/nickel",
-        "weight": 1.0
-      },
-      {
-        "from": "augmented/examples/nickel/build.ncl",
-        "to": "augmented/examples/nickel/infra.ncl",
-        "relation": "shared_dir:augmented/examples/nickel",
-        "weight": 1.0
-      },
-      {
         "from": "setup.sh",
         "to": "flake.nix",
         "relation": "shared_dir:",
@@ -304,28 +304,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
         "severity_value": 5.0,
         "files": [
-          "tests/property/test_invariants.sh",
-          "tests/e2e/test_pipeline.sh",
-          "tests/unit/test_basic.sh"
+          "tests/integration/test_contracts.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "tests/property/test_invariants.sh",
-          "tests/e2e/test_pipeline.sh",
-          "tests/unit/test_basic.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "InsecureProtocol",
@@ -341,14 +327,28 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
-          "tests/integration/test_contracts.sh"
+          "tests/property/test_invariants.sh",
+          "tests/e2e/test_pipeline.sh",
+          "tests/unit/test_basic.sh"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "tests/property/test_invariants.sh",
+          "tests/e2e/test_pipeline.sh",
+          "tests/unit/test_basic.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

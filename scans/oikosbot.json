@@ -68,12 +68,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 7592,
-    "unsafe_blocks": 0,
+    "total_lines": 7558,
+    "unsafe_blocks": 1,
     "panic_sites": 0,
     "unwrap_calls": 5,
     "allocation_sites": 34,
-    "io_operations": 10,
+    "io_operations": 11,
     "threading_constructs": 1
   },
   "file_statistics": [
@@ -85,6 +85,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 2,
       "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "policies/finding_taxonomy.ecl",
+      "lines": 49,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -205,18 +215,12 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "analyzers/code-haskell/src/Eco/Pareto.hs",
-        "to": "analyzers/code-haskell/src/Eco/Analysis.hs",
-        "relation": "shared_dir:analyzers/code-haskell/src/Eco",
-        "weight": 1.0
-      },
       {
         "from": "crates/oikosbot-analysis/src/dependencies.rs",
         "to": "crates/oikosbot-analysis/src/migration.rs",
@@ -248,10 +252,28 @@
         "weight": 1.0
       },
       {
+        "from": "analyzers/code-haskell/src/Eco/Pareto.hs",
+        "to": "analyzers/code-haskell/src/Eco/Analysis.hs",
+        "relation": "shared_dir:analyzers/code-haskell/src/Eco",
+        "weight": 1.0
+      },
+      {
+        "from": "policies/carbon_budget.ecl",
+        "to": "policies/finding_taxonomy.ecl",
+        "relation": "shared_dir:policies",
+        "weight": 1.0
+      },
+      {
         "from": "policies/carbon_budget.ecl",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
+      },
+      {
+        "from": "policies/finding_taxonomy.ecl",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 3.0
       },
       {
         "from": "crates/oikosbot-eclexia/src/lib.rs",
@@ -325,22 +347,6 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/oikosbot-eclexia/src/lib.rs",
-          "crates/oikosbot-analysis/src/dependencies.rs",
-          "crates/oikosbot-analysis/src/migration.rs",
-          "crates/oikosbot-analysis/src/analyzer.rs",
-          "crates/oikosbot-fleet/src/lib.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -354,6 +360,22 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/oikosbot-eclexia/src/lib.rs",
+          "crates/oikosbot-analysis/src/dependencies.rs",
+          "crates/oikosbot-analysis/src/migration.rs",
+          "crates/oikosbot-analysis/src/analyzer.rs",
+          "crates/oikosbot-fleet/src/lib.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

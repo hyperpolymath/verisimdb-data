@@ -111,38 +111,28 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "bindings/rust/build.rs",
         "to": "bindings/rust/lib.rs",
         "relation": "shared_dir:bindings/rust",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "tests/aspect/grammar_aspect_test.ts"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
@@ -152,16 +142,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "bindings/rust/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -182,6 +162,26 @@
         ],
         "frameworks": [],
         "relation": "UncheckedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "bindings/rust/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "tests/aspect/grammar_aspect_test.ts"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

@@ -17,30 +17,6 @@
       "test_context": "production"
     },
     {
-      "category": "DynamicCodeExecution",
-      "location": "extension/lib/rescript/DevTools.res.js",
-      "file": "extension/lib/rescript/DevTools.res.js",
-      "severity": "Critical",
-      "description": "eval() usage in extension/lib/rescript/DevTools.res.js",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "extension/devtools/panel.js",
-      "file": "extension/devtools/panel.js",
-      "severity": "Critical",
-      "description": "eval() usage in extension/devtools/panel.js",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "HardcodedSecret",
       "location": "scripts/sign-extension.sh",
       "file": "scripts/sign-extension.sh",
@@ -122,7 +98,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 13058,
+    "total_lines": 13044,
     "unsafe_blocks": 14,
     "panic_sites": 0,
     "unwrap_calls": 11,
@@ -153,7 +129,7 @@
     },
     {
       "file_path": "extension/lib/rescript/DatabaseUpdater.res.js",
-      "lines": 357,
+      "lines": 355,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -263,10 +239,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "memory",
     "network",
-    "cpu"
+    "memory",
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -281,28 +257,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          ".screenshots/generate-mockups.sh"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "extension/lib/dom-utils.js",
-          "extension/lib/rescript/DevTools.res.js",
-          "extension/devtools/panel.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -313,26 +267,14 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/property/FlagPropertiesTest.res.js",
-          "tests/bench/FlagBench.res.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
         "severity_value": 5.0,
         "files": [
-          "extension/lib/rescript/DevTools.res.js",
-          "extension/devtools/panel.js"
+          "scripts/sign-extension.sh"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "PanicPath",
@@ -347,14 +289,35 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "scripts/sign-extension.sh"
+          "extension/lib/dom-utils.js"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/property/FlagPropertiesTest.res.js",
+          "tests/bench/FlagBench.res.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          ".screenshots/generate-mockups.sh"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

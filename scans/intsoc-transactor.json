@@ -501,13 +501,37 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
+    "network",
     "memory",
-    "network"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-cli/src/commands/fix.rs",
+        "to": "crates/intsoc-cli/src/commands/check.rs",
+        "relation": "shared_dir:crates/intsoc-cli/src/commands",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-cli/src/commands/check.rs",
+        "to": "crates/intsoc-cli/src/commands/init.rs",
+        "relation": "shared_dir:crates/intsoc-cli/src/commands",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-cli/src/commands/init.rs",
+        "to": "crates/intsoc-cli/src/commands/submit.rs",
+        "relation": "shared_dir:crates/intsoc-cli/src/commands",
+        "weight": 1.0
+      },
       {
         "from": "crates/intsoc-parser/src/idnits.rs",
         "to": "crates/intsoc-parser/src/xml.rs",
@@ -521,9 +545,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "nickel/policies/ipr-check.ncl",
+        "to": "nickel/policies/stream-rules.ncl",
+        "relation": "shared_dir:nickel/policies",
         "weight": 1.0
       },
       {
@@ -551,18 +575,6 @@
         "weight": 1.0
       },
       {
-        "from": "nickel/policies/ipr-check.ncl",
-        "to": "nickel/policies/stream-rules.ncl",
-        "relation": "shared_dir:nickel/policies",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "crates/intsoc-fixer/src/generators/boilerplate.rs",
         "to": "crates/intsoc-fixer/src/generators/date.rs",
         "relation": "shared_dir:crates/intsoc-fixer/src/generators",
@@ -578,6 +590,24 @@
         "from": "crates/intsoc-fixer/src/generators/references.rs",
         "to": "crates/intsoc-fixer/src/generators/header.rs",
         "relation": "shared_dir:crates/intsoc-fixer/src/generators",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-api/src/datatracker.rs",
+        "to": "crates/intsoc-api/src/iana.rs",
+        "relation": "shared_dir:crates/intsoc-api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "gui/src/tea/Tea_Sub.res",
+        "to": "gui/src/tea/Tea_Cmd.res",
+        "relation": "shared_dir:gui/src/tea",
+        "weight": 1.0
+      },
+      {
+        "from": "gui/src/tea/Tea_Cmd.res",
+        "to": "gui/src/tea/Tea_Render.res",
+        "relation": "shared_dir:gui/src/tea",
         "weight": 1.0
       },
       {
@@ -599,39 +629,9 @@
         "weight": 1.0
       },
       {
-        "from": "crates/intsoc-cli/src/commands/fix.rs",
-        "to": "crates/intsoc-cli/src/commands/check.rs",
-        "relation": "shared_dir:crates/intsoc-cli/src/commands",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-cli/src/commands/check.rs",
-        "to": "crates/intsoc-cli/src/commands/init.rs",
-        "relation": "shared_dir:crates/intsoc-cli/src/commands",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-cli/src/commands/init.rs",
-        "to": "crates/intsoc-cli/src/commands/submit.rs",
-        "relation": "shared_dir:crates/intsoc-cli/src/commands",
-        "weight": 1.0
-      },
-      {
-        "from": "gui/src/tea/Tea_Sub.res",
-        "to": "gui/src/tea/Tea_Cmd.res",
-        "relation": "shared_dir:gui/src/tea",
-        "weight": 1.0
-      },
-      {
-        "from": "gui/src/tea/Tea_Cmd.res",
-        "to": "gui/src/tea/Tea_Render.res",
-        "relation": "shared_dir:gui/src/tea",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-api/src/datatracker.rs",
-        "to": "crates/intsoc-api/src/iana.rs",
-        "relation": "shared_dir:crates/intsoc-api/src",
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -873,18 +873,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "crates/intsoc-cli/src/commands/init.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -899,19 +887,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "gui/src/tea/Tea_Sub.res",
-          "gui/src/tea/Tea_Cmd.res"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -924,6 +899,31 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "crates/intsoc-cli/src/commands/init.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "gui/src/tea/Tea_Sub.res",
+          "gui/src/tea/Tea_Cmd.res"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

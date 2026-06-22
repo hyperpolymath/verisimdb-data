@@ -330,19 +330,13 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "memory",
     "disk",
+    "network",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "hinfo_loc_fluctuator_ada/src/dns_records.ads",
         "to": "hinfo_loc_fluctuator_ada/src/scheduler.adb",
@@ -480,21 +474,17 @@
         "to": "hinfo_loc_fluctuator_ada/src/protocol_manager.adb",
         "relation": "shared_dir:hinfo_loc_fluctuator_ada/src",
         "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/rsr-verify.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -504,6 +494,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "hinfo_loc_fluctuator/test/dns_records_test.exs"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "HardcodedSecret",
@@ -516,14 +516,14 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
-          "hinfo_loc_fluctuator/test/dns_records_test.exs"
+          "scripts/rsr-verify.sh"
         ],
         "frameworks": [],
-        "relation": "MutationGap->Cpu"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

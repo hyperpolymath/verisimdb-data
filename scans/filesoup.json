@@ -270,8 +270,8 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "network",
     "memory",
+    "network",
     "disk"
   ],
   "dependency_graph": {
@@ -304,6 +304,27 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/verify-rsr.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "crates/fslint-cli/tests/integration_test.rs",
+          "plugins/secret-scanner/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -323,16 +344,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/verify-rsr.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -357,17 +368,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "crates/fslint-cli/tests/integration_test.rs",
-          "plugins/secret-scanner/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
       }
     ]
   }

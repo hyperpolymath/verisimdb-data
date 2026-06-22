@@ -1,172 +1,90 @@
 {
-  "program_path": "/var$REPOS_DIR/reposystem/stateful-artefacts",
-  "language": "haskell",
-  "frameworks": [
-    "WebServer"
-  ],
+  "schema_version": "2.5",
+  "program_path": "stateful-artefacts",
+  "language": "shell",
+  "frameworks": [],
   "weak_points": [
     {
-      "category": "CommandInjection",
-      "location": "examples/automation-update-stats.sh",
+      "category": "PathTraversal",
+      "location": "tests/e2e.sh",
+      "file": "tests/e2e.sh",
       "severity": "Medium",
-      "description": "29 potentially unquoted variable expansions in examples/automation-update-stats.sh",
+      "description": "Hardcoded /tmp/ path without mktemp in tests/e2e.sh",
       "recommended_attack": [
-        "cpu"
-      ]
+        "disk"
+      ],
+      "test_context": "test_only"
     }
   ],
   "statistics": {
-    "total_lines": 2407,
-    "unsafe_blocks": 0,
+    "total_lines": 4119,
+    "unsafe_blocks": 4,
     "panic_sites": 0,
-    "unwrap_calls": 3,
-    "allocation_sites": 0,
-    "io_operations": 12,
+    "unwrap_calls": 0,
+    "allocation_sites": 1,
+    "io_operations": 9,
     "threading_constructs": 0
   },
   "file_statistics": [
     {
-      "file_path": "gnosis/src/Main.hs",
-      "lines": 115,
+      "file_path": "src/interface/ffi/src/main.zig",
+      "lines": 275,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
+      "allocation_sites": 1,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "gnosis/src/Paxos.hs",
-      "lines": 112,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/Abi/Foreign.idr",
+      "lines": 83,
+      "unsafe_blocks": 4,
       "panic_sites": 0,
-      "unwrap_calls": 1,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "gnosis/src/SixSCM.hs",
-      "lines": 113,
+      "file_path": "tests/e2e.sh",
+      "lines": 142,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 7,
       "threading_constructs": 0
     },
     {
-      "file_path": "gnosis/src/DAX.hs",
-      "lines": 255,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "gnosis/src/SixSCMEnhanced.hs",
-      "lines": 172,
+      "file_path": "session/dispatch.sh",
+      "lines": 137,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "dashboard/js/dashboard.js",
-      "lines": 382,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
+      "io_operations": 2,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
-    "edges": [
-      {
-        "from": "gnosis/src/Main.hs",
-        "to": "gnosis/src/Paxos.hs",
-        "relation": "shared_dir:gnosis/src",
-        "weight": 1.0
-      },
-      {
-        "from": "gnosis/src/Paxos.hs",
-        "to": "gnosis/src/SixSCM.hs",
-        "relation": "shared_dir:gnosis/src",
-        "weight": 1.0
-      },
-      {
-        "from": "gnosis/src/SixSCM.hs",
-        "to": "gnosis/src/DAX.hs",
-        "relation": "shared_dir:gnosis/src",
-        "weight": 1.0
-      },
-      {
-        "from": "gnosis/src/DAX.hs",
-        "to": "gnosis/src/SixSCMEnhanced.hs",
-        "relation": "shared_dir:gnosis/src",
-        "weight": 1.0
-      },
-      {
-        "from": "gnosis/src/Main.hs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "gnosis/src/Paxos.hs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "gnosis/src/SixSCM.hs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "gnosis/src/DAX.hs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "gnosis/src/SixSCMEnhanced.hs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "dashboard/js/dashboard.js",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      }
-    ]
+    "edges": []
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "examples/automation-update-stats.sh"
+          "tests/e2e.sh"
         ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "CommandInjection->Cpu"
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }
