@@ -177,12 +177,18 @@
   ],
   "recommended_attacks": [
     "disk",
-    "concurrency",
     "memory",
-    "cpu"
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "crates/hesiod-lib/src/records.rs",
         "to": "crates/hesiod-lib/src/health.rs",
@@ -199,12 +205,6 @@
         "from": "crates/hesiod-lib/src/server.rs",
         "to": "crates/hesiod-lib/src/config.rs",
         "relation": "shared_dir:crates/hesiod-lib/src",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -297,6 +297,18 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/hesiod-lib/tests/e2e_test.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -308,18 +320,6 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/hesiod-lib/tests/e2e_test.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

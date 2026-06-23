@@ -475,54 +475,18 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "memory",
-    "cpu",
     "network",
-    "disk"
+    "cpu",
+    "disk",
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "affinescript/tools/affine-doc/src/extract.rs",
-        "to": "affinescript/tools/affine-doc/src/html.rs",
-        "relation": "shared_dir:affinescript/tools/affine-doc/src",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affine-doc/src/html.rs",
-        "to": "affinescript/tools/affine-doc/src/render.rs",
-        "relation": "shared_dir:affinescript/tools/affine-doc/src",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affine-doc/src/render.rs",
-        "to": "affinescript/tools/affine-doc/src/index.rs",
-        "relation": "shared_dir:affinescript/tools/affine-doc/src",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affinescript-lsp/src/document.rs",
-        "to": "affinescript/tools/affinescript-lsp/src/diagnostics.rs",
-        "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affinescript-lsp/src/diagnostics.rs",
-        "to": "affinescript/tools/affinescript-lsp/src/text_index.rs",
-        "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affinescript-lsp/src/text_index.rs",
-        "to": "affinescript/tools/affinescript-lsp/src/main.rs",
-        "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
-        "weight": 1.0
-      },
-      {
-        "from": "affinescript/tools/affinescript-lsp/src/main.rs",
-        "to": "affinescript/tools/affinescript-lsp/src/handlers.rs",
-        "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
+        "from": "affinescript/test/test_golden.ml",
+        "to": "affinescript/test/test_e2e.ml",
+        "relation": "shared_dir:affinescript/test",
         "weight": 1.0
       },
       {
@@ -598,9 +562,45 @@
         "weight": 1.0
       },
       {
-        "from": "affinescript/test/test_golden.ml",
-        "to": "affinescript/test/test_e2e.ml",
-        "relation": "shared_dir:affinescript/test",
+        "from": "affinescript/tools/affine-doc/src/extract.rs",
+        "to": "affinescript/tools/affine-doc/src/html.rs",
+        "relation": "shared_dir:affinescript/tools/affine-doc/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affine-doc/src/html.rs",
+        "to": "affinescript/tools/affine-doc/src/render.rs",
+        "relation": "shared_dir:affinescript/tools/affine-doc/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affine-doc/src/render.rs",
+        "to": "affinescript/tools/affine-doc/src/index.rs",
+        "relation": "shared_dir:affinescript/tools/affine-doc/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affinescript-lsp/src/document.rs",
+        "to": "affinescript/tools/affinescript-lsp/src/diagnostics.rs",
+        "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affinescript-lsp/src/diagnostics.rs",
+        "to": "affinescript/tools/affinescript-lsp/src/text_index.rs",
+        "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affinescript-lsp/src/text_index.rs",
+        "to": "affinescript/tools/affinescript-lsp/src/main.rs",
+        "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "affinescript/tools/affinescript-lsp/src/main.rs",
+        "to": "affinescript/tools/affinescript-lsp/src/handlers.rs",
+        "relation": "shared_dir:affinescript/tools/affinescript-lsp/src",
         "weight": 1.0
       }
     ]
@@ -608,24 +608,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "affinescript/tools/affine-doc/assets/search.js"
+          "tests/e2e.sh"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "affinescript/tools/affine-doc/assets/search.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -640,14 +630,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "tests/e2e.sh"
+          "affinescript/tools/affine-doc/assets/search.js"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -660,6 +650,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "affinescript/tools/affine-doc/assets/search.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "UncheckedError",

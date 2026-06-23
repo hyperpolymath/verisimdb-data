@@ -5,6 +5,18 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "UnboundedAllocation",
+      "location": "src/rust/src/main.rs",
+      "file": "src/rust/src/main.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/rust/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "PathTraversal",
       "location": "tests/e2e.sh",
       "file": "tests/e2e.sh",
@@ -17,15 +29,26 @@
     }
   ],
   "statistics": {
-    "total_lines": 5539,
+    "total_lines": 6553,
     "unsafe_blocks": 4,
     "panic_sites": 0,
-    "unwrap_calls": 0,
-    "allocation_sites": 1,
-    "io_operations": 9,
+    "unwrap_calls": 1,
+    "allocation_sites": 9,
+    "io_operations": 10,
     "threading_constructs": 0
   },
   "file_statistics": [
+    {
+      "file_path": "src/rust/src/main.rs",
+      "lines": 372,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 4,
+      "allocation_sites": 8,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
     {
       "file_path": "src/interface/ffi/src/main.zig",
       "lines": 275,
@@ -69,13 +92,34 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",

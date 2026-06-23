@@ -444,14 +444,32 @@
     }
   ],
   "recommended_attacks": [
+    "network",
     "concurrency",
     "disk",
-    "network",
     "cpu",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bin/yacht-agent/src/ebpf.rs",
+        "to": "bin/yacht-agent/src/main.rs",
+        "relation": "shared_dir:bin/yacht-agent/src",
+        "weight": 1.0
+      },
+      {
+        "from": "deploy/local-test.sh",
+        "to": "deploy/verify-sqli.sh",
+        "relation": "shared_dir:deploy",
+        "weight": 1.0
+      },
+      {
+        "from": "deploy/verify-sqli.sh",
+        "to": "deploy/setup.sh",
+        "relation": "shared_dir:deploy",
+        "weight": 1.0
+      },
       {
         "from": "scripts/deploy_yacht.sh",
         "to": "scripts/smoke_test.sh",
@@ -465,15 +483,9 @@
         "weight": 1.0
       },
       {
-        "from": "deploy/local-test.sh",
-        "to": "deploy/verify-sqli.sh",
-        "relation": "shared_dir:deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/verify-sqli.sh",
-        "to": "deploy/setup.sh",
-        "relation": "shared_dir:deploy",
+        "from": "project-wharf-launcher.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -528,18 +540,6 @@
         "from": "crates/wharf-core/src/nebula.rs",
         "to": "crates/wharf-core/src/fleet.rs",
         "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "project-wharf-launcher.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/yacht-agent/src/ebpf.rs",
-        "to": "bin/yacht-agent/src/main.rs",
-        "relation": "shared_dir:bin/yacht-agent/src",
         "weight": 1.0
       },
       {
@@ -847,21 +847,18 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "bin/yacht-agent/src/ebpf.rs",
-          "crates/wharf-core/src/integrity.rs",
-          "crates/wharf-core/src/config.rs",
-          "crates/wharf-core/src/nebula.rs",
-          "crates/wharf-core/src/fleet.rs"
+          "crates/wharf-ebpf/src/main.rs",
+          "crates/wharf-ebpf/src/main.rs"
         ],
         "frameworks": [
           "Networking",
           "WebServer"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "PathTraversal",
@@ -878,6 +875,23 @@
           "WebServer"
         ],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "bin/yacht-agent/src/ebpf.rs",
+          "crates/wharf-core/src/integrity.rs",
+          "crates/wharf-core/src/config.rs",
+          "crates/wharf-core/src/nebula.rs",
+          "crates/wharf-core/src/fleet.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "WebServer"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -921,20 +935,6 @@
           "WebServer"
         ],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "crates/wharf-ebpf/src/main.rs",
-          "crates/wharf-ebpf/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UnsafeCode",

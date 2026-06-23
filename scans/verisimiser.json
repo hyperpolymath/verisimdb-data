@@ -382,17 +382,17 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "concurrency",
-    "memory",
-    "cpu"
+    "cpu",
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
+        "from": "src/tier1/temporal.rs",
+        "to": "src/tier1/provenance.rs",
+        "relation": "shared_dir:src/tier1",
         "weight": 1.0
       },
       {
@@ -420,18 +420,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/doctor.rs",
-        "to": "src/gc.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/gc.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
         "from": "src/codegen/overlay.rs",
         "to": "src/codegen/query.rs",
         "relation": "shared_dir:src/codegen",
@@ -450,21 +438,45 @@
         "weight": 1.0
       },
       {
-        "from": "src/sidecar/json.rs",
-        "to": "src/sidecar/lock.rs",
-        "relation": "shared_dir:src/sidecar",
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
-        "from": "src/tier1/temporal.rs",
-        "to": "src/tier1/provenance.rs",
-        "relation": "shared_dir:src/tier1",
+        "from": "src/doctor.rs",
+        "to": "src/gc.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/gc.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/sidecar/json.rs",
+        "to": "src/sidecar/lock.rs",
+        "relation": "shared_dir:src/sidecar",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/provenance_fork_test.rs",
+          "tests/logging_test.rs",
+          "tests/sqlite_intercept_e2e.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
@@ -479,18 +491,6 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/sidecar/json.rs",
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -502,6 +502,18 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/sidecar/json.rs",
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "UncheckedError",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -510,18 +522,6 @@
         ],
         "frameworks": [],
         "relation": "UncheckedError->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/logging_test.rs",
-          "tests/sqlite_intercept_e2e.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

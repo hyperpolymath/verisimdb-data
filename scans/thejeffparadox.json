@@ -172,15 +172,21 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "engine/scripts/generate_report.jl",
-        "to": "engine/scripts/execute_turn.jl",
-        "relation": "shared_dir:engine/scripts",
+        "from": "tui/src/tui.adb",
+        "to": "tui/src/game_state.adb",
+        "relation": "shared_dir:tui/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tui/src/game_state.adb",
+        "to": "tui/src/jeff_tui.adb",
+        "relation": "shared_dir:tui/src",
         "weight": 1.0
       },
       {
@@ -196,21 +202,25 @@
         "weight": 1.0
       },
       {
-        "from": "tui/src/tui.adb",
-        "to": "tui/src/game_state.adb",
-        "relation": "shared_dir:tui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "tui/src/game_state.adb",
-        "to": "tui/src/jeff_tui.adb",
-        "relation": "shared_dir:tui/src",
+        "from": "engine/scripts/generate_report.jl",
+        "to": "engine/scripts/execute_turn.jl",
+        "relation": "shared_dir:engine/scripts",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "engine/test/integration_tests.jl"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
       {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
@@ -221,16 +231,6 @@
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "engine/test/integration_tests.jl"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   }

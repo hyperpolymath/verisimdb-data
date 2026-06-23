@@ -497,49 +497,13 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
     "concurrency",
-    "memory",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "examples/multi-env/environments/prod.ncl",
-        "to": "examples/multi-env/environments/staging.ncl",
-        "relation": "shared_dir:examples/multi-env/environments",
-        "weight": 1.0
-      },
-      {
-        "from": "examples/multi-env/environments/staging.ncl",
-        "to": "examples/multi-env/environments/dev.ncl",
-        "relation": "shared_dir:examples/multi-env/environments",
-        "weight": 1.0
-      },
-      {
-        "from": "src/errors/recovery.rs",
-        "to": "src/errors/mod.rs",
-        "relation": "shared_dir:src/errors",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/property_test.rs",
-        "to": "tests/e2e_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cache/filesystem.rs",
-        "to": "src/cache/hash.rs",
-        "relation": "shared_dir:src/cache",
-        "weight": 1.0
-      },
-      {
-        "from": "src/analyzer/recommender.rs",
-        "to": "src/analyzer/patterns.rs",
-        "relation": "shared_dir:src/analyzer",
-        "weight": 1.0
-      },
       {
         "from": "src/pipeline/dag.rs",
         "to": "src/pipeline/executor.rs",
@@ -556,6 +520,12 @@
         "from": "src/pipeline/definition.rs",
         "to": "src/pipeline/validation.rs",
         "relation": "shared_dir:src/pipeline",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cache/filesystem.rs",
+        "to": "src/cache/hash.rs",
+        "relation": "shared_dir:src/cache",
         "weight": 1.0
       },
       {
@@ -628,6 +598,36 @@
         "from": "src/cli/validate.rs",
         "to": "src/cli/cache.rs",
         "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/errors/recovery.rs",
+        "to": "src/errors/mod.rs",
+        "relation": "shared_dir:src/errors",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property_test.rs",
+        "to": "tests/e2e_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/analyzer/recommender.rs",
+        "to": "src/analyzer/patterns.rs",
+        "relation": "shared_dir:src/analyzer",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/multi-env/environments/prod.ncl",
+        "to": "examples/multi-env/environments/staging.ncl",
+        "relation": "shared_dir:examples/multi-env/environments",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/multi-env/environments/staging.ncl",
+        "to": "examples/multi-env/environments/dev.ncl",
+        "relation": "shared_dir:examples/multi-env/environments",
         "weight": 1.0
       },
       {
@@ -859,6 +859,18 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e_test.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -889,18 +901,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e_test.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

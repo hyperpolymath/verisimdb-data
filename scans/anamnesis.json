@@ -169,9 +169,9 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
-    "network"
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -216,19 +216,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "learning/src/rdf/schema.jl",
-          "learning/test/runtests.jl"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -242,18 +229,17 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "orchestrator/lib/anamnesis/ports/parser_port.ex",
-          "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
-          "orchestrator/lib/anamnesis/ports/julia_port.ex"
+          "learning/src/rdf/schema.jl",
+          "learning/test/runtests.jl"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -268,6 +254,20 @@
           "OTP"
         ],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "orchestrator/lib/anamnesis/ports/parser_port.ex",
+          "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex",
+          "orchestrator/lib/anamnesis/ports/julia_port.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }
