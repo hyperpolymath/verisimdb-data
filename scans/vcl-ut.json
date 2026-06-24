@@ -496,28 +496,28 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
     "concurrency",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/fmt/src/lib.rs",
-        "to": "src/interface/fmt/src/main.rs",
-        "relation": "shared_dir:src/interface/fmt/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/lsp/src/lib.rs",
-        "to": "src/interface/lsp/src/main.rs",
-        "relation": "shared_dir:src/interface/lsp/src",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/lint/src/lib.rs",
         "to": "src/interface/lint/src/main.rs",
         "relation": "shared_dir:src/interface/lint/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e_test.rs",
+        "to": "tests/integration_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/fmt/src/lib.rs",
+        "to": "src/interface/fmt/src/main.rs",
+        "relation": "shared_dir:src/interface/fmt/src",
         "weight": 1.0
       },
       {
@@ -539,18 +539,6 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/integration_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/parse/tests/conformance_emit.rs",
         "to": "src/interface/parse/tests/wire.rs",
         "relation": "shared_dir:src/interface/parse/tests",
@@ -567,23 +555,23 @@
         "to": "src/interface/parse/tests/parse.rs",
         "relation": "shared_dir:src/interface/parse/tests",
         "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/lsp/src/lib.rs",
+        "to": "src/interface/lsp/src/main.rs",
+        "relation": "shared_dir:src/interface/lsp/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/interface/lint/src/main.rs",
-          "src/interface/fmt/src/main.rs",
-          "src/interface/parse/src/bin/vclt-gate.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -609,6 +597,28 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "ResourceLeak",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/recompute-wasm/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "ResourceLeak->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/interface/lint/src/main.rs",
+          "src/interface/fmt/src/main.rs",
+          "src/interface/parse/src/bin/vclt-gate.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
@@ -618,16 +628,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/recompute-wasm/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Memory"
       }
     ]
   }

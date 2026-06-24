@@ -315,18 +315,6 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/branch-protection-apply.sh",
-        "to": "scripts/wiki-audit.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/wiki-audit.sh",
-        "to": "scripts/standardize_readmes.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "lib/script_manager/git_syncer.ex",
         "to": "lib/script_manager/dependency_fixer.ex",
         "relation": "shared_dir:lib/script_manager",
@@ -361,11 +349,33 @@
         "to": "lib/script_manager/toolchain_linker.ex",
         "relation": "shared_dir:lib/script_manager",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/branch-protection-apply.sh",
+        "to": "scripts/wiki-audit.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/wiki-audit.sh",
+        "to": "scripts/standardize_readmes.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "launchers/git-scripts-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
@@ -384,16 +394,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "lib/script_manager/tui.ex"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -415,14 +415,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "launchers/git-scripts-launcher.sh"
+          "lib/script_manager/tui.ex"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

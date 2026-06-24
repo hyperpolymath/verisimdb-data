@@ -366,12 +366,54 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "disk",
-    "cpu",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/lint/escape_hatch.rs",
+        "to": "src/lint/postulate.rs",
+        "relation": "shared_dir:src/lint",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lint/postulate.rs",
+        "to": "src/lint/safe_pragma.rs",
+        "relation": "shared_dir:src/lint",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lint/safe_pragma.rs",
+        "to": "src/lint/mod.rs",
+        "relation": "shared_dir:src/lint",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lint/mod.rs",
+        "to": "src/lint/tab_mix.rs",
+        "relation": "shared_dir:src/lint",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lint/tab_mix.rs",
+        "to": "src/lint/unpinned_headline.rs",
+        "relation": "shared_dir:src/lint",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/smoke.rs",
+        "to": "tests/proven.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/proven.rs",
+        "to": "tests/transitions.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
       {
         "from": "src/dag.rs",
         "to": "src/event.rs",
@@ -425,71 +467,11 @@
         "to": "src/workspace.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
-      },
-      {
-        "from": "tests/smoke.rs",
-        "to": "tests/proven.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/proven.rs",
-        "to": "tests/transitions.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lint/escape_hatch.rs",
-        "to": "src/lint/postulate.rs",
-        "relation": "shared_dir:src/lint",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lint/postulate.rs",
-        "to": "src/lint/safe_pragma.rs",
-        "relation": "shared_dir:src/lint",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lint/safe_pragma.rs",
-        "to": "src/lint/mod.rs",
-        "relation": "shared_dir:src/lint",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lint/mod.rs",
-        "to": "src/lint/tab_mix.rs",
-        "relation": "shared_dir:src/lint",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lint/tab_mix.rs",
-        "to": "src/lint/unpinned_headline.rs",
-        "relation": "shared_dir:src/lint",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/lint/escape_hatch.rs",
-          "src/lint/postulate.rs",
-          "src/lint/tab_mix.rs",
-          "src/lint/unpinned_headline.rs",
-          "src/dag.rs",
-          "src/event.rs",
-          "src/graph.rs",
-          "src/proven.rs",
-          "src/config.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -518,6 +500,24 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/lint/escape_hatch.rs",
+          "src/lint/postulate.rs",
+          "src/lint/tab_mix.rs",
+          "src/lint/unpinned_headline.rs",
+          "src/dag.rs",
+          "src/event.rs",
+          "src/graph.rs",
+          "src/proven.rs",
+          "src/config.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",

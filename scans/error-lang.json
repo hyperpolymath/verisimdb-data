@@ -70,15 +70,26 @@
         "memory"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "verification/check-affinescript.sh",
+      "file": "verification/check-affinescript.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in verification/check-affinescript.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 28253,
+    "total_lines": 28689,
     "unsafe_blocks": 35,
     "panic_sites": 0,
     "unwrap_calls": 16,
     "allocation_sites": 115,
-    "io_operations": 12,
+    "io_operations": 13,
     "threading_constructs": 2
   },
   "file_statistics": [
@@ -114,7 +125,7 @@
     },
     {
       "file_path": "src/abi/Foreign.idr",
-      "lines": 283,
+      "lines": 277,
       "unsafe_blocks": 13,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -363,6 +374,16 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "verification/check-affinescript.sh",
+      "lines": 43,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "verification/tests/TestHelpers.res",
       "lines": 142,
       "unsafe_blocks": 0,
@@ -465,22 +486,28 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "memory",
     "cpu",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "compiler/test/TestHelpers.res",
-        "to": "compiler/test/CstTest.res",
-        "relation": "shared_dir:compiler/test",
+        "from": "verification/tests/TestHelpers.res",
+        "to": "verification/tests/CstTest.res",
+        "relation": "shared_dir:verification/tests",
         "weight": 1.0
       },
       {
-        "from": "levels/03-unterminated-string.err",
-        "to": "levels/09-operators.err",
-        "relation": "shared_dir:levels",
+        "from": "examples/05-web-server-stable.err",
+        "to": "examples/09-null-cascade.err",
+        "relation": "shared_dir:examples",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/09-null-cascade.err",
+        "to": "examples/03-mutable-ripple.err",
+        "relation": "shared_dir:examples",
         "weight": 1.0
       },
       {
@@ -490,15 +517,9 @@
         "weight": 1.0
       },
       {
-        "from": "error-pkg/src/install.rs",
-        "to": "error-pkg/src/resolve.rs",
-        "relation": "shared_dir:error-pkg/src",
-        "weight": 1.0
-      },
-      {
-        "from": "verification/fuzzing/FuzzLexer.res",
-        "to": "verification/fuzzing/FuzzParser.res",
-        "relation": "shared_dir:verification/fuzzing",
+        "from": "compiler/test/TestHelpers.res",
+        "to": "compiler/test/CstTest.res",
+        "relation": "shared_dir:compiler/test",
         "weight": 1.0
       },
       {
@@ -550,21 +571,21 @@
         "weight": 1.0
       },
       {
-        "from": "verification/tests/TestHelpers.res",
-        "to": "verification/tests/CstTest.res",
-        "relation": "shared_dir:verification/tests",
+        "from": "verification/benchmarks/BenchLexer.res",
+        "to": "verification/benchmarks/BenchParser.res",
+        "relation": "shared_dir:verification/benchmarks",
         "weight": 1.0
       },
       {
-        "from": "examples/05-web-server-stable.err",
-        "to": "examples/09-null-cascade.err",
-        "relation": "shared_dir:examples",
+        "from": "verification/fuzzing/FuzzLexer.res",
+        "to": "verification/fuzzing/FuzzParser.res",
+        "relation": "shared_dir:verification/fuzzing",
         "weight": 1.0
       },
       {
-        "from": "examples/09-null-cascade.err",
-        "to": "examples/03-mutable-ripple.err",
-        "relation": "shared_dir:examples",
+        "from": "error-pkg/src/install.rs",
+        "to": "error-pkg/src/resolve.rs",
+        "relation": "shared_dir:error-pkg/src",
         "weight": 1.0
       },
       {
@@ -574,9 +595,9 @@
         "weight": 1.0
       },
       {
-        "from": "verification/benchmarks/BenchLexer.res",
-        "to": "verification/benchmarks/BenchParser.res",
-        "relation": "shared_dir:verification/benchmarks",
+        "from": "levels/03-unterminated-string.err",
+        "to": "levels/09-operators.err",
+        "relation": "shared_dir:levels",
         "weight": 1.0
       }
     ]
@@ -585,13 +606,23 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "error-pkg/src/types.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "verification/check-affinescript.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -609,13 +640,13 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "error-pkg/src/types.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   },

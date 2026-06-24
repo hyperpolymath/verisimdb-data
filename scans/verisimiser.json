@@ -382,17 +382,53 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "concurrency",
-    "cpu",
     "disk",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
+        "from": "src/codegen/overlay.rs",
+        "to": "src/codegen/query.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/query.rs",
+        "to": "src/codegen/ident.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/ident.rs",
+        "to": "src/codegen/parser.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/doctor.rs",
+        "to": "src/gc.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/gc.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
         "from": "src/tier1/temporal.rs",
         "to": "src/tier1/provenance.rs",
         "relation": "shared_dir:src/tier1",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -420,42 +456,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/codegen/overlay.rs",
-        "to": "src/codegen/query.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
-        "from": "src/codegen/query.rs",
-        "to": "src/codegen/ident.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
-        "from": "src/codegen/ident.rs",
-        "to": "src/codegen/parser.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src/doctor.rs",
-        "to": "src/gc.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/gc.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
         "from": "src/sidecar/json.rs",
         "to": "src/sidecar/lock.rs",
         "relation": "shared_dir:src/sidecar",
@@ -466,16 +466,26 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/logging_test.rs",
-          "tests/sqlite_intercept_e2e.rs"
+          "src/sidecar/json.rs",
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -490,16 +500,16 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/sidecar/json.rs",
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
+          "tests/provenance_fork_test.rs",
+          "tests/logging_test.rs",
+          "tests/sqlite_intercept_e2e.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -512,16 +522,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
       }
     ]
   }

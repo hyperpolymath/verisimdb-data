@@ -205,12 +205,18 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "bivouac/src/playbook/mod.rs",
         "to": "bivouac/src/playbook/executor.rs",
@@ -221,6 +227,18 @@
         "from": "bivouac/src/playbook/executor.rs",
         "to": "bivouac/src/playbook/parser.rs",
         "relation": "shared_dir:bivouac/src/playbook",
+        "weight": 1.0
+      },
+      {
+        "from": "bivouac/src/config.rs",
+        "to": "bivouac/src/main.rs",
+        "relation": "shared_dir:bivouac/src",
+        "weight": 1.0
+      },
+      {
+        "from": "bivouac/src/main.rs",
+        "to": "bivouac/src/error.rs",
+        "relation": "shared_dir:bivouac/src",
         "weight": 1.0
       },
       {
@@ -240,24 +258,6 @@
         "to": "bivouac/tests/integration_test.rs",
         "relation": "shared_dir:bivouac/tests",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/src/config.rs",
-        "to": "bivouac/src/main.rs",
-        "relation": "shared_dir:bivouac/src",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/src/main.rs",
-        "to": "bivouac/src/error.rs",
-        "relation": "shared_dir:bivouac/src",
-        "weight": 1.0
       }
     ]
   },
@@ -265,13 +265,13 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "bivouac/src/playbook/parser.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -295,13 +295,13 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "bivouac/src/playbook/parser.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

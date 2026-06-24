@@ -347,11 +347,23 @@
   ],
   "recommended_attacks": [
     "disk",
-    "concurrency",
-    "cpu"
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "netstack/orchestrator/lib/flatracoon_orchestrator/module_registry.ex",
+        "to": "netstack/orchestrator/lib/flatracoon_orchestrator/health_monitor.ex",
+        "relation": "shared_dir:netstack/orchestrator/lib/flatracoon_orchestrator",
+        "weight": 1.0
+      },
+      {
+        "from": "netstack/interface/src/FlatRacoonClient.res.js",
+        "to": "netstack/interface/src/FlatRacoonClient.res",
+        "relation": "shared_dir:netstack/interface/src",
+        "weight": 1.0
+      },
       {
         "from": "netstack/configs/install.sh",
         "to": "netstack/configs/environments.ncl",
@@ -362,12 +374,6 @@
         "from": "netstack/configs/environments.ncl",
         "to": "netstack/configs/modules.ncl",
         "relation": "shared_dir:netstack/configs",
-        "weight": 1.0
-      },
-      {
-        "from": "netstack/interface/src/FlatRacoonClient.res.js",
-        "to": "netstack/interface/src/FlatRacoonClient.res",
-        "relation": "shared_dir:netstack/interface/src",
         "weight": 1.0
       },
       {
@@ -398,12 +404,6 @@
         "from": "netstack/tui/src/flatracoon-api_client.ads",
         "to": "netstack/tui/src/flatracoon_tui.adb",
         "relation": "shared_dir:netstack/tui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "netstack/orchestrator/lib/flatracoon_orchestrator/module_registry.ex",
-        "to": "netstack/orchestrator/lib/flatracoon_orchestrator/health_monitor.ex",
-        "relation": "shared_dir:netstack/orchestrator/lib/flatracoon_orchestrator",
         "weight": 1.0
       },
       {
@@ -753,6 +753,36 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "netstack/orchestrator/lib/flatracoon_orchestrator_web.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "netstack/orchestrator/lib/flatracoon_orchestrator/module_registry.ex",
+          "netstack/orchestrator/lib/flatracoon_orchestrator/health_monitor.ex",
+          "netstack/orchestrator/lib/flatracoon_orchestrator/module_discovery.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -767,20 +797,6 @@
           "Phoenix"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "netstack/orchestrator/lib/flatracoon_orchestrator_web.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "MutationGap",
@@ -802,22 +818,6 @@
           "Phoenix"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "netstack/orchestrator/lib/flatracoon_orchestrator/module_registry.ex",
-          "netstack/orchestrator/lib/flatracoon_orchestrator/health_monitor.ex",
-          "netstack/orchestrator/lib/flatracoon_orchestrator/module_discovery.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "CommandInjection->Cpu"
       }
     ]
   }

@@ -360,18 +360,30 @@
     }
   ],
   "recommended_attacks": [
-    "network",
+    "concurrency",
     "cpu",
     "memory",
-    "concurrency",
+    "network",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
-        "to": "crates/neurophone-core/benches/pipeline_bench.rs",
-        "relation": "shared_dir:crates/neurophone-core/benches",
+        "from": "scripts/setup.sh",
+        "to": "scripts/install-on-phone.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-on-phone.sh",
+        "to": "scripts/install-termux.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-termux.sh",
+        "to": "scripts/build-android.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -393,33 +405,21 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/setup.sh",
-        "to": "scripts/install-on-phone.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-on-phone.sh",
-        "to": "scripts/install-termux.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-termux.sh",
-        "to": "scripts/build-android.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
-        "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
-        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
+        "to": "crates/neurophone-core/benches/pipeline_bench.rs",
+        "relation": "shared_dir:crates/neurophone-core/benches",
         "weight": 1.0
       },
       {
         "from": "setup.sh",
         "to": "flake.nix",
         "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
+        "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
         "weight": 1.0
       },
       {
@@ -692,6 +692,38 @@
     "rows": [
       {
         "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/neurophone-core/benches/neurophone_bench.rs",
+          "crates/neurophone-core/tests/aspect_concurrency.rs",
+          "crates/neurophone-core/tests/integration_pipeline.rs",
+          "crates/neurophone-core/tests/property_test.rs",
+          "crates/sensors/tests/integration_pipeline.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/uninstall.sh",
+          "scripts/setup.sh",
+          "scripts/install-on-phone.sh"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
@@ -719,38 +751,6 @@
           "Concurrent"
         ],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/uninstall.sh",
-          "scripts/setup.sh",
-          "scripts/install-on-phone.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/neurophone-core/benches/neurophone_bench.rs",
-          "crates/neurophone-core/tests/aspect_concurrency.rs",
-          "crates/neurophone-core/tests/integration_pipeline.rs",
-          "crates/neurophone-core/tests/property_test.rs",
-          "crates/sensors/tests/integration_pipeline.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

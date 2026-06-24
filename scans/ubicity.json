@@ -304,9 +304,9 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -347,6 +347,18 @@
         "weight": 1.0
       },
       {
+        "from": "src/export.js",
+        "to": "src/privacy.js",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/privacy.js",
+        "to": "src/import.js",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
         "from": "mapper.js",
         "to": "setup.sh",
         "relation": "shared_dir:",
@@ -363,23 +375,21 @@
         "to": "flake.nix",
         "relation": "shared_dir:",
         "weight": 1.0
-      },
-      {
-        "from": "src/export.js",
-        "to": "src/privacy.js",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/privacy.js",
-        "to": "src/import.js",
-        "relation": "shared_dir:src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src-rescript/Analysis.res"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -395,16 +405,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src-rescript/Analysis.res"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

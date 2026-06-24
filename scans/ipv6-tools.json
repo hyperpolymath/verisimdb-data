@@ -147,12 +147,6 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "ipv6-only/scripts/he-cert-check.sh",
         "to": "ipv6-only/scripts/he-check-status.sh",
         "relation": "shared_dir:ipv6-only/scripts",
@@ -169,21 +163,17 @@
         "to": "ipv6-only/scripts/he-update-endpoint.sh",
         "relation": "shared_dir:ipv6-only/scripts",
         "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "flake.nix",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "ipv6-only/scripts/he-tunnel-setup.sh"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -195,14 +185,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
         "severity_value": 5.0,
         "files": [
-          "ipv6-only/src/scripts/ipv6-config.sh"
+          "ipv6-only/scripts/he-tunnel-setup.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "InsecureProtocol",
@@ -213,6 +203,16 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "ipv6-only/src/scripts/ipv6-config.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }
