@@ -5,15 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "CommandInjection",
       "location": "tests/property/test_invariants.sh",
       "file": "tests/property/test_invariants.sh",
@@ -110,12 +101,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 4015,
+    "total_lines": 3857,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 0,
-    "io_operations": 39,
+    "io_operations": 36,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -200,16 +191,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "setup.sh",
       "lines": 278,
       "unsafe_blocks": 0,
@@ -217,16 +198,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -252,8 +223,8 @@
   ],
   "recommended_attacks": [
     "network",
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -292,29 +263,22 @@
         "to": "augmented/examples/nickel/infra.ncl",
         "relation": "shared_dir:augmented/examples/nickel",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
           "tests/property/test_invariants.sh",
           "tests/e2e/test_pipeline.sh",
-          "tests/integration/test_contracts.sh",
           "tests/unit/test_basic.sh"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -329,6 +293,19 @@
         "relation": "CommandInjection->Cpu"
       },
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "tests/property/test_invariants.sh",
+          "tests/e2e/test_pipeline.sh",
+          "tests/integration/test_contracts.sh",
+          "tests/unit/test_basic.sh"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -337,18 +314,6 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "tests/property/test_invariants.sh",
-          "tests/e2e/test_pipeline.sh",
-          "tests/unit/test_basic.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       }
     ]
   }

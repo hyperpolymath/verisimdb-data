@@ -85,24 +85,15 @@
         "cpu"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 14889,
+    "total_lines": 14773,
     "unsafe_blocks": 2,
     "panic_sites": 1,
     "unwrap_calls": 7,
     "allocation_sites": 21,
-    "io_operations": 20,
+    "io_operations": 18,
     "threading_constructs": 19
   },
   "file_statistics": [
@@ -392,45 +383,17 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 2
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "network",
     "memory",
-    "disk",
-    "cpu"
+    "concurrency",
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/main.rs",
-        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
-        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
-        "weight": 1.0
-      },
-      {
-        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
-        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
-        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
-        "weight": 1.0
-      },
-      {
-        "from": "indieweb2-bastion/policy/curps/webmention.ncl",
-        "to": "indieweb2-bastion/policy/curps/policy.ncl",
-        "relation": "shared_dir:indieweb2-bastion/policy/curps",
-        "weight": 1.0
-      },
       {
         "from": "indieweb2-bastion/graphql-dns-api/src/blockchain.rs",
         "to": "indieweb2-bastion/graphql-dns-api/src/main.rs",
@@ -447,6 +410,24 @@
         "from": "indieweb2-bastion/graphql-dns-api/src/resolvers.rs",
         "to": "indieweb2-bastion/graphql-dns-api/src/db.rs",
         "relation": "shared_dir:indieweb2-bastion/graphql-dns-api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/policy/curps/webmention.ncl",
+        "to": "indieweb2-bastion/policy/curps/policy.ncl",
+        "relation": "shared_dir:indieweb2-bastion/policy/curps",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/main.rs",
+        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
+        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
+        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
+        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
         "weight": 1.0
       },
       {
@@ -958,24 +939,6 @@
         "to": "Ecto",
         "relation": "framework",
         "weight": 4.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "Ecto",
-        "relation": "framework",
-        "weight": 1.0
       }
     ]
   },
@@ -997,21 +960,6 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "backend/rust-api/src/api/verify.rs",
-          "backend/ada-core/src/civicconnect-verification.adb"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Phoenix",
-          "Ecto"
-        ],
-        "relation": "UncheckedError->Cpu"
-      },
-      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -1024,6 +972,20 @@
           "Ecto"
         ],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "indieweb2-bastion/src/PolicyGateCLI.res"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Phoenix",
+          "Ecto"
+        ],
+        "relation": "UnsafeDeserialization->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -1041,20 +1003,6 @@
       },
       {
         "source_category": "UnsafeDeserialization",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "indieweb2-bastion/src/PolicyGateCLI.res"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Phoenix",
-          "Ecto"
-        ],
-        "relation": "UnsafeDeserialization->Memory"
-      },
-      {
-        "source_category": "UnsafeDeserialization",
         "sink_axis": "cpu",
         "severity_value": 3.5,
         "files": [
@@ -1066,6 +1014,21 @@
           "Ecto"
         ],
         "relation": "UnsafeDeserialization->Cpu"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "backend/rust-api/src/api/verify.rs",
+          "backend/ada-core/src/civicconnect-verification.adb"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Phoenix",
+          "Ecto"
+        ],
+        "relation": "UncheckedError->Cpu"
       }
     ]
   }

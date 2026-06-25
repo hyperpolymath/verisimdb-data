@@ -28,15 +28,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "PanicPath",
       "location": "tests/integration_tests.rs",
       "file": "tests/integration_tests.rs",
@@ -60,12 +51,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 6329,
+    "total_lines": 6159,
     "unsafe_blocks": 17,
     "panic_sites": 0,
     "unwrap_calls": 11,
     "allocation_sites": 15,
-    "io_operations": 6,
+    "io_operations": 5,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -151,16 +142,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/integration_tests.rs",
       "lines": 592,
       "unsafe_blocks": 0,
@@ -172,9 +153,9 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "memory",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -189,27 +170,11 @@
         "to": "src/codegen/capability.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -219,16 +184,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -241,6 +196,16 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -249,6 +214,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration_tests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

@@ -3,8 +3,8 @@
   "program_path": "neurophone",
   "language": "rust",
   "frameworks": [
-    "Networking",
-    "Concurrent"
+    "Concurrent",
+    "Networking"
   ],
   "weak_points": [
     {
@@ -49,15 +49,6 @@
       "recommended_attack": [
         "network"
       ],
-      "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
       "test_context": "production"
     },
     {
@@ -127,12 +118,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 7675,
+    "total_lines": 6668,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 68,
-    "allocation_sites": 18,
-    "io_operations": 16,
+    "allocation_sites": 6,
+    "io_operations": 14,
     "threading_constructs": 4
   },
   "file_statistics": [
@@ -177,36 +168,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "android/app/src/main/java/ai/neurophone/widget/NeurophoneAppWidget.java",
-      "lines": 198,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 8,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
-      "lines": 200,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 3,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
-      "lines": 49,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": ".machine_readable/contractiles/bust/bust.ncl",
       "lines": 66,
       "unsafe_blocks": 0,
@@ -224,16 +185,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -360,32 +311,14 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
-    "memory",
     "network",
-    "disk"
+    "concurrency",
+    "disk",
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/setup.sh",
-        "to": "scripts/install-on-phone.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-on-phone.sh",
-        "to": "scripts/install-termux.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-termux.sh",
-        "to": "scripts/build-android.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "crates/neurophone-core/tests/lifecycle.rs",
         "to": "crates/neurophone-core/tests/aspect_concurrency.rs",
@@ -411,15 +344,27 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
+        "from": "scripts/setup.sh",
+        "to": "scripts/install-on-phone.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
-        "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
-        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "from": "scripts/install-on-phone.sh",
+        "to": "scripts/install-termux.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-termux.sh",
+        "to": "scripts/build-android.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/setup.sh",
+        "to": "Concurrent",
+        "relation": "framework",
         "weight": 1.0
       },
       {
@@ -429,7 +374,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/setup.sh",
+        "from": "scripts/install-on-phone.sh",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -441,7 +386,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/install-on-phone.sh",
+        "from": "scripts/install-termux.sh",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -453,7 +398,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/install-termux.sh",
+        "from": "scripts/build-android.sh",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -465,43 +410,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/build-android.sh",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/widget/NeurophoneAppWidget.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/widget/NeurophoneAppWidget.java",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -513,7 +422,7 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "from": "setup.sh",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -525,19 +434,7 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
+        "from": "crates/lsm/src/lib.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -549,7 +446,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/lsm/src/lib.rs",
+        "from": "crates/claude-client/src/lib.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -561,10 +458,10 @@
         "weight": 1.0
       },
       {
-        "from": "crates/claude-client/src/lib.rs",
+        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 9.0
       },
       {
         "from": "crates/neurophone-core/benches/neurophone_bench.rs",
@@ -573,10 +470,10 @@
         "weight": 9.0
       },
       {
-        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
+        "from": "crates/neurophone-core/benches/pipeline_bench.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 9.0
+        "weight": 5.0
       },
       {
         "from": "crates/neurophone-core/benches/pipeline_bench.rs",
@@ -585,10 +482,10 @@
         "weight": 5.0
       },
       {
-        "from": "crates/neurophone-core/benches/pipeline_bench.rs",
+        "from": "crates/neurophone-core/tests/lifecycle.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 5.0
+        "weight": 2.0
       },
       {
         "from": "crates/neurophone-core/tests/lifecycle.rs",
@@ -597,10 +494,10 @@
         "weight": 2.0
       },
       {
-        "from": "crates/neurophone-core/tests/lifecycle.rs",
+        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 15.0
       },
       {
         "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
@@ -609,10 +506,10 @@
         "weight": 15.0
       },
       {
-        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
+        "from": "crates/neurophone-core/tests/integration_pipeline.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 15.0
+        "weight": 9.0
       },
       {
         "from": "crates/neurophone-core/tests/integration_pipeline.rs",
@@ -621,10 +518,10 @@
         "weight": 9.0
       },
       {
-        "from": "crates/neurophone-core/tests/integration_pipeline.rs",
+        "from": "crates/neurophone-core/tests/property_test.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 9.0
+        "weight": 19.0
       },
       {
         "from": "crates/neurophone-core/tests/property_test.rs",
@@ -633,10 +530,10 @@
         "weight": 19.0
       },
       {
-        "from": "crates/neurophone-core/tests/property_test.rs",
+        "from": "crates/llm/src/lib.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 19.0
+        "weight": 2.0
       },
       {
         "from": "crates/llm/src/lib.rs",
@@ -645,10 +542,10 @@
         "weight": 2.0
       },
       {
-        "from": "crates/llm/src/lib.rs",
+        "from": "crates/llm/tests/integration_backend.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 5.0
       },
       {
         "from": "crates/llm/tests/integration_backend.rs",
@@ -657,32 +554,26 @@
         "weight": 5.0
       },
       {
-        "from": "crates/llm/tests/integration_backend.rs",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 5.0
-      },
-      {
         "from": "crates/sensors/benches/sensors_bench.rs",
-        "to": "Networking",
+        "to": "Concurrent",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "crates/sensors/benches/sensors_bench.rs",
-        "to": "Concurrent",
+        "to": "Networking",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "crates/sensors/tests/integration_pipeline.rs",
-        "to": "Networking",
+        "to": "Concurrent",
         "relation": "framework",
         "weight": 8.0
       },
       {
         "from": "crates/sensors/tests/integration_pipeline.rs",
-        "to": "Concurrent",
+        "to": "Networking",
         "relation": "framework",
         "weight": 8.0
       }
@@ -691,21 +582,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "crates/neurophone-core/benches/neurophone_bench.rs",
-          "crates/neurophone-core/tests/aspect_concurrency.rs",
-          "crates/neurophone-core/tests/integration_pipeline.rs",
-          "crates/neurophone-core/tests/property_test.rs",
-          "crates/sensors/tests/integration_pipeline.rs"
+          "scripts/install-termux.sh"
         ],
         "frameworks": [
-          "Networking",
-          "Concurrent"
+          "Concurrent",
+          "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "PathTraversal",
@@ -717,8 +604,8 @@
           "scripts/install-on-phone.sh"
         ],
         "frameworks": [
-          "Networking",
-          "Concurrent"
+          "Concurrent",
+          "Networking"
         ],
         "relation": "PathTraversal->Disk"
       },
@@ -734,23 +621,27 @@
           "crates/sensors/tests/integration_pipeline.rs"
         ],
         "frameworks": [
-          "Networking",
-          "Concurrent"
+          "Concurrent",
+          "Networking"
         ],
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "scripts/install-termux.sh"
+          "crates/neurophone-core/benches/neurophone_bench.rs",
+          "crates/neurophone-core/tests/aspect_concurrency.rs",
+          "crates/neurophone-core/tests/integration_pipeline.rs",
+          "crates/neurophone-core/tests/property_test.rs",
+          "crates/sensors/tests/integration_pipeline.rs"
         ],
         "frameworks": [
-          "Networking",
-          "Concurrent"
+          "Concurrent",
+          "Networking"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

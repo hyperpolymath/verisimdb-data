@@ -121,15 +121,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "CommandInjection",
       "location": "composer/src/composer_ffi.erl",
       "file": "composer/src/composer_ffi.erl",
@@ -143,12 +134,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 6063,
+    "total_lines": 5947,
     "unsafe_blocks": 2,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 0,
-    "io_operations": 22,
+    "io_operations": 20,
     "threading_constructs": 2
   },
   "file_statistics": [
@@ -233,16 +224,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "composer/src/runner.gleam",
       "lines": 51,
       "unsafe_blocks": 1,
@@ -274,29 +255,11 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "composer/src/runner.gleam",
-        "to": "composer/src/composer_ffi.erl",
-        "relation": "shared_dir:composer/src",
-        "weight": 1.0
-      },
-      {
-        "from": "composer/src/composer_ffi.erl",
-        "to": "composer/src/bundler.gleam",
-        "relation": "shared_dir:composer/src",
-        "weight": 1.0
-      },
       {
         "from": "lib/squisher_corpus/pipeline/fetch_worker.ex",
         "to": "lib/squisher_corpus/pipeline/search_worker.ex",
@@ -316,6 +279,18 @@
         "weight": 1.0
       },
       {
+        "from": "composer/src/runner.gleam",
+        "to": "composer/src/composer_ffi.erl",
+        "relation": "shared_dir:composer/src",
+        "weight": 1.0
+      },
+      {
+        "from": "composer/src/composer_ffi.erl",
+        "to": "composer/src/bundler.gleam",
+        "relation": "shared_dir:composer/src",
+        "weight": 1.0
+      },
+      {
         "from": "test/pipeline/sync_worker_test.exs",
         "to": "Database",
         "relation": "framework",
@@ -455,24 +430,6 @@
       },
       {
         "from": "setup.sh",
-        "to": "Ecto",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
         "to": "Ecto",
         "relation": "framework",
         "weight": 1.0
@@ -536,6 +493,21 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "lib/squisher_corpus/port_runner.ex",
+          "composer/src/composer_ffi.erl"
+        ],
+        "frameworks": [
+          "Database",
+          "OTP",
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -571,21 +543,6 @@
           "Ecto"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "lib/squisher_corpus/port_runner.ex",
-          "composer/src/composer_ffi.erl"
-        ],
-        "frameworks": [
-          "Database",
-          "OTP",
-          "Ecto"
-        ],
-        "relation": "CommandInjection->Cpu"
       }
     ]
   }

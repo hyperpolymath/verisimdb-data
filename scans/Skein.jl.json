@@ -49,24 +49,15 @@
         "cpu"
       ],
       "test_context": "test_only"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 8147,
+    "total_lines": 8031,
     "unsafe_blocks": 12,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 17,
+    "io_operations": 15,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -139,41 +130,43 @@
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "test/runtests.jl",
-        "to": "test/e2e_test.jl",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
         "from": "src/storage.jl",
         "to": "src/import_export.jl",
         "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "test/runtests.jl",
+        "to": "test/e2e_test.jl",
+        "relation": "shared_dir:test",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/runtests.jl",
+          "test/e2e_test.jl",
+          "test/knot_theory_ext_test.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -193,18 +186,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/runtests.jl",
-          "test/e2e_test.jl",
-          "test/knot_theory_ext_test.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
       }
     ]
   }

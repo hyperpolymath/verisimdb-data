@@ -47,24 +47,15 @@
         "disk"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 9260,
+    "total_lines": 9090,
     "unsafe_blocks": 15,
     "panic_sites": 1,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 48,
+    "io_operations": 47,
     "threading_constructs": 4
   },
   "file_statistics": [
@@ -199,16 +190,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/validate.test.deno.js",
       "lines": 485,
       "unsafe_blocks": 0,
@@ -220,11 +201,11 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
+    "memory",
     "network",
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -238,6 +219,12 @@
         "from": "src/interface/ffi/src/verisimdb.zig",
         "to": "src/interface/ffi/src/dbus.zig",
         "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
         "weight": 1.0
       },
       {
@@ -275,27 +262,11 @@
         "to": "src/core/diagnostics.eph",
         "relation": "shared_dir:src/core",
         "weight": 1.0
-      },
-      {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/dbus.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -325,6 +296,16 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/dbus.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

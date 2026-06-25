@@ -497,10 +497,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "cpu",
     "network",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -583,9 +583,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/compose/ComposeOrchestrator.res",
-        "to": "src/compose/ComposeOrchestrator.res.mjs",
-        "relation": "shared_dir:src/compose",
+        "from": "src/policy/PolicyEvaluator.res",
+        "to": "src/policy/PolicyStore.res",
+        "relation": "shared_dir:src/policy",
+        "weight": 1.0
+      },
+      {
+        "from": "src/vordr/Client.res",
+        "to": "src/vordr/Client.res.mjs",
+        "relation": "shared_dir:src/vordr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/bindings/Deno.res",
+        "to": "src/bindings/Fetch.res",
+        "relation": "shared_dir:src/bindings",
         "weight": 1.0
       },
       {
@@ -613,9 +625,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/policy/PolicyEvaluator.res",
-        "to": "src/policy/PolicyStore.res",
-        "relation": "shared_dir:src/policy",
+        "from": "src/compose/ComposeOrchestrator.res",
+        "to": "src/compose/ComposeOrchestrator.res.mjs",
+        "relation": "shared_dir:src/compose",
         "weight": 1.0
       },
       {
@@ -631,18 +643,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/vordr/Client.res",
-        "to": "src/vordr/Client.res.mjs",
-        "relation": "shared_dir:src/vordr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/bindings/Deno.res",
-        "to": "src/bindings/Fetch.res",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
-      {
         "from": "src/tests/AuthTest.res",
         "to": "src/tests/AuthSecurityTest.res",
         "relation": "shared_dir:src/tests",
@@ -652,6 +652,16 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CryptoMisuse",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "tests/bench/gateway_bench.js"
+        ],
+        "frameworks": [],
+        "relation": "CryptoMisuse->Network"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -678,16 +688,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "CryptoMisuse",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "tests/bench/gateway_bench.js"
-        ],
-        "frameworks": [],
-        "relation": "CryptoMisuse->Network"
       }
     ]
   },

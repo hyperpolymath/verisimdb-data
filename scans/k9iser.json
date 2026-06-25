@@ -40,15 +40,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "PanicPath",
       "location": "tests/integration_test.rs",
       "file": "tests/integration_test.rs",
@@ -72,12 +63,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 6004,
+    "total_lines": 5834,
     "unsafe_blocks": 34,
     "panic_sites": 1,
     "unwrap_calls": 22,
     "allocation_sites": 37,
-    "io_operations": 14,
+    "io_operations": 13,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -184,16 +175,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/integration_test.rs",
       "lines": 274,
       "unsafe_blocks": 0,
@@ -205,12 +186,18 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/validator.rs",
         "to": "src/codegen/mod.rs",
@@ -228,34 +215,11 @@
         "to": "src/codegen/contract.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -268,14 +232,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/interface/ffi/src/main.zig"
+          "tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -288,14 +252,25 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "tests/integration_test.rs"
+          "src/interface/ffi/src/main.zig"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

@@ -91,15 +91,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -110,12 +101,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 28568,
+    "total_lines": 28398,
     "unsafe_blocks": 19,
     "panic_sites": 1,
     "unwrap_calls": 2,
     "allocation_sites": 160,
-    "io_operations": 24,
+    "io_operations": 23,
     "threading_constructs": 5
   },
   "file_statistics": [
@@ -454,16 +445,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/e2e_test.rs",
       "lines": 391,
       "unsafe_blocks": 0,
@@ -495,19 +476,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "concurrency",
-    "disk",
-    "cpu"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/interface/lint/src/lib.rs",
-        "to": "src/interface/lint/src/main.rs",
-        "relation": "shared_dir:src/interface/lint/src",
-        "weight": 1.0
-      },
       {
         "from": "tests/e2e_test.rs",
         "to": "tests/integration_test.rs",
@@ -518,24 +493,6 @@
         "from": "src/interface/fmt/src/lib.rs",
         "to": "src/interface/fmt/src/main.rs",
         "relation": "shared_dir:src/interface/fmt/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/parse/src/lexer.rs",
-        "to": "src/interface/parse/src/wire.rs",
-        "relation": "shared_dir:src/interface/parse/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/parse/src/wire.rs",
-        "to": "src/interface/parse/src/decider.rs",
-        "relation": "shared_dir:src/interface/parse/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/parse/src/decider.rs",
-        "to": "src/interface/parse/src/parser.rs",
-        "relation": "shared_dir:src/interface/parse/src",
         "weight": 1.0
       },
       {
@@ -557,15 +514,33 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/lsp/src/lib.rs",
         "to": "src/interface/lsp/src/main.rs",
         "relation": "shared_dir:src/interface/lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/lint/src/lib.rs",
+        "to": "src/interface/lint/src/main.rs",
+        "relation": "shared_dir:src/interface/lint/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/parse/src/lexer.rs",
+        "to": "src/interface/parse/src/wire.rs",
+        "relation": "shared_dir:src/interface/parse/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/parse/src/wire.rs",
+        "to": "src/interface/parse/src/decider.rs",
+        "relation": "shared_dir:src/interface/parse/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/parse/src/decider.rs",
+        "to": "src/interface/parse/src/parser.rs",
+        "relation": "shared_dir:src/interface/parse/src",
         "weight": 1.0
       }
     ]
@@ -585,28 +560,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/src/lib.zig",
-          "src/interface/recompute-wasm/src/lib.rs",
-          "src/interface/attest/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/recompute-wasm/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -619,6 +572,16 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "ResourceLeak",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/recompute-wasm/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "ResourceLeak->Memory"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
@@ -628,6 +591,18 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/src/lib.zig",
+          "src/interface/recompute-wasm/src/lib.rs",
+          "src/interface/attest/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

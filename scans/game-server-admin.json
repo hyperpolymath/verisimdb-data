@@ -118,24 +118,15 @@
         "network"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 22693,
+    "total_lines": 22524,
     "unsafe_blocks": 22,
     "panic_sites": 4,
     "unwrap_calls": 0,
     "allocation_sites": 4,
-    "io_operations": 113,
+    "io_operations": 112,
     "threading_constructs": 1
   },
   "file_statistics": [
@@ -450,16 +441,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 169,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "play.sh",
       "lines": 358,
       "unsafe_blocks": 0,
@@ -471,13 +452,67 @@
     }
   ],
   "recommended_attacks": [
+    "network",
     "memory",
     "cpu",
-    "disk",
-    "network"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/interface/ffi/src/server_actions.zig",
+        "to": "src/interface/ffi/src/groove_client.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/groove_client.zig",
+        "to": "src/interface/ffi/src/cli.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/cli.zig",
+        "to": "src/interface/ffi/src/main.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/main.zig",
+        "to": "src/interface/ffi/src/config_extract.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/config_extract.zig",
+        "to": "src/interface/ffi/src/game_profiles.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "game-server-admin-launcher.sh",
+        "to": "play.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/GrooveClient.eph",
+        "to": "src/core/Shell.eph",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/Shell.eph",
+        "to": "src/core/Bridge.eph",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/Bridge.eph",
+        "to": "src/core/Types.eph",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
       {
         "from": "scripts/provision-server.sh",
         "to": "scripts/install-desktop.sh",
@@ -555,71 +590,33 @@
         "to": "src/wasm/build-complete.sh",
         "relation": "shared_dir:src/wasm",
         "weight": 1.0
-      },
-      {
-        "from": "game-server-admin-launcher.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
-        "to": "play.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/server_actions.zig",
-        "to": "src/interface/ffi/src/groove_client.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/groove_client.zig",
-        "to": "src/interface/ffi/src/cli.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/cli.zig",
-        "to": "src/interface/ffi/src/main.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/main.zig",
-        "to": "src/interface/ffi/src/config_extract.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/config_extract.zig",
-        "to": "src/interface/ffi/src/game_profiles.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/GrooveClient.eph",
-        "to": "src/core/Shell.eph",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/Shell.eph",
-        "to": "src/core/Bridge.eph",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/Bridge.eph",
-        "to": "src/core/Types.eph",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/steam-stage.sh",
+          "game-server-admin-launcher.sh",
+          "src/wasm/launch-gsa.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "game-server-admin-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -634,39 +631,6 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/steam-stage.sh",
-          "game-server-admin-launcher.sh",
-          "src/wasm/launch-gsa.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/wizard.sh",
-          "scripts/steam-stage.sh"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "game-server-admin-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -678,6 +642,17 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/wizard.sh",
+          "scripts/steam-stage.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

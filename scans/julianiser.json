@@ -88,15 +88,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "PanicPath",
       "location": "tests/integration_tests.rs",
       "file": "tests/integration_tests.rs",
@@ -120,12 +111,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 6466,
+    "total_lines": 6296,
     "unsafe_blocks": 18,
     "panic_sites": 0,
     "unwrap_calls": 159,
     "allocation_sites": 59,
-    "io_operations": 15,
+    "io_operations": 14,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -223,16 +214,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/integration_tests.rs",
       "lines": 491,
       "unsafe_blocks": 0,
@@ -244,18 +225,12 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/benchmark.rs",
         "to": "src/codegen/julia_gen.rs",
@@ -279,16 +254,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/benchmark.rs",
-          "src/codegen/julia_gen.rs",
-          "tests/integration_tests.rs"
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -303,17 +277,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/codegen/benchmark.rs",
-          "src/codegen/julia_gen.rs"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -325,17 +288,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -344,6 +296,29 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/codegen/benchmark.rs",
+          "src/codegen/julia_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/benchmark.rs",
+          "src/codegen/julia_gen.rs",
+          "tests/integration_tests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

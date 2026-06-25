@@ -28,15 +28,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "PanicPath",
       "location": "tests/integration_test.rs",
       "file": "tests/integration_test.rs",
@@ -60,12 +51,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 6208,
+    "total_lines": 6038,
     "unsafe_blocks": 20,
     "panic_sites": 0,
     "unwrap_calls": 12,
     "allocation_sites": 17,
-    "io_operations": 11,
+    "io_operations": 10,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -153,16 +144,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/integration_test.rs",
       "lines": 494,
       "unsafe_blocks": 0,
@@ -174,18 +155,12 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/audit.rs",
         "to": "src/codegen/engine.rs",
@@ -229,6 +204,16 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -247,16 +232,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

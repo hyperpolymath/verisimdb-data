@@ -17,15 +17,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "PathTraversal",
       "location": "tests/e2e.sh",
       "file": "tests/e2e.sh",
@@ -38,12 +29,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 4429,
+    "total_lines": 4259,
     "unsafe_blocks": 13,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 17,
+    "io_operations": 16,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -108,16 +99,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/e2e.sh",
       "lines": 142,
       "unsafe_blocks": 0,
@@ -139,9 +120,9 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "cpu",
     "memory",
+    "network",
     "disk"
   ],
   "dependency_graph": {
@@ -154,12 +135,6 @@
       },
       {
         "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
         "to": "server.js",
         "relation": "shared_dir:",
         "weight": 1.0
@@ -168,16 +143,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "public/app.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -197,6 +162,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "public/app.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

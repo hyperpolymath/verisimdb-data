@@ -335,36 +335,12 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/typed-wasm-codegen/tests/execute_lowering.rs",
-        "to": "crates/typed-wasm-codegen/tests/execute.rs",
-        "relation": "shared_dir:crates/typed-wasm-codegen/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/typed-wasm-codegen/tests/execute.rs",
-        "to": "crates/typed-wasm-codegen/tests/corpus.rs",
-        "relation": "shared_dir:crates/typed-wasm-codegen/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/typed-wasm-codegen/tests/corpus.rs",
-        "to": "crates/typed-wasm-codegen/tests/optimization.rs",
-        "relation": "shared_dir:crates/typed-wasm-codegen/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/typed-wasm-codegen/tests/optimization.rs",
-        "to": "crates/typed-wasm-codegen/tests/roundtrip.rs",
-        "relation": "shared_dir:crates/typed-wasm-codegen/tests",
-        "weight": 1.0
-      },
       {
         "from": "crates/typed-wasm-codegen/src/errors.rs",
         "to": "crates/typed-wasm-codegen/src/lib.rs",
@@ -394,11 +370,45 @@
         "to": "crates/typed-wasm-verify/tests/cross_compat_real.rs",
         "relation": "shared_dir:crates/typed-wasm-verify/tests",
         "weight": 1.0
+      },
+      {
+        "from": "crates/typed-wasm-codegen/tests/execute_lowering.rs",
+        "to": "crates/typed-wasm-codegen/tests/execute.rs",
+        "relation": "shared_dir:crates/typed-wasm-codegen/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/typed-wasm-codegen/tests/execute.rs",
+        "to": "crates/typed-wasm-codegen/tests/corpus.rs",
+        "relation": "shared_dir:crates/typed-wasm-codegen/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/typed-wasm-codegen/tests/corpus.rs",
+        "to": "crates/typed-wasm-codegen/tests/optimization.rs",
+        "relation": "shared_dir:crates/typed-wasm-codegen/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/typed-wasm-codegen/tests/optimization.rs",
+        "to": "crates/typed-wasm-codegen/tests/roundtrip.rs",
+        "relation": "shared_dir:crates/typed-wasm-codegen/tests",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "tools/provision.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -410,24 +420,27 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tools/provision.sh"
+          "crates/typed-wasm-codegen/src/bin/tw.rs"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "ffi/zig/src/main.zig"
+          "crates/typed-wasm-verify/src/section.rs",
+          "crates/typed-wasm-codegen/src/parser.rs",
+          "crates/typed-wasm-codegen/tests/execute_lowering.rs",
+          "crates/typed-wasm-codegen/tests/corpus.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -463,37 +476,24 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "UnsafeCode",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "crates/typed-wasm-codegen/src/bin/tw.rs"
+          "ffi/zig/src/main.zig"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "PathTraversal",
         "sink_axis": "disk",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
           "tools/provision.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/typed-wasm-verify/src/section.rs",
-          "crates/typed-wasm-codegen/src/parser.rs",
-          "crates/typed-wasm-codegen/tests/execute_lowering.rs",
-          "crates/typed-wasm-codegen/tests/corpus.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

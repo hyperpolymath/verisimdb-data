@@ -64,15 +64,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "PanicPath",
       "location": "tests/integration_test.rs",
       "file": "tests/integration_test.rs",
@@ -96,12 +87,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 10348,
+    "total_lines": 10178,
     "unsafe_blocks": 16,
     "panic_sites": 0,
     "unwrap_calls": 29,
     "allocation_sites": 43,
-    "io_operations": 16,
+    "io_operations": 15,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -250,16 +241,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/integration_test.rs",
       "lines": 344,
       "unsafe_blocks": 0,
@@ -271,17 +252,23 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "memory",
     "cpu",
-    "disk"
+    "network",
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
+        "from": "src/abi/idris_emitter.rs",
+        "to": "src/abi/verify.rs",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/verify.rs",
+        "to": "src/abi/zig_ffi_parser.rs",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -301,23 +288,34 @@
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "src/abi/idris_emitter.rs",
-        "to": "src/abi/verify.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/verify.rs",
-        "to": "src/abi/zig_ffi_parser.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/scaffold.rs"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs",
+          "src/scan/mod.rs",
+          "src/abi/idris_emitter.rs",
+          "src/abi/verify.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -333,26 +331,6 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/scaffold.rs"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
@@ -362,17 +340,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/manifest/mod.rs",
-          "src/scan/mod.rs",
-          "src/abi/idris_emitter.rs",
-          "src/abi/verify.rs"
+          "tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

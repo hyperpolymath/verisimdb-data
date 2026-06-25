@@ -7,15 +7,6 @@
   ],
   "weak_points": [
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "crates/hesiod-lib/src/config.rs",
       "file": "crates/hesiod-lib/src/config.rs",
@@ -63,12 +54,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 3996,
+    "total_lines": 3880,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 7,
     "allocation_sites": 2,
-    "io_operations": 10,
+    "io_operations": 8,
     "threading_constructs": 6
   },
   "file_statistics": [
@@ -100,16 +91,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -176,19 +157,13 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "cpu",
+    "disk",
     "memory",
-    "disk"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "crates/hesiod-lib/src/records.rs",
         "to": "crates/hesiod-lib/src/health.rs",
@@ -221,12 +196,6 @@
       },
       {
         "from": "setup.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -273,7 +242,7 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "crates/hesiod-lib/src/config.rs",
@@ -282,19 +251,7 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/hesiod-lib/tests/e2e_test.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -309,8 +266,20 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/hesiod-lib/tests/e2e_test.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "crates/hesiod-lib/src/config.rs",
@@ -319,7 +288,7 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

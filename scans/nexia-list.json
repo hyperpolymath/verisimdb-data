@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "nexia-list",
-  "language": "rescript",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -28,15 +28,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "PanicPath",
       "location": "desktop/src/main.rs",
       "file": "desktop/src/main.rs",
@@ -60,12 +51,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 2390,
+    "total_lines": 2274,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 15,
     "allocation_sites": 4,
-    "io_operations": 9,
+    "io_operations": 7,
     "threading_constructs": 2
   },
   "file_statistics": [
@@ -120,16 +111,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "desktop/src/main.rs",
       "lines": 303,
       "unsafe_blocks": 0,
@@ -142,8 +123,8 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
@@ -153,17 +134,21 @@
         "to": "core/src/note.rs",
         "relation": "shared_dir:core/src",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "desktop/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -194,118 +179,7 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "desktop/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
-  },
-  "migration_metrics": {
-    "deprecated_api_count": 44,
-    "modern_api_count": 84,
-    "api_migration_ratio": 0.65625,
-    "health_score": 0.55,
-    "config_format": "None",
-    "version_bracket": "V12Current",
-    "file_count": 6,
-    "rescript_lines": 883,
-    "deprecated_patterns": [
-      {
-        "pattern": "ReactDOMStyle.make / ReactDOM.Style.make",
-        "replacement": "inline record style={{...}}",
-        "file_path": "ui/src/View.res",
-        "line_number": 0,
-        "category": "OldReactStyle",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Dict.",
-        "replacement": "Dict",
-        "file_path": "ui/src/Model.res",
-        "line_number": 0,
-        "category": "OldDict",
-        "count": 6
-      },
-      {
-        "pattern": "Js.Date.",
-        "replacement": "Date (no core replacement yet)",
-        "file_path": "ui/src/Model.res",
-        "line_number": 0,
-        "category": "OldDate",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Dict.",
-        "replacement": "Dict",
-        "file_path": "ui/src/Update.res",
-        "line_number": 0,
-        "category": "OldDict",
-        "count": 17
-      },
-      {
-        "pattern": "Js.Math.",
-        "replacement": "Math",
-        "file_path": "ui/src/Update.res",
-        "line_number": 0,
-        "category": "OldNumeric",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Date.",
-        "replacement": "Date (no core replacement yet)",
-        "file_path": "ui/src/Update.res",
-        "line_number": 0,
-        "category": "OldDate",
-        "count": 6
-      },
-      {
-        "pattern": "Js.Dict.",
-        "replacement": "Dict",
-        "file_path": "ui/src/Types.res",
-        "line_number": 0,
-        "category": "OldDict",
-        "count": 4
-      },
-      {
-        "pattern": "Js.Math.",
-        "replacement": "Math",
-        "file_path": "ui/src/Types.res",
-        "line_number": 0,
-        "category": "OldNumeric",
-        "count": 1
-      },
-      {
-        "pattern": "Js.Json.",
-        "replacement": "JSON",
-        "file_path": "ui/src/Types.res",
-        "line_number": 0,
-        "category": "OldJson",
-        "count": 1
-      },
-      {
-        "pattern": "Js.Date.",
-        "replacement": "Date (no core replacement yet)",
-        "file_path": "ui/src/Types.res",
-        "line_number": 0,
-        "category": "OldDate",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Console.",
-        "replacement": "Console",
-        "file_path": "ui/src/Main.res",
-        "line_number": 0,
-        "category": "OldConsole",
-        "count": 1
-      }
-    ],
-    "uncurried": false
   }
 }

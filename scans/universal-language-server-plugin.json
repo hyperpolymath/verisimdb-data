@@ -235,31 +235,13 @@
   ],
   "recommended_attacks": [
     "concurrency",
+    "cpu",
     "disk",
-    "memory",
     "network",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "server/tests/aspect_tests.rs",
-        "to": "server/tests/contract_tests.rs",
-        "relation": "shared_dir:server/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "server/tests/contract_tests.rs",
-        "to": "server/tests/core_tests.rs",
-        "relation": "shared_dir:server/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "server/tests/core_tests.rs",
-        "to": "server/tests/e2e_tests.rs",
-        "relation": "shared_dir:server/tests",
-        "weight": 1.0
-      },
       {
         "from": "server/src/document_store.rs",
         "to": "server/src/lib.rs",
@@ -313,21 +295,29 @@
         "to": "server/src/formats/yaml.rs",
         "relation": "shared_dir:server/src/formats",
         "weight": 1.0
+      },
+      {
+        "from": "server/tests/aspect_tests.rs",
+        "to": "server/tests/contract_tests.rs",
+        "relation": "shared_dir:server/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "server/tests/contract_tests.rs",
+        "to": "server/tests/core_tests.rs",
+        "relation": "shared_dir:server/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "server/tests/core_tests.rs",
+        "to": "server/tests/e2e_tests.rs",
+        "relation": "shared_dir:server/tests",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "server/tests/core_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
@@ -357,6 +347,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "server/tests/core_tests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

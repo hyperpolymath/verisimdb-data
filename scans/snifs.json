@@ -339,9 +339,9 @@
   ],
   "recommended_attacks": [
     "concurrency",
-    "cpu",
+    "memory",
     "disk",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -488,28 +488,34 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "demo/bench/snif_bench.exs"
+          "rust/crates/snif-abi/src/lib.rs",
+          "rust/crates/snif-abi/src/lib.rs",
+          "rust/crates/demo-guest/src/lib.rs",
+          "rust/crates/demo-guest/src/lib.rs",
+          "rust-guest/src/lib.rs",
+          "rust-guest/src/lib.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "tests/e2e.sh"
+          "demo/bench/snif_bench.exs",
+          "benches/snif_eval.sh"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "PathTraversal->Disk"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -529,21 +535,16 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "rust/crates/snif-abi/src/lib.rs",
-          "rust/crates/snif-abi/src/lib.rs",
-          "rust/crates/demo-guest/src/lib.rs",
-          "rust/crates/demo-guest/src/lib.rs",
-          "rust-guest/src/lib.rs",
-          "rust-guest/src/lib.rs"
+          "demo/bench/snif_bench.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "MutationGap",
@@ -560,17 +561,16 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "demo/bench/snif_bench.exs",
-          "benches/snif_eval.sh"
+          "tests/e2e.sh"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

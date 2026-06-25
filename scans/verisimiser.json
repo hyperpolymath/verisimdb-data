@@ -52,15 +52,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "PanicPath",
       "location": "tests/provenance_fork_test.rs",
       "file": "tests/provenance_fork_test.rs",
@@ -110,12 +101,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 13646,
+    "total_lines": 13476,
     "unsafe_blocks": 25,
     "panic_sites": 1,
     "unwrap_calls": 40,
     "allocation_sites": 52,
-    "io_operations": 39,
+    "io_operations": 38,
     "threading_constructs": 12
   },
   "file_statistics": [
@@ -319,16 +310,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "tests/sidecar_cli_test.rs",
       "lines": 92,
       "unsafe_blocks": 0,
@@ -382,13 +363,25 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
     "disk",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/doctor.rs",
+        "to": "src/gc.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/gc.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/overlay.rs",
         "to": "src/codegen/query.rs",
@@ -408,27 +401,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/doctor.rs",
-        "to": "src/gc.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/gc.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
         "from": "src/tier1/temporal.rs",
         "to": "src/tier1/provenance.rs",
         "relation": "shared_dir:src/tier1",
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
+        "from": "src/sidecar/json.rs",
+        "to": "src/sidecar/lock.rs",
+        "relation": "shared_dir:src/sidecar",
         "weight": 1.0
       },
       {
@@ -454,28 +435,22 @@
         "to": "tests/integration_test.rs",
         "relation": "shared_dir:tests",
         "weight": 1.0
-      },
-      {
-        "from": "src/sidecar/json.rs",
-        "to": "src/sidecar/lock.rs",
-        "relation": "shared_dir:src/sidecar",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/sidecar/json.rs",
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
+          "tests/provenance_fork_test.rs",
+          "tests/logging_test.rs",
+          "tests/sqlite_intercept_e2e.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -500,18 +475,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/logging_test.rs",
-          "tests/sqlite_intercept_e2e.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -522,6 +485,18 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/sidecar/json.rs",
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

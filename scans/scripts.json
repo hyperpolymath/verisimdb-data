@@ -51,15 +51,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "CommandInjection",
       "location": "enhance-kinoite.sh",
       "file": "enhance-kinoite.sh",
@@ -73,12 +64,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 6591,
+    "total_lines": 7214,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 0,
-    "io_operations": 99,
+    "io_operations": 103,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -114,7 +105,7 @@
     },
     {
       "file_path": "repo_auditor.exs",
-      "lines": 135,
+      "lines": 137,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -143,8 +134,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
+      "file_path": "organize_edge_bookmarks.jl",
+      "lines": 119,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -153,13 +144,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "organize_edge_bookmarks.jl",
-      "lines": 119,
+      "file_path": "convert_contractile_to_a2ml.sh",
+      "lines": 273,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 6,
       "threading_constructs": 0
     },
     {
@@ -203,16 +194,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "fix-class1-urls.sh",
       "lines": 22,
       "unsafe_blocks": 0,
@@ -235,6 +216,16 @@
     {
       "file_path": "nvidia-auto-setup.sh",
       "lines": 74,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ensure_contractiles_structure.sh",
+      "lines": 112,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -294,9 +285,9 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "cpu",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -338,6 +329,12 @@
       },
       {
         "from": "organize_edge_bookmarks.jl",
+        "to": "convert_contractile_to_a2ml.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "convert_contractile_to_a2ml.sh",
         "to": "setup.sh",
         "relation": "shared_dir:",
         "weight": 1.0
@@ -362,12 +359,6 @@
       },
       {
         "from": "generate_bookmarks_html.jl",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
         "to": "fix-class1-urls.sh",
         "relation": "shared_dir:",
         "weight": 1.0
@@ -386,6 +377,12 @@
       },
       {
         "from": "nvidia-auto-setup.sh",
+        "to": "ensure_contractiles_structure.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "ensure_contractiles_structure.sh",
         "to": "migrate-to-eclipse.sh",
         "relation": "shared_dir:",
         "weight": 1.0
@@ -419,28 +416,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "setup-kinoite-dev.sh",
-          "enhance-kinoite.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "setup-kinoite-dev.sh",
-          "check-language-compliance.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -452,6 +427,17 @@
       },
       {
         "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "setup-kinoite-dev.sh",
+          "enhance-kinoite.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
@@ -460,6 +446,17 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "setup-kinoite-dev.sh",
+          "check-language-compliance.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

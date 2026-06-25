@@ -5,15 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "InsecureProtocol",
       "location": "tests/test_a2ml.lua",
       "file": "tests/test_a2ml.lua",
@@ -38,12 +29,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 3883,
+    "total_lines": 3713,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 6,
+    "io_operations": 5,
     "threading_constructs": 2
   },
   "file_statistics": [
@@ -88,16 +79,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 170,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "a2ml-filter.lua",
       "lines": 464,
       "unsafe_blocks": 0,
@@ -109,20 +90,14 @@
     }
   ],
   "recommended_attacks": [
-    "network",
+    "cpu",
     "disk",
-    "cpu"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
         "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "flake.nix",
         "to": "a2ml-filter.lua",
         "relation": "shared_dir:",
         "weight": 1.0
@@ -132,16 +107,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "a2ml-filter.lua"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -150,6 +115,16 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "a2ml-filter.lua"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",

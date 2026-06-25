@@ -62,15 +62,6 @@
     },
     {
       "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
       "location": "deno.json",
       "file": "deno.json",
       "severity": "Medium",
@@ -89,12 +80,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 7092,
+    "total_lines": 6976,
     "unsafe_blocks": 8,
     "panic_sites": 0,
     "unwrap_calls": 12,
     "allocation_sites": 37,
-    "io_operations": 6,
+    "io_operations": 4,
     "threading_constructs": 2
   },
   "file_statistics": [
@@ -208,26 +199,27 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "network",
-    "disk",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/proven/Proven_SafeString.res",
+        "to": "src/proven/Proven_SafePath.res",
+        "relation": "shared_dir:src/proven",
+        "weight": 1.0
+      },
+      {
+        "from": "src/proven/Proven_SafePath.res",
+        "to": "src/proven/Proven_SafeHex.res",
+        "relation": "shared_dir:src/proven",
+        "weight": 1.0
+      },
       {
         "from": "lib/ocaml/Proven_SafeString.res",
         "to": "lib/ocaml/Proven_SafePath.res",
@@ -245,23 +237,21 @@
         "to": "lib/ocaml/RuntimeBridge.res",
         "relation": "shared_dir:lib/ocaml",
         "weight": 1.0
-      },
-      {
-        "from": "src/proven/Proven_SafeString.res",
-        "to": "src/proven/Proven_SafePath.res",
-        "relation": "shared_dir:src/proven",
-        "weight": 1.0
-      },
-      {
-        "from": "src/proven/Proven_SafePath.res",
-        "to": "src/proven/Proven_SafeHex.res",
-        "relation": "shared_dir:src/proven",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/main.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -274,16 +264,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/main.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",

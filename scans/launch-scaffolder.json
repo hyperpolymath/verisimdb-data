@@ -201,12 +201,36 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/launcher-common/src/config.rs",
+        "to": "crates/launcher-common/src/standard.rs",
+        "relation": "shared_dir:crates/launcher-common/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher-common/src/standard.rs",
+        "to": "crates/launcher-common/src/metadata_block.rs",
+        "relation": "shared_dir:crates/launcher-common/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher-common/src/metadata_block.rs",
+        "to": "crates/launcher-common/src/template.rs",
+        "relation": "shared_dir:crates/launcher-common/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher-common/src/template.rs",
+        "to": "crates/launcher-common/src/discovery.rs",
+        "relation": "shared_dir:crates/launcher-common/src",
+        "weight": 1.0
+      },
       {
         "from": "docs/ruleset-audit-2026-04-10/wave2-apply.sh",
         "to": "docs/ruleset-audit-2026-04-10/audit.sh",
@@ -236,35 +260,24 @@
         "to": "crates/launcher/src/cmd_mint.rs",
         "relation": "shared_dir:crates/launcher/src",
         "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/src/config.rs",
-        "to": "crates/launcher-common/src/standard.rs",
-        "relation": "shared_dir:crates/launcher-common/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/src/standard.rs",
-        "to": "crates/launcher-common/src/metadata_block.rs",
-        "relation": "shared_dir:crates/launcher-common/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/src/metadata_block.rs",
-        "to": "crates/launcher-common/src/template.rs",
-        "relation": "shared_dir:crates/launcher-common/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/src/template.rs",
-        "to": "crates/launcher-common/src/discovery.rs",
-        "relation": "shared_dir:crates/launcher-common/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/launcher/src/cmd_config.rs",
+          "crates/launcher/src/cmd_realign.rs",
+          "crates/launcher-common/src/config.rs",
+          "crates/launcher-common/src/standard.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -287,19 +300,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/launcher/src/cmd_config.rs",
-          "crates/launcher/src/cmd_realign.rs",
-          "crates/launcher-common/src/config.rs",
-          "crates/launcher-common/src/standard.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

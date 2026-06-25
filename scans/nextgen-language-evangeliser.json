@@ -98,15 +98,6 @@
     },
     {
       "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
       "location": "deno.json",
       "file": "deno.json",
       "severity": "Medium",
@@ -116,12 +107,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 5679,
+    "total_lines": 5561,
     "unsafe_blocks": 3,
     "panic_sites": 0,
     "unwrap_calls": 4,
     "allocation_sites": 14,
-    "io_operations": 18,
+    "io_operations": 16,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -216,16 +207,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "flake.nix",
-      "lines": 118,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "gui/app.js",
       "lines": 284,
       "unsafe_blocks": 0,
@@ -237,13 +218,25 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
     "memory",
-    "network",
-    "disk"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "test/Patterns_test.res",
+        "to": "test/Scanner_test.res",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/Scanner_test.res",
+        "to": "test/Analyser_test.res",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
       {
         "from": "src/Glyphs.res",
         "to": "src/Narrative.res",
@@ -267,24 +260,6 @@
         "to": "src/Patterns.res",
         "relation": "shared_dir:src",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "test/Patterns_test.res",
-        "to": "test/Scanner_test.res",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/Scanner_test.res",
-        "to": "test/Analyser_test.res",
-        "relation": "shared_dir:test",
-        "weight": 1.0
       }
     ]
   },
@@ -301,26 +276,16 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "src/Narrative.res",
-          "src/Cli.res",
-          "test/Scanner_test.res"
+          "scripts/validate-cartridges.js",
+          "scripts/launch-gui.sh",
+          "scripts/rescript-build.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/validate-cartridges.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "ExcessivePermissions->Network"
       },
       {
         "source_category": "ExcessivePermissions",
@@ -335,16 +300,26 @@
         "relation": "ExcessivePermissions->Disk"
       },
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "scripts/validate-cartridges.js",
-          "scripts/launch-gui.sh",
-          "scripts/rescript-build.sh"
+          "scripts/validate-cartridges.js"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/Narrative.res",
+          "src/Cli.res",
+          "test/Scanner_test.res"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   },

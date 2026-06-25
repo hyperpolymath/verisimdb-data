@@ -193,25 +193,14 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "beam/test/quandle_db_nif_test.exs",
-          "beam/test/quandle_db_nif_live_integration_test.exs"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
@@ -224,14 +213,15 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "beam/native/quandle_db_nif.zig"
+          "beam/test/quandle_db_nif_live_integration_test.exs",
+          "beam/mix.exs"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "ProofDrift",
@@ -260,15 +250,25 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "MutationGap",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 1.0,
         "files": [
-          "beam/test/quandle_db_nif_live_integration_test.exs",
-          "beam/mix.exs"
+          "beam/test/quandle_db_nif_test.exs",
+          "beam/test/quandle_db_nif_live_integration_test.exs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "beam/native/quandle_db_nif.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

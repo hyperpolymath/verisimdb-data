@@ -20,20 +20,12 @@
       "category": "UncheckedAllocation",
       "location": "src/tree_sitter/array.h",
       "file": "src/tree_sitter/array.h",
+      "line": 188,
       "severity": "Critical",
       "description": "Unchecked malloc in src/tree_sitter/array.h",
       "recommended_attack": [
         "memory"
       ],
-      "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
       "test_context": "production"
     },
     {
@@ -50,12 +42,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 3997,
+    "total_lines": 3881,
     "unsafe_blocks": 1,
     "panic_sites": 0,
     "unwrap_calls": 1,
     "allocation_sites": 3,
-    "io_operations": 5,
+    "io_operations": 3,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -98,31 +90,15 @@
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "cpu",
+    "concurrency",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "setup.sh",
-        "to": "flake.nix",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "bindings/rust/build.rs",
         "to": "bindings/rust/lib.rs",
@@ -134,14 +110,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "UnsafeCode",
         "sink_axis": "memory",
-        "severity_value": 5.0,
+        "severity_value": 3.5,
         "files": [
-          "tests/aspect/grammar_aspect_test.ts"
+          "bindings/rust/lib.rs"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UncheckedAllocation",
@@ -154,24 +130,14 @@
         "relation": "UncheckedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "bindings/rust/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 5.0,
         "files": [
           "tests/aspect/grammar_aspect_test.ts"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -182,6 +148,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "tests/aspect/grammar_aspect_test.ts"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }
