@@ -5,17 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "CommandInjection",
-      "location": "scripts/verify-same-cube.sh",
-      "file": "scripts/verify-same-cube.sh",
-      "severity": "Medium",
-      "description": "35 potentially unquoted variable expansions in scripts/verify-same-cube.sh",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "PathTraversal",
       "location": "test_multi_root.sh",
       "file": "test_multi_root.sh",
@@ -28,10 +17,10 @@
     },
     {
       "category": "UnboundedAllocation",
-      "location": "crates/invariant-path-cli/src/main.rs",
-      "file": "crates/invariant-path-cli/src/main.rs",
+      "location": "crates/invariant-path-core/src/annotations.rs",
+      "file": "crates/invariant-path-core/src/annotations.rs",
       "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in crates/invariant-path-cli/src/main.rs",
+      "description": "Potential unbounded allocation pattern detected in crates/invariant-path-core/src/annotations.rs",
       "recommended_attack": [
         "memory",
         "cpu"
@@ -65,19 +54,39 @@
     },
     {
       "category": "UnboundedAllocation",
-      "location": "crates/invariant-path-core/src/annotations.rs",
-      "file": "crates/invariant-path-core/src/annotations.rs",
+      "location": "crates/invariant-path-cli/src/main.rs",
+      "file": "crates/invariant-path-cli/src/main.rs",
       "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in crates/invariant-path-core/src/annotations.rs",
+      "description": "Potential unbounded allocation pattern detected in crates/invariant-path-cli/src/main.rs",
       "recommended_attack": [
         "memory",
         "cpu"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "scripts/verify-same-cube.sh",
+      "file": "scripts/verify-same-cube.sh",
+      "severity": "Medium",
+      "description": "35 potentially unquoted variable expansions in scripts/verify-same-cube.sh",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 2778,
+    "total_lines": 2850,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 9,
@@ -87,12 +96,41 @@
   },
   "file_statistics": [
     {
-      "file_path": "crates/invariant-path-cli/src/main.rs",
-      "lines": 898,
+      "file_path": "crates/invariant-path-core/src/lib.rs",
+      "lines": 155,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/invariant-path-core/src/classifier.rs",
+      "lines": 206,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/invariant-path-core/src/annotations.rs",
+      "lines": 186,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/invariant-path-core/src/extractor.rs",
+      "lines": 164,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
       "allocation_sites": 4,
       "io_operations": 0,
       "threading_constructs": 0
@@ -109,74 +147,45 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "crates/invariant-path-core/src/annotations.rs",
-      "lines": 186,
+      "file_path": "crates/invariant-path-cli/src/main.rs",
+      "lines": 898,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/invariant-path-core/src/classifier.rs",
-      "lines": 206,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/invariant-path-core/src/extractor.rs",
-      "lines": 164,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
+      "safe_unwrap_calls": 2,
       "allocation_sites": 4,
       "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/invariant-path-core/src/lib.rs",
-      "lines": 133,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/invariant-path-core/src/doc_claims.rs",
-        "to": "crates/invariant-path-core/src/annotations.rs",
-        "relation": "shared_dir:crates/invariant-path-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/invariant-path-core/src/annotations.rs",
+        "from": "crates/invariant-path-core/src/lib.rs",
         "to": "crates/invariant-path-core/src/classifier.rs",
         "relation": "shared_dir:crates/invariant-path-core/src",
         "weight": 1.0
       },
       {
         "from": "crates/invariant-path-core/src/classifier.rs",
+        "to": "crates/invariant-path-core/src/annotations.rs",
+        "relation": "shared_dir:crates/invariant-path-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/invariant-path-core/src/annotations.rs",
         "to": "crates/invariant-path-core/src/extractor.rs",
         "relation": "shared_dir:crates/invariant-path-core/src",
         "weight": 1.0
       },
       {
         "from": "crates/invariant-path-core/src/extractor.rs",
-        "to": "crates/invariant-path-core/src/lib.rs",
+        "to": "crates/invariant-path-core/src/doc_claims.rs",
         "relation": "shared_dir:crates/invariant-path-core/src",
         "weight": 1.0
       }
@@ -186,6 +195,16 @@
     "rows": [
       {
         "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/invariant-path-core/src/doc_claims.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -193,28 +212,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/verify-same-cube.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/invariant-path-cli/src/main.rs",
-          "crates/invariant-path-core/src/doc_claims.rs",
-          "crates/invariant-path-core/src/annotations.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PathTraversal",
@@ -227,26 +224,38 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/invariant-path-core/src/doc_claims.rs"
+          "crates/invariant-path-core/src/annotations.rs",
+          "crates/invariant-path-core/src/doc_claims.rs",
+          "crates/invariant-path-cli/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/invariant-path-cli/src/main.rs",
+          "crates/invariant-path-core/src/annotations.rs",
           "crates/invariant-path-core/src/doc_claims.rs",
-          "crates/invariant-path-core/src/annotations.rs"
+          "crates/invariant-path-cli/src/main.rs"
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/verify-same-cube.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }
