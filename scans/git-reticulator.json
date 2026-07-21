@@ -3,10 +3,22 @@
   "program_path": "git-reticulator",
   "language": "rust",
   "frameworks": [
-    "WebServer",
-    "Networking"
+    "Networking",
+    "WebServer"
   ],
   "weak_points": [
+    {
+      "category": "UnboundedAllocation",
+      "location": "src/store.rs",
+      "file": "src/store.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/store.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
     {
       "category": "MutationGap",
       "location": "Cargo.toml",
@@ -18,22 +30,22 @@
     }
   ],
   "statistics": {
-    "total_lines": 1826,
+    "total_lines": 2456,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 1,
-    "allocation_sites": 22,
-    "io_operations": 1,
+    "allocation_sites": 30,
+    "io_operations": 8,
     "threading_constructs": 0
   },
   "file_statistics": [
     {
-      "file_path": "src/lattice/mod.rs",
-      "lines": 497,
+      "file_path": "src/ingest.rs",
+      "lines": 332,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
+      "safe_unwrap_calls": 3,
       "allocation_sites": 8,
       "io_operations": 0,
       "threading_constructs": 0
@@ -49,22 +61,43 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/ingest.rs",
-      "lines": 302,
+      "file_path": "src/query.rs",
+      "lines": 327,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 3,
+      "allocation_sites": 8,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/store.rs",
+      "lines": 290,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/lattice/mod.rs",
+      "lines": 533,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
       "allocation_sites": 8,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
       "file_path": "src/cli/main.rs",
-      "lines": 114,
+      "lines": 196,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 1,
+      "safe_unwrap_calls": 2,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
@@ -92,31 +125,26 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu"
+    "cpu",
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/lattice/mod.rs",
-        "to": "WebServer",
-        "relation": "framework",
+        "from": "src/ingest.rs",
+        "to": "src/query.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
-        "from": "src/lattice/mod.rs",
-        "to": "Networking",
-        "relation": "framework",
+        "from": "src/query.rs",
+        "to": "src/store.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
-        "from": "src/api/app.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/app.rs",
+        "from": "src/ingest.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -128,13 +156,49 @@
         "weight": 1.0
       },
       {
-        "from": "src/ingest.rs",
+        "from": "src/api/app.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "src/cli/main.rs",
+        "from": "src/api/app.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/query.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/query.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/store.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/store.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lattice/mod.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lattice/mod.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -146,7 +210,7 @@
         "weight": 1.0
       },
       {
-        "from": "benches/git_reticulator_bench.rs",
+        "from": "src/cli/main.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -158,7 +222,7 @@
         "weight": 1.0
       },
       {
-        "from": "tests/property_tests.rs",
+        "from": "benches/git_reticulator_bench.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -166,12 +230,45 @@
       {
         "from": "tests/property_tests.rs",
         "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property_tests.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/store.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "WebServer"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/store.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "WebServer"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      }
+    ]
   }
 }

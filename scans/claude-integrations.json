@@ -7,6 +7,18 @@
   ],
   "weak_points": [
     {
+      "category": "UnsafeDeserialization",
+      "location": "gitlab-bridge/src/services/MRReviewer.res",
+      "file": "gitlab-bridge/src/services/MRReviewer.res",
+      "severity": "High",
+      "description": "1 JSON.parseExn calls in gitlab-bridge/src/services/MRReviewer.res (use JSON.parse for safe Result)",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "DynamicCodeExecution",
       "location": "gecko-browser-extension/src/content/content.js",
       "file": "gecko-browser-extension/src/content/content.js",
@@ -100,18 +112,6 @@
     },
     {
       "category": "DynamicCodeExecution",
-      "location": "firefox-mcp/extension/content/bridge.js",
-      "file": "firefox-mcp/extension/content/bridge.js",
-      "severity": "Critical",
-      "description": "eval() usage in firefox-mcp/extension/content/bridge.js",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
       "location": "firefox-mcp/extension-mv3/background.js",
       "file": "firefox-mcp/extension-mv3/background.js",
       "severity": "Critical",
@@ -123,20 +123,29 @@
       "test_context": "production"
     },
     {
-      "category": "UnsafeDeserialization",
-      "location": "gitlab-bridge/src/services/MRReviewer.res",
-      "file": "gitlab-bridge/src/services/MRReviewer.res",
-      "severity": "High",
-      "description": "1 JSON.parseExn calls in gitlab-bridge/src/services/MRReviewer.res (use JSON.parse for safe Result)",
+      "category": "DynamicCodeExecution",
+      "location": "firefox-mcp/extension/content/bridge.js",
+      "file": "firefox-mcp/extension/content/bridge.js",
+      "severity": "Critical",
+      "description": "eval() usage in firefox-mcp/extension/content/bridge.js",
       "recommended_attack": [
-        "memory",
-        "cpu"
+        "cpu",
+        "memory"
       ],
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
       "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 13496,
+    "total_lines": 13530,
     "unsafe_blocks": 82,
     "panic_sites": 1,
     "unwrap_calls": 0,
@@ -146,8 +155,98 @@
   },
   "file_statistics": [
     {
+      "file_path": "gitlab-bridge/src/services/MRReviewer.res",
+      "lines": 241,
+      "unsafe_blocks": 0,
+      "panic_sites": 1,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gitlab-bridge/src/bindings/Crypto.res",
+      "lines": 108,
+      "unsafe_blocks": 5,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gitlab-bridge/src/bindings/Express.res",
+      "lines": 68,
+      "unsafe_blocks": 19,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gitlab-bridge/src/bindings/Vitest.res",
+      "lines": 93,
+      "unsafe_blocks": 24,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gitlab-bridge/src/auth/RateLimiter.res",
+      "lines": 237,
+      "unsafe_blocks": 3,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gitlab-bridge/contractiles/trust/Trustfile.hs",
+      "lines": 105,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gitlab-bridge/ai-cli-crash-capture/recoverer-setup.sh",
+      "lines": 155,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gitlab-bridge/tests/unit/auth/RateLimiterTest.res",
+      "lines": 215,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "gecko-browser-extension/src/background/background.js",
       "lines": 165,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gecko-browser-extension/contractiles/trust/Trustfile.hs",
+      "lines": 105,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -166,16 +265,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "gecko-browser-extension/contractiles/trust/Trustfile.hs",
-      "lines": 105,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "mozilla-extension/src/core/api.js",
       "lines": 141,
       "unsafe_blocks": 0,
@@ -186,16 +275,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "mozilla-extension/ai-cli-crash-capture/recoverer-setup.sh",
-      "lines": 155,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "mozilla-extension/contractiles/trust/Trustfile.hs",
       "lines": 105,
       "unsafe_blocks": 0,
@@ -203,6 +282,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "mozilla-extension/ai-cli-crash-capture/recoverer-setup.sh",
+      "lines": 155,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
       "threading_constructs": 0
     },
     {
@@ -246,16 +335,6 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "firefox-mcp/scripts/install.sh",
-      "lines": 85,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "firefox-mcp/host/bindings/Deno_Ws.res",
       "lines": 145,
       "unsafe_blocks": 26,
@@ -286,16 +365,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "firefox-mcp/ai-cli-crash-capture/recoverer-setup.sh",
-      "lines": 155,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "firefox-mcp/contractiles/trust/Trustfile.hs",
       "lines": 105,
       "unsafe_blocks": 0,
@@ -306,57 +375,7 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "gitlab-bridge/src/bindings/Vitest.res",
-      "lines": 93,
-      "unsafe_blocks": 24,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "gitlab-bridge/src/bindings/Express.res",
-      "lines": 68,
-      "unsafe_blocks": 19,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "gitlab-bridge/src/bindings/Crypto.res",
-      "lines": 108,
-      "unsafe_blocks": 5,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "gitlab-bridge/src/auth/RateLimiter.res",
-      "lines": 237,
-      "unsafe_blocks": 3,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "gitlab-bridge/src/services/MRReviewer.res",
-      "lines": 241,
-      "unsafe_blocks": 0,
-      "panic_sites": 1,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "gitlab-bridge/ai-cli-crash-capture/recoverer-setup.sh",
+      "file_path": "firefox-mcp/ai-cli-crash-capture/recoverer-setup.sh",
       "lines": 155,
       "unsafe_blocks": 0,
       "panic_sites": 0,
@@ -366,46 +385,24 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "gitlab-bridge/tests/unit/auth/RateLimiterTest.res",
-      "lines": 215,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "gitlab-bridge/contractiles/trust/Trustfile.hs",
-      "lines": 105,
+      "file_path": "firefox-mcp/scripts/install.sh",
+      "lines": 85,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 4,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
     "memory",
-    "network",
-    "disk"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "gitlab-bridge/src/bindings/Vitest.res",
-        "to": "gitlab-bridge/src/bindings/Express.res",
-        "relation": "shared_dir:gitlab-bridge/src/bindings",
-        "weight": 1.0
-      },
-      {
-        "from": "gitlab-bridge/src/bindings/Express.res",
-        "to": "gitlab-bridge/src/bindings/Crypto.res",
-        "relation": "shared_dir:gitlab-bridge/src/bindings",
-        "weight": 1.0
-      },
       {
         "from": "firefox-mcp/host/NativeHost.res",
         "to": "firefox-mcp/host/Server.res",
@@ -413,13 +410,67 @@
         "weight": 1.0
       },
       {
-        "from": "gecko-browser-extension/src/background/background.js",
+        "from": "gitlab-bridge/src/bindings/Crypto.res",
+        "to": "gitlab-bridge/src/bindings/Express.res",
+        "relation": "shared_dir:gitlab-bridge/src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "gitlab-bridge/src/bindings/Express.res",
+        "to": "gitlab-bridge/src/bindings/Vitest.res",
+        "relation": "shared_dir:gitlab-bridge/src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "gitlab-bridge/src/services/MRReviewer.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "gitlab-bridge/src/bindings/Crypto.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 15.0
+      },
+      {
+        "from": "gitlab-bridge/src/bindings/Express.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 57.0
+      },
+      {
+        "from": "gitlab-bridge/src/bindings/Vitest.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 72.0
+      },
+      {
+        "from": "gitlab-bridge/src/auth/RateLimiter.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 9.0
+      },
+      {
+        "from": "gitlab-bridge/contractiles/trust/Trustfile.hs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "gecko-browser-extension/ai-cli-crash-capture/recoverer-setup.sh",
+        "from": "gitlab-bridge/ai-cli-crash-capture/recoverer-setup.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "gitlab-bridge/tests/unit/auth/RateLimiterTest.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "gecko-browser-extension/src/background/background.js",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -431,19 +482,25 @@
         "weight": 1.0
       },
       {
+        "from": "gecko-browser-extension/ai-cli-crash-capture/recoverer-setup.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "mozilla-extension/src/core/api.js",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "mozilla-extension/ai-cli-crash-capture/recoverer-setup.sh",
+        "from": "mozilla-extension/contractiles/trust/Trustfile.hs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "mozilla-extension/contractiles/trust/Trustfile.hs",
+        "from": "mozilla-extension/ai-cli-crash-capture/recoverer-setup.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -473,12 +530,6 @@
         "weight": 4.0
       },
       {
-        "from": "firefox-mcp/scripts/install.sh",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "firefox-mcp/host/bindings/Deno_Ws.res",
         "to": "OTP",
         "relation": "framework",
@@ -497,61 +548,19 @@
         "weight": 1.0
       },
       {
-        "from": "firefox-mcp/ai-cli-crash-capture/recoverer-setup.sh",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "firefox-mcp/contractiles/trust/Trustfile.hs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "gitlab-bridge/src/bindings/Vitest.res",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 72.0
-      },
-      {
-        "from": "gitlab-bridge/src/bindings/Express.res",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 57.0
-      },
-      {
-        "from": "gitlab-bridge/src/bindings/Crypto.res",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 15.0
-      },
-      {
-        "from": "gitlab-bridge/src/auth/RateLimiter.res",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 9.0
-      },
-      {
-        "from": "gitlab-bridge/src/services/MRReviewer.res",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "gitlab-bridge/ai-cli-crash-capture/recoverer-setup.sh",
+        "from": "firefox-mcp/ai-cli-crash-capture/recoverer-setup.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "gitlab-bridge/tests/unit/auth/RateLimiterTest.res",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "gitlab-bridge/contractiles/trust/Trustfile.hs",
+        "from": "firefox-mcp/scripts/install.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -560,97 +569,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "firefox-lsp/lib/adapters/firefox.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "mozilla-extension/src/core/storage.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "firefox-lsp/lib/lsp/server.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "AtomExhaustion->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "gecko-browser-extension/src/content/content.js",
-          "gecko-browser-extension/src/popup/popup.js",
-          "mozilla-extension/src/ui/sidebar.js",
-          "firefox-mcp/extension/content/bridge.js",
-          "firefox-mcp/extension-mv3/background.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "gecko-browser-extension/src/content/content.js",
-          "gecko-browser-extension/src/popup/popup.js",
-          "mozilla-extension/src/ui/sidebar.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "firefox-mcp/extension/content/bridge.js",
-          "firefox-mcp/extension-mv3/background.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "UnsafeDeserialization",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "gitlab-bridge/src/services/MRReviewer.res"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeDeserialization->Memory"
-      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -677,6 +595,81 @@
         "relation": "CommandInjection->Disk"
       },
       {
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "firefox-lsp/lib/lsp/server.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "AtomExhaustion->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "gecko-browser-extension/src/content/content.js",
+          "gecko-browser-extension/src/popup/popup.js",
+          "mozilla-extension/src/ui/sidebar.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "mozilla-extension/src/core/storage.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "firefox-mcp/extension-mv3/background.js",
+          "firefox-mcp/extension/content/bridge.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "firefox-lsp/lib/adapters/firefox.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "gitlab-bridge/src/services/MRReviewer.res"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeDeserialization->Memory"
+      },
+      {
         "source_category": "UnsafeDeserialization",
         "sink_axis": "cpu",
         "severity_value": 3.5,
@@ -687,6 +680,22 @@
           "OTP"
         ],
         "relation": "UnsafeDeserialization->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "gecko-browser-extension/src/content/content.js",
+          "gecko-browser-extension/src/popup/popup.js",
+          "mozilla-extension/src/ui/sidebar.js",
+          "firefox-mcp/extension-mv3/background.js",
+          "firefox-mcp/extension/content/bridge.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   },
@@ -700,6 +709,22 @@
     "file_count": 37,
     "rescript_lines": 7358,
     "deprecated_patterns": [
+      {
+        "pattern": "Js.Re.",
+        "replacement": "RegExp",
+        "file_path": "gitlab-bridge/src/bindings/Vitest.res",
+        "line_number": 0,
+        "category": "OldRegExp",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Re.",
+        "replacement": "RegExp",
+        "file_path": "gitlab-bridge/src/auth/TokenValidator.res",
+        "line_number": 0,
+        "category": "OldRegExp",
+        "count": 2
+      },
       {
         "pattern": "Js.Nullable.",
         "replacement": "Nullable",
@@ -811,22 +836,6 @@
         "line_number": 0,
         "category": "OldJson",
         "count": 6
-      },
-      {
-        "pattern": "Js.Re.",
-        "replacement": "RegExp",
-        "file_path": "gitlab-bridge/src/bindings/Vitest.res",
-        "line_number": 0,
-        "category": "OldRegExp",
-        "count": 1
-      },
-      {
-        "pattern": "Js.Re.",
-        "replacement": "RegExp",
-        "file_path": "gitlab-bridge/src/auth/TokenValidator.res",
-        "line_number": 0,
-        "category": "OldRegExp",
-        "count": 2
       }
     ],
     "uncurried": false

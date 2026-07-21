@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "claude-gecko-browser-extension",
-  "language": "shell",
+  "language": "nickel",
   "frameworks": [],
   "weak_points": [
     {
@@ -27,10 +27,19 @@
         "network"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 1523,
+    "total_lines": 1557,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -50,16 +59,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ai-cli-crash-capture/recoverer-setup.sh",
-      "lines": 155,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "contractiles/trust/Trustfile.hs",
       "lines": 105,
       "unsafe_blocks": 0,
@@ -68,30 +67,29 @@
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "ai-cli-crash-capture/recoverer-setup.sh",
+      "lines": 155,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "network",
     "cpu",
-    "disk"
+    "memory",
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/content/content.js",
-          "src/popup/popup.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -102,6 +100,17 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/content/content.js",
+          "src/popup/popup.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

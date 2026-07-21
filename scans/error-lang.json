@@ -5,6 +5,17 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "PathTraversal",
+      "location": "verification/check-affinescript.sh",
+      "file": "verification/check-affinescript.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in verification/check-affinescript.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnboundedAllocation",
       "location": "error-pkg/src/types.rs",
       "file": "error-pkg/src/types.rs",
@@ -13,17 +24,6 @@
       "recommended_attack": [
         "memory",
         "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "verification/check-affinescript.sh",
-      "file": "verification/check-affinescript.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in verification/check-affinescript.sh",
-      "recommended_attack": [
-        "disk"
       ],
       "test_context": "production"
     }
@@ -38,36 +38,6 @@
     "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "error-pkg/src/install.rs",
-      "lines": 120,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "error-pkg/src/resolve.rs",
-      "lines": 51,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 449,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
     {
       "file_path": "src/abi/Foreign.idr",
       "lines": 277,
@@ -99,6 +69,17 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "tools/lsp/src/backend.rs",
+      "lines": 694,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 11,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
       "file_path": "levels/03-unterminated-string.err",
       "lines": 31,
       "unsafe_blocks": 0,
@@ -116,6 +97,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 449,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -139,16 +130,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "examples/09-null-cascade.err",
-      "lines": 113,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "examples/03-mutable-ripple.err",
       "lines": 47,
       "unsafe_blocks": 0,
@@ -159,40 +140,53 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/lsp/src/backend.rs",
-      "lines": 694,
+      "file_path": "examples/09-null-cascade.err",
+      "lines": 113,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "error-pkg/src/install.rs",
+      "lines": 120,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 11,
-      "allocation_sites": 6,
+      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 1
+    },
+    {
+      "file_path": "error-pkg/src/resolve.rs",
+      "lines": 51,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
         "from": "examples/05-web-server-stable.err",
-        "to": "examples/09-null-cascade.err",
-        "relation": "shared_dir:examples",
-        "weight": 1.0
-      },
-      {
-        "from": "examples/09-null-cascade.err",
         "to": "examples/03-mutable-ripple.err",
         "relation": "shared_dir:examples",
         "weight": 1.0
       },
       {
-        "from": "error-pkg/src/install.rs",
-        "to": "error-pkg/src/resolve.rs",
-        "relation": "shared_dir:error-pkg/src",
+        "from": "examples/03-mutable-ripple.err",
+        "to": "examples/09-null-cascade.err",
+        "relation": "shared_dir:examples",
         "weight": 1.0
       },
       {
@@ -200,21 +194,17 @@
         "to": "levels/09-operators.err",
         "relation": "shared_dir:levels",
         "weight": 1.0
+      },
+      {
+        "from": "error-pkg/src/install.rs",
+        "to": "error-pkg/src/resolve.rs",
+        "relation": "shared_dir:error-pkg/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "error-pkg/src/types.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -234,6 +224,16 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "error-pkg/src/types.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

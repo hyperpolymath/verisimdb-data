@@ -3,51 +3,43 @@
   "program_path": "neurophone",
   "language": "rust",
   "frameworks": [
-    "Concurrent",
-    "Networking"
+    "Networking",
+    "Concurrent"
   ],
   "weak_points": [
     {
-      "category": "PathTraversal",
-      "location": "scripts/uninstall.sh",
-      "file": "scripts/uninstall.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in scripts/uninstall.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "scripts/setup.sh",
-      "file": "scripts/setup.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in scripts/setup.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "scripts/install-on-phone.sh",
-      "file": "scripts/install-on-phone.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in scripts/install-on-phone.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "HardcodedSecret",
-      "location": "scripts/install-termux.sh",
-      "file": "scripts/install-termux.sh",
+      "location": "crates/claude-client/src/egress_gate.rs",
+      "file": "crates/claude-client/src/egress_gate.rs",
       "severity": "Critical",
-      "description": "Possible hardcoded secret in scripts/install-termux.sh",
+      "description": "Possible hardcoded secret in crates/claude-client/src/egress_gate.rs",
       "recommended_attack": [
         "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "crates/sensors/tests/integration_pipeline.rs",
+      "file": "crates/sensors/tests/integration_pipeline.rs",
+      "severity": "Medium",
+      "description": "8 unwrap/expect calls in crates/sensors/tests/integration_pipeline.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "crates/bt-presence/build.rs",
+      "file": "crates/bt-presence/build.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in crates/bt-presence/build.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
       ],
       "test_context": "production"
     },
@@ -57,19 +49,6 @@
       "file": "crates/neurophone-core/benches/neurophone_bench.rs",
       "severity": "Medium",
       "description": "9 unwrap/expect calls in crates/neurophone-core/benches/neurophone_bench.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
-      "category": "PanicPath",
-      "location": "crates/neurophone-core/tests/aspect_concurrency.rs",
-      "file": "crates/neurophone-core/tests/aspect_concurrency.rs",
-      "severity": "Medium",
-      "description": "13 unwrap/expect calls in crates/neurophone-core/tests/aspect_concurrency.rs",
       "recommended_attack": [
         "memory",
         "disk"
@@ -92,6 +71,19 @@
     },
     {
       "category": "PanicPath",
+      "location": "crates/neurophone-core/tests/aspect_concurrency.rs",
+      "file": "crates/neurophone-core/tests/aspect_concurrency.rs",
+      "severity": "Medium",
+      "description": "13 unwrap/expect calls in crates/neurophone-core/tests/aspect_concurrency.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "PanicPath",
       "location": "crates/neurophone-core/tests/property_test.rs",
       "file": "crates/neurophone-core/tests/property_test.rs",
       "severity": "Medium",
@@ -104,169 +96,80 @@
       "test_context": "test_only"
     },
     {
-      "category": "PanicPath",
-      "location": "crates/sensors/tests/integration_pipeline.rs",
-      "file": "crates/sensors/tests/integration_pipeline.rs",
+      "category": "PathTraversal",
+      "location": "scripts/install-on-phone.sh",
+      "file": "scripts/install-on-phone.sh",
       "severity": "Medium",
-      "description": "8 unwrap/expect calls in crates/sensors/tests/integration_pipeline.rs",
+      "description": "Hardcoded /tmp/ path without mktemp in scripts/install-on-phone.sh",
       "recommended_attack": [
-        "memory",
         "disk"
       ],
       "suppressed": true,
-      "test_context": "test_only"
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "scripts/uninstall.sh",
+      "file": "scripts/uninstall.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in scripts/uninstall.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 6668,
+    "total_lines": 10510,
     "unsafe_blocks": 0,
-    "panic_sites": 0,
-    "unwrap_calls": 68,
-    "allocation_sites": 6,
-    "io_operations": 14,
-    "threading_constructs": 4
+    "panic_sites": 5,
+    "unwrap_calls": 70,
+    "allocation_sites": 30,
+    "io_operations": 17,
+    "threading_constructs": 9
   },
   "file_statistics": [
     {
-      "file_path": "scripts/setup.sh",
-      "lines": 86,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/install-on-phone.sh",
-      "lines": 117,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/install-termux.sh",
-      "lines": 88,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/build-android.sh",
-      "lines": 122,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "setup.sh",
-      "lines": 278,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/lsm/src/lib.rs",
-      "lines": 577,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "crates/claude-client/src/lib.rs",
-      "lines": 674,
+      "lines": 876,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "safe_unwrap_calls": 4,
-      "allocation_sites": 2,
+      "allocation_sites": 4,
       "io_operations": 0,
-      "threading_constructs": 0
+      "threading_constructs": 2
     },
     {
-      "file_path": "crates/neurophone-core/benches/neurophone_bench.rs",
-      "lines": 315,
+      "file_path": "crates/sensors/benches/sensors_bench.rs",
+      "lines": 81,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 9,
+      "unwrap_calls": 2,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "crates/neurophone-core/benches/pipeline_bench.rs",
-      "lines": 87,
+      "file_path": "crates/sensors/tests/integration_pipeline.rs",
+      "lines": 70,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 5,
+      "unwrap_calls": 8,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "crates/neurophone-core/tests/lifecycle.rs",
-      "lines": 58,
+      "file_path": "crates/bt-presence/build.rs",
+      "lines": 111,
       "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
+      "panic_sites": 5,
+      "unwrap_calls": 2,
+      "safe_unwrap_calls": 5,
       "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "crates/neurophone-core/tests/aspect_concurrency.rs",
-      "lines": 127,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 13,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "crates/neurophone-core/tests/integration_pipeline.rs",
-      "lines": 143,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 9,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/neurophone-core/tests/property_test.rs",
-      "lines": 276,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 19,
-      "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -290,145 +193,373 @@
       "threading_constructs": 1
     },
     {
-      "file_path": "crates/sensors/benches/sensors_bench.rs",
-      "lines": 81,
+      "file_path": "crates/neurophone-android/src/state.rs",
+      "lines": 292,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 2,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 3
+    },
+    {
+      "file_path": "crates/lsm/src/lib.rs",
+      "lines": 582,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/neurophone-core/benches/pipeline_bench.rs",
+      "lines": 87,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 5,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "crates/sensors/tests/integration_pipeline.rs",
-      "lines": 70,
+      "file_path": "crates/neurophone-core/benches/neurophone_bench.rs",
+      "lines": 315,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 8,
+      "unwrap_calls": 9,
       "allocation_sites": 0,
       "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/neurophone-core/tests/integration_pipeline.rs",
+      "lines": 143,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 9,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/neurophone-core/tests/aspect_concurrency.rs",
+      "lines": 127,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 13,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "crates/neurophone-core/tests/lifecycle.rs",
+      "lines": 58,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "crates/neurophone-core/tests/property_test.rs",
+      "lines": 276,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 19,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "setup.sh",
+      "lines": 294,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "android/app/src/main/assets/gossamer-ui/dist/logic.deno.js",
+      "lines": 132,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
+      "lines": 74,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "android/app/src/main/java/ai/neurophone/widget/NeurophoneAppWidget.java",
+      "lines": 181,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 8,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
+      "lines": 201,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+      "lines": 43,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
+      "lines": 191,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 5,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/build-android.sh",
+      "lines": 122,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-termux.sh",
+      "lines": 90,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-on-phone.sh",
+      "lines": 117,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/setup.sh",
+      "lines": 90,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/_base.ncl",
+      "lines": 140,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "network",
     "concurrency",
-    "disk",
+    "cpu",
     "memory",
-    "cpu"
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/neurophone-core/tests/lifecycle.rs",
-        "to": "crates/neurophone-core/tests/aspect_concurrency.rs",
-        "relation": "shared_dir:crates/neurophone-core/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
-        "to": "crates/neurophone-core/tests/integration_pipeline.rs",
-        "relation": "shared_dir:crates/neurophone-core/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/neurophone-core/tests/integration_pipeline.rs",
-        "to": "crates/neurophone-core/tests/property_test.rs",
-        "relation": "shared_dir:crates/neurophone-core/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
-        "to": "crates/neurophone-core/benches/pipeline_bench.rs",
+        "from": "crates/neurophone-core/benches/pipeline_bench.rs",
+        "to": "crates/neurophone-core/benches/neurophone_bench.rs",
         "relation": "shared_dir:crates/neurophone-core/benches",
         "weight": 1.0
       },
       {
-        "from": "scripts/setup.sh",
-        "to": "scripts/install-on-phone.sh",
-        "relation": "shared_dir:scripts",
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
+        "to": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
         "weight": 1.0
       },
       {
-        "from": "scripts/install-on-phone.sh",
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
+        "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "to": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/build-android.sh",
         "to": "scripts/install-termux.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
         "from": "scripts/install-termux.sh",
-        "to": "scripts/build-android.sh",
+        "to": "scripts/install-on-phone.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "scripts/setup.sh",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/setup.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/install-on-phone.sh",
-        "to": "Concurrent",
-        "relation": "framework",
+        "to": "scripts/setup.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "scripts/install-on-phone.sh",
+        "from": "crates/neurophone-core/tests/integration_pipeline.rs",
+        "to": "crates/neurophone-core/tests/aspect_concurrency.rs",
+        "relation": "shared_dir:crates/neurophone-core/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
+        "to": "crates/neurophone-core/tests/lifecycle.rs",
+        "relation": "shared_dir:crates/neurophone-core/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/neurophone-core/tests/lifecycle.rs",
+        "to": "crates/neurophone-core/tests/property_test.rs",
+        "relation": "shared_dir:crates/neurophone-core/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/claude-client/src/lib.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 4.0
       },
       {
-        "from": "scripts/install-termux.sh",
+        "from": "crates/claude-client/src/lib.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 4.0
       },
       {
-        "from": "scripts/install-termux.sh",
+        "from": "crates/sensors/benches/sensors_bench.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
       },
       {
-        "from": "scripts/build-android.sh",
+        "from": "crates/sensors/benches/sensors_bench.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
       },
       {
-        "from": "scripts/build-android.sh",
+        "from": "crates/sensors/tests/integration_pipeline.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 8.0
       },
       {
-        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "from": "crates/sensors/tests/integration_pipeline.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 8.0
       },
       {
-        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "from": "crates/bt-presence/build.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 12.0
       },
       {
-        "from": "setup.sh",
+        "from": "crates/bt-presence/build.rs",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 12.0
       },
       {
-        "from": "setup.sh",
+        "from": "crates/llm/src/lib.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "crates/llm/src/lib.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "crates/llm/tests/integration_backend.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 5.0
+      },
+      {
+        "from": "crates/llm/tests/integration_backend.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 5.0
+      },
+      {
+        "from": "crates/neurophone-android/src/state.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "crates/neurophone-android/src/state.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "crates/lsm/src/lib.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -440,34 +571,10 @@
         "weight": 1.0
       },
       {
-        "from": "crates/lsm/src/lib.rs",
+        "from": "crates/neurophone-core/benches/pipeline_bench.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/claude-client/src/lib.rs",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/claude-client/src/lib.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 9.0
-      },
-      {
-        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 9.0
+        "weight": 5.0
       },
       {
         "from": "crates/neurophone-core/benches/pipeline_bench.rs",
@@ -476,37 +583,13 @@
         "weight": 5.0
       },
       {
-        "from": "crates/neurophone-core/benches/pipeline_bench.rs",
+        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 5.0
+        "weight": 9.0
       },
       {
-        "from": "crates/neurophone-core/tests/lifecycle.rs",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "crates/neurophone-core/tests/lifecycle.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 15.0
-      },
-      {
-        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 15.0
-      },
-      {
-        "from": "crates/neurophone-core/tests/integration_pipeline.rs",
+        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 9.0
@@ -518,130 +601,293 @@
         "weight": 9.0
       },
       {
+        "from": "crates/neurophone-core/tests/integration_pipeline.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 9.0
+      },
+      {
+        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 15.0
+      },
+      {
+        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 15.0
+      },
+      {
+        "from": "crates/neurophone-core/tests/lifecycle.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "crates/neurophone-core/tests/lifecycle.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "crates/neurophone-core/tests/property_test.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 19.0
+      },
+      {
         "from": "crates/neurophone-core/tests/property_test.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 19.0
       },
       {
-        "from": "crates/neurophone-core/tests/property_test.rs",
+        "from": "setup.sh",
         "to": "Networking",
         "relation": "framework",
-        "weight": 19.0
+        "weight": 1.0
       },
       {
-        "from": "crates/llm/src/lib.rs",
+        "from": "setup.sh",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
-        "from": "crates/llm/src/lib.rs",
+        "from": "android/app/src/main/assets/gossamer-ui/dist/logic.deno.js",
         "to": "Networking",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
-        "from": "crates/llm/tests/integration_backend.rs",
+        "from": "android/app/src/main/assets/gossamer-ui/dist/logic.deno.js",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 5.0
+        "weight": 1.0
       },
       {
-        "from": "crates/llm/tests/integration_backend.rs",
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
         "to": "Networking",
         "relation": "framework",
-        "weight": 5.0
+        "weight": 1.0
       },
       {
-        "from": "crates/sensors/benches/sensors_bench.rs",
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
-        "from": "crates/sensors/benches/sensors_bench.rs",
+        "from": "android/app/src/main/java/ai/neurophone/widget/NeurophoneAppWidget.java",
         "to": "Networking",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
-        "from": "crates/sensors/tests/integration_pipeline.rs",
+        "from": "android/app/src/main/java/ai/neurophone/widget/NeurophoneAppWidget.java",
         "to": "Concurrent",
         "relation": "framework",
-        "weight": 8.0
+        "weight": 1.0
       },
       {
-        "from": "crates/sensors/tests/integration_pipeline.rs",
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
         "to": "Networking",
         "relation": "framework",
-        "weight": 8.0
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/build-android.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/build-android.sh",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-termux.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-termux.sh",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-on-phone.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-on-phone.sh",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/setup.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/setup.sh",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/_base.ncl",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/_base.ncl",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/install-termux.sh"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "scripts/uninstall.sh",
-          "scripts/setup.sh",
-          "scripts/install-on-phone.sh"
+          "scripts/install-on-phone.sh",
+          "scripts/uninstall.sh"
         ],
         "frameworks": [
-          "Concurrent",
-          "Networking"
+          "Networking",
+          "Concurrent"
         ],
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/neurophone-core/benches/neurophone_bench.rs",
-          "crates/neurophone-core/tests/aspect_concurrency.rs",
-          "crates/neurophone-core/tests/integration_pipeline.rs",
-          "crates/neurophone-core/tests/property_test.rs",
-          "crates/sensors/tests/integration_pipeline.rs"
+          "crates/bt-presence/build.rs"
         ],
         "frameworks": [
-          "Concurrent",
-          "Networking"
+          "Networking",
+          "Concurrent"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "crates/claude-client/src/egress_gate.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
+          "crates/sensors/tests/integration_pipeline.rs",
           "crates/neurophone-core/benches/neurophone_bench.rs",
-          "crates/neurophone-core/tests/aspect_concurrency.rs",
           "crates/neurophone-core/tests/integration_pipeline.rs",
-          "crates/neurophone-core/tests/property_test.rs",
-          "crates/sensors/tests/integration_pipeline.rs"
+          "crates/neurophone-core/tests/aspect_concurrency.rs",
+          "crates/neurophone-core/tests/property_test.rs"
         ],
         "frameworks": [
-          "Concurrent",
-          "Networking"
+          "Networking",
+          "Concurrent"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/sensors/tests/integration_pipeline.rs",
+          "crates/neurophone-core/benches/neurophone_bench.rs",
+          "crates/neurophone-core/tests/integration_pipeline.rs",
+          "crates/neurophone-core/tests/aspect_concurrency.rs",
+          "crates/neurophone-core/tests/property_test.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/bt-presence/build.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

@@ -1,20 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "cloudguard-cli",
-  "language": "rust",
+  "language": "shell",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "CommandInjection",
-      "location": "scripts/maintenance/run-maintenance.sh",
-      "file": "scripts/maintenance/run-maintenance.sh",
-      "severity": "Medium",
-      "description": "33 potentially unquoted variable expansions in scripts/maintenance/run-maintenance.sh",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "production"
-    },
     {
       "category": "UnboundedAllocation",
       "location": "src/api/mod.rs",
@@ -53,6 +42,17 @@
       "test_context": "production"
     },
     {
+      "category": "CommandInjection",
+      "location": "scripts/maintenance/run-maintenance.sh",
+      "file": "scripts/maintenance/run-maintenance.sh",
+      "severity": "Medium",
+      "description": "33 potentially unquoted variable expansions in scripts/maintenance/run-maintenance.sh",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -73,23 +73,55 @@
   },
   "file_statistics": [
     {
-      "file_path": "scripts/maintenance/run-maintenance.sh",
-      "lines": 612,
+      "file_path": "src/api/mod.rs",
+      "lines": 614,
       "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "safe_unwrap_calls": 10,
+      "allocation_sites": 8,
+      "io_operations": 3,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "src/abi/Types.idr",
+      "lines": 233,
+      "unsafe_blocks": 1,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "scripts/maintenance/perms-state.sh",
-      "lines": 241,
-      "unsafe_blocks": 0,
+      "file_path": "src/abi/Foreign.idr",
+      "lines": 217,
+      "unsafe_blocks": 12,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/main.rs",
+      "lines": 771,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 7,
+      "safe_unwrap_calls": 11,
+      "allocation_sites": 6,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "benches/cloudguard_bench.rs",
+      "lines": 132,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 6,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -113,55 +145,23 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "src/api/mod.rs",
-      "lines": 614,
+      "file_path": "scripts/maintenance/run-maintenance.sh",
+      "lines": 612,
       "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "safe_unwrap_calls": 10,
-      "allocation_sites": 8,
-      "io_operations": 3,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "src/main.rs",
-      "lines": 771,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 7,
-      "safe_unwrap_calls": 11,
-      "allocation_sites": 6,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 217,
-      "unsafe_blocks": 12,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Types.idr",
-      "lines": 233,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "benches/cloudguard_bench.rs",
-      "lines": 132,
+      "file_path": "scripts/maintenance/perms-state.sh",
+      "lines": 241,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 6,
-      "io_operations": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -176,16 +176,16 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
     "disk",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
+        "from": "src/abi/Types.idr",
+        "to": "src/abi/Foreign.idr",
         "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
@@ -200,15 +200,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/api/mod.rs",
           "src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -221,6 +220,27 @@
         "relation": "CommandInjection->Cpu"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/mod.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -230,26 +250,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

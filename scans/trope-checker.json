@@ -26,10 +26,19 @@
         "disk"
       ],
       "test_context": "test_only"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 6553,
+    "total_lines": 11052,
     "unsafe_blocks": 4,
     "panic_sites": 0,
     "unwrap_calls": 1,
@@ -39,14 +48,13 @@
   },
   "file_statistics": [
     {
-      "file_path": "src/rust/src/main.rs",
-      "lines": 372,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/Abi/Foreign.idr",
+      "lines": 83,
+      "unsafe_blocks": 4,
       "panic_sites": 0,
-      "unwrap_calls": 1,
-      "safe_unwrap_calls": 4,
-      "allocation_sites": 8,
-      "io_operations": 1,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -60,23 +68,14 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/Abi/Foreign.idr",
-      "lines": 83,
-      "unsafe_blocks": 4,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/e2e.sh",
-      "lines": 142,
+      "file_path": "src/rust/src/main.rs",
+      "lines": 391,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 7,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 4,
+      "allocation_sites": 8,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -87,6 +86,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e.sh",
+      "lines": 142,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
       "threading_constructs": 0
     }
   ],
@@ -100,6 +109,16 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -119,16 +138,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

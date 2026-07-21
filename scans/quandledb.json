@@ -6,17 +6,6 @@
   "weak_points": [
     {
       "category": "ProofDrift",
-      "location": "server/test_quandle_axioms.jl",
-      "file": "server/test_quandle_axioms.jl",
-      "severity": "Medium",
-      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in server/test_quandle_axioms.jl",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "ProofDrift",
       "location": "server/krl/test/seam_test.jl",
       "file": "server/krl/test/seam_test.jl",
       "severity": "Medium",
@@ -61,6 +50,17 @@
     },
     {
       "category": "ProofDrift",
+      "location": "server/test_semantic_index.jl",
+      "file": "server/test_semantic_index.jl",
+      "severity": "Medium",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in server/test_semantic_index.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "ProofDrift",
       "location": "server/test_br5_fuzz.jl",
       "file": "server/test_br5_fuzz.jl",
       "severity": "Medium",
@@ -72,25 +72,14 @@
     },
     {
       "category": "ProofDrift",
-      "location": "server/test_semantic_index.jl",
-      "file": "server/test_semantic_index.jl",
+      "location": "server/test_quandle_axioms.jl",
+      "file": "server/test_quandle_axioms.jl",
       "severity": "Medium",
-      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in server/test_semantic_index.jl",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in server/test_quandle_axioms.jl",
       "recommended_attack": [
         "cpu"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "MutationGap",
-      "location": "beam/test/quandle_db_nif_test.exs",
-      "file": "beam/test/quandle_db_nif_test.exs",
-      "severity": "Low",
-      "description": "Elixir test file beam/test/quandle_db_nif_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
     },
     {
       "category": "CommandInjection",
@@ -110,6 +99,17 @@
       "file": "beam/test/quandle_db_nif_live_integration_test.exs",
       "severity": "Low",
       "description": "Elixir test file beam/test/quandle_db_nif_live_integration_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "beam/test/quandle_db_nif_test.exs",
+      "file": "beam/test/quandle_db_nif_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file beam/test/quandle_db_nif_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
       "recommended_attack": [
         "cpu"
       ],
@@ -148,10 +148,19 @@
         "memory"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 9920,
+    "total_lines": 10014,
     "unsafe_blocks": 8,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -161,16 +170,6 @@
   },
   "file_statistics": [
     {
-      "file_path": "server/serve.jl",
-      "lines": 1077,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
       "file_path": ".claude/hooks/session-start.sh",
       "lines": 140,
       "unsafe_blocks": 0,
@@ -178,6 +177,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "server/serve.jl",
+      "lines": 1077,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
       "threading_constructs": 0
     },
     {
@@ -193,25 +202,14 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "beam/test/quandle_db_nif_live_integration_test.exs",
-          "beam/mix.exs"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -224,20 +222,25 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "server/test_quandle_axioms.jl",
-          "server/krl/test/seam_test.jl",
-          "server/krl/test/parser_test.jl",
-          "server/krl/test/lexer_test.jl",
-          "server/krl/test/sql_test.jl",
-          "server/test_br5_fuzz.jl",
-          "server/test_semantic_index.jl"
+          "beam/test/quandle_db_nif_live_integration_test.exs",
+          "beam/mix.exs"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "beam/native/quandle_db_nif.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -250,25 +253,31 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "server/krl/test/seam_test.jl",
+          "server/krl/test/parser_test.jl",
+          "server/krl/test/lexer_test.jl",
+          "server/krl/test/sql_test.jl",
+          "server/test_semantic_index.jl",
+          "server/test_br5_fuzz.jl",
+          "server/test_quandle_axioms.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
         "files": [
-          "beam/test/quandle_db_nif_test.exs",
-          "beam/test/quandle_db_nif_live_integration_test.exs"
+          "beam/test/quandle_db_nif_live_integration_test.exs",
+          "beam/test/quandle_db_nif_test.exs"
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "beam/native/quandle_db_nif.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

@@ -29,6 +29,17 @@
     },
     {
       "category": "ProofDrift",
+      "location": "test/knot_theory_ext_test.jl",
+      "file": "test/knot_theory_ext_test.jl",
+      "severity": "Medium",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/knot_theory_ext_test.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
       "location": "test/e2e_test.jl",
       "file": "test/e2e_test.jl",
       "severity": "Medium",
@@ -37,17 +48,6 @@
         "cpu"
       ],
       "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
-      "category": "ProofDrift",
-      "location": "test/knot_theory_ext_test.jl",
-      "file": "test/knot_theory_ext_test.jl",
-      "severity": "Medium",
-      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/knot_theory_ext_test.jl",
-      "recommended_attack": [
-        "cpu"
-      ],
       "test_context": "test_only"
     }
   ],
@@ -62,23 +62,13 @@
   },
   "file_statistics": [
     {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 276,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/storage.jl",
-      "lines": 541,
-      "unsafe_blocks": 0,
+      "file_path": "src/abi/Foreign.idr",
+      "lines": 217,
+      "unsafe_blocks": 12,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 3,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -92,13 +82,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 217,
-      "unsafe_blocks": 12,
+      "file_path": "src/storage.jl",
+      "lines": 541,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 3,
       "threading_constructs": 0
     },
     {
@@ -122,6 +112,16 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 276,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": ".machine_readable/contractiles/bust/bust.ncl",
       "lines": 66,
       "unsafe_blocks": 0,
@@ -133,40 +133,28 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/storage.jl",
-        "to": "src/import_export.jl",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
         "from": "test/runtests.jl",
         "to": "test/e2e_test.jl",
         "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "src/import_export.jl",
+        "to": "src/storage.jl",
+        "relation": "shared_dir:src",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/runtests.jl",
-          "test/e2e_test.jl",
-          "test/knot_theory_ext_test.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -176,6 +164,18 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/runtests.jl",
+          "test/knot_theory_ext_test.jl",
+          "test/e2e_test.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",

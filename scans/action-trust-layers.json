@@ -6,6 +6,18 @@
   "weak_points": [
     {
       "category": "UnboundedAllocation",
+      "location": "src/policy.rs",
+      "file": "src/policy.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/policy.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
       "location": "src/resolve.rs",
       "file": "src/resolve.rs",
       "severity": "Medium",
@@ -17,15 +29,12 @@
       "test_context": "production"
     },
     {
-      "category": "UnboundedAllocation",
-      "location": "src/policy.rs",
-      "file": "src/policy.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in src/policy.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
       "test_context": "production"
     },
     {
@@ -39,7 +48,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 1049,
+    "total_lines": 1083,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -49,14 +58,13 @@
   },
   "file_statistics": [
     {
-      "file_path": "src/resolve.rs",
-      "lines": 214,
+      "file_path": "src/policy.rs",
+      "lines": 157,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -66,16 +74,6 @@
       "panic_sites": 0,
       "unwrap_calls": 0,
       "safe_unwrap_calls": 1,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/parse.rs",
-      "lines": 93,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
       "allocation_sites": 4,
       "io_operations": 0,
       "threading_constructs": 0
@@ -91,13 +89,24 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/policy.rs",
-      "lines": 157,
+      "file_path": "src/resolve.rs",
+      "lines": 214,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
+      "safe_unwrap_calls": 2,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/parse.rs",
+      "lines": 93,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 0,
       "threading_constructs": 0
     }
   ],
@@ -108,26 +117,26 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/resolve.rs",
+        "from": "src/policy.rs",
         "to": "src/report.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
         "from": "src/report.rs",
-        "to": "src/parse.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/parse.rs",
         "to": "src/main.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
         "from": "src/main.rs",
-        "to": "src/policy.rs",
+        "to": "src/resolve.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/resolve.rs",
+        "to": "src/parse.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       }
@@ -140,8 +149,8 @@
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/resolve.rs",
-          "src/policy.rs"
+          "src/policy.rs",
+          "src/resolve.rs"
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
@@ -151,8 +160,8 @@
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/resolve.rs",
-          "src/policy.rs"
+          "src/policy.rs",
+          "src/resolve.rs"
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"

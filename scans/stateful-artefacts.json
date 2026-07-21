@@ -5,6 +5,17 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "UnsafeCode",
+      "location": "src/interface/ffi/src/main.zig",
+      "file": "src/interface/ffi/src/main.zig",
+      "severity": "High",
+      "description": "4 unsafe pointer casts in src/interface/ffi/src/main.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "PathTraversal",
       "location": "tests/e2e.sh",
       "file": "tests/e2e.sh",
@@ -14,32 +25,51 @@
         "disk"
       ],
       "test_context": "test_only"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 4119,
-    "unsafe_blocks": 4,
+    "total_lines": 5222,
+    "unsafe_blocks": 19,
     "panic_sites": 0,
     "unwrap_calls": 0,
-    "allocation_sites": 1,
-    "io_operations": 9,
+    "allocation_sites": 2,
+    "io_operations": 10,
     "threading_constructs": 0
   },
   "file_statistics": [
     {
-      "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 275,
+      "file_path": "src/bridges/verisimdb-feed.sh",
+      "lines": 53,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/interface/Abi/Record.idr",
+      "lines": 151,
+      "unsafe_blocks": 5,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
       "file_path": "src/interface/Abi/Foreign.idr",
-      "lines": 83,
-      "unsafe_blocks": 4,
+      "lines": 172,
+      "unsafe_blocks": 10,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -47,13 +77,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tests/e2e.sh",
-      "lines": 142,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/ffi/src/main.zig",
+      "lines": 447,
+      "unsafe_blocks": 4,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 7,
+      "allocation_sites": 2,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -65,17 +95,45 @@
       "allocation_sites": 0,
       "io_operations": 2,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e.sh",
+      "lines": 142,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
-    "edges": []
+    "edges": [
+      {
+        "from": "src/interface/Abi/Record.idr",
+        "to": "src/interface/Abi/Foreign.idr",
+        "relation": "shared_dir:src/interface/Abi",
+        "weight": 1.0
+      }
+    ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",

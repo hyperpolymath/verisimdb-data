@@ -17,6 +17,18 @@
     },
     {
       "category": "CommandInjection",
+      "location": "examples/tools/starship.sh",
+      "file": "examples/tools/starship.sh",
+      "severity": "Critical",
+      "description": "eval usage in examples/tools/starship.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
       "location": "examples/os/macos.sh",
       "file": "examples/os/macos.sh",
       "severity": "Critical",
@@ -40,20 +52,17 @@
       "test_context": "production"
     },
     {
-      "category": "CommandInjection",
-      "location": "examples/tools/starship.sh",
-      "file": "examples/tools/starship.sh",
-      "severity": "Critical",
-      "description": "eval usage in examples/tools/starship.sh",
-      "recommended_attack": [
-        "cpu",
-        "disk"
-      ],
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
       "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 2612,
+    "total_lines": 2646,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -62,26 +71,6 @@
     "threading_constructs": 0
   },
   "file_statistics": [
-    {
-      "file_path": "hello.adb",
-      "lines": 5,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/config_store/config_store.adb",
-      "lines": 54,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
     {
       "file_path": "src/shell_validator/shell_validator.adb",
       "lines": 784,
@@ -103,8 +92,28 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "src/config_store/config_store.adb",
+      "lines": 54,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "src/shell_manager/shell_manager.adb",
       "lines": 476,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "hello.adb",
+      "lines": 5,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -124,14 +133,38 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "examples/tools/starship.sh",
+          "examples/os/macos.sh",
+          "examples/ui/colours.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "examples/tools/starship.sh",
+          "examples/os/macos.sh",
+          "examples/ui/colours.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
       {
         "source_category": "UncheckedError",
         "sink_axis": "cpu",
@@ -141,30 +174,6 @@
         ],
         "frameworks": [],
         "relation": "UncheckedError->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "examples/os/macos.sh",
-          "examples/ui/colours.sh",
-          "examples/tools/starship.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "examples/os/macos.sh",
-          "examples/ui/colours.sh",
-          "examples/tools/starship.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
       }
     ]
   }

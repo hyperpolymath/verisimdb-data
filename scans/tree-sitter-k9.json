@@ -5,18 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "UnsafeCode",
-      "location": "bindings/rust/lib.rs",
-      "file": "bindings/rust/lib.rs",
-      "severity": "High",
-      "description": "1 unsafe blocks in bindings/rust/lib.rs",
-      "recommended_attack": [
-        "memory",
-        "concurrency"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "UncheckedAllocation",
       "location": "src/tree_sitter/array.h",
       "file": "src/tree_sitter/array.h",
@@ -25,6 +13,18 @@
       "description": "Unchecked malloc in src/tree_sitter/array.h",
       "recommended_attack": [
         "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "bindings/rust/lib.rs",
+      "file": "bindings/rust/lib.rs",
+      "severity": "High",
+      "description": "1 unsafe blocks in bindings/rust/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "concurrency"
       ],
       "test_context": "production"
     },
@@ -52,6 +52,16 @@
   },
   "file_statistics": [
     {
+      "file_path": "src/tree_sitter/array.h",
+      "lines": 293,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "bindings/rust/build.rs",
       "lines": 17,
       "unsafe_blocks": 0,
@@ -72,16 +82,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/tree_sitter/array.h",
-      "lines": 293,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 3,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "setup.sh",
       "lines": 278,
       "unsafe_blocks": 0,
@@ -93,8 +93,8 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
@@ -110,6 +110,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UncheckedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "src/tree_sitter/array.h"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedAllocation->Memory"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -120,14 +130,14 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UncheckedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "src/tree_sitter/array.h"
+          "bindings/rust/lib.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedAllocation->Memory"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -148,16 +158,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "bindings/rust/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

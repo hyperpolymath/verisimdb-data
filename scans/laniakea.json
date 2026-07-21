@@ -3,39 +3,28 @@
   "program_path": "laniakea",
   "language": "elixir",
   "frameworks": [
-    "OTP",
     "Phoenix",
+    "OTP",
     "WebServer"
   ],
   "weak_points": [
+    {
+      "category": "HardcodedSecret",
+      "location": "schemas/config.ncl",
+      "file": "schemas/config.ncl",
+      "severity": "Critical",
+      "description": "Possible hardcoded secret in schemas/config.ncl",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
+    },
     {
       "category": "MutationGap",
       "location": "server/test/e2e/crdt_e2e_test.exs",
       "file": "server/test/e2e/crdt_e2e_test.exs",
       "severity": "Low",
       "description": "Elixir test file server/test/e2e/crdt_e2e_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "MutationGap",
-      "location": "server/test/crdt/pn_counter_test.exs",
-      "file": "server/test/crdt/pn_counter_test.exs",
-      "severity": "Low",
-      "description": "Elixir test file server/test/crdt/pn_counter_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "MutationGap",
-      "location": "server/test/crdt/or_set_test.exs",
-      "file": "server/test/crdt/or_set_test.exs",
-      "severity": "Low",
-      "description": "Elixir test file server/test/crdt/or_set_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
       "recommended_attack": [
         "cpu"
       ],
@@ -54,10 +43,32 @@
     },
     {
       "category": "MutationGap",
+      "location": "server/test/crdt/pn_counter_test.exs",
+      "file": "server/test/crdt/pn_counter_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file server/test/crdt/pn_counter_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
       "location": "server/test/crdt/g_counter_test.exs",
       "file": "server/test/crdt/g_counter_test.exs",
       "severity": "Low",
       "description": "Elixir test file server/test/crdt/g_counter_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "server/test/crdt/or_set_test.exs",
+      "file": "server/test/crdt/or_set_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file server/test/crdt/or_set_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
       "recommended_attack": [
         "cpu"
       ],
@@ -71,17 +82,6 @@
       "description": "Dynamic apply/3 in server/lib/laniakea_web.ex",
       "recommended_attack": [
         "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "HardcodedSecret",
-      "location": "schemas/config.ncl",
-      "file": "schemas/config.ncl",
-      "severity": "Critical",
-      "description": "Possible hardcoded secret in schemas/config.ncl",
-      "recommended_attack": [
-        "network"
       ],
       "test_context": "production"
     }
@@ -107,16 +107,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "server/lib/laniakea/policy/engine.ex",
-      "lines": 245,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
       "file_path": "server/lib/laniakea/crdt/registry.ex",
       "lines": 272,
       "unsafe_blocks": 0,
@@ -137,14 +127,14 @@
       "threading_constructs": 1
     },
     {
-      "file_path": "cli/laniakea.ts",
-      "lines": 1450,
+      "file_path": "server/lib/laniakea/policy/engine.ex",
+      "lines": 245,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 4,
-      "threading_constructs": 0
+      "io_operations": 0,
+      "threading_constructs": 1
     },
     {
       "file_path": "client/src/adapters/Capabilities.res",
@@ -185,6 +175,16 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "cli/laniakea.ts",
+      "lines": 1450,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
@@ -196,37 +196,25 @@
     "edges": [
       {
         "from": "setup.sh",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "setup.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "server/lib/laniakea/policy/engine.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "server/lib/laniakea/policy/engine.ex",
+        "from": "server/lib/laniakea/crdt/registry.ex",
         "to": "Phoenix",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "server/lib/laniakea/policy/engine.ex",
-        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
@@ -238,13 +226,13 @@
       },
       {
         "from": "server/lib/laniakea/crdt/registry.ex",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "server/lib/laniakea/crdt/registry.ex",
-        "to": "WebServer",
+        "from": "server/lib/laniakea/command/bus.ex",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
       },
@@ -256,43 +244,37 @@
       },
       {
         "from": "server/lib/laniakea/command/bus.ex",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "server/lib/laniakea/command/bus.ex",
         "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "cli/laniakea.ts",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "cli/laniakea.ts",
+        "from": "server/lib/laniakea/policy/engine.ex",
         "to": "Phoenix",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
       },
       {
-        "from": "cli/laniakea.ts",
+        "from": "server/lib/laniakea/policy/engine.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "server/lib/laniakea/policy/engine.ex",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
       },
       {
         "from": "client/src/adapters/Capabilities.res",
-        "to": "OTP",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 9.0
       },
       {
         "from": "client/src/adapters/Capabilities.res",
-        "to": "Phoenix",
+        "to": "OTP",
         "relation": "framework",
         "weight": 9.0
       },
@@ -304,25 +286,19 @@
       },
       {
         "from": "client/src/transport/Channel.res",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 27.0
-      },
-      {
-        "from": "client/src/transport/Channel.res",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 27.0
       },
       {
         "from": "client/src/transport/Channel.res",
-        "to": "WebServer",
+        "to": "OTP",
         "relation": "framework",
         "weight": 27.0
       },
       {
-        "from": "client/lib/bs/src/transport/Channel.res",
-        "to": "OTP",
+        "from": "client/src/transport/Channel.res",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 27.0
       },
@@ -334,13 +310,13 @@
       },
       {
         "from": "client/lib/bs/src/transport/Channel.res",
-        "to": "WebServer",
+        "to": "OTP",
         "relation": "framework",
         "weight": 27.0
       },
       {
-        "from": "client/lib/ocaml/Channel.res",
-        "to": "OTP",
+        "from": "client/lib/bs/src/transport/Channel.res",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 27.0
       },
@@ -352,14 +328,56 @@
       },
       {
         "from": "client/lib/ocaml/Channel.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 27.0
+      },
+      {
+        "from": "client/lib/ocaml/Channel.res",
         "to": "WebServer",
         "relation": "framework",
         "weight": 27.0
+      },
+      {
+        "from": "cli/laniakea.ts",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "cli/laniakea.ts",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "cli/laniakea.ts",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "server/test/e2e/crdt_e2e_test.exs",
+          "server/test/crdt/lww_register_test.exs",
+          "server/test/crdt/pn_counter_test.exs",
+          "server/test/crdt/g_counter_test.exs",
+          "server/test/crdt/or_set_test.exs"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "MutationGap->Cpu"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
@@ -368,8 +386,8 @@
           "server/lib/laniakea_web.ex"
         ],
         "frameworks": [
-          "OTP",
           "Phoenix",
+          "OTP",
           "WebServer"
         ],
         "relation": "DynamicCodeExecution->Cpu"
@@ -382,29 +400,11 @@
           "schemas/config.ncl"
         ],
         "frameworks": [
-          "OTP",
           "Phoenix",
+          "OTP",
           "WebServer"
         ],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "server/test/e2e/crdt_e2e_test.exs",
-          "server/test/crdt/pn_counter_test.exs",
-          "server/test/crdt/or_set_test.exs",
-          "server/test/crdt/lww_register_test.exs",
-          "server/test/crdt/g_counter_test.exs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix",
-          "WebServer"
-        ],
-        "relation": "MutationGap->Cpu"
       }
     ]
   }

@@ -6,10 +6,21 @@
   "weak_points": [
     {
       "category": "PathTraversal",
-      "location": "gossamer/launch.sh",
-      "file": "gossamer/launch.sh",
+      "location": "desktop/install-debug.sh",
+      "file": "desktop/install-debug.sh",
       "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in gossamer/launch.sh",
+      "description": "Hardcoded /tmp/ path without mktemp in desktop/install-debug.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "desktop/install.sh",
+      "file": "desktop/install.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in desktop/install.sh",
       "recommended_attack": [
         "disk"
       ],
@@ -27,24 +38,14 @@
       "test_context": "production"
     },
     {
-      "category": "InputBoundary",
-      "location": "test/bench.js",
-      "file": "test/bench.js",
-      "severity": "Medium",
-      "description": "1 JSON.parse call(s) with 0 try block(s) in test/bench.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "category": "ExcessivePermissions",
+      "location": "run.js",
+      "file": "run.js",
+      "severity": "High",
+      "description": "Deno -A (all permissions) in run.js",
       "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "InputBoundary",
-      "location": "test/compatibility_test.js",
-      "file": "test/compatibility_test.js",
-      "severity": "Medium",
-      "description": "3 JSON.parse call(s) with 0 try block(s) in test/compatibility_test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
-      "recommended_attack": [
-        "cpu"
+        "network",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -72,36 +73,24 @@
       "test_context": "production"
     },
     {
-      "category": "ExcessivePermissions",
-      "location": "run.js",
-      "file": "run.js",
-      "severity": "High",
-      "description": "Deno -A (all permissions) in run.js",
+      "category": "InputBoundary",
+      "location": "test/compatibility_test.js",
+      "file": "test/compatibility_test.js",
+      "severity": "Medium",
+      "description": "3 JSON.parse call(s) with 0 try block(s) in test/compatibility_test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
       "recommended_attack": [
-        "network",
-        "disk"
+        "cpu"
       ],
       "test_context": "production"
     },
     {
-      "category": "PathTraversal",
-      "location": "desktop/install.sh",
-      "file": "desktop/install.sh",
+      "category": "InputBoundary",
+      "location": "test/bench.js",
+      "file": "test/bench.js",
       "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in desktop/install.sh",
+      "description": "1 JSON.parse call(s) with 0 try block(s) in test/bench.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
       "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "desktop/install-debug.sh",
-      "file": "desktop/install-debug.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in desktop/install-debug.sh",
-      "recommended_attack": [
-        "disk"
+        "cpu"
       ],
       "test_context": "production"
     },
@@ -128,10 +117,30 @@
         "concurrency"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "gossamer/launch.sh",
+      "file": "gossamer/launch.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in gossamer/launch.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 22333,
+    "total_lines": 22374,
     "unsafe_blocks": 1,
     "panic_sites": 0,
     "unwrap_calls": 1,
@@ -141,8 +150,80 @@
   },
   "file_statistics": [
     {
+      "file_path": "archive/web/app_enhanced.js",
+      "lines": 303,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "launcher.sh",
+      "lines": 317,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tray/src/main.rs",
+      "lines": 335,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 4,
+      "allocation_sites": 10,
+      "io_operations": 3,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "tray/benches/tray_bench.rs",
+      "lines": 92,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "test_verisimdb_simple.js",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "gossamer/app_gossamer.js",
-      "lines": 6572,
+      "lines": 6579,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -179,86 +260,14 @@
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "launcher.sh",
-      "lines": 317,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "test_verisimdb_simple.js",
-      "lines": 59,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "archive/web/app_enhanced.js",
-      "lines": 303,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tray/src/main.rs",
-      "lines": 335,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "safe_unwrap_calls": 4,
-      "allocation_sites": 10,
-      "io_operations": 3,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "tray/benches/tray_bench.rs",
-      "lines": 92,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "network",
-    "disk",
-    "cpu",
+    "memory",
     "concurrency",
-    "memory"
+    "disk",
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -285,6 +294,17 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "run.js",
+          "launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Network"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -293,62 +313,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/bench.js",
-          "test/compatibility_test.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "launcher.sh",
-          "run.js"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "gossamer/launch.sh",
-          "install.sh",
-          "launcher.sh",
-          "desktop/install.sh",
-          "desktop/install-debug.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -361,15 +325,60 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
         "severity_value": 3.5,
         "files": [
-          "launcher.sh",
-          "run.js"
+          "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "desktop/install-debug.sh",
+          "desktop/install.sh",
+          "install.sh",
+          "launcher.sh",
+          "gossamer/launch.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/compatibility_test.js",
+          "test/bench.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "disk",
+        "severity_value": 3.5,
+        "files": [
+          "run.js",
+          "launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Disk"
       }
     ]
   }

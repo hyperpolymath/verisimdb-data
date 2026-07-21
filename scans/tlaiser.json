@@ -40,15 +40,35 @@
     }
   ],
   "statistics": {
-    "total_lines": 6795,
+    "total_lines": 8196,
     "unsafe_blocks": 22,
     "panic_sites": 0,
     "unwrap_calls": 42,
     "allocation_sites": 51,
-    "io_operations": 5,
+    "io_operations": 8,
     "threading_constructs": 3
   },
   "file_statistics": [
+    {
+      "file_path": "src/manifest/mod.rs",
+      "lines": 360,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/abi/mod.rs",
+      "lines": 470,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
     {
       "file_path": "src/codegen/pluscal_gen.rs",
       "lines": 415,
@@ -56,16 +76,6 @@
       "panic_sites": 0,
       "unwrap_calls": 1,
       "allocation_sites": 10,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/codegen/tlc_gen.rs",
-      "lines": 400,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 8,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -81,12 +91,32 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "src/codegen/tlc_gen.rs",
+      "lines": 400,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 8,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "src/codegen/parser.rs",
       "lines": 346,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 1,
       "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/interface/abi/Tlaiser/ABI/Foreign.idr",
+      "lines": 381,
+      "unsafe_blocks": 22,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -111,18 +141,18 @@
       "threading_constructs": 3
     },
     {
-      "file_path": "src/interface/abi/Foreign.idr",
-      "lines": 381,
-      "unsafe_blocks": 22,
+      "file_path": "setup.sh",
+      "lines": 287,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 3,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/manifest/mod.rs",
-      "lines": 360,
+      "file_path": "scripts/abi-ffi-gate.jl",
+      "lines": 116,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -131,23 +161,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/mod.rs",
-      "lines": 470,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "setup.sh",
-      "lines": 278,
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 3,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -162,26 +182,32 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/codegen/pluscal_gen.rs",
-        "to": "src/codegen/tlc_gen.rs",
-        "relation": "shared_dir:src/codegen",
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "src/codegen/tlc_gen.rs",
+        "from": "src/codegen/pluscal_gen.rs",
         "to": "src/codegen/tla_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
       },
       {
         "from": "src/codegen/tla_gen.rs",
+        "to": "src/codegen/tlc_gen.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/tlc_gen.rs",
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
@@ -191,16 +217,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -209,6 +225,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -222,13 +248,13 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
