@@ -3,8 +3,8 @@
   "program_path": "heterogenous-mobile-computing",
   "language": "rust",
   "frameworks": [
-    "Concurrent",
-    "Networking"
+    "Networking",
+    "Concurrent"
   ],
   "weak_points": [
     {
@@ -51,12 +51,12 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/training.rs",
-      "lines": 532,
+      "file_path": "src/persistence.rs",
+      "lines": 670,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 24,
+      "unwrap_calls": 8,
+      "allocation_sites": 16,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -71,6 +71,16 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "src/training.rs",
+      "lines": 532,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 24,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "src/main.rs",
       "lines": 241,
       "unsafe_blocks": 0,
@@ -78,16 +88,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 2,
       "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/persistence.rs",
-      "lines": 670,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 8,
-      "allocation_sites": 16,
-      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -124,61 +124,67 @@
   ],
   "recommended_attacks": [
     "memory",
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
         "from": "src/context.rs",
-        "to": "src/training.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/training.rs",
-        "to": "src/types.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/types.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/main.rs",
         "to": "src/persistence.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
         "from": "src/persistence.rs",
+        "to": "src/types.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/types.rs",
+        "to": "src/training.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/training.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/main.rs",
         "to": "src/mlp.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
         "from": "src/context.rs",
-        "to": "Concurrent",
+        "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/context.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/training.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "src/training.rs",
+        "from": "src/persistence.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 8.0
+      },
+      {
+        "from": "src/persistence.rs",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 8.0
+      },
+      {
+        "from": "src/types.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -190,13 +196,13 @@
         "weight": 1.0
       },
       {
-        "from": "src/types.rs",
+        "from": "src/training.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "src/main.rs",
+        "from": "src/training.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -208,19 +214,7 @@
         "weight": 1.0
       },
       {
-        "from": "src/persistence.rs",
-        "to": "Concurrent",
-        "relation": "framework",
-        "weight": 8.0
-      },
-      {
-        "from": "src/persistence.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 8.0
-      },
-      {
-        "from": "src/mlp.rs",
+        "from": "src/main.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -232,7 +226,7 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
+        "from": "src/mlp.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -244,7 +238,7 @@
         "weight": 1.0
       },
       {
-        "from": "tests/smoke_test.rs",
+        "from": "setup.sh",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -252,6 +246,12 @@
       {
         "from": "tests/smoke_test.rs",
         "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/smoke_test.rs",
+        "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
       }
@@ -261,29 +261,29 @@
     "rows": [
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/persistence.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/persistence.rs"
         ],
         "frameworks": [
-          "Concurrent",
-          "Networking"
+          "Networking",
+          "Concurrent"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/persistence.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

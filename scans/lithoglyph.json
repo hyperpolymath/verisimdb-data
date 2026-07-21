@@ -1,106 +1,655 @@
 {
-  "program_path": ".",
-  "language": "rust",
+  "schema_version": "2.5",
+  "program_path": "lithoglyph",
+  "language": "rescript",
   "frameworks": [
     "WebServer",
-    "Database",
-    "Networking"
+    "OTP",
+    "Phoenix"
   ],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "debugger/adapters/cli/src/main.rs",
-      "severity": "Medium",
-      "description": "13 unwrap/expect calls in debugger/adapters/cli/src/main.rs",
+      "category": "UnsafeDeserialization",
+      "location": "clients/rescript/src/Lithoglyph_Subscriptions.res",
+      "file": "clients/rescript/src/Lithoglyph_Subscriptions.res",
+      "severity": "High",
+      "description": "2 JSON.parseExn calls in clients/rescript/src/Lithoglyph_Subscriptions.res (use JSON.parse for safe Result)",
       "recommended_attack": [
         "memory",
-        "disk"
-      ]
+        "cpu"
+      ],
+      "test_context": "production"
     },
     {
       "category": "PanicPath",
-      "location": "studio/debugger/adapters/cli/src/main.rs",
+      "location": "clients/rescript/src/Lithoglyph.res",
+      "file": "clients/rescript/src/Lithoglyph.res",
       "severity": "Medium",
-      "description": "13 unwrap/expect calls in studio/debugger/adapters/cli/src/main.rs",
+      "description": "20 unsafe get calls in clients/rescript/src/Lithoglyph.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "clients/rescript/src/Lith.res",
+      "file": "clients/rescript/src/Lith.res",
+      "severity": "Medium",
+      "description": "9 unsafe get calls in clients/rescript/src/Lith.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "geo/src/config.rs",
+      "file": "geo/src/config.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in geo/src/config.rs",
       "recommended_attack": [
         "memory",
-        "disk"
-      ]
+        "cpu"
+      ],
+      "test_context": "production"
     },
     {
       "category": "PanicPath",
       "location": "geo/src/index/rtree.rs",
+      "file": "geo/src/index/rtree.rs",
       "severity": "Medium",
-      "description": "12 unwrap/expect calls in geo/src/index/rtree.rs",
+      "description": "11 unwrap/expect calls in geo/src/index/rtree.rs",
       "recommended_attack": [
         "memory",
         "disk"
-      ]
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "lith-http/test_analytics_api.sh",
+      "file": "lith-http/test_analytics_api.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in lith-http/test_analytics_api.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/bench/websocket_stress_test.exs",
+      "file": "lith-http/bench/websocket_stress_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/bench/websocket_stress_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "lith-http/bench/http_load_test.js",
+      "file": "lith-http/bench/http_load_test.js",
+      "severity": "Medium",
+      "description": "2 JSON.parse call(s) with 1 try block(s) in lith-http/bench/http_load_test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "lith-http/test_geo_api.sh",
+      "file": "lith-http/test_geo_api.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in lith-http/test_geo_api.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "lith-http/test_http_api.sh",
+      "file": "lith-http/test_http_api.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in lith-http/test_http_api.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/temporal_index_test.exs",
+      "file": "lith-http/test/lith_http/temporal_index_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/temporal_index_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/analytics_test.exs",
+      "file": "lith-http/test/lith_http/analytics_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/analytics_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/graceful_shutdown_test.exs",
+      "file": "lith-http/test/lith_http/graceful_shutdown_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/graceful_shutdown_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/cbor_test.exs",
+      "file": "lith-http/test/lith_http/cbor_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/cbor_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/query_cache_lru_test.exs",
+      "file": "lith-http/test/lith_http/query_cache_lru_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/query_cache_lru_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/database_registry_test.exs",
+      "file": "lith-http/test/lith_http/database_registry_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/database_registry_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/spatial_index_test.exs",
+      "file": "lith-http/test/lith_http/spatial_index_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/spatial_index_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/query_cache_test.exs",
+      "file": "lith-http/test/lith_http/query_cache_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/query_cache_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http/geo_test.exs",
+      "file": "lith-http/test/lith_http/geo_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http/geo_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/controllers/error_json_test.exs",
+      "file": "lith-http/test/lith_http_web/controllers/error_json_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/controllers/error_json_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/controllers/auth_controller_test.exs",
+      "file": "lith-http/test/lith_http_web/controllers/auth_controller_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/controllers/auth_controller_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/controllers/health_controller_test.exs",
+      "file": "lith-http/test/lith_http_web/controllers/health_controller_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/controllers/health_controller_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/controllers/api_controller_test.exs",
+      "file": "lith-http/test/lith_http_web/controllers/api_controller_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/controllers/api_controller_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/controllers/geo_controller_test.exs",
+      "file": "lith-http/test/lith_http_web/controllers/geo_controller_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/controllers/geo_controller_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/controllers/analytics_controller_test.exs",
+      "file": "lith-http/test/lith_http_web/controllers/analytics_controller_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/controllers/analytics_controller_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/auth/jwt_test.exs",
+      "file": "lith-http/test/lith_http_web/auth/jwt_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/auth/jwt_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/plugs/request_logger_test.exs",
+      "file": "lith-http/test/lith_http_web/plugs/request_logger_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/plugs/request_logger_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/plugs/authenticate_test.exs",
+      "file": "lith-http/test/lith_http_web/plugs/authenticate_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/plugs/authenticate_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/plugs/rate_limiter_test.exs",
+      "file": "lith-http/test/lith_http_web/plugs/rate_limiter_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/plugs/rate_limiter_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/metrics/collector_test.exs",
+      "file": "lith-http/test/lith_http_web/metrics/collector_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/metrics/collector_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/lith_http_web/error_json_extended_test.exs",
+      "file": "lith-http/test/lith_http_web/error_json_extended_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/lith_http_web/error_json_extended_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "lith-http/test/support/conn_case.ex",
+      "file": "lith-http/test/support/conn_case.ex",
+      "severity": "Low",
+      "description": "Elixir test file lith-http/test/support/conn_case.ex uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CryptoMisuse",
+      "location": "lith-http/lib/lith_http/temporal_index.ex",
+      "file": "lith-http/lib/lith_http/temporal_index.ex",
+      "severity": "High",
+      "description": ":crypto.hash(:md5, ...) in lith-http/lib/lith_http/temporal_index.ex — use :sha256 or stronger",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "lith-http/test_persistence.sh",
+      "file": "lith-http/test_persistence.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in lith-http/test_persistence.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "core-zig/src/bridge.zig",
+      "file": "core-zig/src/bridge.zig",
+      "severity": "High",
+      "description": "14 unsafe pointer casts in core-zig/src/bridge.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "tools/sdk-gen/src/Main.res",
+      "file": "tools/sdk-gen/src/Main.res",
+      "severity": "Medium",
+      "description": "1 unsafe get calls in tools/sdk-gen/src/Main.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "analytics/src/Lith_Analytics_Window.res",
+      "file": "analytics/src/Lith_Analytics_Window.res",
+      "severity": "Medium",
+      "description": "6 unsafe get calls in analytics/src/Lith_Analytics_Window.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "ffi/zig/src/bridge.zig",
+      "file": "ffi/zig/src/bridge.zig",
+      "severity": "High",
+      "description": "2 unsafe pointer casts in ffi/zig/src/bridge.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "MutationGap",
+      "location": "verification/benchmarks/websocket_stress_test.exs",
+      "file": "verification/benchmarks/websocket_stress_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file verification/benchmarks/websocket_stress_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "verification/benchmarks/http_load_test.js",
+      "file": "verification/benchmarks/http_load_test.js",
+      "severity": "Medium",
+      "description": "2 JSON.parse call(s) with 1 try block(s) in verification/benchmarks/http_load_test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "verification/tests/property/src/Lith_Property_Generators.res",
+      "file": "verification/tests/property/src/Lith_Property_Generators.res",
+      "severity": "Medium",
+      "description": "1 unsafe get calls in verification/tests/property/src/Lith_Property_Generators.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "verification/tests/e2e.sh",
+      "file": "verification/tests/e2e.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in verification/tests/e2e.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "scripts/check-proofs.sh",
+      "file": "scripts/check-proofs.sh",
+      "severity": "Medium",
+      "description": "26 potentially unquoted variable expansions in scripts/check-proofs.sh",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": ".machine_readable/coaptation/extract-facts.sh",
+      "file": ".machine_readable/coaptation/extract-facts.sh",
+      "severity": "Medium",
+      "description": "39 potentially unquoted variable expansions in .machine_readable/coaptation/extract-facts.sh",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": ".machine_readable/arrival-pack/extract.sh",
+      "file": ".machine_readable/arrival-pack/extract.sh",
+      "severity": "Medium",
+      "description": "23 potentially unquoted variable expansions in .machine_readable/arrival-pack/extract.sh",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "beam/src/lith_beam/client.gleam",
+      "file": "beam/src/lith_beam/client.gleam",
+      "severity": "Medium",
+      "description": "9 @external FFI calls in beam/src/lith_beam/client.gleam",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "beam/native_rust/src/lib.rs",
+      "file": "beam/native_rust/src/lib.rs",
+      "severity": "High",
+      "description": "11 unsafe blocks in beam/native_rust/src/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "concurrency"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "beam/test/lith_nif_test.exs",
+      "file": "beam/test/lith_nif_test.exs",
+      "severity": "Medium",
+      "description": "Dynamic apply/3 in beam/test/lith_nif_test.exs",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "beam/test/lith_nif_test.exs",
+      "file": "beam/test/lith_nif_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file beam/test/lith_nif_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "beam/test/lith_integration_test.exs",
+      "file": "beam/test/lith_integration_test.exs",
+      "severity": "Medium",
+      "description": "Dynamic apply/3 in beam/test/lith_integration_test.exs",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
+      "location": "beam/test/lith_integration_test.exs",
+      "file": "beam/test/lith_integration_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file beam/test/lith_integration_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "beam/native/src/lith_nif.zig",
+      "file": "beam/native/src/lith_nif.zig",
+      "severity": "High",
+      "description": "8 unsafe pointer casts in beam/native/src/lith_nif.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "beam/native/src/beam.zig",
+      "file": "beam/native/src/beam.zig",
+      "severity": "High",
+      "description": "1 unsafe pointer casts in beam/native/src/beam.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "distributed/src/Lith_Distributed_Sharding.res",
+      "file": "distributed/src/Lith_Distributed_Sharding.res",
+      "severity": "Medium",
+      "description": "2 unsafe get calls in distributed/src/Lith_Distributed_Sharding.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "tests/property/src/Lith_Property_Generators.res",
+      "file": "tests/property/src/Lith_Property_Generators.res",
+      "severity": "Medium",
+      "description": "1 unsafe get calls in tests/property/src/Lith_Property_Generators.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "tests/e2e.sh",
+      "file": "tests/e2e.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in tests/e2e.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "test_only"
     }
   ],
   "statistics": {
-    "total_lines": 43323,
-    "unsafe_blocks": 0,
-    "panic_sites": 0,
-    "unwrap_calls": 44,
-    "allocation_sites": 34,
-    "io_operations": 4,
-    "threading_constructs": 2
+    "total_lines": 59776,
+    "unsafe_blocks": 117,
+    "panic_sites": 3,
+    "unwrap_calls": 52,
+    "allocation_sites": 153,
+    "io_operations": 165,
+    "threading_constructs": 16
   },
   "file_statistics": [
     {
-      "file_path": "debugger/adapters/cli/src/main.rs",
-      "lines": 494,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 13,
-      "allocation_sites": 2,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "debugger/adapters/postgres/src/constraint_check.rs",
-      "lines": 469,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "debugger/adapters/postgres/src/lib.rs",
-      "lines": 299,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "debugger/adapters/postgres/src/schema.rs",
-      "lines": 419,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "debugger/adapters/postgres/src/transaction.rs",
-      "lines": 379,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "debugger/ui/src/app.rs",
-      "lines": 351,
+      "file_path": "api/src/websocket.zig",
+      "lines": 332,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -109,28 +658,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "debugger/ui/src/proofs.rs",
-      "lines": 254,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "studio/debugger/adapters/cli/src/main.rs",
-      "lines": 494,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 13,
-      "allocation_sites": 2,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "studio/debugger/adapters/postgres/src/constraint_check.rs",
-      "lines": 469,
+      "file_path": "api/src/bridge_client.zig",
+      "lines": 584,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -139,48 +668,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "studio/debugger/adapters/postgres/src/lib.rs",
-      "lines": 299,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "studio/debugger/adapters/postgres/src/schema.rs",
-      "lines": 419,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "studio/debugger/adapters/postgres/src/transaction.rs",
-      "lines": 379,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "studio/debugger/ui/src/app.rs",
-      "lines": 351,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 3,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "studio/debugger/ui/src/proofs.rs",
-      "lines": 254,
+      "file_path": "api/src/grpc.zig",
+      "lines": 686,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -189,24 +678,94 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "studio/src-tauri/src/main.rs",
-      "lines": 515,
+      "file_path": "api/src/auth.zig",
+      "lines": 274,
       "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
+      "panic_sites": 1,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "geo/src/index/rtree.rs",
-      "lines": 228,
+      "file_path": "api/src/main.zig",
+      "lines": 148,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 12,
-      "allocation_sites": 1,
-      "io_operations": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 1
+    },
+    {
+      "file_path": "api/src/config.zig",
+      "lines": 96,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "clients/rescript/src/Lithoglyph_Subscriptions.res",
+      "lines": 324,
+      "unsafe_blocks": 2,
+      "panic_sites": 2,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "clients/rescript/src/Lithoglyph.res",
+      "lines": 944,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 20,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "clients/rescript/src/Lith.res",
+      "lines": 496,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 9,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/Lith/LithForeign.idr",
+      "lines": 674,
+      "unsafe_blocks": 49,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/interface/Abi/Foreign.idr",
+      "lines": 83,
+      "unsafe_blocks": 4,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/interface/ffi/src/main.zig",
+      "lines": 275,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
     },
     {
       "file_path": "geo/src/api/mod.rs",
@@ -214,19 +773,10 @@
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 1
-    },
-    {
-      "file_path": "geo/src/formbd/mod.rs",
-      "lines": 224,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 3,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
     },
     {
       "file_path": "geo/src/config.rs",
@@ -237,11 +787,4850 @@
       "allocation_sites": 0,
       "io_operations": 2,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "geo/src/index/rtree.rs",
+      "lines": 228,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 11,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "geo/ffi/zig/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "geo/ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "lith-http/test_m13.sh",
+      "lines": 175,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 12,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lith-http/test_analytics_api.sh",
+      "lines": 129,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 12,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lith-http/test_auth.sh",
+      "lines": 76,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lith-http/bench/run_all_benchmarks.sh",
+      "lines": 134,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lith-http/test_geo_api.sh",
+      "lines": 112,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lith-http/test_http_api.sh",
+      "lines": 69,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lith-http/test_observability.sh",
+      "lines": 56,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 9,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "lith-http/lib/lith_http/temporal_index.ex",
+      "lines": 277,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "lith-http/test_persistence.sh",
+      "lines": 128,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 9,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "core-zig/src/blocks.zig",
+      "lines": 633,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 6,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "core-zig/src/bridge.zig",
+      "lines": 1145,
+      "unsafe_blocks": 14,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 16,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "core-zig/test-ffi-integration.c",
+      "lines": 575,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "core-zig/test-execution.sh",
+      "lines": 130,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bofig-ingest.sh",
+      "lines": 270,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/sdk-gen/src/Generator.res",
+      "lines": 67,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/sdk-gen/src/ReScriptGen.res",
+      "lines": 201,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/sdk-gen/src/Main.res",
+      "lines": 79,
+      "unsafe_blocks": 6,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/bofig_ingest.exs",
+      "lines": 332,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "analytics/src/lith_client.jl",
+      "lines": 160,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "analytics/src/Lith_Analytics_Window.res",
+      "lines": 368,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 6,
+      "allocation_sites": 7,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "analytics/src/Lith_Analytics_TimeSeries.res",
+      "lines": 291,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "analytics/src/api.jl",
+      "lines": 140,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "analytics/ffi/zig/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "analytics/ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "session/dispatch.sh",
+      "lines": 137,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/src/bridge.zig",
+      "lines": 771,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "perf/src/Lith_Perf_Cache.res",
+      "lines": 119,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "perf/src/Lith_Perf_Pool.res",
+      "lines": 167,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "perf/src/Lith_Perf_Batch.res",
+      "lines": 144,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/benchmarks/run_all_benchmarks.sh",
+      "lines": 134,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/fuzzing/src/Lith_Fuzz_Main.res",
+      "lines": 81,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/fuzzing/src/Lith_Fuzz_Runner.res",
+      "lines": 165,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 5,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/fuzzing/src/Lith_Fuzz_GQL.res",
+      "lines": 171,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/property/src/Lith_Property_GQL.res",
+      "lines": 247,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/property/src/Lith_Property_Generators.res",
+      "lines": 353,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/property/src/Lith_Property_Runner.res",
+      "lines": 110,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/e2e/src/Lith_E2E_API.res",
+      "lines": 262,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+      "lines": 265,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/e2e/src/Lith_E2E_Types.res",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/e2e/template_instantiation_test.sh",
+      "lines": 258,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/e2e.sh",
+      "lines": 166,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/integration/src/Lith_Integration_Ghost.res",
+      "lines": 197,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/integration/src/Lith_Integration_Directus.res",
+      "lines": 207,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/integration/src/Lith_Integration_Payload.res",
+      "lines": 259,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/integration/src/Lith_Integration_Strapi.res",
+      "lines": 288,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/fuzz/src/Lith_Fuzz_Main.res",
+      "lines": 81,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/fuzz/src/Lith_Fuzz_Runner.res",
+      "lines": 165,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 5,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "verification/tests/fuzz/src/Lith_Fuzz_GQL.res",
+      "lines": 171,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "integrations/directus/src/Lith_Directus_Hook.res",
+      "lines": 200,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "integrations/strapi/src/Lith_Strapi_Client.res",
+      "lines": 115,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "integrations/ghost/src/Lith_Ghost_Server.res",
+      "lines": 128,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "integrations/ghost/src/Lith_Ghost_Webhook.res",
+      "lines": 223,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "integrations/payload/src/Lith_Payload_Hooks.res",
+      "lines": 212,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "studio/src/RuntimeBridge.res",
+      "lines": 86,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "studio/ffi/zig/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "studio/ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "examples/demo-server.zig",
+      "lines": 295,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": ".machine_readable/coaptation/verify.sh",
+      "lines": 34,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/coaptation/coapt.ncl",
+      "lines": 174,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/arrival-pack/arrival-pack.ncl",
+      "lines": 89,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/arrival-pack/generate.sh",
+      "lines": 45,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
+      "lines": 167,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/adjust/adjust.ncl",
+      "lines": 62,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/_base.ncl",
+      "lines": 140,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/trust/trust.ncl",
+      "lines": 88,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/trust/trust.k9.ncl",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/intend/intend.ncl",
+      "lines": 81,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/intend/intend.k9.ncl",
+      "lines": 252,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/must/must.k9.ncl",
+      "lines": 238,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/must/must.ncl",
+      "lines": 64,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/dust/dust.k9.ncl",
+      "lines": 172,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/dust/dust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": ".machine_readable/contractiles/bust/bust.k9.ncl",
+      "lines": 162,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "beam/src/lith_beam/client.gleam",
+      "lines": 255,
+      "unsafe_blocks": 9,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "beam/native_rust/build.rs",
+      "lines": 26,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "beam/native_rust/src/lib.rs",
+      "lines": 620,
+      "unsafe_blocks": 11,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "beam/test/lith_beam_smoke_test.gleam",
+      "lines": 262,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "beam/ffi/zig/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "beam/ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "beam/native/src/lith_nif.zig",
+      "lines": 823,
+      "unsafe_blocks": 8,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 9,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "beam/native/src/beam.zig",
+      "lines": 147,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "distributed/src/Lith_Distributed_Sharding.res",
+      "lines": 236,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "generated/abi/bridge.h",
+      "lines": 385,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/property/src/Lith_Property_GQL.res",
+      "lines": 247,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/property/src/Lith_Property_Generators.res",
+      "lines": 353,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/property/src/Lith_Property_Runner.res",
+      "lines": 110,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e/src/Lith_E2E_API.res",
+      "lines": 262,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e/src/Lith_E2E_Sync.res",
+      "lines": 265,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e/src/Lith_E2E_Types.res",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e/template_instantiation_test.sh",
+      "lines": 258,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e.sh",
+      "lines": 166,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/integration/src/Lith_Integration_Ghost.res",
+      "lines": 197,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/integration/src/Lith_Integration_Directus.res",
+      "lines": 207,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/integration/src/Lith_Integration_Payload.res",
+      "lines": 259,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/integration/src/Lith_Integration_Strapi.res",
+      "lines": 288,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/fuzz/src/Lith_Fuzz_Main.res",
+      "lines": 81,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/fuzz/src/Lith_Fuzz_Runner.res",
+      "lines": 165,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 5,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/fuzz/src/Lith_Fuzz_GQL.res",
+      "lines": 171,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "disk",
+    "network",
+    "concurrency",
     "memory",
-    "disk"
-  ]
+    "cpu"
+  ],
+  "dependency_graph": {
+    "edges": [
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "ffi/zig/src/bridge.zig",
+        "relation": "shared_dir:ffi/zig/src",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/coaptation/verify.sh",
+        "to": ".machine_readable/coaptation/coapt.ncl",
+        "relation": "shared_dir:.machine_readable/coaptation",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/Generator.res",
+        "to": "tools/sdk-gen/src/ReScriptGen.res",
+        "relation": "shared_dir:tools/sdk-gen/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/ReScriptGen.res",
+        "to": "tools/sdk-gen/src/Main.res",
+        "relation": "shared_dir:tools/sdk-gen/src",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/arrival-pack/arrival-pack.ncl",
+        "to": ".machine_readable/arrival-pack/generate.sh",
+        "relation": "shared_dir:.machine_readable/arrival-pack",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Ghost.res",
+        "to": "tests/integration/src/Lith_Integration_Directus.res",
+        "relation": "shared_dir:tests/integration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Directus.res",
+        "to": "tests/integration/src/Lith_Integration_Payload.res",
+        "relation": "shared_dir:tests/integration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Payload.res",
+        "to": "tests/integration/src/Lith_Integration_Strapi.res",
+        "relation": "shared_dir:tests/integration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/lith_client.jl",
+        "to": "analytics/src/Lith_Analytics_Window.res",
+        "relation": "shared_dir:analytics/src",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/Lith_Analytics_Window.res",
+        "to": "analytics/src/Lith_Analytics_TimeSeries.res",
+        "relation": "shared_dir:analytics/src",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/Lith_Analytics_TimeSeries.res",
+        "to": "analytics/src/api.jl",
+        "relation": "shared_dir:analytics/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_Main.res",
+        "to": "verification/tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "relation": "shared_dir:verification/tests/fuzz/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "to": "verification/tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "relation": "shared_dir:verification/tests/fuzz/src",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/dust/dust.k9.ncl",
+        "to": ".machine_readable/contractiles/dust/dust.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/dust",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_GQL.res",
+        "to": "verification/tests/property/src/Lith_Property_Generators.res",
+        "relation": "shared_dir:verification/tests/property/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_Generators.res",
+        "to": "verification/tests/property/src/Lith_Property_Runner.res",
+        "relation": "shared_dir:verification/tests/property/src",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/websocket.zig",
+        "to": "api/src/bridge_client.zig",
+        "relation": "shared_dir:api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/bridge_client.zig",
+        "to": "api/src/grpc.zig",
+        "relation": "shared_dir:api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/grpc.zig",
+        "to": "api/src/auth.zig",
+        "relation": "shared_dir:api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/auth.zig",
+        "to": "api/src/main.zig",
+        "relation": "shared_dir:api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/main.zig",
+        "to": "api/src/config.zig",
+        "relation": "shared_dir:api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "integrations/ghost/src/Lith_Ghost_Server.res",
+        "to": "integrations/ghost/src/Lith_Ghost_Webhook.res",
+        "relation": "shared_dir:integrations/ghost/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_API.res",
+        "to": "tests/e2e/src/Lith_E2E_Sync.res",
+        "relation": "shared_dir:tests/e2e/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_Sync.res",
+        "to": "tests/e2e/src/Lith_E2E_Types.res",
+        "relation": "shared_dir:tests/e2e/src",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": ".machine_readable/contractiles/bust/bust.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/bust",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_m13.sh",
+        "to": "lith-http/test_analytics_api.sh",
+        "relation": "shared_dir:lith-http",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_analytics_api.sh",
+        "to": "lith-http/test_auth.sh",
+        "relation": "shared_dir:lith-http",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_auth.sh",
+        "to": "lith-http/test_geo_api.sh",
+        "relation": "shared_dir:lith-http",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_geo_api.sh",
+        "to": "lith-http/test_http_api.sh",
+        "relation": "shared_dir:lith-http",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_http_api.sh",
+        "to": "lith-http/test_observability.sh",
+        "relation": "shared_dir:lith-http",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_observability.sh",
+        "to": "lith-http/test_persistence.sh",
+        "relation": "shared_dir:lith-http",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_Main.res",
+        "to": "verification/fuzzing/src/Lith_Fuzz_Runner.res",
+        "relation": "shared_dir:verification/fuzzing/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_Runner.res",
+        "to": "verification/fuzzing/src/Lith_Fuzz_GQL.res",
+        "relation": "shared_dir:verification/fuzzing/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Ghost.res",
+        "to": "verification/tests/integration/src/Lith_Integration_Directus.res",
+        "relation": "shared_dir:verification/tests/integration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Directus.res",
+        "to": "verification/tests/integration/src/Lith_Integration_Payload.res",
+        "relation": "shared_dir:verification/tests/integration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Payload.res",
+        "to": "verification/tests/integration/src/Lith_Integration_Strapi.res",
+        "relation": "shared_dir:verification/tests/integration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "to": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "relation": "shared_dir:verification/tests/e2e/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "to": "verification/tests/e2e/src/Lith_E2E_Types.res",
+        "relation": "shared_dir:verification/tests/e2e/src",
+        "weight": 1.0
+      },
+      {
+        "from": "clients/rescript/src/Lithoglyph_Subscriptions.res",
+        "to": "clients/rescript/src/Lithoglyph.res",
+        "relation": "shared_dir:clients/rescript/src",
+        "weight": 1.0
+      },
+      {
+        "from": "clients/rescript/src/Lithoglyph.res",
+        "to": "clients/rescript/src/Lith.res",
+        "relation": "shared_dir:clients/rescript/src",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.k9.ncl",
+        "to": ".machine_readable/contractiles/must/must.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/must",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_Main.res",
+        "to": "tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "relation": "shared_dir:tests/fuzz/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "to": "tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "relation": "shared_dir:tests/fuzz/src",
+        "weight": 1.0
+      },
+      {
+        "from": "beam/native/src/lith_nif.zig",
+        "to": "beam/native/src/beam.zig",
+        "relation": "shared_dir:beam/native/src",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
+        "to": ".machine_readable/contractiles/adjust/adjust.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/adjust",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/intend/intend.ncl",
+        "to": ".machine_readable/contractiles/intend/intend.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/intend",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/src/blocks.zig",
+        "to": "core-zig/src/bridge.zig",
+        "relation": "shared_dir:core-zig/src",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/test-ffi-integration.c",
+        "to": "core-zig/test-execution.sh",
+        "relation": "shared_dir:core-zig",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.ncl",
+        "to": ".machine_readable/contractiles/trust/trust.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/trust",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Cache.res",
+        "to": "perf/src/Lith_Perf_Pool.res",
+        "relation": "shared_dir:perf/src",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Pool.res",
+        "to": "perf/src/Lith_Perf_Batch.res",
+        "relation": "shared_dir:perf/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_GQL.res",
+        "to": "tests/property/src/Lith_Property_Generators.res",
+        "relation": "shared_dir:tests/property/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_Generators.res",
+        "to": "tests/property/src/Lith_Property_Runner.res",
+        "relation": "shared_dir:tests/property/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bofig-ingest.sh",
+        "to": "tools/bofig_ingest.exs",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/websocket.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/websocket.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/websocket.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/bridge_client.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/bridge_client.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/bridge_client.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/grpc.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/grpc.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/grpc.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/auth.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "api/src/auth.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "api/src/auth.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "api/src/main.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "api/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "api/src/main.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "api/src/config.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/config.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "api/src/config.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "clients/rescript/src/Lithoglyph_Subscriptions.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 10.0
+      },
+      {
+        "from": "clients/rescript/src/Lithoglyph_Subscriptions.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 10.0
+      },
+      {
+        "from": "clients/rescript/src/Lithoglyph_Subscriptions.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 10.0
+      },
+      {
+        "from": "clients/rescript/src/Lithoglyph.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 23.0
+      },
+      {
+        "from": "clients/rescript/src/Lithoglyph.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 23.0
+      },
+      {
+        "from": "clients/rescript/src/Lithoglyph.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 23.0
+      },
+      {
+        "from": "clients/rescript/src/Lith.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "clients/rescript/src/Lith.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "clients/rescript/src/Lith.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "src/Lith/LithForeign.idr",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 147.0
+      },
+      {
+        "from": "src/Lith/LithForeign.idr",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 147.0
+      },
+      {
+        "from": "src/Lith/LithForeign.idr",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 147.0
+      },
+      {
+        "from": "src/interface/Abi/Foreign.idr",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "src/interface/Abi/Foreign.idr",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "src/interface/Abi/Foreign.idr",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "src/interface/ffi/src/main.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/main.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "geo/src/api/mod.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "geo/src/api/mod.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "geo/src/api/mod.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "geo/src/config.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "geo/src/config.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "geo/src/config.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "geo/src/index/rtree.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 13.0
+      },
+      {
+        "from": "geo/src/index/rtree.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 13.0
+      },
+      {
+        "from": "geo/src/index/rtree.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 13.0
+      },
+      {
+        "from": "geo/ffi/zig/src/main.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "geo/ffi/zig/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "geo/ffi/zig/src/main.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "geo/ffi/zig/test/integration_test.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "geo/ffi/zig/test/integration_test.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "geo/ffi/zig/test/integration_test.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "lith-http/test_m13.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_m13.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_m13.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_analytics_api.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_analytics_api.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_analytics_api.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_auth.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_auth.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_auth.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/bench/run_all_benchmarks.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/bench/run_all_benchmarks.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/bench/run_all_benchmarks.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_geo_api.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_geo_api.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_geo_api.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_http_api.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_http_api.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_http_api.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_observability.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_observability.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_observability.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/lib/lith_http/temporal_index.ex",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "lith-http/lib/lith_http/temporal_index.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "lith-http/lib/lith_http/temporal_index.ex",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "lith-http/test_persistence.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_persistence.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lith-http/test_persistence.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/src/blocks.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/src/blocks.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/src/blocks.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/src/bridge.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 42.0
+      },
+      {
+        "from": "core-zig/src/bridge.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 42.0
+      },
+      {
+        "from": "core-zig/src/bridge.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 42.0
+      },
+      {
+        "from": "core-zig/test-ffi-integration.c",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/test-ffi-integration.c",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/test-ffi-integration.c",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/test-execution.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/test-execution.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "core-zig/test-execution.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bofig-ingest.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bofig-ingest.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bofig-ingest.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/Generator.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/Generator.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/Generator.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/ReScriptGen.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/ReScriptGen.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/ReScriptGen.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sdk-gen/src/Main.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 19.0
+      },
+      {
+        "from": "tools/sdk-gen/src/Main.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 19.0
+      },
+      {
+        "from": "tools/sdk-gen/src/Main.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 19.0
+      },
+      {
+        "from": "tools/bofig_ingest.exs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bofig_ingest.exs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/bofig_ingest.exs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/lith_client.jl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/lith_client.jl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/lith_client.jl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/Lith_Analytics_Window.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "analytics/src/Lith_Analytics_Window.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "analytics/src/Lith_Analytics_Window.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "analytics/src/Lith_Analytics_TimeSeries.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/Lith_Analytics_TimeSeries.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/Lith_Analytics_TimeSeries.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/api.jl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/api.jl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/src/api.jl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/ffi/zig/src/main.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/ffi/zig/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/ffi/zig/src/main.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "analytics/ffi/zig/test/integration_test.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "analytics/ffi/zig/test/integration_test.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "analytics/ffi/zig/test/integration_test.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "session/dispatch.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "session/dispatch.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "session/dispatch.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/bridge.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "ffi/zig/src/bridge.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "ffi/zig/src/bridge.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Cache.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Cache.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Cache.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Pool.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Pool.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Pool.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Batch.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Batch.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "perf/src/Lith_Perf_Batch.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/benchmarks/run_all_benchmarks.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/benchmarks/run_all_benchmarks.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/benchmarks/run_all_benchmarks.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_Main.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_Main.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_Main.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_Runner.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_Runner.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_Runner.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_GQL.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_GQL.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/fuzzing/src/Lith_Fuzz_GQL.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_GQL.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_GQL.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_GQL.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_Generators.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_Generators.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_Generators.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_Runner.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_Runner.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/property/src/Lith_Property_Runner.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_Types.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_Types.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/src/Lith_E2E_Types.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/template_instantiation_test.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/template_instantiation_test.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e/template_instantiation_test.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/e2e.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Ghost.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Ghost.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Ghost.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Directus.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Directus.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Directus.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Payload.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Payload.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Payload.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Strapi.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Strapi.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/integration/src/Lith_Integration_Strapi.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_Main.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_Main.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_Main.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "integrations/directus/src/Lith_Directus_Hook.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/directus/src/Lith_Directus_Hook.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/directus/src/Lith_Directus_Hook.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/strapi/src/Lith_Strapi_Client.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/strapi/src/Lith_Strapi_Client.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/strapi/src/Lith_Strapi_Client.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/ghost/src/Lith_Ghost_Server.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/ghost/src/Lith_Ghost_Server.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/ghost/src/Lith_Ghost_Server.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/ghost/src/Lith_Ghost_Webhook.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/ghost/src/Lith_Ghost_Webhook.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/ghost/src/Lith_Ghost_Webhook.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/payload/src/Lith_Payload_Hooks.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/payload/src/Lith_Payload_Hooks.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "integrations/payload/src/Lith_Payload_Hooks.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "studio/src/RuntimeBridge.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "studio/src/RuntimeBridge.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "studio/src/RuntimeBridge.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "studio/ffi/zig/src/main.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "studio/ffi/zig/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "studio/ffi/zig/src/main.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "studio/ffi/zig/test/integration_test.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "studio/ffi/zig/test/integration_test.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "studio/ffi/zig/test/integration_test.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "examples/demo-server.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "examples/demo-server.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "examples/demo-server.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": ".machine_readable/coaptation/verify.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/coaptation/verify.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/coaptation/verify.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/coaptation/coapt.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/coaptation/coapt.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/coaptation/coapt.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/arrival-pack/arrival-pack.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/arrival-pack/arrival-pack.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/arrival-pack/arrival-pack.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/arrival-pack/generate.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/arrival-pack/generate.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/arrival-pack/generate.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/_base.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/_base.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/_base.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.k9.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.k9.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.k9.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/intend/intend.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/intend/intend.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/intend/intend.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/intend/intend.k9.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/intend/intend.k9.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/intend/intend.k9.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.k9.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.k9.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.k9.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/dust/dust.k9.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/dust/dust.k9.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/dust/dust.k9.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/dust/dust.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/dust/dust.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/dust/dust.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.k9.ncl",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.k9.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.k9.ncl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "beam/src/lith_beam/client.gleam",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 27.0
+      },
+      {
+        "from": "beam/src/lith_beam/client.gleam",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 27.0
+      },
+      {
+        "from": "beam/src/lith_beam/client.gleam",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 27.0
+      },
+      {
+        "from": "beam/native_rust/build.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "beam/native_rust/build.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "beam/native_rust/build.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "beam/native_rust/src/lib.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 35.0
+      },
+      {
+        "from": "beam/native_rust/src/lib.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 35.0
+      },
+      {
+        "from": "beam/native_rust/src/lib.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 35.0
+      },
+      {
+        "from": "beam/test/lith_beam_smoke_test.gleam",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "beam/test/lith_beam_smoke_test.gleam",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "beam/test/lith_beam_smoke_test.gleam",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "beam/ffi/zig/src/main.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "beam/ffi/zig/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "beam/ffi/zig/src/main.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "beam/ffi/zig/test/integration_test.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "beam/ffi/zig/test/integration_test.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "beam/ffi/zig/test/integration_test.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "beam/native/src/lith_nif.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 24.0
+      },
+      {
+        "from": "beam/native/src/lith_nif.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 24.0
+      },
+      {
+        "from": "beam/native/src/lith_nif.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 24.0
+      },
+      {
+        "from": "beam/native/src/beam.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "beam/native/src/beam.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "beam/native/src/beam.zig",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "distributed/src/Lith_Distributed_Sharding.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "distributed/src/Lith_Distributed_Sharding.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "distributed/src/Lith_Distributed_Sharding.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "generated/abi/bridge.h",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "generated/abi/bridge.h",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "generated/abi/bridge.h",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_GQL.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_GQL.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_GQL.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_Generators.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_Generators.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_Generators.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_Runner.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_Runner.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property/src/Lith_Property_Runner.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_API.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_API.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_API.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_Sync.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_Sync.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_Sync.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_Types.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_Types.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/src/Lith_E2E_Types.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/template_instantiation_test.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/template_instantiation_test.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e/template_instantiation_test.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e.sh",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Ghost.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Ghost.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Ghost.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Directus.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Directus.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Directus.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Payload.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Payload.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Payload.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Strapi.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Strapi.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration/src/Lith_Integration_Strapi.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_Main.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_Main.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_Main.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      }
+    ]
+  },
+  "taint_matrix": {
+    "rows": [
+      {
+        "source_category": "CryptoMisuse",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "lith-http/lib/lith_http/temporal_index.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "CryptoMisuse->Network"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "geo/src/config.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "clients/rescript/src/Lithoglyph.res",
+          "clients/rescript/src/Lith.res",
+          "geo/src/index/rtree.rs",
+          "tools/sdk-gen/src/Main.res",
+          "analytics/src/Lith_Analytics_Window.res",
+          "verification/tests/property/src/Lith_Property_Generators.res",
+          "distributed/src/Lith_Distributed_Sharding.res",
+          "tests/property/src/Lith_Property_Generators.res"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "lith-http/bench/http_load_test.js",
+          "verification/benchmarks/http_load_test.js"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "beam/native_rust/src/lib.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "lith-http/bench/websocket_stress_test.exs",
+          "lith-http/test/lith_http/temporal_index_test.exs",
+          "lith-http/test/lith_http/analytics_test.exs",
+          "lith-http/test/lith_http/graceful_shutdown_test.exs",
+          "lith-http/test/lith_http/cbor_test.exs",
+          "lith-http/test/lith_http/query_cache_lru_test.exs",
+          "lith-http/test/lith_http/database_registry_test.exs",
+          "lith-http/test/lith_http/spatial_index_test.exs",
+          "lith-http/test/lith_http/query_cache_test.exs",
+          "lith-http/test/lith_http/geo_test.exs",
+          "lith-http/test/lith_http_web/controllers/error_json_test.exs",
+          "lith-http/test/lith_http_web/controllers/auth_controller_test.exs",
+          "lith-http/test/lith_http_web/controllers/health_controller_test.exs",
+          "lith-http/test/lith_http_web/controllers/api_controller_test.exs",
+          "lith-http/test/lith_http_web/controllers/geo_controller_test.exs",
+          "lith-http/test/lith_http_web/controllers/analytics_controller_test.exs",
+          "lith-http/test/lith_http_web/auth/jwt_test.exs",
+          "lith-http/test/lith_http_web/plugs/request_logger_test.exs",
+          "lith-http/test/lith_http_web/plugs/authenticate_test.exs",
+          "lith-http/test/lith_http_web/plugs/rate_limiter_test.exs",
+          "lith-http/test/lith_http_web/metrics/collector_test.exs",
+          "lith-http/test/lith_http_web/error_json_extended_test.exs",
+          "lith-http/test/support/conn_case.ex",
+          "verification/benchmarks/websocket_stress_test.exs",
+          "beam/test/lith_nif_test.exs",
+          "beam/test/lith_integration_test.exs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "core-zig/src/bridge.zig",
+          "ffi/zig/src/bridge.zig",
+          "beam/native_rust/src/lib.rs",
+          "beam/native/src/lith_nif.zig",
+          "beam/native/src/beam.zig"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "beam/test/lith_nif_test.exs",
+          "beam/test/lith_integration_test.exs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "geo/src/index/rtree.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "clients/rescript/src/Lithoglyph_Subscriptions.res"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "UnsafeDeserialization->Memory"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "clients/rescript/src/Lithoglyph_Subscriptions.res"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "UnsafeDeserialization->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "geo/src/config.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "lith-http/test_analytics_api.sh",
+          "lith-http/test_geo_api.sh",
+          "lith-http/test_http_api.sh",
+          "lith-http/test_persistence.sh",
+          "verification/tests/e2e.sh",
+          "tests/e2e.sh"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "beam/src/lith_beam/client.gleam"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/check-proofs.sh",
+          ".machine_readable/coaptation/extract-facts.sh",
+          ".machine_readable/arrival-pack/extract.sh"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "CommandInjection->Cpu"
+      }
+    ]
+  },
+  "migration_metrics": {
+    "deprecated_api_count": 1454,
+    "modern_api_count": 2948,
+    "api_migration_ratio": 0.6696955929123126,
+    "health_score": 0.55,
+    "config_format": "None",
+    "version_bracket": "V12Current",
+    "file_count": 94,
+    "rescript_lines": 19889,
+    "deprecated_patterns": [
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tools/sdk-gen/src/ReScriptGen.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tools/sdk-gen/src/ReScriptGen.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "analytics/src/Lith_Analytics_Aggregations.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 17
+      },
+      {
+        "pattern": "Js.Math.",
+        "replacement": "Math",
+        "file_path": "analytics/src/Lith_Analytics_Aggregations.res",
+        "line_number": 0,
+        "category": "OldNumeric",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "analytics/src/Lith_Analytics_Aggregations.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 10
+      },
+      {
+        "pattern": "Js.Json.classify",
+        "replacement": "JSON.Classify.classify",
+        "file_path": "analytics/src/Lith_Analytics_Aggregations.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "analytics/src/Lith_Analytics_Window.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 26
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "analytics/src/Lith_Analytics_Window.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 37
+      },
+      {
+        "pattern": "Js.Json.classify",
+        "replacement": "JSON.Classify.classify",
+        "file_path": "analytics/src/Lith_Analytics_Window.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "analytics/src/Lith_Analytics_TimeSeries.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 6
+      },
+      {
+        "pattern": "Js.Math.",
+        "replacement": "Math",
+        "file_path": "analytics/src/Lith_Analytics_TimeSeries.res",
+        "line_number": 0,
+        "category": "OldNumeric",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "analytics/src/Lith_Analytics_TimeSeries.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "analytics/src/Lith_Analytics_Export.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 57
+      },
+      {
+        "pattern": "Js.Math.",
+        "replacement": "Math",
+        "file_path": "analytics/src/Lith_Analytics_Export.res",
+        "line_number": 0,
+        "category": "OldNumeric",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "analytics/src/Lith_Analytics_Export.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 65
+      },
+      {
+        "pattern": "Js.Json.classify",
+        "replacement": "JSON.Classify.classify",
+        "file_path": "analytics/src/Lith_Analytics_Export.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "stability/src/Lith_Stability_Health.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 12
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "stability/src/Lith_Stability_Health.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "stability/src/Lith_Stability_Health.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 12
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "stability/src/Lith_Stability_Readiness.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "stability/src/Lith_Stability_Shutdown.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 6
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "stability/src/Lith_Stability_Shutdown.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "perf/src/Lith_Perf_Cache.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 9
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "perf/src/Lith_Perf_Cache.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "perf/src/Lith_Perf_Pool.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "perf/src/Lith_Perf_Batch.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "perf/src/Lith_Perf_Metrics.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 16
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "perf/src/Lith_Perf_Metrics.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/fuzzing/src/Lith_Fuzz_Main.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 10
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/fuzzing/src/Lith_Fuzz_Runner.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 23
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "verification/fuzzing/src/Lith_Fuzz_Runner.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/fuzzing/src/Lith_Fuzz_GQL.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/property/src/Lith_Property_Runner.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "verification/tests/property/src/Lith_Property_Runner.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Array.",
+        "replacement": "Array",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 9
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Nullable.",
+        "replacement": "Nullable",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldNullable",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 18
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 20
+      },
+      {
+        "pattern": "Js.Array.",
+        "replacement": "Array",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 28
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_Types.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_Types.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "verification/tests/e2e/src/Lith_E2E_Types.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Ghost.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Ghost.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Ghost.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Mock.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 10
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Mock.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Mock.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Directus.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 17
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Directus.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Directus.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 15
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Types.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Types.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Payload.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 30
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Payload.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Payload.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 33
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Strapi.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 25
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Strapi.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "verification/tests/integration/src/Lith_Integration_Strapi.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 20
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/fuzz/src/Lith_Fuzz_Main.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 10
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 23
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "verification/tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "verification/tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "integrations/directus/src/Lith_Directus_Hook.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 11
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/directus/src/Lith_Directus_Hook.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 21
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "integrations/directus/src/Lith_Directus_Types.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/directus/src/Lith_Directus_Types.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "integrations/strapi/src/Lith_Strapi_Lifecycles.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/strapi/src/Lith_Strapi_Lifecycles.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 10
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "integrations/strapi/src/Lith_Strapi_Service.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/strapi/src/Lith_Strapi_Service.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "integrations/strapi/src/Lith_Strapi_Client.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/strapi/src/Lith_Strapi_Client.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 15
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/strapi/src/Lith_Strapi_Types.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/ghost/src/Lith_Ghost_Server.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "integrations/ghost/src/Lith_Ghost_Webhook.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 36
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/ghost/src/Lith_Ghost_Webhook.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 51
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "integrations/payload/src/Lith_Payload_Hooks.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 13
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "integrations/payload/src/Lith_Payload_Hooks.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 22
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "distributed/src/Lith_Distributed_Replication.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Math.",
+        "replacement": "Math",
+        "file_path": "distributed/src/Lith_Distributed_Replication.res",
+        "line_number": 0,
+        "category": "OldNumeric",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "distributed/src/Lith_Distributed_Replication.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 11
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "distributed/src/Lith_Distributed_Replication.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "distributed/src/Lith_Distributed_Consensus.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 6
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "distributed/src/Lith_Distributed_Consensus.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "distributed/src/Lith_Distributed_Consensus.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 6
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "distributed/src/Lith_Distributed_Cluster.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Math.",
+        "replacement": "Math",
+        "file_path": "distributed/src/Lith_Distributed_Cluster.res",
+        "line_number": 0,
+        "category": "OldNumeric",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "distributed/src/Lith_Distributed_Cluster.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 15
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "distributed/src/Lith_Distributed_Cluster.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "distributed/src/Lith_Distributed_Sharding.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/property/src/Lith_Property_Runner.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "tests/property/src/Lith_Property_Runner.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Array.",
+        "replacement": "Array",
+        "file_path": "tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 9
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Nullable.",
+        "replacement": "Nullable",
+        "file_path": "tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldNullable",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 18
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "tests/e2e/src/Lith_E2E_API.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 20
+      },
+      {
+        "pattern": "Js.Array.",
+        "replacement": "Array",
+        "file_path": "tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 28
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "tests/e2e/src/Lith_E2E_Sync.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/e2e/src/Lith_E2E_Types.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/e2e/src/Lith_E2E_Types.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 4
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "tests/e2e/src/Lith_E2E_Types.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/integration/src/Lith_Integration_Ghost.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/integration/src/Lith_Integration_Ghost.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/integration/src/Lith_Integration_Ghost.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 14
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/integration/src/Lith_Integration_Mock.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 10
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/integration/src/Lith_Integration_Mock.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 7
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "tests/integration/src/Lith_Integration_Mock.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/integration/src/Lith_Integration_Directus.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 17
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/integration/src/Lith_Integration_Directus.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/integration/src/Lith_Integration_Directus.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 15
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/integration/src/Lith_Integration_Types.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 2
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/integration/src/Lith_Integration_Types.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/integration/src/Lith_Integration_Payload.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 30
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/integration/src/Lith_Integration_Payload.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/integration/src/Lith_Integration_Payload.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 33
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "tests/integration/src/Lith_Integration_Strapi.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 25
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/integration/src/Lith_Integration_Strapi.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 5
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "tests/integration/src/Lith_Integration_Strapi.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 20
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/fuzz/src/Lith_Fuzz_Main.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 10
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 23
+      },
+      {
+        "pattern": "Js.Date.",
+        "replacement": "Date (no core replacement yet)",
+        "file_path": "tests/fuzz/src/Lith_Fuzz_Runner.res",
+        "line_number": 0,
+        "category": "OldDate",
+        "count": 3
+      },
+      {
+        "pattern": "Js.Console.",
+        "replacement": "Console",
+        "file_path": "tests/fuzz/src/Lith_Fuzz_GQL.res",
+        "line_number": 0,
+        "category": "OldConsole",
+        "count": 1
+      }
+    ],
+    "uncurried": false
+  }
 }

@@ -1,20 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "a2mliser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "UnsafeCode",
-      "location": "src/interface/ffi/src/main.zig",
-      "file": "src/interface/ffi/src/main.zig",
-      "severity": "High",
-      "description": "2 unsafe pointer casts in src/interface/ffi/src/main.zig",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
     {
       "category": "UnboundedAllocation",
       "location": "src/manifest/mod.rs",
@@ -24,6 +13,17 @@
       "recommended_attack": [
         "memory",
         "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "src/interface/ffi/src/main.zig",
+      "file": "src/interface/ffi/src/main.zig",
+      "severity": "High",
+      "description": "2 unsafe pointer casts in src/interface/ffi/src/main.zig",
+      "recommended_attack": [
+        "memory"
       ],
       "test_context": "production"
     },
@@ -38,15 +38,35 @@
     }
   ],
   "statistics": {
-    "total_lines": 3367,
+    "total_lines": 4364,
     "unsafe_blocks": 20,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 3,
-    "io_operations": 2,
+    "io_operations": 5,
     "threading_constructs": 0
   },
   "file_statistics": [
+    {
+      "file_path": "src/manifest/mod.rs",
+      "lines": 71,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/interface/abi/A2mliser/ABI/Foreign.idr",
+      "lines": 323,
+      "unsafe_blocks": 18,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
     {
       "file_path": "src/interface/ffi/src/main.zig",
       "lines": 610,
@@ -58,23 +78,23 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/abi/Foreign.idr",
-      "lines": 323,
-      "unsafe_blocks": 18,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/manifest/mod.rs",
-      "lines": 71,
+      "file_path": "scripts/abi-ffi-gate.jl",
+      "lines": 116,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
@@ -83,7 +103,14 @@
     "cpu"
   ],
   "dependency_graph": {
-    "edges": []
+    "edges": [
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      }
+    ]
   },
   "taint_matrix": {
     "rows": [
