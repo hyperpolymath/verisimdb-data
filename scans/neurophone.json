@@ -407,37 +407,13 @@
   ],
   "recommended_attacks": [
     "concurrency",
-    "network",
-    "cpu",
     "memory",
-    "disk"
+    "disk",
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/neurophone-core/benches/pipeline_bench.rs",
-        "to": "crates/neurophone-core/benches/neurophone_bench.rs",
-        "relation": "shared_dir:crates/neurophone-core/benches",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/build-android.sh",
-        "to": "scripts/install-termux.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-termux.sh",
-        "to": "scripts/install-on-phone.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-on-phone.sh",
-        "to": "scripts/setup.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
         "to": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
@@ -457,6 +433,12 @@
         "weight": 1.0
       },
       {
+        "from": "crates/neurophone-core/benches/pipeline_bench.rs",
+        "to": "crates/neurophone-core/benches/neurophone_bench.rs",
+        "relation": "shared_dir:crates/neurophone-core/benches",
+        "weight": 1.0
+      },
+      {
         "from": "crates/neurophone-core/tests/integration_pipeline.rs",
         "to": "crates/neurophone-core/tests/aspect_concurrency.rs",
         "relation": "shared_dir:crates/neurophone-core/tests",
@@ -472,6 +454,24 @@
         "from": "crates/neurophone-core/tests/lifecycle.rs",
         "to": "crates/neurophone-core/tests/property_test.rs",
         "relation": "shared_dir:crates/neurophone-core/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/build-android.sh",
+        "to": "scripts/install-termux.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-termux.sh",
+        "to": "scripts/install-on-phone.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-on-phone.sh",
+        "to": "scripts/setup.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -804,7 +804,7 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "crates/bt-presence/build.rs"
@@ -813,24 +813,7 @@
           "Networking",
           "Concurrent"
         ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/sensors/tests/integration_pipeline.rs",
-          "crates/neurophone-core/benches/neurophone_bench.rs",
-          "crates/neurophone-core/tests/integration_pipeline.rs",
-          "crates/neurophone-core/tests/aspect_concurrency.rs",
-          "crates/neurophone-core/tests/property_test.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -863,17 +846,21 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/bt-presence/build.rs"
+          "crates/sensors/tests/integration_pipeline.rs",
+          "crates/neurophone-core/benches/neurophone_bench.rs",
+          "crates/neurophone-core/tests/integration_pipeline.rs",
+          "crates/neurophone-core/tests/aspect_concurrency.rs",
+          "crates/neurophone-core/tests/property_test.rs"
         ],
         "frameworks": [
           "Networking",
           "Concurrent"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PathTraversal",
@@ -888,6 +875,19 @@
           "Concurrent"
         ],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/bt-presence/build.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

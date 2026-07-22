@@ -272,10 +272,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
     "cpu",
-    "network"
+    "memory",
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -283,6 +283,18 @@
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/idris_emitter.rs",
+        "to": "src/abi/verify.rs",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/verify.rs",
+        "to": "src/abi/zig_ffi_parser.rs",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -302,33 +314,11 @@
         "to": "src/codegen/cartridge.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "src/abi/idris_emitter.rs",
-        "to": "src/abi/verify.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/verify.rs",
-        "to": "src/abi/zig_ffi_parser.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -351,6 +341,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "InsecureProtocol",

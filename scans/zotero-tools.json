@@ -698,11 +698,11 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk",
     "network",
+    "disk",
     "concurrency",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -716,36 +716,6 @@
         "from": "formbd/migration/src/sync.jl",
         "to": "formbd/migration/src/server.jl",
         "relation": "shared_dir:formbd/migration/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/init-raczotbuild.rkt",
-        "to": "rescript-templater/init-zotero-plugin.sh",
-        "relation": "shared_dir:rescript-templater",
-        "weight": 1.0
-      },
-      {
-        "from": "voyant-export/src/Performance.res",
-        "to": "voyant-export/src/Exporter.res",
-        "relation": "shared_dir:voyant-export/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/scripts/verify-release.sh",
-        "to": "rescript-templater/scripts/generate-sbom.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/scripts/generate-sbom.sh",
-        "to": "rescript-templater/scripts/sign-release.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "zotpress/src/rescript/Zotpress.res",
-        "to": "zotpress/src/rescript/Utils.res",
-        "relation": "shared_dir:zotpress/src/rescript",
         "weight": 1.0
       },
       {
@@ -764,6 +734,36 @@
         "from": "formbd/migration/bin/score.jl",
         "to": "formbd/migration/bin/blindspot.jl",
         "relation": "shared_dir:formbd/migration/bin",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/verify-release.sh",
+        "to": "rescript-templater/scripts/generate-sbom.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/generate-sbom.sh",
+        "to": "rescript-templater/scripts/sign-release.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/init-raczotbuild.rkt",
+        "to": "rescript-templater/init-zotero-plugin.sh",
+        "relation": "shared_dir:rescript-templater",
+        "weight": 1.0
+      },
+      {
+        "from": "zotpress/src/rescript/Zotpress.res",
+        "to": "zotpress/src/rescript/Utils.res",
+        "relation": "shared_dir:zotpress/src/rescript",
+        "weight": 1.0
+      },
+      {
+        "from": "voyant-export/src/Performance.res",
+        "to": "voyant-export/src/Exporter.res",
+        "relation": "shared_dir:voyant-export/src",
         "weight": 1.0
       },
       {
@@ -1077,17 +1077,22 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
+          "voyant-export/src/Format.res",
+          "voyant-export/old-src/test/test-format.js",
+          "voyant-export/old-src/format.js",
+          "fogbinder/src/engine/FogTrailVisualizer.bs.js",
+          "fogbinder/src/engine/FogTrailVisualizer.res",
+          "fogbinder/lib/ocaml/FogTrailVisualizer.res",
+          "rescript-templater/init-zotero-plugin.sh"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "InputBoundary",
@@ -1104,6 +1109,19 @@
       },
       {
         "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
@@ -1114,6 +1132,19 @@
           "WebServer"
         ],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/core/FamilyResemblance.res",
+          "fogbinder/src/engine/MysteryClustering.res"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -1140,37 +1171,6 @@
           "WebServer"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "fogbinder/src/core/FamilyResemblance.res",
-          "fogbinder/src/engine/MysteryClustering.res"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "voyant-export/src/Format.res",
-          "voyant-export/old-src/test/test-format.js",
-          "voyant-export/old-src/format.js",
-          "fogbinder/src/engine/FogTrailVisualizer.bs.js",
-          "fogbinder/src/engine/FogTrailVisualizer.res",
-          "fogbinder/lib/ocaml/FogTrailVisualizer.res",
-          "rescript-templater/init-zotero-plugin.sh"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "InsecureProtocol->Network"
       }
     ]
   }

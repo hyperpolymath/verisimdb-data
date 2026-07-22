@@ -261,29 +261,11 @@
   "recommended_attacks": [
     "memory",
     "concurrency",
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "build.rs",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src/report.rs",
-        "to": "src/scene.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scene.rs",
-        "to": "src/safe_io.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
       {
         "from": "tests/e2e.sh",
         "to": "tests/scanners.rs",
@@ -319,11 +301,40 @@
         "to": "src/scanners/banned_patterns.rs",
         "relation": "shared_dir:src/scanners",
         "weight": 1.0
+      },
+      {
+        "from": "build.rs",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "src/report.rs",
+        "to": "src/scene.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/scene.rs",
+        "to": "src/safe_io.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src/safe_io.rs",
+          "src/safe_io.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
+      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -338,16 +349,6 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/scanners.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -357,15 +358,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/safe_io.rs",
-          "src/safe_io.rs"
+          "tests/scanners.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

@@ -253,14 +253,20 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "memory",
-    "concurrency",
     "cpu",
-    "network"
+    "concurrency",
+    "network",
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "telegram-bot/src/bindings/Sqlite.res",
+        "to": "telegram-bot/src/bindings/Grammy.res",
+        "relation": "shared_dir:telegram-bot/src/bindings",
+        "weight": 1.0
+      },
       {
         "from": "scripts/CreatePagesProjects.res",
         "to": "scripts/DeployDeno.res",
@@ -296,27 +302,11 @@
         "to": "telegram-bot/src/StampMock.res",
         "relation": "shared_dir:telegram-bot/src",
         "weight": 1.0
-      },
-      {
-        "from": "telegram-bot/src/bindings/Sqlite.res",
-        "to": "telegram-bot/src/bindings/Grammy.res",
-        "relation": "shared_dir:telegram-bot/src/bindings",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "public/demo.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -326,16 +316,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "deploy-repos.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
       },
       {
         "source_category": "ExcessivePermissions",
@@ -349,13 +329,13 @@
       },
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "memory",
+        "sink_axis": "concurrency",
         "severity_value": 3.5,
         "files": [
           "avow-lib/examples/rust/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -368,14 +348,34 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "deploy-repos.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Network"
+      },
+      {
         "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
           "avow-lib/examples/rust/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "public/demo.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   },

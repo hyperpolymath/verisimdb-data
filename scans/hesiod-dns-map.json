@@ -157,10 +157,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "concurrency",
+    "memory",
     "cpu",
-    "memory"
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -241,28 +241,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/hesiod-lib/tests/e2e_test.rs"
+          "crates/hesiod-lib/src/config.rs",
+          "crates/hesinfo/src/main.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/hesiod-lib/tests/e2e_test.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -278,17 +267,28 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/hesiod-lib/src/config.rs",
-          "crates/hesinfo/src/main.rs"
+          "crates/hesiod-lib/tests/e2e_test.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/hesiod-lib/tests/e2e_test.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

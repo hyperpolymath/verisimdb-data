@@ -497,41 +497,47 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "disk",
+    "memory",
     "cpu",
-    "memory"
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/cli/rsr.rs",
-        "to": "src/cli/run.rs",
-        "relation": "shared_dir:src/cli",
+        "from": "src/analyzer/patterns.rs",
+        "to": "src/analyzer/recommender.rs",
+        "relation": "shared_dir:src/analyzer",
         "weight": 1.0
       },
       {
-        "from": "src/cli/run.rs",
-        "to": "src/cli/watch.rs",
-        "relation": "shared_dir:src/cli",
+        "from": "examples/multi-env/environments/dev.ncl",
+        "to": "examples/multi-env/environments/staging.ncl",
+        "relation": "shared_dir:examples/multi-env/environments",
         "weight": 1.0
       },
       {
-        "from": "src/cli/watch.rs",
-        "to": "src/cli/init.rs",
-        "relation": "shared_dir:src/cli",
+        "from": "examples/multi-env/environments/staging.ncl",
+        "to": "examples/multi-env/environments/prod.ncl",
+        "relation": "shared_dir:examples/multi-env/environments",
         "weight": 1.0
       },
       {
-        "from": "src/cli/init.rs",
-        "to": "src/cli/cache.rs",
-        "relation": "shared_dir:src/cli",
+        "from": "tests/e2e_test.rs",
+        "to": "tests/property_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
-        "from": "src/cli/cache.rs",
-        "to": "src/cli/validate.rs",
-        "relation": "shared_dir:src/cli",
+        "from": "src/errors/recovery.rs",
+        "to": "src/errors/mod.rs",
+        "relation": "shared_dir:src/errors",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cache/hash.rs",
+        "to": "src/cache/filesystem.rs",
+        "relation": "shared_dir:src/cache",
         "weight": 1.0
       },
       {
@@ -577,6 +583,36 @@
         "weight": 1.0
       },
       {
+        "from": "src/cli/rsr.rs",
+        "to": "src/cli/run.rs",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/run.rs",
+        "to": "src/cli/watch.rs",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/watch.rs",
+        "to": "src/cli/init.rs",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/init.rs",
+        "to": "src/cli/cache.rs",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/cache.rs",
+        "to": "src/cli/validate.rs",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
         "from": "src/pipeline/executor.rs",
         "to": "src/pipeline/definition.rs",
         "relation": "shared_dir:src/pipeline",
@@ -592,42 +628,6 @@
         "from": "src/pipeline/validation.rs",
         "to": "src/pipeline/dag.rs",
         "relation": "shared_dir:src/pipeline",
-        "weight": 1.0
-      },
-      {
-        "from": "src/analyzer/patterns.rs",
-        "to": "src/analyzer/recommender.rs",
-        "relation": "shared_dir:src/analyzer",
-        "weight": 1.0
-      },
-      {
-        "from": "src/errors/recovery.rs",
-        "to": "src/errors/mod.rs",
-        "relation": "shared_dir:src/errors",
-        "weight": 1.0
-      },
-      {
-        "from": "examples/multi-env/environments/dev.ncl",
-        "to": "examples/multi-env/environments/staging.ncl",
-        "relation": "shared_dir:examples/multi-env/environments",
-        "weight": 1.0
-      },
-      {
-        "from": "examples/multi-env/environments/staging.ncl",
-        "to": "examples/multi-env/environments/prod.ncl",
-        "relation": "shared_dir:examples/multi-env/environments",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/property_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cache/hash.rs",
-        "to": "src/cache/filesystem.rs",
-        "relation": "shared_dir:src/cache",
         "weight": 1.0
       },
       {
@@ -839,6 +839,18 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e_test.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -857,18 +869,6 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e_test.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",

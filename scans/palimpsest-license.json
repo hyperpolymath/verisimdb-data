@@ -292,9 +292,9 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "network",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
@@ -324,15 +324,15 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/generate-structure.sh",
-        "to": "scripts/migrate-version.jl",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "bof-meetings/presentations/demo-http-headers.sh",
         "to": "bof-meetings/presentations/demo-dns-discovery.sh",
         "relation": "shared_dir:bof-meetings/presentations",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/generate-structure.sh",
+        "to": "scripts/migrate-version.jl",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -448,19 +448,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "bof-meetings/presentations/demo-http-headers.sh",
-          "bof-meetings/presentations/demo-dns-discovery.sh"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -475,18 +462,6 @@
           "Ecto"
         ],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-verify/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -512,6 +487,31 @@
           "Ecto"
         ],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "bof-meetings/presentations/demo-http-headers.sh",
+          "bof-meetings/presentations/demo-dns-discovery.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tools/pmpl-verify/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

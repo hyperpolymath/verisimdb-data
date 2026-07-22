@@ -792,20 +792,14 @@
     }
   ],
   "recommended_attacks": [
+    "network",
     "disk",
-    "memory",
     "cpu",
-    "concurrency",
-    "network"
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "vexometer/tests/benchmark_runner.adb",
-        "to": "vexometer/tests/test_runner.adb",
-        "relation": "shared_dir:vexometer/tests",
-        "weight": 1.0
-      },
       {
         "from": "vext/vext-core/src/irc_client.rs",
         "to": "vext/vext-core/src/protocol.rs",
@@ -846,6 +840,42 @@
         "from": "vext/vext-core/src/config.rs",
         "to": "vext/vext-core/src/main.rs",
         "relation": "shared_dir:vext/vext-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "vexometer/tests/benchmark_runner.adb",
+        "to": "vexometer/tests/test_runner.adb",
+        "relation": "shared_dir:vexometer/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "lazy-eliminator/tests/aspect_test.rs",
+        "to": "lazy-eliminator/tests/e2e_test.rs",
+        "relation": "shared_dir:lazy-eliminator/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "lazy-eliminator/tests/e2e_test.rs",
+        "to": "lazy-eliminator/tests/property_test.rs",
+        "relation": "shared_dir:lazy-eliminator/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "vexometer/scripts/run-benchmarks.sh",
+        "to": "vexometer/scripts/publish-bench-to-verisim.sh",
+        "relation": "shared_dir:vexometer/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "vext-email-gateway/src/types.rs",
+        "to": "vext-email-gateway/src/main.rs",
+        "relation": "shared_dir:vext-email-gateway/src",
+        "weight": 1.0
+      },
+      {
+        "from": "vext/vext-tools/src/hooks/Git.res",
+        "to": "vext/vext-tools/src/hooks/Install.res",
+        "relation": "shared_dir:vext/vext-tools/src/hooks",
         "weight": 1.0
       },
       {
@@ -951,24 +981,6 @@
         "weight": 1.0
       },
       {
-        "from": "vext/vext-tools/src/hooks/Git.res",
-        "to": "vext/vext-tools/src/hooks/Install.res",
-        "relation": "shared_dir:vext/vext-tools/src/hooks",
-        "weight": 1.0
-      },
-      {
-        "from": "vext-email-gateway/src/types.rs",
-        "to": "vext-email-gateway/src/main.rs",
-        "relation": "shared_dir:vext-email-gateway/src",
-        "weight": 1.0
-      },
-      {
-        "from": "vexometer/scripts/run-benchmarks.sh",
-        "to": "vexometer/scripts/publish-bench-to-verisim.sh",
-        "relation": "shared_dir:vexometer/scripts",
-        "weight": 1.0
-      },
-      {
         "from": "lazy-eliminator/src/lib.rs",
         "to": "lazy-eliminator/src/patterns.rs",
         "relation": "shared_dir:lazy-eliminator/src",
@@ -997,23 +1009,31 @@
         "to": "lazy-eliminator/src/analyzer.rs",
         "relation": "shared_dir:lazy-eliminator/src",
         "weight": 1.0
-      },
-      {
-        "from": "lazy-eliminator/tests/aspect_test.rs",
-        "to": "lazy-eliminator/tests/e2e_test.rs",
-        "relation": "shared_dir:lazy-eliminator/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "lazy-eliminator/tests/e2e_test.rs",
-        "to": "lazy-eliminator/tests/property_test.rs",
-        "relation": "shared_dir:lazy-eliminator/tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "vexometer/src/vexometer-reports.adb"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "vexometer/src/vexometer-api.adb"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -1028,28 +1048,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "vexometer/src/vexometer-reports.adb"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "vext/vext-core/src/config.rs",
-          "lazy-eliminator/src/config.rs",
-          "lazy-eliminator/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -1062,16 +1060,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "vexometer/src/vexometer-api.adb"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -1082,6 +1070,18 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "vext/vext-core/src/config.rs",
+          "lazy-eliminator/src/config.rs",
+          "lazy-eliminator/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

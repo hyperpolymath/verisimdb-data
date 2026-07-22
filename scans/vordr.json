@@ -832,43 +832,13 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "concurrency",
     "cpu",
-    "memory"
+    "memory",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/elixir/lib/vordr/mcp_client.ex",
-        "to": "src/elixir/lib/vordr/borg.ex",
-        "relation": "shared_dir:src/elixir/lib/vordr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/elixir/lib/vordr/temporal/time_controller.ex",
-        "to": "src/elixir/lib/vordr/temporal/tomograph.ex",
-        "relation": "shared_dir:src/elixir/lib/vordr/temporal",
-        "weight": 1.0
-      },
-      {
-        "from": "src/elixir/lib/vordr/temporal/tomograph.ex",
-        "to": "src/elixir/lib/vordr/temporal/port_swarm.ex",
-        "relation": "shared_dir:src/elixir/lib/vordr/temporal",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rust/ebpf/syscall.rs",
-        "to": "src/rust/ebpf/probes.rs",
-        "relation": "shared_dir:src/rust/ebpf",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rust/ebpf/probes.rs",
-        "to": "src/rust/ebpf/mod.rs",
-        "relation": "shared_dir:src/rust/ebpf",
-        "weight": 1.0
-      },
       {
         "from": "src/rust/cli/run.rs",
         "to": "src/rust/cli/auth.rs",
@@ -924,33 +894,21 @@
         "weight": 1.0
       },
       {
+        "from": "src/rust/temporal/isolation.rs",
+        "to": "src/rust/temporal/time_control.rs",
+        "relation": "shared_dir:src/rust/temporal",
+        "weight": 1.0
+      },
+      {
         "from": "src/rust/ebpf/bpf/sys_enter.rs",
         "to": "src/rust/ebpf/bpf/sched_exec.rs",
         "relation": "shared_dir:src/rust/ebpf/bpf",
         "weight": 1.0
       },
       {
-        "from": "src/rust/tests/cli_integration.rs",
-        "to": "src/rust/tests/cli_expanded.rs",
-        "relation": "shared_dir:src/rust/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rust/tests/cli_expanded.rs",
-        "to": "src/rust/tests/e2e_test.rs",
-        "relation": "shared_dir:src/rust/tests",
-        "weight": 1.0
-      },
-      {
         "from": "src/mcp-adapter/src/HttpServer.res",
         "to": "src/mcp-adapter/src/HttpMain.res",
         "relation": "shared_dir:src/mcp-adapter/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rust/mcp/server.rs",
-        "to": "src/rust/mcp/mod.rs",
-        "relation": "shared_dir:src/rust/mcp",
         "weight": 1.0
       },
       {
@@ -963,6 +921,24 @@
         "from": "src/rust/engine/config.rs",
         "to": "src/rust/engine/lifecycle.rs",
         "relation": "shared_dir:src/rust/engine",
+        "weight": 1.0
+      },
+      {
+        "from": "src/elixir/lib/vordr/mcp_client.ex",
+        "to": "src/elixir/lib/vordr/borg.ex",
+        "relation": "shared_dir:src/elixir/lib/vordr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rust/tests/cli_integration.rs",
+        "to": "src/rust/tests/cli_expanded.rs",
+        "relation": "shared_dir:src/rust/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rust/tests/cli_expanded.rs",
+        "to": "src/rust/tests/e2e_test.rs",
+        "relation": "shared_dir:src/rust/tests",
         "weight": 1.0
       },
       {
@@ -984,9 +960,33 @@
         "weight": 1.0
       },
       {
-        "from": "src/rust/temporal/isolation.rs",
-        "to": "src/rust/temporal/time_control.rs",
-        "relation": "shared_dir:src/rust/temporal",
+        "from": "src/rust/mcp/server.rs",
+        "to": "src/rust/mcp/mod.rs",
+        "relation": "shared_dir:src/rust/mcp",
+        "weight": 1.0
+      },
+      {
+        "from": "src/elixir/lib/vordr/temporal/time_controller.ex",
+        "to": "src/elixir/lib/vordr/temporal/tomograph.ex",
+        "relation": "shared_dir:src/elixir/lib/vordr/temporal",
+        "weight": 1.0
+      },
+      {
+        "from": "src/elixir/lib/vordr/temporal/tomograph.ex",
+        "to": "src/elixir/lib/vordr/temporal/port_swarm.ex",
+        "relation": "shared_dir:src/elixir/lib/vordr/temporal",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rust/ebpf/syscall.rs",
+        "to": "src/rust/ebpf/probes.rs",
+        "relation": "shared_dir:src/rust/ebpf",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rust/ebpf/probes.rs",
+        "to": "src/rust/ebpf/mod.rs",
+        "relation": "shared_dir:src/rust/ebpf",
         "weight": 1.0
       },
       {
@@ -1336,6 +1336,22 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/benches/container_lifecycle.rs",
+          "src/rust/engine/config.rs",
+          "src/rust/tests/cli_expanded.rs",
+          "src/rust/tests/e2e_test.rs",
+          "src/mcp-adapter/src/HttpServer.res"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -1371,6 +1387,25 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src/rust/ffi/gatekeeper.rs",
+          "src/rust/ffi/gatekeeper.rs",
+          "src/rust/engine/state.rs",
+          "src/rust/engine/config.rs",
+          "src/rust/engine/lifecycle.rs",
+          "src/rust/ebpf/bpf/sys_enter.rs",
+          "src/rust/ebpf/bpf/sched_exec.rs",
+          "src/rust/ebpf/bpf/sched_exec.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -1396,41 +1431,6 @@
           "OTP"
         ],
         "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/benches/container_lifecycle.rs",
-          "src/rust/engine/config.rs",
-          "src/rust/tests/cli_expanded.rs",
-          "src/rust/tests/e2e_test.rs",
-          "src/mcp-adapter/src/HttpServer.res"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "src/rust/ffi/gatekeeper.rs",
-          "src/rust/ffi/gatekeeper.rs",
-          "src/rust/engine/state.rs",
-          "src/rust/engine/config.rs",
-          "src/rust/engine/lifecycle.rs",
-          "src/rust/ebpf/bpf/sys_enter.rs",
-          "src/rust/ebpf/bpf/sched_exec.rs",
-          "src/rust/ebpf/bpf/sched_exec.rs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

@@ -383,25 +383,13 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "network",
     "memory",
-    "cpu"
+    "network",
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "ephapax/bridge.eph",
-        "to": "ephapax/types.eph",
-        "relation": "shared_dir:ephapax",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/aspect_test.rs",
-        "to": "tests/e2e_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
       {
         "from": "compose/src/vordr.rs",
         "to": "compose/src/compose.rs",
@@ -467,21 +455,23 @@
         "to": "compose/src/commands/images.rs",
         "relation": "shared_dir:compose/src/commands",
         "weight": 1.0
+      },
+      {
+        "from": "ephapax/bridge.eph",
+        "to": "ephapax/types.eph",
+        "relation": "shared_dir:ephapax",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/aspect_test.rs",
+        "to": "tests/e2e_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
       {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
@@ -493,14 +483,18 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "zig/runtime.zig"
+          "compose/src/commands/create.rs",
+          "compose/src/commands/run.rs",
+          "compose/src/commands/up.rs",
+          "compose/src/commands/scale.rs",
+          "compose/src/compose.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -517,18 +511,24 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "compose/src/commands/create.rs",
-          "compose/src/commands/run.rs",
-          "compose/src/commands/up.rs",
-          "compose/src/commands/scale.rs",
-          "compose/src/compose.rs"
+          "zig/runtime.zig"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }
