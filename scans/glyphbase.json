@@ -314,12 +314,36 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "memory",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "server/src/glyphbase_server.gleam",
+        "to": "server/src/router.gleam",
+        "relation": "shared_dir:server/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/bindings/Fetch.res",
+        "to": "ui/src/bindings/Webapi.res",
+        "relation": "shared_dir:ui/src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/stores/CollaborationStore.res",
+        "to": "ui/src/stores/CommentsStore.res",
+        "relation": "shared_dir:ui/src/stores",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/stores/CommentsStore.res",
+        "to": "ui/src/stores/KanbanStore.res",
+        "relation": "shared_dir:ui/src/stores",
+        "weight": 1.0
+      },
       {
         "from": "ui/src/views/CalendarStore.res",
         "to": "ui/src/views/GalleryStore.res",
@@ -337,47 +361,20 @@
         "to": "server/src/lithoglyph/nif_ffi.gleam",
         "relation": "shared_dir:server/src/lithoglyph",
         "weight": 1.0
-      },
-      {
-        "from": "ui/src/bindings/Fetch.res",
-        "to": "ui/src/bindings/Webapi.res",
-        "relation": "shared_dir:ui/src/bindings",
-        "weight": 1.0
-      },
-      {
-        "from": "server/src/glyphbase_server.gleam",
-        "to": "server/src/router.gleam",
-        "relation": "shared_dir:server/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/stores/CollaborationStore.res",
-        "to": "ui/src/stores/CommentsStore.res",
-        "relation": "shared_dir:ui/src/stores",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/stores/CommentsStore.res",
-        "to": "ui/src/stores/KanbanStore.res",
-        "relation": "shared_dir:ui/src/stores",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "server/src/lithoglyph/client.gleam",
-          "server/src/lithoglyph/nif_ffi.gleam",
-          "server/ffi/zig/src/main.zig",
-          "server/native/src/lithoglyph_nif.zig"
+          "server/ffi/zig/src/main.zig"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -391,16 +388,6 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "server/ffi/zig/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -409,6 +396,19 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "server/src/lithoglyph/client.gleam",
+          "server/src/lithoglyph/nif_ffi.gleam",
+          "server/ffi/zig/src/main.zig",
+          "server/native/src/lithoglyph_nif.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   },

@@ -248,14 +248,20 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "concurrency",
+    "disk",
     "memory",
     "network",
-    "disk"
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "dipstick/tools/cli/rollback.sh",
+        "to": "dipstick/tools/cli/migrate.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
+        "weight": 1.0
+      },
       {
         "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "dipstick/services/collector/tests/reflexive_tests.rs",
@@ -284,12 +290,6 @@
         "from": "dipstick/services/collector/src/platforms.rs",
         "to": "dipstick/services/collector/src/scheduler.rs",
         "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/tools/cli/rollback.sh",
-        "to": "dipstick/tools/cli/migrate.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
         "weight": 1.0
       },
       {
@@ -501,17 +501,18 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
-        "severity_value": 5.0,
+        "severity_value": 3.5,
         "files": [
-          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+          "polygraph/browser-extension/src/popup.js",
+          "polygraph/browser-extension/src/content.js"
         ],
         "frameworks": [
           "Phoenix",
           "OTP"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -528,20 +529,6 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "polygraph/browser-extension/src/popup.js",
-          "polygraph/browser-extension/src/content.js"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -553,6 +540,19 @@
           "OTP"
         ],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

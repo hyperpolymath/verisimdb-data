@@ -187,13 +187,19 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "concurrency",
+    "cpu",
     "memory",
-    "cpu"
+    "concurrency",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/formatrix-bridges/src/fs_bridge.rs",
+        "to": "crates/formatrix-bridges/src/store.rs",
+        "relation": "shared_dir:crates/formatrix-bridges/src",
+        "weight": 1.0
+      },
       {
         "from": "tui/src/formatrix_tui.adb",
         "to": "tui/src/formatrix_tui-app.adb",
@@ -204,12 +210,6 @@
         "from": "crates/formatrix-core/src/traits.rs",
         "to": "crates/formatrix-core/src/file_ops.rs",
         "relation": "shared_dir:crates/formatrix-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/formatrix-bridges/src/fs_bridge.rs",
-        "to": "crates/formatrix-bridges/src/store.rs",
-        "relation": "shared_dir:crates/formatrix-bridges/src",
         "weight": 1.0
       },
       {
@@ -302,19 +302,6 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/formatrix-core/src/traits.rs",
-          "crates/formatrix-core/src/file_ops.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -325,6 +312,19 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/formatrix-core/src/traits.rs",
+          "crates/formatrix-core/src/file_ops.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

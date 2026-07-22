@@ -192,12 +192,24 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "tests/aspect_test.rs",
+        "to": "tests/e2e_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e_test.rs",
+        "to": "tests/property_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
       {
         "from": "src/bridge/registry.rs",
         "to": "src/bridge/classify.rs",
@@ -227,34 +239,11 @@
         "to": "src/bridge/mod.rs",
         "relation": "shared_dir:src/bridge",
         "weight": 1.0
-      },
-      {
-        "from": "tests/aspect_test.rs",
-        "to": "tests/e2e_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/property_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/bridge/registry.rs",
-          "src/bridge/reachability.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -265,6 +254,17 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/bridge/registry.rs",
+          "src/bridge/reachability.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
