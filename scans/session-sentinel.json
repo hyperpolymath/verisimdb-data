@@ -201,11 +201,11 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "concurrency",
-    "network",
     "disk",
-    "cpu"
+    "network",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -246,6 +246,12 @@
         "weight": 1.0
       },
       {
+        "from": "src/interface/abi/Types.idr",
+        "to": "src/interface/abi/Foreign.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
+      {
         "from": "src/interface/ffi/src/dbus.zig",
         "to": "src/interface/ffi/src/verisimdb.zig",
         "relation": "shared_dir:src/interface/ffi/src",
@@ -256,37 +262,11 @@
         "to": "src/interface/ffi/src/main.zig",
         "relation": "shared_dir:src/interface/ffi/src",
         "weight": 1.0
-      },
-      {
-        "from": "src/interface/abi/Types.idr",
-        "to": "src/interface/abi/Foreign.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/core/monitor.eph"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/dbus.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -306,6 +286,26 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/dbus.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/core/monitor.eph"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       }
     ]
   }

@@ -3,8 +3,8 @@
   "program_path": "cerrotorre",
   "language": "ada",
   "frameworks": [
-    "WebServer",
     "Phoenix",
+    "WebServer",
     "OTP"
   ],
   "weak_points": [
@@ -582,16 +582,70 @@
   ],
   "recommended_attacks": [
     "disk",
-    "network",
     "memory",
+    "network",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/ct_test_e2e.adb",
-        "to": "tests/manual-e2e-test.sh",
-        "relation": "shared_dir:tests",
+        "from": "src/cli/ct_test_parser.adb",
+        "to": "src/cli/cerro_main.adb",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/cerro_main.adb",
+        "to": "src/cli/cerro_cli.adb",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/cerro_cli.adb",
+        "to": "src/cli/cerro_cli_keygen_rust.adb",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/cerro_cli_keygen_rust.adb",
+        "to": "src/cli/cerro_explain.adb",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/cerro_explain.adb",
+        "to": "src/cli/cerro_cli.ads",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cli/cerro_cli.ads",
+        "to": "src/cli/ct_test_crypto.adb",
+        "relation": "shared_dir:src/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "src/bindings/liboqs.adb",
+        "to": "src/bindings/liboqs.ads",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "src/policy/cerro_policy_enforce.adb",
+        "to": "src/policy/cerro_policy_a2ml.adb",
+        "relation": "shared_dir:src/policy",
+        "weight": 1.0
+      },
+      {
+        "from": "src/policy/cerro_policy_a2ml.adb",
+        "to": "src/policy/cerro_policy_a2ml.ads",
+        "relation": "shared_dir:src/policy",
+        "weight": 1.0
+      },
+      {
+        "from": "src/policy/cerro_policy_a2ml.ads",
+        "to": "src/policy/cerro_selinux.adb",
+        "relation": "shared_dir:src/policy",
         "weight": 1.0
       },
       {
@@ -691,66 +745,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/cli/ct_test_parser.adb",
-        "to": "src/cli/cerro_main.adb",
-        "relation": "shared_dir:src/cli",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cli/cerro_main.adb",
-        "to": "src/cli/cerro_cli.adb",
-        "relation": "shared_dir:src/cli",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cli/cerro_cli.adb",
-        "to": "src/cli/cerro_cli_keygen_rust.adb",
-        "relation": "shared_dir:src/cli",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cli/cerro_cli_keygen_rust.adb",
-        "to": "src/cli/cerro_explain.adb",
-        "relation": "shared_dir:src/cli",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cli/cerro_explain.adb",
-        "to": "src/cli/cerro_cli.ads",
-        "relation": "shared_dir:src/cli",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cli/cerro_cli.ads",
-        "to": "src/cli/ct_test_crypto.adb",
-        "relation": "shared_dir:src/cli",
-        "weight": 1.0
-      },
-      {
-        "from": "src/bindings/liboqs.adb",
-        "to": "src/bindings/liboqs.ads",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
-      {
-        "from": "src/policy/cerro_policy_enforce.adb",
-        "to": "src/policy/cerro_policy_a2ml.adb",
-        "relation": "shared_dir:src/policy",
-        "weight": 1.0
-      },
-      {
-        "from": "src/policy/cerro_policy_a2ml.adb",
-        "to": "src/policy/cerro_policy_a2ml.ads",
-        "relation": "shared_dir:src/policy",
-        "weight": 1.0
-      },
-      {
-        "from": "src/policy/cerro_policy_a2ml.ads",
-        "to": "src/policy/cerro_selinux.adb",
-        "relation": "shared_dir:src/policy",
-        "weight": 1.0
-      },
-      {
         "from": "tools/mvp/ct_mvp.jl",
         "to": "tools/mvp/ct_pack.jl",
         "relation": "shared_dir:tools/mvp",
@@ -769,14 +763,20 @@
         "weight": 1.0
       },
       {
-        "from": "src/core/cerro_manifest.adb",
-        "to": "WebServer",
-        "relation": "framework",
+        "from": "tests/ct_test_e2e.adb",
+        "to": "tests/manual-e2e-test.sh",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
         "from": "src/core/cerro_manifest.adb",
         "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/cerro_manifest.adb",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -788,13 +788,13 @@
       },
       {
         "from": "src/core/cerro_crypto_openssl.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/cerro_crypto_openssl.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -806,13 +806,13 @@
       },
       {
         "from": "src/core/ct_registry.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/ct_registry.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -824,13 +824,13 @@
       },
       {
         "from": "src/core/cerro_manifest.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/cerro_manifest.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -842,13 +842,13 @@
       },
       {
         "from": "src/core/ct_sbom.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/ct_sbom.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -860,13 +860,13 @@
       },
       {
         "from": "src/core/cerro_provenance.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/cerro_provenance.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -878,13 +878,13 @@
       },
       {
         "from": "src/core/cerro_tar.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/cerro_tar.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -896,13 +896,13 @@
       },
       {
         "from": "src/core/cerro_trust_store.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/cerro_trust_store.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -914,13 +914,13 @@
       },
       {
         "from": "src/core/ct_http.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/ct_http.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -932,13 +932,13 @@
       },
       {
         "from": "src/core/ct_http.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/ct_http.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -950,13 +950,13 @@
       },
       {
         "from": "src/core/cerro_tar.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/cerro_tar.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -968,13 +968,13 @@
       },
       {
         "from": "src/core/ct_json.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/ct_json.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -986,13 +986,13 @@
       },
       {
         "from": "src/core/cerro_crypto_openssl.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/cerro_crypto_openssl.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1004,13 +1004,13 @@
       },
       {
         "from": "src/core/ct_transparency.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/ct_transparency.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1022,13 +1022,13 @@
       },
       {
         "from": "src/core/cerro_crypto.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 3.0
       },
       {
         "from": "src/core/cerro_crypto.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 3.0
       },
@@ -1040,13 +1040,13 @@
       },
       {
         "from": "src/core/ct_sbom.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/ct_sbom.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1058,13 +1058,13 @@
       },
       {
         "from": "src/core/ct_registry.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/core/ct_registry.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1076,13 +1076,13 @@
       },
       {
         "from": "src/bindings/liboqs.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 9.0
       },
       {
         "from": "src/bindings/liboqs.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 9.0
       },
@@ -1094,13 +1094,13 @@
       },
       {
         "from": "src/bindings/liboqs.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/bindings/liboqs.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1112,13 +1112,13 @@
       },
       {
         "from": "src/exporters/oci/cerro_export_oci.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/exporters/oci/cerro_export_oci.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1130,13 +1130,13 @@
       },
       {
         "from": "src/exporters/rpm-ostree/cerro_export_ostree.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/exporters/rpm-ostree/cerro_export_ostree.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1148,13 +1148,13 @@
       },
       {
         "from": "src/importers/debian/cerro_import_debian.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/importers/debian/cerro_import_debian.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1166,13 +1166,13 @@
       },
       {
         "from": "src/policy/cerro_policy_enforce.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/policy/cerro_policy_enforce.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1184,13 +1184,13 @@
       },
       {
         "from": "src/policy/cerro_policy_a2ml.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/policy/cerro_policy_a2ml.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1202,13 +1202,13 @@
       },
       {
         "from": "src/policy/cerro_policy_a2ml.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/policy/cerro_policy_a2ml.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1220,13 +1220,13 @@
       },
       {
         "from": "src/policy/cerro_selinux.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/policy/cerro_selinux.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1238,13 +1238,13 @@
       },
       {
         "from": "src/cli/ct_test_parser.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/cli/ct_test_parser.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1256,13 +1256,13 @@
       },
       {
         "from": "src/cli/cerro_main.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/cli/cerro_main.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1274,13 +1274,13 @@
       },
       {
         "from": "src/cli/cerro_cli.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/cli/cerro_cli.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1292,13 +1292,13 @@
       },
       {
         "from": "src/cli/cerro_cli_keygen_rust.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/cli/cerro_cli_keygen_rust.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1310,13 +1310,13 @@
       },
       {
         "from": "src/cli/cerro_explain.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/cli/cerro_explain.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1328,13 +1328,13 @@
       },
       {
         "from": "src/cli/cerro_cli.ads",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/cli/cerro_cli.ads",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1346,13 +1346,13 @@
       },
       {
         "from": "src/cli/ct_test_crypto.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/cli/ct_test_crypto.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1364,13 +1364,13 @@
       },
       {
         "from": "tools/mvp/ct_mvp.jl",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "tools/mvp/ct_mvp.jl",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1382,13 +1382,13 @@
       },
       {
         "from": "tools/mvp/ct_pack.jl",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "tools/mvp/ct_pack.jl",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1400,13 +1400,13 @@
       },
       {
         "from": "tools/mvp/ct_build.jl",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "tools/mvp/ct_build.jl",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1418,13 +1418,13 @@
       },
       {
         "from": "tools/mvp/ct_plugin.jl",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "tools/mvp/ct_plugin.jl",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1436,13 +1436,13 @@
       },
       {
         "from": "ffi/zig/src/main.zig",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "ffi/zig/src/main.zig",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1454,13 +1454,13 @@
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 4.0
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 4.0
       },
@@ -1472,13 +1472,13 @@
       },
       {
         "from": "cerro_torre_stack/test_both_modes.sh",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "cerro_torre_stack/test_both_modes.sh",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1490,13 +1490,13 @@
       },
       {
         "from": "cerro_torre_stack/apps/svalinn/mix.exs",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "cerro_torre_stack/apps/svalinn/mix.exs",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1508,13 +1508,13 @@
       },
       {
         "from": "cerro_torre_stack/apps/svalinn/lib/svalinn/vordr_adapter.ex",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "cerro_torre_stack/apps/svalinn/lib/svalinn/vordr_adapter.ex",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1526,13 +1526,13 @@
       },
       {
         "from": "tests/ct_test_e2e.adb",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "tests/ct_test_e2e.adb",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1544,13 +1544,13 @@
       },
       {
         "from": "tests/manual-e2e-test.sh",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "tests/manual-e2e-test.sh",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1565,6 +1565,35 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/core/ct_sbom.ads",
+          "src/exporters/oci/cerro_export_oci.adb"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/policy/cerro_policy_enforce.adb"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "UncheckedError->Cpu"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -1574,54 +1603,11 @@
           "cerro_torre_stack/apps/svalinn/test/support/conn_case.ex"
         ],
         "frameworks": [
-          "WebServer",
           "Phoenix",
+          "WebServer",
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "cerro_torre_stack/apps/svalinn/lib/svalinn_web.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/core/ct_sbom.ads",
-          "src/exporters/oci/cerro_export_oci.adb"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src-rust/main.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -1632,25 +1618,25 @@
           "src/bindings/liboqs.adb"
         ],
         "frameworks": [
-          "WebServer",
           "Phoenix",
+          "WebServer",
           "OTP"
         ],
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "src/policy/cerro_policy_enforce.adb"
+          "src-rust/main.rs"
         ],
         "frameworks": [
-          "WebServer",
           "Phoenix",
+          "WebServer",
           "OTP"
         ],
-        "relation": "UncheckedError->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -1660,11 +1646,25 @@
           "src-rust/main.rs"
         ],
         "frameworks": [
-          "WebServer",
           "Phoenix",
+          "WebServer",
           "OTP"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "cerro_torre_stack/apps/svalinn/lib/svalinn_web.ex"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

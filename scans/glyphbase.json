@@ -314,9 +314,9 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
-    "memory",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -327,9 +327,9 @@
         "weight": 1.0
       },
       {
-        "from": "ui/src/bindings/Fetch.res",
-        "to": "ui/src/bindings/Webapi.res",
-        "relation": "shared_dir:ui/src/bindings",
+        "from": "server/src/lithoglyph/client.gleam",
+        "to": "server/src/lithoglyph/nif_ffi.gleam",
+        "relation": "shared_dir:server/src/lithoglyph",
         "weight": 1.0
       },
       {
@@ -357,15 +357,28 @@
         "weight": 1.0
       },
       {
-        "from": "server/src/lithoglyph/client.gleam",
-        "to": "server/src/lithoglyph/nif_ffi.gleam",
-        "relation": "shared_dir:server/src/lithoglyph",
+        "from": "ui/src/bindings/Fetch.res",
+        "to": "ui/src/bindings/Webapi.res",
+        "relation": "shared_dir:ui/src/bindings",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "server/src/lithoglyph/client.gleam",
+          "server/src/lithoglyph/nif_ffi.gleam",
+          "server/ffi/zig/src/main.zig",
+          "server/native/src/lithoglyph_nif.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
       {
         "source_category": "UncheckedError",
         "sink_axis": "cpu",
@@ -396,19 +409,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "server/src/lithoglyph/client.gleam",
-          "server/src/lithoglyph/nif_ffi.gleam",
-          "server/ffi/zig/src/main.zig",
-          "server/native/src/lithoglyph_nif.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   },

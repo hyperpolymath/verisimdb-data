@@ -241,8 +241,8 @@
   "recommended_attacks": [
     "memory",
     "cpu",
-    "network",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -257,24 +257,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "scripts/sign-extension.sh"
+          "tests/property/FlagPropertiesTest.res.js",
+          "tests/bench/FlagBench.res.js"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "extension/lib/dom-utils.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -285,6 +276,16 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/sign-extension.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "PanicPath",
@@ -309,15 +310,14 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "tests/property/FlagPropertiesTest.res.js",
-          "tests/bench/FlagBench.res.js"
+          "extension/lib/dom-utils.js"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

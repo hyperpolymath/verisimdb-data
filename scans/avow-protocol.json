@@ -253,11 +253,11 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "memory",
     "concurrency",
     "network",
-    "disk",
-    "memory"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -265,6 +265,12 @@
         "from": "telegram-bot/src/bindings/Sqlite.res",
         "to": "telegram-bot/src/bindings/Grammy.res",
         "relation": "shared_dir:telegram-bot/src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "telegram-bot/src/Bot.res",
+        "to": "telegram-bot/src/StampMock.res",
+        "relation": "shared_dir:telegram-bot/src",
         "weight": 1.0
       },
       {
@@ -296,17 +302,21 @@
         "to": "src/bindings/Deno_Api.res",
         "relation": "shared_dir:src/bindings",
         "weight": 1.0
-      },
-      {
-        "from": "telegram-bot/src/Bot.res",
-        "to": "telegram-bot/src/StampMock.res",
-        "relation": "shared_dir:telegram-bot/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "public/demo.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -318,6 +328,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "avow-lib/examples/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "ExcessivePermissions",
         "sink_axis": "disk",
         "severity_value": 3.5,
@@ -326,16 +346,6 @@
         ],
         "frameworks": [],
         "relation": "ExcessivePermissions->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "avow-lib/examples/rust/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -359,23 +369,13 @@
       },
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "memory",
+        "sink_axis": "concurrency",
         "severity_value": 3.5,
         "files": [
           "avow-lib/examples/rust/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "public/demo.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "UnsafeCode->Concurrency"
       }
     ]
   },

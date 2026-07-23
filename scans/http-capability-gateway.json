@@ -3,8 +3,8 @@
   "program_path": "http-capability-gateway",
   "language": "elixir",
   "frameworks": [
-    "WebServer",
-    "OTP"
+    "OTP",
+    "WebServer"
   ],
   "weak_points": [
     {
@@ -483,13 +483,49 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "memory",
     "disk",
     "concurrency",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/abi/HttpServer.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "test/mtls_test.exs",
+        "to": "test/e2e_boj_integration_test.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/e2e_boj_integration_test.exs",
+        "to": "test/policy_loader_test.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/policy_loader_test.exs",
+        "to": "test/test_helper.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/test_helper.exs",
+        "to": "test/performance_test.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/performance_test.exs",
+        "to": "test/concurrency_test.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
       {
         "from": "bench/gateway_latency.exs",
         "to": "bench/compare.exs",
@@ -500,12 +536,6 @@
         "from": "bench/compare.exs",
         "to": "bench/rebaseline.exs",
         "relation": "shared_dir:bench",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/HttpServer.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -563,34 +593,10 @@
         "weight": 1.0
       },
       {
-        "from": "test/mtls_test.exs",
-        "to": "test/e2e_boj_integration_test.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/e2e_boj_integration_test.exs",
-        "to": "test/policy_loader_test.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/policy_loader_test.exs",
-        "to": "test/test_helper.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/test_helper.exs",
-        "to": "test/performance_test.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/performance_test.exs",
-        "to": "test/concurrency_test.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
+        "from": "src/abi/HttpServer.idr",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 30.0
       },
       {
         "from": "src/abi/HttpServer.idr",
@@ -599,10 +605,10 @@
         "weight": 30.0
       },
       {
-        "from": "src/abi/HttpServer.idr",
+        "from": "src/abi/Types.idr",
         "to": "OTP",
         "relation": "framework",
-        "weight": 30.0
+        "weight": 3.0
       },
       {
         "from": "src/abi/Types.idr",
@@ -611,10 +617,10 @@
         "weight": 3.0
       },
       {
-        "from": "src/abi/Types.idr",
+        "from": "bench/gateway_latency.exs",
         "to": "OTP",
         "relation": "framework",
-        "weight": 3.0
+        "weight": 4.0
       },
       {
         "from": "bench/gateway_latency.exs",
@@ -623,25 +629,13 @@
         "weight": 4.0
       },
       {
-        "from": "bench/gateway_latency.exs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "bench/compare.exs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "bench/compare.exs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "bench/rebaseline.exs",
+        "from": "bench/compare.exs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -653,7 +647,7 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
+        "from": "bench/rebaseline.exs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -665,7 +659,7 @@
         "weight": 1.0
       },
       {
-        "from": "test/mtls_test.exs",
+        "from": "setup.sh",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -677,7 +671,7 @@
         "weight": 1.0
       },
       {
-        "from": "test/fixtures/mtls/gen-test-ca.sh",
+        "from": "test/mtls_test.exs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -689,16 +683,28 @@
         "weight": 1.0
       },
       {
-        "from": "test/e2e_boj_integration_test.exs",
+        "from": "test/fixtures/mtls/gen-test-ca.sh",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
         "from": "test/e2e_boj_integration_test.exs",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
+      },
+      {
+        "from": "test/e2e_boj_integration_test.exs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "test/policy_loader_test.exs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
       },
       {
         "from": "test/policy_loader_test.exs",
@@ -707,10 +713,10 @@
         "weight": 1.0
       },
       {
-        "from": "test/policy_loader_test.exs",
+        "from": "test/test_helper.exs",
         "to": "OTP",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
       },
       {
         "from": "test/test_helper.exs",
@@ -719,10 +725,10 @@
         "weight": 2.0
       },
       {
-        "from": "test/test_helper.exs",
+        "from": "test/performance_test.exs",
         "to": "OTP",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 4.0
       },
       {
         "from": "test/performance_test.exs",
@@ -731,10 +737,10 @@
         "weight": 4.0
       },
       {
-        "from": "test/performance_test.exs",
+        "from": "test/concurrency_test.exs",
         "to": "OTP",
         "relation": "framework",
-        "weight": 4.0
+        "weight": 14.0
       },
       {
         "from": "test/concurrency_test.exs",
@@ -743,7 +749,7 @@
         "weight": 14.0
       },
       {
-        "from": "test/concurrency_test.exs",
+        "from": "ffi/zig/src/main.zig",
         "to": "OTP",
         "relation": "framework",
         "weight": 14.0
@@ -755,25 +761,13 @@
         "weight": 14.0
       },
       {
-        "from": "ffi/zig/src/main.zig",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 14.0
-      },
-      {
-        "from": "ffi/zig/grpc/parser.zig",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "ffi/zig/grpc/parser.zig",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "ffi/zig/graphql/parser.zig",
+        "from": "ffi/zig/grpc/parser.zig",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -785,7 +779,7 @@
         "weight": 1.0
       },
       {
-        "from": "lib/http_capability_gateway/graphql_handler.ex",
+        "from": "ffi/zig/graphql/parser.zig",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -797,7 +791,7 @@
         "weight": 1.0
       },
       {
-        "from": "lib/http_capability_gateway/k9_contract.ex",
+        "from": "lib/http_capability_gateway/graphql_handler.ex",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -809,7 +803,7 @@
         "weight": 1.0
       },
       {
-        "from": "lib/http_capability_gateway/application.ex",
+        "from": "lib/http_capability_gateway/k9_contract.ex",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -821,7 +815,7 @@
         "weight": 1.0
       },
       {
-        "from": "lib/http_capability_gateway/policy_compiler.ex",
+        "from": "lib/http_capability_gateway/application.ex",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -833,13 +827,25 @@
         "weight": 1.0
       },
       {
+        "from": "lib/http_capability_gateway/policy_compiler.ex",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/http_capability_gateway/minikaran.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
         "from": "lib/http_capability_gateway/minikaran.ex",
         "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "lib/http_capability_gateway/minikaran.ex",
+        "from": "lib/http_capability_gateway/circuit_breaker.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
@@ -851,7 +857,7 @@
         "weight": 2.0
       },
       {
-        "from": "lib/http_capability_gateway/circuit_breaker.ex",
+        "from": "lib/http_capability_gateway/verisimdb.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
@@ -863,25 +869,13 @@
         "weight": 2.0
       },
       {
-        "from": "lib/http_capability_gateway/verisimdb.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "lib/http_capability_gateway/rate_limiter.ex",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "lib/http_capability_gateway/rate_limiter.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "lib/http_capability_gateway/policy_loader.ex",
+        "from": "lib/http_capability_gateway/rate_limiter.ex",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -893,7 +887,7 @@
         "weight": 1.0
       },
       {
-        "from": "lib/http_capability_gateway/proxy.ex",
+        "from": "lib/http_capability_gateway/policy_loader.ex",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -901,6 +895,12 @@
       {
         "from": "lib/http_capability_gateway/proxy.ex",
         "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/http_capability_gateway/proxy.ex",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       }
@@ -933,8 +933,8 @@
           "test/concurrency_test.exs"
         ],
         "frameworks": [
-          "WebServer",
-          "OTP"
+          "OTP",
+          "WebServer"
         ],
         "relation": "MutationGap->Cpu"
       }

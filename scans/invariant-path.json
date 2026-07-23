@@ -159,8 +159,8 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
+    "memory",
     "disk"
   ],
   "dependency_graph": {
@@ -193,6 +193,28 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/verify-same-cube.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/invariant-path-core/src/annotations.rs",
+          "crates/invariant-path-core/src/doc_claims.rs",
+          "crates/invariant-path-cli/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -234,28 +256,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/verify-same-cube.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/invariant-path-core/src/annotations.rs",
-          "crates/invariant-path-core/src/doc_claims.rs",
-          "crates/invariant-path-cli/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
