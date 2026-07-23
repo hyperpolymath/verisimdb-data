@@ -619,11 +619,29 @@
   "recommended_attacks": [
     "disk",
     "cpu",
-    "memory",
-    "network"
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/rescript/DataBrowser.res",
+        "to": "src/rescript/Settings.res",
+        "relation": "shared_dir:src/rescript",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rescript/Settings.res",
+        "to": "src/rescript/ConstraintEditor.res",
+        "relation": "shared_dir:src/rescript",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rescript/adapters/OfficeJsAdapter.res",
+        "to": "src/rescript/adapters/UnoAdapter.res",
+        "relation": "shared_dir:src/rescript/adapters",
+        "weight": 1.0
+      },
       {
         "from": "src/visualization/report_generator.jl",
         "to": "src/visualization/charts.rs",
@@ -637,9 +655,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/rescript/adapters/OfficeJsAdapter.res",
-        "to": "src/rescript/adapters/UnoAdapter.res",
-        "relation": "shared_dir:src/rescript/adapters",
+        "from": "src/collaboration/websocket_server.jl",
+        "to": "src/collaboration/comments.res",
+        "relation": "shared_dir:src/collaboration",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/webhooks.jl",
+        "to": "src/plugins/marketplace.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/marketplace.jl",
+        "to": "src/plugins/plugin_system.jl",
+        "relation": "shared_dir:src/plugins",
         "weight": 1.0
       },
       {
@@ -695,53 +725,11 @@
         "to": "src/julia/data_sources/FRED.jl",
         "relation": "shared_dir:src/julia/data_sources",
         "weight": 1.0
-      },
-      {
-        "from": "src/collaboration/websocket_server.jl",
-        "to": "src/collaboration/comments.res",
-        "relation": "shared_dir:src/collaboration",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rescript/DataBrowser.res",
-        "to": "src/rescript/Settings.res",
-        "relation": "shared_dir:src/rescript",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rescript/Settings.res",
-        "to": "src/rescript/ConstraintEditor.res",
-        "relation": "shared_dir:src/rescript",
-        "weight": 1.0
-      },
-      {
-        "from": "src/plugins/webhooks.jl",
-        "to": "src/plugins/marketplace.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
-      },
-      {
-        "from": "src/plugins/marketplace.jl",
-        "to": "src/plugins/plugin_system.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/enterprise/saml_auth.jl",
-          "src/visualization/geo_viz.res",
-          "src/julia/data_sources/IMF.jl"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -784,14 +772,16 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "tests/julia/test_client.jl"
+          "src/enterprise/saml_auth.jl",
+          "src/visualization/geo_viz.res",
+          "src/julia/data_sources/IMF.jl"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "MutationGap",
@@ -802,6 +792,16 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/julia/test_client.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
       }
     ]
   }

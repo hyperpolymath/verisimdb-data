@@ -234,9 +234,9 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -269,14 +269,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "src/codegen/benchmark.rs"
+          "src/interface/ffi/src/main.zig"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -302,17 +302,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs",
-          "src/codegen/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -325,14 +314,25 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "src/interface/ffi/src/main.zig"
+          "src/codegen/benchmark.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs",
+          "src/codegen/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

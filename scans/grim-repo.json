@@ -947,12 +947,24 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
     "network",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/src/core/GrimCore.mjs",
+        "to": "scripts/src/core/GrimCore.res",
+        "relation": "shared_dir:scripts/src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/src/core/GrimCore.res",
+        "to": "scripts/src/core/GrimCore.res.mjs",
+        "relation": "shared_dir:scripts/src/core",
+        "weight": 1.0
+      },
       {
         "from": "scripts/src/scripts/aibdp/AibdpChecker.mjs",
         "to": "scripts/src/scripts/aibdp/AibdpChecker.res",
@@ -963,18 +975,6 @@
         "from": "scripts/src/scripts/aibdp/AibdpChecker.res",
         "to": "scripts/src/scripts/aibdp/AibdpChecker.res.mjs",
         "relation": "shared_dir:scripts/src/scripts/aibdp",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/src/scripts/license/GrimLicenseChecker.mjs",
-        "to": "scripts/src/scripts/license/GrimLicenseChecker.res",
-        "relation": "shared_dir:scripts/src/scripts/license",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/src/scripts/license/GrimLicenseChecker.res",
-        "to": "scripts/src/scripts/license/GrimLicenseChecker.res.mjs",
-        "relation": "shared_dir:scripts/src/scripts/license",
         "weight": 1.0
       },
       {
@@ -1104,21 +1104,50 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/src/core/GrimCore.mjs",
-        "to": "scripts/src/core/GrimCore.res",
-        "relation": "shared_dir:scripts/src/core",
+        "from": "scripts/src/scripts/license/GrimLicenseChecker.mjs",
+        "to": "scripts/src/scripts/license/GrimLicenseChecker.res",
+        "relation": "shared_dir:scripts/src/scripts/license",
         "weight": 1.0
       },
       {
-        "from": "scripts/src/core/GrimCore.res",
-        "to": "scripts/src/core/GrimCore.res.mjs",
-        "relation": "shared_dir:scripts/src/core",
+        "from": "scripts/src/scripts/license/GrimLicenseChecker.res",
+        "to": "scripts/src/scripts/license/GrimLicenseChecker.res.mjs",
+        "relation": "shared_dir:scripts/src/scripts/license",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/Utils.res",
+          "scripts/src/scripts/template/GrimTemplateEngine.res",
+          "scripts/src/scripts/greaser/GrimGreaser.res",
+          "scripts/PublishGreasyfork.res",
+          "scripts/lib/ocaml/GrimTemplateEngine.res",
+          "scripts/lib/ocaml/GrimGreaser.res",
+          "scripts/lib/ocaml/PublishGreasyfork.res",
+          "scripts/lib/ocaml/publish-greasyfork.res"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/userscripts/GrimSecurityScanner.user.js",
+          "scripts/src/scripts/security/GrimSecurityScanner.mjs",
+          "scripts/src/scripts/security/GrimSecurityScanner.res.mjs"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -1189,35 +1218,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/Utils.res",
-          "scripts/src/scripts/template/GrimTemplateEngine.res",
-          "scripts/src/scripts/greaser/GrimGreaser.res",
-          "scripts/PublishGreasyfork.res",
-          "scripts/lib/ocaml/GrimTemplateEngine.res",
-          "scripts/lib/ocaml/GrimGreaser.res",
-          "scripts/lib/ocaml/PublishGreasyfork.res",
-          "scripts/lib/ocaml/publish-greasyfork.res"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/userscripts/GrimSecurityScanner.user.js",
-          "scripts/src/scripts/security/GrimSecurityScanner.mjs",
-          "scripts/src/scripts/security/GrimSecurityScanner.res.mjs"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "InputBoundary",
