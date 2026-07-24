@@ -340,10 +340,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
     "disk",
-    "network"
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -363,6 +363,12 @@
         "from": "crates/generators/src/leetspeak.rs",
         "to": "crates/generators/src/phonetic.rs",
         "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/dicti0nary.chpl",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -390,24 +396,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/dicti0nary.chpl",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/generators/Random.chpl",
-        "to": "src/generators/Phonetic.chpl",
-        "relation": "shared_dir:src/generators",
-        "weight": 1.0
-      },
-      {
-        "from": "src/generators/Phonetic.chpl",
-        "to": "src/generators/Markov.chpl",
-        "relation": "shared_dir:src/generators",
-        "weight": 1.0
-      },
-      {
         "from": "web/src/WasmBindings.res",
         "to": "web/src/Hash.res",
         "relation": "shared_dir:web/src",
@@ -429,6 +417,18 @@
         "from": "web/src/WasmLoader.res",
         "to": "web/src/WebDom.res",
         "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/generators/Random.chpl",
+        "to": "src/generators/Phonetic.chpl",
+        "relation": "shared_dir:src/generators",
+        "weight": 1.0
+      },
+      {
+        "from": "src/generators/Phonetic.chpl",
+        "to": "src/generators/Markov.chpl",
+        "relation": "shared_dir:src/generators",
         "weight": 1.0
       },
       {
@@ -743,6 +743,20 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "crates/generators/src/leetspeak.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -767,20 +781,6 @@
           "Concurrent"
         ],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "crates/generators/src/leetspeak.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   },

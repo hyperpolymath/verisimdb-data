@@ -573,12 +573,24 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/jtv-cli/src/repl.rs",
+        "to": "crates/jtv-cli/src/main.rs",
+        "relation": "shared_dir:crates/jtv-cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/jtv-cli/src/main.rs",
+        "to": "crates/jtv-cli/src/rsr_check.rs",
+        "relation": "shared_dir:crates/jtv-cli/src",
+        "weight": 1.0
+      },
       {
         "from": "viper-pkg/src/registry.jl",
         "to": "viper-pkg/src/install.jl",
@@ -721,18 +733,6 @@
         "from": "crates/jtv-core/tests/coproc_corpus_tests.rs",
         "to": "crates/jtv-core/tests/coproc_lower_tests.rs",
         "relation": "shared_dir:crates/jtv-core/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/jtv-cli/src/repl.rs",
-        "to": "crates/jtv-cli/src/main.rs",
-        "relation": "shared_dir:crates/jtv-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/jtv-cli/src/main.rs",
-        "to": "crates/jtv-cli/src/rsr_check.rs",
-        "relation": "shared_dir:crates/jtv-cli/src",
         "weight": 1.0
       },
       {
@@ -980,6 +980,32 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "setup.sh"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/jtv-cli/src/repl.rs",
+          "crates/jtv-cli/src/main.rs",
+          "crates/jtv-cli/src/rsr_check.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -992,6 +1018,30 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "ffi/zig/src/ZigFFI.jl"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "packages/jtv-analyzer/src/Main.res"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UncheckedError->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -1026,56 +1076,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "ffi/zig/src/ZigFFI.jl"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "packages/jtv-analyzer/src/Main.res"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UncheckedError->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/jtv-cli/src/repl.rs",
-          "crates/jtv-cli/src/main.rs",
-          "crates/jtv-cli/src/rsr_check.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "setup.sh"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }

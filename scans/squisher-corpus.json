@@ -3,9 +3,9 @@
   "program_path": "squisher-corpus",
   "language": "elixir",
   "frameworks": [
+    "Database",
     "OTP",
-    "Ecto",
-    "Database"
+    "Ecto"
   ],
   "weak_points": [
     {
@@ -292,6 +292,12 @@
       },
       {
         "from": "setup.sh",
+        "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -303,7 +309,7 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
+        "from": "test/pipeline/sync_worker_test.exs",
         "to": "Database",
         "relation": "framework",
         "weight": 1.0
@@ -321,10 +327,10 @@
         "weight": 1.0
       },
       {
-        "from": "test/pipeline/sync_worker_test.exs",
+        "from": "lib/squisher_corpus/port_runner.ex",
         "to": "Database",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
       },
       {
         "from": "lib/squisher_corpus/port_runner.ex",
@@ -339,7 +345,7 @@
         "weight": 2.0
       },
       {
-        "from": "lib/squisher_corpus/port_runner.ex",
+        "from": "lib/squisher_corpus/rate_limiter.ex",
         "to": "Database",
         "relation": "framework",
         "weight": 2.0
@@ -357,10 +363,10 @@
         "weight": 2.0
       },
       {
-        "from": "lib/squisher_corpus/rate_limiter.ex",
+        "from": "lib/squisher_corpus/pipeline/sync_worker.ex",
         "to": "Database",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
         "from": "lib/squisher_corpus/pipeline/sync_worker.ex",
@@ -375,7 +381,7 @@
         "weight": 1.0
       },
       {
-        "from": "lib/squisher_corpus/pipeline/sync_worker.ex",
+        "from": "lib/squisher_corpus/pipeline/fetch_worker.ex",
         "to": "Database",
         "relation": "framework",
         "weight": 1.0
@@ -393,7 +399,7 @@
         "weight": 1.0
       },
       {
-        "from": "lib/squisher_corpus/pipeline/fetch_worker.ex",
+        "from": "lib/squisher_corpus/pipeline/search_worker.ex",
         "to": "Database",
         "relation": "framework",
         "weight": 1.0
@@ -411,7 +417,7 @@
         "weight": 1.0
       },
       {
-        "from": "lib/squisher_corpus/pipeline/search_worker.ex",
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
         "to": "Database",
         "relation": "framework",
         "weight": 1.0
@@ -429,7 +435,7 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "from": "composer/src/composer_ffi.erl",
         "to": "Database",
         "relation": "framework",
         "weight": 1.0
@@ -447,10 +453,10 @@
         "weight": 1.0
       },
       {
-        "from": "composer/src/composer_ffi.erl",
+        "from": "composer/src/bundler.gleam",
         "to": "Database",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 3.0
       },
       {
         "from": "composer/src/bundler.gleam",
@@ -465,7 +471,7 @@
         "weight": 3.0
       },
       {
-        "from": "composer/src/bundler.gleam",
+        "from": "composer/src/runner.gleam",
         "to": "Database",
         "relation": "framework",
         "weight": 3.0
@@ -479,12 +485,6 @@
       {
         "from": "composer/src/runner.gleam",
         "to": "Ecto",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "composer/src/runner.gleam",
-        "to": "Database",
         "relation": "framework",
         "weight": 3.0
       }
@@ -492,6 +492,21 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "lib/squisher_corpus/port_runner.ex",
+          "composer/src/composer_ffi.erl"
+        ],
+        "frameworks": [
+          "Database",
+          "OTP",
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -508,26 +523,11 @@
           "test/pipeline/sync_worker_test.exs"
         ],
         "frameworks": [
+          "Database",
           "OTP",
-          "Ecto",
-          "Database"
+          "Ecto"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "lib/squisher_corpus/port_runner.ex",
-          "composer/src/composer_ffi.erl"
-        ],
-        "frameworks": [
-          "OTP",
-          "Ecto",
-          "Database"
-        ],
-        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -538,9 +538,9 @@
           "composer/src/composer_ffi.erl"
         ],
         "frameworks": [
+          "Database",
           "OTP",
-          "Ecto",
-          "Database"
+          "Ecto"
         ],
         "relation": "CommandInjection->Disk"
       }
