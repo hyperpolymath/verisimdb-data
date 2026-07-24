@@ -172,11 +172,17 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "engine/scripts/execute_turn.jl",
+        "to": "engine/scripts/generate_report.jl",
+        "relation": "shared_dir:engine/scripts",
+        "weight": 1.0
+      },
       {
         "from": "engine/src/llm_client.jl",
         "to": "engine/src/embedding_client.jl",
@@ -200,17 +206,21 @@
         "to": "tui/src/tui.adb",
         "relation": "shared_dir:tui/src",
         "weight": 1.0
-      },
-      {
-        "from": "engine/scripts/execute_turn.jl",
-        "to": "engine/scripts/generate_report.jl",
-        "relation": "shared_dir:engine/scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "engine/test/integration_tests.jl"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
       {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
@@ -221,16 +231,6 @@
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "engine/test/integration_tests.jl"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   }

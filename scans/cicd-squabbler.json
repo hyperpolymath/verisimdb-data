@@ -420,27 +420,39 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": ".machine_readable/coaptation/verify.sh",
-        "to": ".machine_readable/coaptation/coapt.ncl",
-        "relation": "shared_dir:.machine_readable/coaptation",
-        "weight": 1.0
-      },
-      {
-        "from": ".machine_readable/contractiles/trust/trust.ncl",
-        "to": ".machine_readable/contractiles/trust/trust.k9.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/trust",
-        "weight": 1.0
-      },
-      {
         "from": ".machine_readable/contractiles/intend/intend.ncl",
         "to": ".machine_readable/contractiles/intend/intend.k9.ncl",
         "relation": "shared_dir:.machine_readable/contractiles/intend",
         "weight": 1.0
       },
       {
+        "from": "crates/squabble-cli/src/boj.rs",
+        "to": "crates/squabble-cli/src/fight.rs",
+        "relation": "shared_dir:crates/squabble-cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/squabble-cli/src/fight.rs",
+        "to": "crates/squabble-cli/src/main.rs",
+        "relation": "shared_dir:crates/squabble-cli/src",
+        "weight": 1.0
+      },
+      {
         "from": ".machine_readable/contractiles/bust/bust.ncl",
         "to": ".machine_readable/contractiles/bust/bust.k9.ncl",
         "relation": "shared_dir:.machine_readable/contractiles/bust",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.k9.ncl",
+        "to": ".machine_readable/contractiles/must/must.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/must",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/arrival-pack/arrival-pack.ncl",
+        "to": ".machine_readable/arrival-pack/generate.sh",
+        "relation": "shared_dir:.machine_readable/arrival-pack",
         "weight": 1.0
       },
       {
@@ -462,15 +474,21 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/must/must.k9.ncl",
-        "to": ".machine_readable/contractiles/must/must.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/must",
-        "weight": 1.0
-      },
-      {
         "from": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
         "to": ".machine_readable/contractiles/adjust/adjust.ncl",
         "relation": "shared_dir:.machine_readable/contractiles/adjust",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/coaptation/verify.sh",
+        "to": ".machine_readable/coaptation/coapt.ncl",
+        "relation": "shared_dir:.machine_readable/coaptation",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.ncl",
+        "to": ".machine_readable/contractiles/trust/trust.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/trust",
         "weight": 1.0
       },
       {
@@ -478,49 +496,24 @@
         "to": ".machine_readable/contractiles/dust/dust.ncl",
         "relation": "shared_dir:.machine_readable/contractiles/dust",
         "weight": 1.0
-      },
-      {
-        "from": "crates/squabble-cli/src/boj.rs",
-        "to": "crates/squabble-cli/src/fight.rs",
-        "relation": "shared_dir:crates/squabble-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/squabble-cli/src/fight.rs",
-        "to": "crates/squabble-cli/src/main.rs",
-        "relation": "shared_dir:crates/squabble-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": ".machine_readable/arrival-pack/arrival-pack.ncl",
-        "to": ".machine_readable/arrival-pack/generate.sh",
-        "relation": "shared_dir:.machine_readable/arrival-pack",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/e2e.sh"
+          "crates/squabble-cli/src/fight.rs",
+          "crates/squabble-cli/src/main.rs",
+          "crates/squabble-fight/src/context.rs",
+          "crates/squabble-fight/src/lib.rs",
+          "crates/squabble-fight/src/apply.rs"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          ".machine_readable/coaptation/extract-facts.sh",
-          ".machine_readable/arrival-pack/extract.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -537,18 +530,25 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/squabble-cli/src/fight.rs",
-          "crates/squabble-cli/src/main.rs",
-          "crates/squabble-fight/src/context.rs",
-          "crates/squabble-fight/src/lib.rs",
-          "crates/squabble-fight/src/apply.rs"
+          ".machine_readable/coaptation/extract-facts.sh",
+          ".machine_readable/arrival-pack/extract.sh"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

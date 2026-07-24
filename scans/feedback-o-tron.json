@@ -3,9 +3,9 @@
   "program_path": "feedback-o-tron",
   "language": "elixir",
   "frameworks": [
-    "MessageQueue",
+    "WebServer",
     "OTP",
-    "WebServer"
+    "MessageQueue"
   ],
   "weak_points": [
     {
@@ -722,12 +722,30 @@
   "recommended_attacks": [
     "disk",
     "network",
-    "concurrency",
+    "memory",
     "cpu",
-    "memory"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/hydrator.ex",
+        "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
+        "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
+        "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
+        "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/sync-state.sh",
+        "to": "scripts/scraper.exs",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/discord.ex",
         "to": "elixir-mcp/lib/feedback_a_tron/channels/codeberg.ex",
@@ -780,18 +798,6 @@
         "from": "elixir-mcp/lib/feedback_a_tron/channels/bitbucket.ex",
         "to": "elixir-mcp/lib/feedback_a_tron/channels/discourse.ex",
         "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/channels",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/hydrator.ex",
-        "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
-        "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
-        "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
-        "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
         "weight": 1.0
       },
       {
@@ -855,14 +861,8 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/sync-state.sh",
-        "to": "scripts/scraper.exs",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "elixir-mcp/test/retry_test.exs",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -874,21 +874,9 @@
       },
       {
         "from": "elixir-mcp/test/retry_test.exs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
         "to": "MessageQueue",
         "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 4.0
+        "weight": 1.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
@@ -897,8 +885,20 @@
         "weight": 4.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex",
+        "from": "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
         "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -910,9 +910,21 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/audit_log.ex",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/audit_log.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/audit_log.ex",
@@ -921,16 +933,16 @@
         "weight": 2.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/audit_log.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/audit_log.ex",
+        "from": "elixir-mcp/lib/feedback_a_tron/retry.ex",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/retry.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/retry.ex",
@@ -939,38 +951,26 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/retry.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/retry.ex",
+        "from": "elixir-mcp/lib/feedback_a_tron/submitter.ex",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/submitter.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/submitter.ex",
         "to": "MessageQueue",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/submitter.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/submitter.ex",
-        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/mcp/server.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 8.0
       },
@@ -982,13 +982,13 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/mcp/server.ex",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 8.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/verisim_writer.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1000,21 +1000,9 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/verisim_writer.ex",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
         "to": "MessageQueue",
         "relation": "framework",
-        "weight": 14.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 14.0
+        "weight": 1.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
@@ -1023,8 +1011,20 @@
         "weight": 14.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/batch_reviewer.ex",
+        "from": "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 14.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
         "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 14.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/batch_reviewer.ex",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
@@ -1036,9 +1036,21 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/batch_reviewer.ex",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 2.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/credentials.ex",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/credentials.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/credentials.ex",
@@ -1047,20 +1059,8 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/credentials.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/credentials.ex",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "elixir-mcp/lib/feedback_a_tron/synthesis/hydrator.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
@@ -1072,13 +1072,13 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/synthesis/hydrator.ex",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1090,37 +1090,25 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
-        "to": "MessageQueue",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
         "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/deduplicator.ex",
-        "to": "MessageQueue",
+        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
+        "to": "OTP",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/deduplicator.ex",
-        "to": "OTP",
+        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 2.0
       },
@@ -1131,8 +1119,20 @@
         "weight": 2.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/rate_limiter.ex",
+        "from": "elixir-mcp/lib/feedback_a_tron/deduplicator.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/deduplicator.ex",
         "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/rate_limiter.ex",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
@@ -1144,13 +1144,13 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/rate_limiter.ex",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/secure_dns.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1162,7 +1162,19 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/secure_dns.ex",
+        "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/discord.ex",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/discord.ex",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1173,20 +1185,8 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/discord.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/discord.ex",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/codeberg.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1198,7 +1198,19 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/codeberg.ex",
+        "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/mailman.ex",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/mailman.ex",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1209,20 +1221,8 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/mailman.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/mailman.ex",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/bugzilla.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1234,7 +1234,19 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/bugzilla.ex",
+        "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/matrix.ex",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/matrix.ex",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1245,20 +1257,8 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/matrix.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/matrix.ex",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/sourcehut.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1270,7 +1270,19 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/sourcehut.ex",
+        "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/jira.ex",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/jira.ex",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1281,20 +1293,8 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/jira.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/jira.ex",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/reddit.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1306,7 +1306,19 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/reddit.ex",
+        "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/bitbucket.ex",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/channels/bitbucket.ex",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1317,20 +1329,8 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/bitbucket.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/channels/bitbucket.ex",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/discourse.ex",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1342,7 +1342,19 @@
       },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/discourse.ex",
+        "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/scripts/mcp_tcp_smoke_test.sh",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/scripts/mcp_tcp_smoke_test.sh",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1353,20 +1365,8 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/scripts/mcp_tcp_smoke_test.sh",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/scripts/mcp_tcp_smoke_test.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "config/example.ncl",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1378,7 +1378,19 @@
       },
       {
         "from": "config/example.ncl",
+        "to": "MessageQueue",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "julia-stats/src/FeedbackStats.jl",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "julia-stats/src/FeedbackStats.jl",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1389,20 +1401,8 @@
         "weight": 1.0
       },
       {
-        "from": "julia-stats/src/FeedbackStats.jl",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "julia-stats/src/FeedbackStats.jl",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "ffi/zig/src/main.zig",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1414,13 +1414,13 @@
       },
       {
         "from": "ffi/zig/src/main.zig",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 4.0
       },
@@ -1432,13 +1432,13 @@
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 4.0
       },
       {
         "from": "scripts/sync-state.sh",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1450,13 +1450,13 @@
       },
       {
         "from": "scripts/sync-state.sh",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "scripts/scraper.exs",
-        "to": "MessageQueue",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1468,7 +1468,7 @@
       },
       {
         "from": "scripts/scraper.exs",
-        "to": "WebServer",
+        "to": "MessageQueue",
         "relation": "framework",
         "weight": 1.0
       }
@@ -1476,6 +1476,24 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
+          "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
+          "elixir-mcp/lib/feedback_a_tron/synthesis/research.ex",
+          "elixir-mcp/lib/feedback_a_tron/channels/gitlab.ex",
+          "elixir-mcp/lib/feedback_a_tron/channels/github.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "MessageQueue"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -1505,11 +1523,25 @@
           "elixir-mcp/test/rate_limiter_test.exs"
         ],
         "frameworks": [
-          "MessageQueue",
+          "WebServer",
           "OTP",
-          "WebServer"
+          "MessageQueue"
         ],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "MessageQueue"
+        ],
+        "relation": "AtomExhaustion->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -1520,29 +1552,11 @@
           "ffi/zig/test/integration_test.zig"
         ],
         "frameworks": [
-          "MessageQueue",
+          "WebServer",
           "OTP",
-          "WebServer"
+          "MessageQueue"
         ],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "elixir-mcp/lib/feedback_a_tron/migration_observer.ex",
-          "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
-          "elixir-mcp/lib/feedback_a_tron/synthesis/research.ex",
-          "elixir-mcp/lib/feedback_a_tron/channels/gitlab.ex",
-          "elixir-mcp/lib/feedback_a_tron/channels/github.ex"
-        ],
-        "frameworks": [
-          "MessageQueue",
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "HardcodedSecret",
@@ -1552,11 +1566,25 @@
           "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
         ],
         "frameworks": [
-          "MessageQueue",
+          "WebServer",
           "OTP",
-          "WebServer"
+          "MessageQueue"
         ],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "julia-stats/src/FeedbackStats.jl"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "MessageQueue"
+        ],
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -1570,39 +1598,11 @@
           "elixir-mcp/lib/feedback_a_tron/channels/github.ex"
         ],
         "frameworks": [
-          "MessageQueue",
+          "WebServer",
           "OTP",
-          "WebServer"
+          "MessageQueue"
         ],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
-        ],
-        "frameworks": [
-          "MessageQueue",
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "AtomExhaustion->Memory"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "julia-stats/src/FeedbackStats.jl"
-        ],
-        "frameworks": [
-          "MessageQueue",
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   }

@@ -223,22 +223,22 @@
   "recommended_attacks": [
     "disk",
     "network",
-    "cpu",
     "memory",
-    "concurrency"
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/diagnostics/interfaces.sh",
-        "to": "src/diagnostics/connectivity.sh",
-        "relation": "shared_dir:src/diagnostics",
-        "weight": 1.0
-      },
-      {
         "from": "src/d/core/repairs/dns_repair.d",
         "to": "src/d/core/repairs/interface_repair.d",
         "relation": "shared_dir:src/d/core/repairs",
+        "weight": 1.0
+      },
+      {
+        "from": "src/diagnostics/interfaces.sh",
+        "to": "src/diagnostics/connectivity.sh",
+        "relation": "shared_dir:src/diagnostics",
         "weight": 1.0
       },
       {
@@ -264,24 +264,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "src/diagnostics/connectivity.sh"
+          "src-tauri/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/repairs/dns.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnsafeCode",
@@ -294,14 +284,24 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src-tauri/src/main.rs"
+          "src/repairs/dns.sh"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/diagnostics/connectivity.sh"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

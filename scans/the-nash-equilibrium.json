@@ -194,10 +194,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
+    "network",
     "disk",
-    "network"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -212,26 +212,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "mvt/src/engine/gameState.js",
-          "mvt/src/engine/utils.js",
-          "mvt/src/kernel/index.js"
+          "tests/e2e.sh"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "mvt/src/ui/app.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -244,14 +232,14 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "tests/e2e.sh"
+          "mvt/src/ui/app.js"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -262,6 +250,18 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "mvt/src/engine/gameState.js",
+          "mvt/src/engine/utils.js",
+          "mvt/src/kernel/index.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

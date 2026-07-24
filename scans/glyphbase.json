@@ -314,18 +314,12 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "memory",
     "cpu",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "server/src/glyphbase_server.gleam",
-        "to": "server/src/router.gleam",
-        "relation": "shared_dir:server/src",
-        "weight": 1.0
-      },
       {
         "from": "server/src/lithoglyph/client.gleam",
         "to": "server/src/lithoglyph/nif_ffi.gleam",
@@ -342,6 +336,12 @@
         "from": "ui/src/stores/CommentsStore.res",
         "to": "ui/src/stores/KanbanStore.res",
         "relation": "shared_dir:ui/src/stores",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/glyphbase_server.gleam",
+        "to": "server/src/router.gleam",
+        "relation": "shared_dir:server/src",
         "weight": 1.0
       },
       {
@@ -367,17 +367,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "server/src/lithoglyph/client.gleam",
-          "server/src/lithoglyph/nif_ffi.gleam",
-          "server/ffi/zig/src/main.zig",
-          "server/native/src/lithoglyph_nif.zig"
+          "ui/src/components/Grid.res"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -401,14 +398,17 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeFFI",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "ui/src/components/Grid.res"
+          "server/src/lithoglyph/client.gleam",
+          "server/src/lithoglyph/nif_ffi.gleam",
+          "server/ffi/zig/src/main.zig",
+          "server/native/src/lithoglyph_nif.zig"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   },

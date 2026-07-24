@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "cloudguard-cli",
-  "language": "shell",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -176,23 +176,23 @@
     }
   ],
   "recommended_attacks": [
+    "concurrency",
     "memory",
     "cpu",
-    "concurrency",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/maintenance/run-maintenance.sh",
-        "to": "scripts/maintenance/perms-state.sh",
-        "relation": "shared_dir:scripts/maintenance",
-        "weight": 1.0
-      },
-      {
         "from": "src/abi/Types.idr",
         "to": "src/abi/Foreign.idr",
         "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/maintenance/run-maintenance.sh",
+        "to": "scripts/maintenance/perms-state.sh",
+        "relation": "shared_dir:scripts/maintenance",
         "weight": 1.0
       }
     ]
@@ -221,17 +221,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/mod.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -250,6 +239,17 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/mod.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
