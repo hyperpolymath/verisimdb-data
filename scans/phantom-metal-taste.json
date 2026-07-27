@@ -5,6 +5,17 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "InputBoundary",
+      "location": "src/analytics/impact_analysis.jl",
+      "file": "src/analytics/impact_analysis.jl",
+      "severity": "Medium",
+      "description": "1 JSON3.read/JSON.parse call(s) with 0 try block(s) in src/analytics/impact_analysis.jl — these throw on malformed input; wrap in try/catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "InsecureProtocol",
       "location": "src/orchestrator/Config.res",
       "file": "src/orchestrator/Config.res",
@@ -25,17 +36,6 @@
         "memory"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "InputBoundary",
-      "location": "src/analytics/impact_analysis.jl",
-      "file": "src/analytics/impact_analysis.jl",
-      "severity": "Medium",
-      "description": "1 JSON3.read/JSON.parse call(s) with 0 try block(s) in src/analytics/impact_analysis.jl — these throw on malformed input; wrap in try/catch",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "production"
     }
   ],
   "statistics": {
@@ -48,6 +48,36 @@
     "threading_constructs": 0
   },
   "file_statistics": [
+    {
+      "file_path": "scripts/demo.sh",
+      "lines": 79,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/analytics/causal_inference.jl",
+      "lines": 193,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/analytics/impact_analysis.jl",
+      "lines": 333,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
     {
       "file_path": "src/orchestrator/db/Bindings.res",
       "lines": 62,
@@ -67,43 +97,13 @@
       "allocation_sites": 0,
       "io_operations": 10,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "src/analytics/impact_analysis.jl",
-      "lines": 333,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/analytics/causal_inference.jl",
-      "lines": 193,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/demo.sh",
-      "lines": 79,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
     "network",
-    "cpu",
-    "disk"
+    "memory",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -114,8 +114,8 @@
         "weight": 1.0
       },
       {
-        "from": "src/analytics/impact_analysis.jl",
-        "to": "src/analytics/causal_inference.jl",
+        "from": "src/analytics/causal_inference.jl",
+        "to": "src/analytics/impact_analysis.jl",
         "relation": "shared_dir:src/analytics",
         "weight": 1.0
       }
@@ -134,16 +134,6 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/orchestrator/db/ArangoDb.res"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -152,6 +142,16 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/orchestrator/db/ArangoDb.res"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   },
@@ -165,6 +165,22 @@
     "file_count": 5,
     "rescript_lines": 608,
     "deprecated_patterns": [
+      {
+        "pattern": "Js.String2",
+        "replacement": "String",
+        "file_path": "src/orchestrator/Index.res",
+        "line_number": 0,
+        "category": "JsApi",
+        "count": 5
+      },
+      {
+        "pattern": "Belt.Int",
+        "replacement": "Int",
+        "file_path": "src/orchestrator/Index.res",
+        "line_number": 0,
+        "category": "BeltApi",
+        "count": 2
+      },
       {
         "pattern": "Belt.Option",
         "replacement": "Option",
@@ -180,6 +196,22 @@
         "line_number": 0,
         "category": "BeltApi",
         "count": 1
+      },
+      {
+        "pattern": "Js.Dict.",
+        "replacement": "Dict",
+        "file_path": "src/orchestrator/Types.res",
+        "line_number": 0,
+        "category": "OldDict",
+        "count": 6
+      },
+      {
+        "pattern": "Js.Json.",
+        "replacement": "JSON",
+        "file_path": "src/orchestrator/Types.res",
+        "line_number": 0,
+        "category": "OldJson",
+        "count": 6
       },
       {
         "pattern": "Js.Dict.",
@@ -244,38 +276,6 @@
         "line_number": 0,
         "category": "BeltApi",
         "count": 1
-      },
-      {
-        "pattern": "Js.String2",
-        "replacement": "String",
-        "file_path": "src/orchestrator/Index.res",
-        "line_number": 0,
-        "category": "JsApi",
-        "count": 5
-      },
-      {
-        "pattern": "Belt.Int",
-        "replacement": "Int",
-        "file_path": "src/orchestrator/Index.res",
-        "line_number": 0,
-        "category": "BeltApi",
-        "count": 2
-      },
-      {
-        "pattern": "Js.Dict.",
-        "replacement": "Dict",
-        "file_path": "src/orchestrator/Types.res",
-        "line_number": 0,
-        "category": "OldDict",
-        "count": 6
-      },
-      {
-        "pattern": "Js.Json.",
-        "replacement": "JSON",
-        "file_path": "src/orchestrator/Types.res",
-        "line_number": 0,
-        "category": "OldJson",
-        "count": 6
       }
     ],
     "uncurried": false

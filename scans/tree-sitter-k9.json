@@ -5,6 +5,18 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "DynamicCodeExecution",
+      "location": "tests/aspect/grammar_aspect_test.ts",
+      "file": "tests/aspect/grammar_aspect_test.ts",
+      "severity": "Critical",
+      "description": "eval() usage in tests/aspect/grammar_aspect_test.ts",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "test_only"
+    },
+    {
       "category": "UncheckedAllocation",
       "location": "src/tree_sitter/array.h",
       "file": "src/tree_sitter/array.h",
@@ -27,18 +39,6 @@
         "concurrency"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "tests/aspect/grammar_aspect_test.ts",
-      "file": "tests/aspect/grammar_aspect_test.ts",
-      "severity": "Critical",
-      "description": "eval() usage in tests/aspect/grammar_aspect_test.ts",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "test_only"
     }
   ],
   "statistics": {
@@ -62,21 +62,21 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "bindings/rust/build.rs",
-      "lines": 17,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "bindings/rust/lib.rs",
       "lines": 41,
       "unsafe_blocks": 1,
       "panic_sites": 0,
       "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "bindings/rust/build.rs",
+      "lines": 17,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
@@ -100,8 +100,8 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "bindings/rust/build.rs",
-        "to": "bindings/rust/lib.rs",
+        "from": "bindings/rust/lib.rs",
+        "to": "bindings/rust/build.rs",
         "relation": "shared_dir:bindings/rust",
         "weight": 1.0
       }
@@ -109,26 +109,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "tests/aspect/grammar_aspect_test.ts"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "tests/aspect/grammar_aspect_test.ts"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -150,6 +130,16 @@
         "relation": "UncheckedAllocation->Memory"
       },
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "tests/aspect/grammar_aspect_test.ts"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
@@ -158,6 +148,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "tests/aspect/grammar_aspect_test.ts"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }
