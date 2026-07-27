@@ -20,10 +20,10 @@
     },
     {
       "category": "UnboundedAllocation",
-      "location": "crates/oikosbot-analysis/src/dependencies.rs",
-      "file": "crates/oikosbot-analysis/src/dependencies.rs",
+      "location": "crates/oikosbot-analysis/src/migration.rs",
+      "file": "crates/oikosbot-analysis/src/migration.rs",
       "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in crates/oikosbot-analysis/src/dependencies.rs",
+      "description": "Potential unbounded allocation pattern detected in crates/oikosbot-analysis/src/migration.rs",
       "recommended_attack": [
         "memory",
         "cpu"
@@ -32,10 +32,10 @@
     },
     {
       "category": "UnboundedAllocation",
-      "location": "crates/oikosbot-analysis/src/migration.rs",
-      "file": "crates/oikosbot-analysis/src/migration.rs",
+      "location": "crates/oikosbot-analysis/src/dependencies.rs",
+      "file": "crates/oikosbot-analysis/src/dependencies.rs",
       "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in crates/oikosbot-analysis/src/migration.rs",
+      "description": "Potential unbounded allocation pattern detected in crates/oikosbot-analysis/src/dependencies.rs",
       "recommended_attack": [
         "memory",
         "cpu"
@@ -78,6 +78,26 @@
   },
   "file_statistics": [
     {
+      "file_path": "policies/finding_taxonomy.ecl",
+      "lines": 49,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "policies/carbon_budget.ecl",
+      "lines": 23,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "analyzers/code-haskell/src/Eco/Pareto.hs",
       "lines": 150,
       "unsafe_blocks": 0,
@@ -109,14 +129,25 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "crates/oikosbot-cli/src/main.rs",
-      "lines": 509,
+      "file_path": "crates/oikosbot-analysis/src/security.rs",
+      "lines": 166,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 7,
-      "allocation_sites": 4,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
       "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "crates/oikosbot-analysis/src/migration.rs",
+      "lines": 373,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 2,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -140,13 +171,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "crates/oikosbot-analysis/src/security.rs",
-      "lines": 166,
+      "file_path": "crates/oikosbot-analysis/src/analyzer.rs",
+      "lines": 265,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
+      "allocation_sites": 4,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -161,23 +192,12 @@
       "threading_constructs": 1
     },
     {
-      "file_path": "crates/oikosbot-analysis/src/migration.rs",
-      "lines": 373,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 2,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/oikosbot-analysis/src/analyzer.rs",
-      "lines": 265,
+      "file_path": "crates/oikosbot-cli/src/main.rs",
+      "lines": 509,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
+      "safe_unwrap_calls": 7,
       "allocation_sites": 4,
       "io_operations": 0,
       "threading_constructs": 0
@@ -192,32 +212,12 @@
       "allocation_sites": 6,
       "io_operations": 3,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "policies/carbon_budget.ecl",
-      "lines": 23,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "policies/finding_taxonomy.ecl",
-      "lines": 49,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "disk",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -228,6 +228,24 @@
         "weight": 1.0
       },
       {
+        "from": "policies/finding_taxonomy.ecl",
+        "to": "policies/carbon_budget.ecl",
+        "relation": "shared_dir:policies",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-analysis/src/security.rs",
+        "to": "crates/oikosbot-analysis/src/migration.rs",
+        "relation": "shared_dir:crates/oikosbot-analysis/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-analysis/src/migration.rs",
+        "to": "crates/oikosbot-analysis/src/directives.rs",
+        "relation": "shared_dir:crates/oikosbot-analysis/src",
+        "weight": 1.0
+      },
+      {
         "from": "crates/oikosbot-analysis/src/directives.rs",
         "to": "crates/oikosbot-analysis/src/dependencies.rs",
         "relation": "shared_dir:crates/oikosbot-analysis/src",
@@ -235,32 +253,26 @@
       },
       {
         "from": "crates/oikosbot-analysis/src/dependencies.rs",
-        "to": "crates/oikosbot-analysis/src/security.rs",
-        "relation": "shared_dir:crates/oikosbot-analysis/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/oikosbot-analysis/src/security.rs",
-        "to": "crates/oikosbot-analysis/src/patterns.rs",
-        "relation": "shared_dir:crates/oikosbot-analysis/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/oikosbot-analysis/src/patterns.rs",
-        "to": "crates/oikosbot-analysis/src/migration.rs",
-        "relation": "shared_dir:crates/oikosbot-analysis/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/oikosbot-analysis/src/migration.rs",
         "to": "crates/oikosbot-analysis/src/analyzer.rs",
         "relation": "shared_dir:crates/oikosbot-analysis/src",
         "weight": 1.0
       },
       {
+        "from": "crates/oikosbot-analysis/src/analyzer.rs",
+        "to": "crates/oikosbot-analysis/src/patterns.rs",
+        "relation": "shared_dir:crates/oikosbot-analysis/src",
+        "weight": 1.0
+      },
+      {
+        "from": "policies/finding_taxonomy.ecl",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
         "from": "policies/carbon_budget.ecl",
-        "to": "policies/finding_taxonomy.ecl",
-        "relation": "shared_dir:policies",
+        "to": "Networking",
+        "relation": "framework",
         "weight": 1.0
       },
       {
@@ -282,10 +294,16 @@
         "weight": 1.0
       },
       {
-        "from": "crates/oikosbot-cli/src/main.rs",
+        "from": "crates/oikosbot-analysis/src/security.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-analysis/src/migration.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
       },
       {
         "from": "crates/oikosbot-analysis/src/directives.rs",
@@ -300,7 +318,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/oikosbot-analysis/src/security.rs",
+        "from": "crates/oikosbot-analysis/src/analyzer.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -312,13 +330,7 @@
         "weight": 2.0
       },
       {
-        "from": "crates/oikosbot-analysis/src/migration.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "crates/oikosbot-analysis/src/analyzer.rs",
+        "from": "crates/oikosbot-cli/src/main.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -328,18 +340,6 @@
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
-      },
-      {
-        "from": "policies/carbon_budget.ecl",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "policies/finding_taxonomy.ecl",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 3.0
       }
     ]
   },
@@ -351,8 +351,8 @@
         "severity_value": 2.5,
         "files": [
           "crates/oikosbot-eclexia/src/lib.rs",
-          "crates/oikosbot-analysis/src/dependencies.rs",
           "crates/oikosbot-analysis/src/migration.rs",
+          "crates/oikosbot-analysis/src/dependencies.rs",
           "crates/oikosbot-analysis/src/analyzer.rs",
           "crates/oikosbot-fleet/src/lib.rs"
         ],
@@ -367,8 +367,8 @@
         "severity_value": 2.5,
         "files": [
           "crates/oikosbot-eclexia/src/lib.rs",
-          "crates/oikosbot-analysis/src/dependencies.rs",
           "crates/oikosbot-analysis/src/migration.rs",
+          "crates/oikosbot-analysis/src/dependencies.rs",
           "crates/oikosbot-analysis/src/analyzer.rs",
           "crates/oikosbot-fleet/src/lib.rs"
         ],

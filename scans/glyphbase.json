@@ -5,11 +5,42 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "UnsafeFFI",
-      "location": "server/src/lithoglyph/client.gleam",
-      "file": "server/src/lithoglyph/client.gleam",
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "ui/src/components/Grid.res",
+      "file": "ui/src/components/Grid.res",
       "severity": "Medium",
-      "description": "7 @external FFI calls in server/src/lithoglyph/client.gleam",
+      "description": "4 unsafe get calls in ui/src/components/Grid.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "server/native/src/lithoglyph_nif.zig",
+      "file": "server/native/src/lithoglyph_nif.zig",
+      "severity": "High",
+      "description": "22 unsafe pointer casts in server/native/src/lithoglyph_nif.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "server/native/src/lithoglyph_nif.zig",
+      "file": "server/native/src/lithoglyph_nif.zig",
+      "severity": "High",
+      "description": "1 C interop imports in server/native/src/lithoglyph_nif.zig",
       "recommended_attack": [
         "memory"
       ],
@@ -21,6 +52,17 @@
       "file": "server/src/lithoglyph/nif_ffi.gleam",
       "severity": "Medium",
       "description": "9 @external FFI calls in server/src/lithoglyph/nif_ffi.gleam",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "server/src/lithoglyph/client.gleam",
+      "file": "server/src/lithoglyph/client.gleam",
+      "severity": "Medium",
+      "description": "7 @external FFI calls in server/src/lithoglyph/client.gleam",
       "recommended_attack": [
         "memory"
       ],
@@ -58,48 +100,6 @@
         "cpu"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "UnsafeCode",
-      "location": "server/native/src/lithoglyph_nif.zig",
-      "file": "server/native/src/lithoglyph_nif.zig",
-      "severity": "High",
-      "description": "22 unsafe pointer casts in server/native/src/lithoglyph_nif.zig",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UnsafeFFI",
-      "location": "server/native/src/lithoglyph_nif.zig",
-      "file": "server/native/src/lithoglyph_nif.zig",
-      "severity": "High",
-      "description": "1 C interop imports in server/native/src/lithoglyph_nif.zig",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "ui/src/components/Grid.res",
-      "file": "ui/src/components/Grid.res",
-      "severity": "Medium",
-      "description": "4 unsafe get calls in ui/src/components/Grid.res",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
     }
   ],
   "statistics": {
@@ -112,126 +112,6 @@
     "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 182,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "server/src/abi/Foreign.idr",
-      "lines": 219,
-      "unsafe_blocks": 9,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "server/src/lithoglyph/client.gleam",
-      "lines": 304,
-      "unsafe_blocks": 7,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "server/src/lithoglyph/nif_ffi.gleam",
-      "lines": 51,
-      "unsafe_blocks": 9,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "server/src/glyphbase_server.gleam",
-      "lines": 131,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "server/src/router.gleam",
-      "lines": 595,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "server/ffi/zig/src/main.zig",
-      "lines": 488,
-      "unsafe_blocks": 3,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "server/native/src/lithoglyph_nif.zig",
-      "lines": 462,
-      "unsafe_blocks": 23,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ui/src/api/Client.res",
-      "lines": 150,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ui/src/bindings/Fetch.res",
-      "lines": 14,
-      "unsafe_blocks": 6,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ui/src/bindings/Webapi.res",
-      "lines": 30,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
     {
       "file_path": "ui/src/stores/CollaborationStore.res",
       "lines": 196,
@@ -263,36 +143,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ui/src/App.res",
-      "lines": 1093,
-      "unsafe_blocks": 2,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ui/src/components/Grid.res",
-      "lines": 699,
-      "unsafe_blocks": 3,
-      "panic_sites": 0,
-      "unwrap_calls": 4,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ui/src/views/CalendarStore.res",
-      "lines": 160,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "ui/src/views/GalleryStore.res",
       "lines": 192,
       "unsafe_blocks": 0,
@@ -311,19 +161,187 @@
       "allocation_sites": 0,
       "io_operations": 2,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "ui/src/views/CalendarStore.res",
+      "lines": 160,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ui/src/App.res",
+      "lines": 1093,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ui/src/bindings/Fetch.res",
+      "lines": 14,
+      "unsafe_blocks": 6,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ui/src/bindings/Webapi.res",
+      "lines": 30,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ui/src/api/Client.res",
+      "lines": 150,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ui/src/components/Grid.res",
+      "lines": 699,
+      "unsafe_blocks": 3,
+      "panic_sites": 0,
+      "unwrap_calls": 4,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "server/native/src/lithoglyph_nif.zig",
+      "lines": 462,
+      "unsafe_blocks": 23,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "server/src/abi/Foreign.idr",
+      "lines": 219,
+      "unsafe_blocks": 9,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "server/src/glyphbase_server.gleam",
+      "lines": 131,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "server/src/lithoglyph/nif_ffi.gleam",
+      "lines": 51,
+      "unsafe_blocks": 9,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "server/src/lithoglyph/client.gleam",
+      "lines": 304,
+      "unsafe_blocks": 7,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "server/src/router.gleam",
+      "lines": 595,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "server/ffi/zig/src/main.zig",
+      "lines": 488,
+      "unsafe_blocks": 3,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 274,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 182,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
     }
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "server/src/lithoglyph/client.gleam",
-        "to": "server/src/lithoglyph/nif_ffi.gleam",
-        "relation": "shared_dir:server/src/lithoglyph",
+        "from": "ui/src/bindings/Fetch.res",
+        "to": "ui/src/bindings/Webapi.res",
+        "relation": "shared_dir:ui/src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/views/GalleryStore.res",
+        "to": "ui/src/views/FormStore.res",
+        "relation": "shared_dir:ui/src/views",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/views/FormStore.res",
+        "to": "ui/src/views/CalendarStore.res",
+        "relation": "shared_dir:ui/src/views",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/glyphbase_server.gleam",
+        "to": "server/src/router.gleam",
+        "relation": "shared_dir:server/src",
         "weight": 1.0
       },
       {
@@ -339,27 +357,9 @@
         "weight": 1.0
       },
       {
-        "from": "server/src/glyphbase_server.gleam",
-        "to": "server/src/router.gleam",
-        "relation": "shared_dir:server/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/views/CalendarStore.res",
-        "to": "ui/src/views/GalleryStore.res",
-        "relation": "shared_dir:ui/src/views",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/views/GalleryStore.res",
-        "to": "ui/src/views/FormStore.res",
-        "relation": "shared_dir:ui/src/views",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/bindings/Fetch.res",
-        "to": "ui/src/bindings/Webapi.res",
-        "relation": "shared_dir:ui/src/bindings",
+        "from": "server/src/lithoglyph/nif_ffi.gleam",
+        "to": "server/src/lithoglyph/client.gleam",
+        "relation": "shared_dir:server/src/lithoglyph",
         "weight": 1.0
       }
     ]
@@ -367,14 +367,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeFFI",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "ui/src/components/Grid.res"
+          "server/native/src/lithoglyph_nif.zig",
+          "server/src/lithoglyph/nif_ffi.gleam",
+          "server/src/lithoglyph/client.gleam",
+          "server/ffi/zig/src/main.zig"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -391,24 +394,21 @@
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "server/ffi/zig/src/main.zig",
-          "server/native/src/lithoglyph_nif.zig"
+          "server/native/src/lithoglyph_nif.zig",
+          "server/ffi/zig/src/main.zig"
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UnsafeFFI",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "server/src/lithoglyph/client.gleam",
-          "server/src/lithoglyph/nif_ffi.gleam",
-          "server/ffi/zig/src/main.zig",
-          "server/native/src/lithoglyph_nif.zig"
+          "ui/src/components/Grid.res"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "PanicPath->Memory"
       }
     ]
   },

@@ -5,18 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "UnboundedAllocation",
-      "location": "src/manifest/mod.rs",
-      "file": "src/manifest/mod.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in src/manifest/mod.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "PanicPath",
       "location": "tests/integration_test.rs",
       "file": "tests/integration_test.rs",
@@ -28,6 +16,18 @@
       ],
       "suppressed": true,
       "test_context": "test_only"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "src/manifest/mod.rs",
+      "file": "src/manifest/mod.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/manifest/mod.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
     },
     {
       "category": "MutationGap",
@@ -50,13 +50,33 @@
   },
   "file_statistics": [
     {
-      "file_path": "src/manifest/mod.rs",
-      "lines": 541,
+      "file_path": "tests/integration_test.rs",
+      "lines": 454,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 1,
+      "unwrap_calls": 42,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/abi-ffi-gate.jl",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -66,27 +86,6 @@
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 8,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/codegen/lustre_gen.rs",
-      "lines": 352,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/codegen/mod.rs",
-      "lines": 155,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -111,6 +110,37 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "src/codegen/mod.rs",
+      "lines": 155,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/codegen/lustre_gen.rs",
+      "lines": 352,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/manifest/mod.rs",
+      "lines": 541,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "setup.sh",
       "lines": 287,
       "unsafe_blocks": 0,
@@ -119,42 +149,12 @@
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/abi-ffi-gate.jl",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/install-zig.sh",
-      "lines": 59,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/integration_test.rs",
-      "lines": 454,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 42,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "disk",
     "memory",
-    "cpu",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -165,8 +165,8 @@
         "weight": 1.0
       },
       {
-        "from": "src/codegen/lustre_gen.rs",
-        "to": "src/codegen/mod.rs",
+        "from": "src/codegen/mod.rs",
+        "to": "src/codegen/lustre_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
       }
@@ -183,6 +183,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -203,16 +213,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

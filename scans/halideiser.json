@@ -1,21 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "halideiser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "UnboundedAllocation",
-      "location": "src/manifest/mod.rs",
-      "file": "src/manifest/mod.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in src/manifest/mod.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    },
     {
       "category": "PanicPath",
       "location": "tests/integration_tests.rs",
@@ -28,6 +16,18 @@
       ],
       "suppressed": true,
       "test_context": "test_only"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "src/manifest/mod.rs",
+      "file": "src/manifest/mod.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/manifest/mod.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
     },
     {
       "category": "MutationGap",
@@ -50,13 +50,43 @@
   },
   "file_statistics": [
     {
-      "file_path": "src/manifest/mod.rs",
-      "lines": 378,
+      "file_path": "tests/integration_tests.rs",
+      "lines": 424,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 18,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/interface/abi/Halideiser/ABI/Foreign.idr",
+      "lines": 350,
+      "unsafe_blocks": 16,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/interface/ffi/src/main.zig",
+      "lines": 610,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -91,23 +121,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/abi/Halideiser/ABI/Foreign.idr",
-      "lines": 350,
-      "unsafe_blocks": 16,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 610,
+      "file_path": "src/manifest/mod.rs",
+      "lines": 378,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -119,32 +139,12 @@
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/install-zig.sh",
-      "lines": 59,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/integration_tests.rs",
-      "lines": 424,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 18,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "disk",
     "memory",
-    "cpu",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -176,16 +176,6 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
@@ -193,6 +183,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",

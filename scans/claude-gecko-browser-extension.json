@@ -5,15 +5,12 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "src/content/content.js",
-      "file": "src/content/content.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in src/content/content.js",
-      "recommended_attack": [
-        "memory",
-        "network"
-      ],
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
       "test_context": "production"
     },
     {
@@ -29,12 +26,15 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
+      "category": "DynamicCodeExecution",
+      "location": "src/content/content.js",
+      "file": "src/content/content.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in src/content/content.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
       "test_context": "production"
     }
   ],
@@ -80,10 +80,10 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "network",
-    "disk",
     "cpu",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": []
@@ -92,25 +92,25 @@
     "rows": [
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/content/content.js",
-          "src/popup/popup.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "src/content/content.js",
-          "src/popup/popup.js"
+          "src/popup/popup.js",
+          "src/content/content.js"
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/popup/popup.js",
+          "src/content/content.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

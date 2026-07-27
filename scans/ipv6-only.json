@@ -5,18 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "CommandInjection",
-      "location": "src/scripts/ipv6-config.sh",
-      "file": "src/scripts/ipv6-config.sh",
-      "severity": "Critical",
-      "description": "eval usage in src/scripts/ipv6-config.sh",
-      "recommended_attack": [
-        "cpu",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "InsecureProtocol",
       "location": "scripts/he-cert-check.sh",
       "file": "scripts/he-cert-check.sh",
@@ -37,6 +25,18 @@
         "network"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "src/scripts/ipv6-config.sh",
+      "file": "src/scripts/ipv6-config.sh",
+      "severity": "Critical",
+      "description": "eval usage in src/scripts/ipv6-config.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
@@ -50,13 +50,13 @@
   },
   "file_statistics": [
     {
-      "file_path": "src/scripts/ipv6-config.sh",
-      "lines": 315,
+      "file_path": "scripts/he-check-status.sh",
+      "lines": 153,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 5,
       "threading_constructs": 0
     },
     {
@@ -67,16 +67,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/he-check-status.sh",
-      "lines": 153,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
       "threading_constructs": 0
     },
     {
@@ -98,23 +88,33 @@
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "src/scripts/ipv6-config.sh",
+      "lines": 315,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "network",
     "cpu",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/he-cert-check.sh",
-        "to": "scripts/he-check-status.sh",
+        "from": "scripts/he-check-status.sh",
+        "to": "scripts/he-cert-check.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "scripts/he-check-status.sh",
+        "from": "scripts/he-cert-check.sh",
         "to": "scripts/he-tunnel-setup.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
@@ -129,26 +129,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/he-cert-check.sh"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/he-tunnel-setup.sh"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -168,6 +148,26 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/he-cert-check.sh"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/he-tunnel-setup.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

@@ -6,10 +6,46 @@
   "weak_points": [
     {
       "category": "DynamicCodeExecution",
-      "location": "src/backends/abstract.jl",
-      "file": "src/backends/abstract.jl",
+      "location": "src/coprocessors/qpu.jl",
+      "file": "src/coprocessors/qpu.jl",
       "severity": "High",
-      "description": "eval/Meta.parse in src/backends/abstract.jl",
+      "description": "eval/Meta.parse in src/coprocessors/qpu.jl",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "src/coprocessors/tpu.jl",
+      "file": "src/coprocessors/tpu.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/coprocessors/tpu.jl",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "src/coprocessors/crypto.jl",
+      "file": "src/coprocessors/crypto.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/coprocessors/crypto.jl",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "src/coprocessors/math.jl",
+      "file": "src/coprocessors/math.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/coprocessors/math.jl",
       "recommended_attack": [
         "cpu",
         "memory"
@@ -42,46 +78,10 @@
     },
     {
       "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/math.jl",
-      "file": "src/coprocessors/math.jl",
+      "location": "src/backends/abstract.jl",
+      "file": "src/backends/abstract.jl",
       "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/math.jl",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/crypto.jl",
-      "file": "src/coprocessors/crypto.jl",
-      "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/crypto.jl",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/tpu.jl",
-      "file": "src/coprocessors/tpu.jl",
-      "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/tpu.jl",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/qpu.jl",
-      "file": "src/coprocessors/qpu.jl",
-      "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/qpu.jl",
+      "description": "eval/Meta.parse in src/backends/abstract.jl",
       "recommended_attack": [
         "cpu",
         "memory"
@@ -141,8 +141,8 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": []
@@ -154,16 +154,32 @@
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "src/backends/abstract.jl",
+          "src/coprocessors/qpu.jl",
+          "src/coprocessors/tpu.jl",
+          "src/coprocessors/crypto.jl",
+          "src/coprocessors/math.jl",
           "src/coprocessors/fpga.jl",
           "src/coprocessors/npu.jl",
-          "src/coprocessors/math.jl",
-          "src/coprocessors/crypto.jl",
-          "src/coprocessors/tpu.jl",
-          "src/coprocessors/qpu.jl"
+          "src/backends/abstract.jl"
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/coprocessors/qpu.jl",
+          "src/coprocessors/tpu.jl",
+          "src/coprocessors/crypto.jl",
+          "src/coprocessors/math.jl",
+          "src/coprocessors/fpga.jl",
+          "src/coprocessors/npu.jl",
+          "src/backends/abstract.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "ProofDrift",
@@ -174,22 +190,6 @@
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "src/backends/abstract.jl",
-          "src/coprocessors/fpga.jl",
-          "src/coprocessors/npu.jl",
-          "src/coprocessors/math.jl",
-          "src/coprocessors/crypto.jl",
-          "src/coprocessors/tpu.jl",
-          "src/coprocessors/qpu.jl"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }
