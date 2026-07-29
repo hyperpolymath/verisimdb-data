@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "eclexiaiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -151,31 +151,21 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/abi/Eclexiaiser/ABI/Types.idr",
-        "to": "src/interface/abi/Eclexiaiser/ABI/Foreign.idr",
-        "relation": "shared_dir:src/interface/abi/Eclexiaiser/ABI",
-        "weight": 1.0
-      },
-      {
         "from": "src/codegen/reporter.rs",
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Eclexiaiser/ABI/Types.idr",
+        "to": "src/interface/abi/Eclexiaiser/ABI/Foreign.idr",
+        "relation": "shared_dir:src/interface/abi/Eclexiaiser/ABI",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -185,6 +175,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -197,14 +197,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/manifest/mod.rs"
+          "tests/integration_tests.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnsafeCode",

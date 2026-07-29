@@ -50,7 +50,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 9090,
+    "total_lines": 9743,
     "unsafe_blocks": 15,
     "panic_sites": 1,
     "unwrap_calls": 0,
@@ -202,13 +202,25 @@
   ],
   "recommended_attacks": [
     "cpu",
+    "concurrency",
     "disk",
     "network",
-    "concurrency",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/interface/ffi/src/main.zig",
+        "to": "src/interface/ffi/src/verisimdb.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/verisimdb.zig",
+        "to": "src/interface/ffi/src/dbus.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
       {
         "from": "src/core/scanner.eph",
         "to": "src/core/diagnostics.eph",
@@ -250,23 +262,21 @@
         "to": "src/interface/abi/Foreign.idr",
         "relation": "shared_dir:src/interface/abi",
         "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/main.zig",
-        "to": "src/interface/ffi/src/verisimdb.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/verisimdb.zig",
-        "to": "src/interface/ffi/src/dbus.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/core/monitor.eph"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
+      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -296,16 +306,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/core/monitor.eph"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
       }
     ]
   }

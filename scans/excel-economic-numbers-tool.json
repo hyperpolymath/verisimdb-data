@@ -216,7 +216,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 22376,
+    "total_lines": 23083,
     "unsafe_blocks": 41,
     "panic_sites": 0,
     "unwrap_calls": 5,
@@ -619,35 +619,11 @@
   "recommended_attacks": [
     "cpu",
     "memory",
-    "network",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/rescript/adapters/UnoAdapter.res",
-        "to": "src/rescript/adapters/OfficeJsAdapter.res",
-        "relation": "shared_dir:src/rescript/adapters",
-        "weight": 1.0
-      },
-      {
-        "from": "src/julia/server/rate_limiting.jl",
-        "to": "src/julia/server/authentication.jl",
-        "relation": "shared_dir:src/julia/server",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rescript/ConstraintEditor.res",
-        "to": "src/rescript/Settings.res",
-        "relation": "shared_dir:src/rescript",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rescript/Settings.res",
-        "to": "src/rescript/DataBrowser.res",
-        "relation": "shared_dir:src/rescript",
-        "weight": 1.0
-      },
       {
         "from": "src/plugins/marketplace.jl",
         "to": "src/plugins/webhooks.jl",
@@ -661,9 +637,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/visualization/report_generator.jl",
-        "to": "src/visualization/charts.rs",
-        "relation": "shared_dir:src/visualization",
+        "from": "src/collaboration/websocket_server.jl",
+        "to": "src/collaboration/comments.res",
+        "relation": "shared_dir:src/collaboration",
         "weight": 1.0
       },
       {
@@ -721,15 +697,51 @@
         "weight": 1.0
       },
       {
-        "from": "src/collaboration/websocket_server.jl",
-        "to": "src/collaboration/comments.res",
-        "relation": "shared_dir:src/collaboration",
+        "from": "src/rescript/adapters/UnoAdapter.res",
+        "to": "src/rescript/adapters/OfficeJsAdapter.res",
+        "relation": "shared_dir:src/rescript/adapters",
+        "weight": 1.0
+      },
+      {
+        "from": "src/julia/server/rate_limiting.jl",
+        "to": "src/julia/server/authentication.jl",
+        "relation": "shared_dir:src/julia/server",
+        "weight": 1.0
+      },
+      {
+        "from": "src/visualization/report_generator.jl",
+        "to": "src/visualization/charts.rs",
+        "relation": "shared_dir:src/visualization",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rescript/ConstraintEditor.res",
+        "to": "src/rescript/Settings.res",
+        "relation": "shared_dir:src/rescript",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rescript/Settings.res",
+        "to": "src/rescript/DataBrowser.res",
+        "relation": "shared_dir:src/rescript",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/collaboration/comments.res",
+          "src/rescript/ConstraintEditor.res",
+          "src/rescript/Settings.res"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -743,23 +755,6 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration/test_e2e.jl",
-          "src/julia/client.jl",
-          "src/julia/data_sources/DBnomics.jl",
-          "src/julia/data_sources/BIS.jl",
-          "src/julia/data_sources/OECD.jl",
-          "src/julia/data_sources/WorldBank.jl",
-          "src/julia/data_sources/FRED.jl",
-          "src/ai/insights.jl"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -768,18 +763,6 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/collaboration/comments.res",
-          "src/rescript/ConstraintEditor.res",
-          "src/rescript/Settings.res"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "ProofDrift",
@@ -802,6 +785,23 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration/test_e2e.jl",
+          "src/julia/client.jl",
+          "src/julia/data_sources/DBnomics.jl",
+          "src/julia/data_sources/BIS.jl",
+          "src/julia/data_sources/OECD.jl",
+          "src/julia/data_sources/WorldBank.jl",
+          "src/julia/data_sources/FRED.jl",
+          "src/ai/insights.jl"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

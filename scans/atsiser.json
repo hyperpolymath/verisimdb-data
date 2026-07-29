@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "atsiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -64,7 +64,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 6818,
+    "total_lines": 7525,
     "unsafe_blocks": 21,
     "panic_sites": 0,
     "unwrap_calls": 21,
@@ -180,8 +180,8 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
@@ -209,6 +209,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -218,16 +228,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UncheckedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "examples/safe-malloc/include/stdlib_subset.h"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -241,14 +241,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UncheckedAllocation",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "tests/integration_test.rs"
+          "examples/safe-malloc/include/stdlib_subset.h"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UncheckedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",

@@ -87,7 +87,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 11727,
+    "total_lines": 12434,
     "unsafe_blocks": 16,
     "panic_sites": 0,
     "unwrap_calls": 29,
@@ -272,19 +272,13 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "network",
-    "memory",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "src/abi/verify.rs",
         "to": "src/abi/zig_ffi_parser.rs",
@@ -314,20 +308,39 @@
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/integration_test.rs"
+          "src/abi/verify.rs",
+          "src/abi/idris_emitter.rs",
+          "src/scan/mod.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/scaffold.rs"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -343,14 +356,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/scaffold.rs"
+          "tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -361,19 +374,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/abi/verify.rs",
-          "src/abi/idris_emitter.rs",
-          "src/scan/mod.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

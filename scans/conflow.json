@@ -138,7 +138,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 14117,
+    "total_lines": 14824,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 19,
@@ -497,10 +497,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "cpu",
     "concurrency",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -508,6 +508,12 @@
         "from": "tests/e2e_test.rs",
         "to": "tests/property_test.rs",
         "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/analyzer/recommender.rs",
+        "to": "src/analyzer/patterns.rs",
+        "relation": "shared_dir:src/analyzer",
         "weight": 1.0
       },
       {
@@ -553,6 +559,30 @@
         "weight": 1.0
       },
       {
+        "from": "src/cache/hash.rs",
+        "to": "src/cache/filesystem.rs",
+        "relation": "shared_dir:src/cache",
+        "weight": 1.0
+      },
+      {
+        "from": "src/pipeline/validation.rs",
+        "to": "src/pipeline/dag.rs",
+        "relation": "shared_dir:src/pipeline",
+        "weight": 1.0
+      },
+      {
+        "from": "src/pipeline/dag.rs",
+        "to": "src/pipeline/definition.rs",
+        "relation": "shared_dir:src/pipeline",
+        "weight": 1.0
+      },
+      {
+        "from": "src/pipeline/definition.rs",
+        "to": "src/pipeline/executor.rs",
+        "relation": "shared_dir:src/pipeline",
+        "weight": 1.0
+      },
+      {
         "from": "src/cli/watch.rs",
         "to": "src/cli/rsr.rs",
         "relation": "shared_dir:src/cli",
@@ -583,12 +613,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/analyzer/recommender.rs",
-        "to": "src/analyzer/patterns.rs",
-        "relation": "shared_dir:src/analyzer",
-        "weight": 1.0
-      },
-      {
         "from": "src/errors/mod.rs",
         "to": "src/errors/recovery.rs",
         "relation": "shared_dir:src/errors",
@@ -604,30 +628,6 @@
         "from": "examples/multi-env/environments/dev.ncl",
         "to": "examples/multi-env/environments/staging.ncl",
         "relation": "shared_dir:examples/multi-env/environments",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cache/hash.rs",
-        "to": "src/cache/filesystem.rs",
-        "relation": "shared_dir:src/cache",
-        "weight": 1.0
-      },
-      {
-        "from": "src/pipeline/validation.rs",
-        "to": "src/pipeline/dag.rs",
-        "relation": "shared_dir:src/pipeline",
-        "weight": 1.0
-      },
-      {
-        "from": "src/pipeline/dag.rs",
-        "to": "src/pipeline/definition.rs",
-        "relation": "shared_dir:src/pipeline",
-        "weight": 1.0
-      },
-      {
-        "from": "src/pipeline/definition.rs",
-        "to": "src/pipeline/executor.rs",
-        "relation": "shared_dir:src/pipeline",
         "weight": 1.0
       },
       {
@@ -839,28 +839,8 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rsr/remediation.rs",
-          "src/rsr/schemas.rs",
-          "src/rsr/config.rs",
-          "src/rsr/compliance.rs",
-          "src/rsr/templates.rs",
-          "src/rsr/requirements.rs",
-          "src/pipeline/definition.rs",
-          "src/analyzer/mod.rs",
-          "src/cache/filesystem.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tests/e2e_test.rs"
@@ -868,7 +848,7 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -892,7 +872,7 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "tests/e2e_test.rs"
@@ -900,7 +880,27 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rsr/remediation.rs",
+          "src/rsr/schemas.rs",
+          "src/rsr/config.rs",
+          "src/rsr/compliance.rs",
+          "src/rsr/templates.rs",
+          "src/rsr/requirements.rs",
+          "src/pipeline/definition.rs",
+          "src/analyzer/mod.rs",
+          "src/cache/filesystem.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
