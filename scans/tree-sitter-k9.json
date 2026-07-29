@@ -93,9 +93,9 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "memory",
-    "cpu"
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -110,24 +110,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "bindings/rust/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UncheckedAllocation",
-        "sink_axis": "memory",
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
-          "src/tree_sitter/array.h"
+          "tests/aspect/grammar_aspect_test.ts"
         ],
         "frameworks": [],
-        "relation": "UncheckedAllocation->Memory"
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -140,6 +130,16 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
+        "source_category": "UncheckedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "src/tree_sitter/array.h"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedAllocation->Memory"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
@@ -150,14 +150,14 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "tests/aspect/grammar_aspect_test.ts"
+          "bindings/rust/lib.rs"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

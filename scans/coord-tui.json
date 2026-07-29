@@ -12,10 +12,22 @@
       "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
       "recommended_attack": [],
       "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "src/main.rs",
+      "file": "src/main.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 1098,
+    "total_lines": 1111,
     "unsafe_blocks": 0,
     "panic_sites": 1,
     "unwrap_calls": 0,
@@ -36,7 +48,7 @@
     },
     {
       "file_path": "src/main.rs",
-      "lines": 732,
+      "lines": 745,
       "unsafe_blocks": 0,
       "panic_sites": 1,
       "unwrap_calls": 0,
@@ -57,13 +69,35 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk"
+    "disk",
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      }
+    ]
   }
 }

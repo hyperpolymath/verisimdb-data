@@ -16,18 +16,20 @@
       "test_context": "test_only"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
+      "category": "UnsafeCode",
+      "location": "src/interface/ffi/src/main.zig",
+      "file": "src/interface/ffi/src/main.zig",
+      "severity": "High",
+      "description": "2 unsafe pointer casts in src/interface/ffi/src/main.zig",
+      "recommended_attack": [
+        "memory"
+      ],
       "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 4210,
-    "unsafe_blocks": 4,
+    "total_lines": 4218,
+    "unsafe_blocks": 6,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
@@ -57,7 +59,7 @@
     },
     {
       "file_path": "src/interface/Abi/Foreign.idr",
-      "lines": 83,
+      "lines": 89,
       "unsafe_blocks": 4,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -67,8 +69,8 @@
     },
     {
       "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 275,
-      "unsafe_blocks": 0,
+      "lines": 285,
+      "unsafe_blocks": 2,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 1,
@@ -78,7 +80,8 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": []
@@ -94,6 +97,16 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

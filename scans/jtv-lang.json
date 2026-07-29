@@ -573,12 +573,24 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/jtv-cli/src/rsr_check.rs",
+        "to": "crates/jtv-cli/src/repl.rs",
+        "relation": "shared_dir:crates/jtv-cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/jtv-cli/src/repl.rs",
+        "to": "crates/jtv-cli/src/main.rs",
+        "relation": "shared_dir:crates/jtv-cli/src",
+        "weight": 1.0
+      },
       {
         "from": "crates/jtv-core/src/typechecker.rs",
         "to": "crates/jtv-core/src/recovery.rs",
@@ -649,18 +661,6 @@
         "from": "crates/jtv-core/src/ast.rs",
         "to": "crates/jtv-core/src/purity.rs",
         "relation": "shared_dir:crates/jtv-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/jtv-cli/src/rsr_check.rs",
-        "to": "crates/jtv-cli/src/repl.rs",
-        "relation": "shared_dir:crates/jtv-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/jtv-cli/src/repl.rs",
-        "to": "crates/jtv-cli/src/main.rs",
-        "relation": "shared_dir:crates/jtv-cli/src",
         "weight": 1.0
       },
       {
@@ -980,21 +980,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "UncheckedError",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/jtv-core/tests/coproc_tests.rs",
-          "crates/jtv-core/tests/mutation_killers.rs",
-          "crates/jtv-core/tests/compatibility_tests.rs",
-          "crates/jtv-core/tests/coproc_corpus_tests.rs",
-          "crates/jtv-core/tests/parser_tests.rs",
-          "crates/jtv-core/tests/property_tests.rs"
+          "packages/jtv-analyzer/src/Main.res"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "UncheckedError->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -1009,6 +1004,18 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "ffi/zig/src/ZigFFI.jl"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -1037,28 +1044,21 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "UnsafeFFI",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "ffi/zig/src/ZigFFI.jl"
+          "crates/jtv-core/tests/coproc_tests.rs",
+          "crates/jtv-core/tests/mutation_killers.rs",
+          "crates/jtv-core/tests/compatibility_tests.rs",
+          "crates/jtv-core/tests/coproc_corpus_tests.rs",
+          "crates/jtv-core/tests/parser_tests.rs",
+          "crates/jtv-core/tests/property_tests.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "packages/jtv-analyzer/src/Main.res"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UncheckedError->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",

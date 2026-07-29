@@ -16,15 +16,6 @@
       "test_context": "test_only"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "src/rust/src/main.rs",
       "file": "src/rust/src/main.rs",
@@ -38,10 +29,10 @@
     }
   ],
   "statistics": {
-    "total_lines": 11052,
+    "total_lines": 12198,
     "unsafe_blocks": 4,
     "panic_sites": 0,
-    "unwrap_calls": 1,
+    "unwrap_calls": 0,
     "allocation_sites": 9,
     "io_operations": 10,
     "threading_constructs": 0
@@ -88,37 +79,44 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/rust/src/main.rs",
-      "lines": 391,
+      "file_path": "src/rust/src/lib.rs",
+      "lines": 884,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 1,
+      "unwrap_calls": 0,
       "safe_unwrap_calls": 4,
       "allocation_sites": 8,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/rust/src/main.rs",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
+    "disk",
     "memory"
   ],
   "dependency_graph": {
-    "edges": []
+    "edges": [
+      {
+        "from": "src/rust/src/lib.rs",
+        "to": "src/rust/src/main.rs",
+        "relation": "shared_dir:src/rust/src",
+        "weight": 1.0
+      }
+    ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -128,6 +126,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnboundedAllocation",

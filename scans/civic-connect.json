@@ -386,11 +386,11 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "network",
+    "concurrency",
     "cpu",
     "memory",
-    "concurrency"
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -425,15 +425,15 @@
         "weight": 1.0
       },
       {
-        "from": "backend/ada-core/src/civicconnect-accounts.ads",
-        "to": "backend/ada-core/src/civicconnect.ads",
-        "relation": "shared_dir:backend/ada-core/src",
-        "weight": 1.0
-      },
-      {
         "from": "indieweb2-bastion/policy/curps/webmention.ncl",
         "to": "indieweb2-bastion/policy/curps/policy.ncl",
         "relation": "shared_dir:indieweb2-bastion/policy/curps",
+        "weight": 1.0
+      },
+      {
+        "from": "backend/ada-core/src/civicconnect-accounts.ads",
+        "to": "backend/ada-core/src/civicconnect.ads",
+        "relation": "shared_dir:backend/ada-core/src",
         "weight": 1.0
       },
       {
@@ -945,6 +945,34 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "backend/rust-api/src/crypto/mod.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Ecto",
+          "Phoenix"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "backend/elixir-phoenix/lib/civic_web.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Ecto",
+          "Phoenix"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
         "source_category": "UnsafeDeserialization",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -989,20 +1017,6 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "backend/elixir-phoenix/lib/civic_web.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Ecto",
-          "Phoenix"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
         "source_category": "UnsafeDeserialization",
         "sink_axis": "cpu",
         "severity_value": 3.5,
@@ -1015,20 +1029,6 @@
           "Phoenix"
         ],
         "relation": "UnsafeDeserialization->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "backend/rust-api/src/crypto/mod.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Ecto",
-          "Phoenix"
-        ],
-        "relation": "HardcodedSecret->Network"
       }
     ]
   }
