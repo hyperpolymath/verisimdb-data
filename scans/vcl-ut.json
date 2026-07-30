@@ -476,17 +476,17 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "concurrency",
-    "memory",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/fmt/src/lib.rs",
-        "to": "src/interface/fmt/src/main.rs",
-        "relation": "shared_dir:src/interface/fmt/src",
+        "from": "src/interface/lint/src/lib.rs",
+        "to": "src/interface/lint/src/main.rs",
+        "relation": "shared_dir:src/interface/lint/src",
         "weight": 1.0
       },
       {
@@ -496,21 +496,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/parse/src/lexer.rs",
-        "to": "src/interface/parse/src/decider.rs",
-        "relation": "shared_dir:src/interface/parse/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/parse/src/decider.rs",
-        "to": "src/interface/parse/src/parser.rs",
-        "relation": "shared_dir:src/interface/parse/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/parse/src/parser.rs",
-        "to": "src/interface/parse/src/wire.rs",
-        "relation": "shared_dir:src/interface/parse/src",
+        "from": "src/interface/fmt/src/lib.rs",
+        "to": "src/interface/fmt/src/main.rs",
+        "relation": "shared_dir:src/interface/fmt/src",
         "weight": 1.0
       },
       {
@@ -538,27 +526,27 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/lint/src/lib.rs",
-        "to": "src/interface/lint/src/main.rs",
-        "relation": "shared_dir:src/interface/lint/src",
+        "from": "src/interface/parse/src/lexer.rs",
+        "to": "src/interface/parse/src/decider.rs",
+        "relation": "shared_dir:src/interface/parse/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/parse/src/decider.rs",
+        "to": "src/interface/parse/src/parser.rs",
+        "relation": "shared_dir:src/interface/parse/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/parse/src/parser.rs",
+        "to": "src/interface/parse/src/wire.rs",
+        "relation": "shared_dir:src/interface/parse/src",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/attest/src/lib.rs",
-          "src/interface/recompute-wasm/src/lib.rs",
-          "ffi/zig/src/lib.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -572,15 +560,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
+        "source_category": "ResourceLeak",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "src/interface/attest/src/lib.rs",
           "src/interface/recompute-wasm/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "ResourceLeak->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -595,14 +582,27 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "ResourceLeak",
+        "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
+          "src/interface/attest/src/lib.rs",
+          "src/interface/recompute-wasm/src/lib.rs",
+          "ffi/zig/src/lib.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/attest/src/lib.rs",
           "src/interface/recompute-wasm/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "ResourceLeak->Memory"
+        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

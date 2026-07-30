@@ -372,17 +372,53 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
     "concurrency",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
+        "from": "src/gc.rs",
+        "to": "src/doctor.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/doctor.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
         "from": "src/sidecar/lock.rs",
         "to": "src/sidecar/json.rs",
         "relation": "shared_dir:src/sidecar",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/ident.rs",
+        "to": "src/codegen/parser.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/parser.rs",
+        "to": "src/codegen/overlay.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/overlay.rs",
+        "to": "src/codegen/query.rs",
+        "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/tier1/temporal.rs",
+        "to": "src/tier1/provenance.rs",
+        "relation": "shared_dir:src/tier1",
         "weight": 1.0
       },
       {
@@ -410,45 +446,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/codegen/ident.rs",
-        "to": "src/codegen/parser.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
-        "from": "src/codegen/parser.rs",
-        "to": "src/codegen/overlay.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
-        "from": "src/codegen/overlay.rs",
-        "to": "src/codegen/query.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "src/tier1/temporal.rs",
-        "to": "src/tier1/provenance.rs",
-        "relation": "shared_dir:src/tier1",
-        "weight": 1.0
-      },
-      {
-        "from": "src/gc.rs",
-        "to": "src/doctor.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/doctor.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
         "weight": 1.0
       }
     ]
@@ -456,28 +456,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/parser.rs",
-          "src/sidecar/json.rs",
-          "src/manifest/mod.rs"
+          "tests/provenance_fork_test.rs",
+          "tests/sqlite_intercept_e2e.rs",
+          "tests/logging_test.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/parser.rs",
-          "src/sidecar/json.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -492,16 +480,28 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/sqlite_intercept_e2e.rs",
-          "tests/logging_test.rs"
+          "src/codegen/parser.rs",
+          "src/sidecar/json.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs",
+          "src/sidecar/json.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

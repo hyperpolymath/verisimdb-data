@@ -239,13 +239,25 @@
     }
   ],
   "recommended_attacks": [
+    "concurrency",
     "cpu",
     "disk",
-    "memory",
-    "concurrency"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "rust-parser/src/analyzer/termination.rs",
+        "to": "rust-parser/src/analyzer/call_graph.rs",
+        "relation": "shared_dir:rust-parser/src/analyzer",
+        "weight": 1.0
+      },
+      {
+        "from": "rust-parser/tests/integration_tests.rs",
+        "to": "rust-parser/tests/property_tests.rs",
+        "relation": "shared_dir:rust-parser/tests",
+        "weight": 1.0
+      },
       {
         "from": "elixir-coordinator/lib/coordinator/property_manager.ex",
         "to": "elixir-coordinator/lib/coordinator/database.ex",
@@ -274,18 +286,6 @@
         "from": "rust-parser/src/ast/pretty_print.rs",
         "to": "rust-parser/src/ast/visitor.rs",
         "relation": "shared_dir:rust-parser/src/ast",
-        "weight": 1.0
-      },
-      {
-        "from": "rust-parser/src/analyzer/termination.rs",
-        "to": "rust-parser/src/analyzer/call_graph.rs",
-        "relation": "shared_dir:rust-parser/src/analyzer",
-        "weight": 1.0
-      },
-      {
-        "from": "rust-parser/tests/integration_tests.rs",
-        "to": "rust-parser/tests/property_tests.rs",
-        "relation": "shared_dir:rust-parser/tests",
         "weight": 1.0
       },
       {
@@ -395,30 +395,28 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
         "files": [
-          "rust-parser/tests/integration_tests.rs",
-          "rust-parser/src/parser/parser.rs"
+          "deployment/arangodb/init-db.js"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
         "files": [
-          "rust-parser/tests/integration_tests.rs",
-          "rust-parser/src/parser/parser.rs"
+          "deployment/arangodb/init-db.js"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -445,28 +443,30 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "deployment/arangodb/init-db.js"
+          "rust-parser/tests/integration_tests.rs",
+          "rust-parser/src/parser/parser.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "deployment/arangodb/init-db.js"
+          "rust-parser/tests/integration_tests.rs",
+          "rust-parser/src/parser/parser.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

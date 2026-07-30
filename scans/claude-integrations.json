@@ -348,13 +348,19 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
     "network",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "firefox-mcp/host/Server.res",
+        "to": "firefox-mcp/host/NativeHost.res",
+        "relation": "shared_dir:firefox-mcp/host",
+        "weight": 1.0
+      },
       {
         "from": "gitlab-bridge/src/bindings/Express.res",
         "to": "gitlab-bridge/src/bindings/Crypto.res",
@@ -365,12 +371,6 @@
         "from": "gitlab-bridge/src/bindings/Crypto.res",
         "to": "gitlab-bridge/src/bindings/Vitest.res",
         "relation": "shared_dir:gitlab-bridge/src/bindings",
-        "weight": 1.0
-      },
-      {
-        "from": "firefox-mcp/host/Server.res",
-        "to": "firefox-mcp/host/NativeHost.res",
-        "relation": "shared_dir:firefox-mcp/host",
         "weight": 1.0
       },
       {
@@ -522,16 +522,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "firefox-lsp/lib/lsp/server.ex"
+          "firefox-lsp/lib/adapters/firefox.ex"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "AtomExhaustion->Memory"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "HardcodedSecret",
@@ -546,28 +546,16 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "AtomExhaustion",
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "gecko-browser-extension/src/content/content.js"
+          "firefox-lsp/lib/lsp/server.ex"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "gecko-browser-extension/src/content/content.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "AtomExhaustion->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -582,6 +570,18 @@
         "relation": "CommandInjection->Cpu"
       },
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "gecko-browser-extension/src/content/content.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
         "source_category": "UnsafeDeserialization",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -594,16 +594,28 @@
         "relation": "UnsafeDeserialization->Memory"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "firefox-lsp/lib/adapters/firefox.ex"
+          "gecko-browser-extension/src/content/content.js"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "gitlab-bridge/src/services/MRReviewer.res"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeDeserialization->Cpu"
       },
       {
         "source_category": "MutationGap",
@@ -617,18 +629,6 @@
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "UnsafeDeserialization",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "gitlab-bridge/src/services/MRReviewer.res"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeDeserialization->Cpu"
       }
     ]
   },
