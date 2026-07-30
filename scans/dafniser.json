@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "dafniser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -132,48 +132,28 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "memory",
     "disk",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/abi/Dafniser/ABI/Types.idr",
-        "to": "src/interface/abi/Dafniser/ABI/Foreign.idr",
-        "relation": "shared_dir:src/interface/abi/Dafniser/ABI",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Dafniser/ABI/Types.idr",
+        "to": "src/interface/abi/Dafniser/ABI/Foreign.idr",
+        "relation": "shared_dir:src/interface/abi/Dafniser/ABI",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
@@ -193,6 +173,26 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

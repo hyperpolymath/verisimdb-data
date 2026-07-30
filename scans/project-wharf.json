@@ -434,6 +434,36 @@
   "dependency_graph": {
     "edges": [
       {
+        "from": "bin/yacht-agent/src/ebpf.rs",
+        "to": "bin/yacht-agent/src/main.rs",
+        "relation": "shared_dir:bin/yacht-agent/src",
+        "weight": 1.0
+      },
+      {
+        "from": "deploy/local-test.sh",
+        "to": "deploy/verify-sqli.sh",
+        "relation": "shared_dir:deploy",
+        "weight": 1.0
+      },
+      {
+        "from": "deploy/verify-sqli.sh",
+        "to": "deploy/setup.sh",
+        "relation": "shared_dir:deploy",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/smoke_test.sh",
+        "to": "scripts/render_zone.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/render_zone.sh",
+        "to": "scripts/deploy_yacht.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
         "from": "crates/wharf-core/src/fleet.rs",
         "to": "crates/wharf-core/src/integrity.rs",
         "relation": "shared_dir:crates/wharf-core/src",
@@ -485,36 +515,6 @@
         "from": "crates/wharf-core/src/crypto.rs",
         "to": "crates/wharf-core/src/nebula.rs",
         "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/smoke_test.sh",
-        "to": "scripts/render_zone.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/render_zone.sh",
-        "to": "scripts/deploy_yacht.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/yacht-agent/src/ebpf.rs",
-        "to": "bin/yacht-agent/src/main.rs",
-        "relation": "shared_dir:bin/yacht-agent/src",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/local-test.sh",
-        "to": "deploy/verify-sqli.sh",
-        "relation": "shared_dir:deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/verify-sqli.sh",
-        "to": "deploy/setup.sh",
-        "relation": "shared_dir:deploy",
         "weight": 1.0
       },
       {
@@ -810,32 +810,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "crates/wharf-ebpf/src/main.rs",
-          "crates/wharf-ebpf/src/main.rs"
+          "crates/wharf-core/tests/integration.rs"
         ],
         "frameworks": [
           "Networking",
           "WebServer"
         ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "crates/wharf-ebpf/src/main.rs",
-          "crates/wharf-ebpf/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -871,19 +856,6 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -901,8 +873,36 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "crates/wharf-ebpf/src/main.rs",
+          "crates/wharf-ebpf/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "WebServer"
+        ],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnsafeCode",
         "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "crates/wharf-ebpf/src/main.rs",
+          "crates/wharf-ebpf/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "WebServer"
+        ],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
           "crates/wharf-core/tests/integration.rs"
@@ -911,7 +911,7 @@
           "Networking",
           "WebServer"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "PanicPath",

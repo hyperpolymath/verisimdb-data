@@ -351,17 +351,17 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/abi/AbsoluteZero/ABI/Foreign.idr",
-        "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
-        "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
+        "from": "examples/special-ops/os/sched_yield.c",
+        "to": "examples/special-ops/os/ioctl_nop.c",
+        "relation": "shared_dir:examples/special-ops/os",
         "weight": 1.0
       },
       {
@@ -371,9 +371,9 @@
         "weight": 1.0
       },
       {
-        "from": "examples/special-ops/os/sched_yield.c",
-        "to": "examples/special-ops/os/ioctl_nop.c",
-        "relation": "shared_dir:examples/special-ops/os",
+        "from": "src/abi/AbsoluteZero/ABI/Foreign.idr",
+        "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
+        "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
         "weight": 1.0
       }
     ]
@@ -381,15 +381,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "source_category": "ResourceLeak",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "verification/run-local-verification.sh",
-          "verification/verify-proofs.sh"
+          "examples/scheme/nop.scm"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "ResourceLeak->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -414,6 +413,16 @@
         "relation": "ProofDrift->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "examples/haskell/Nop.hs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Cpu"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -424,14 +433,14 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeCode",
         "sink_axis": "cpu",
         "severity_value": 3.5,
         "files": [
-          "examples/haskell/Nop.hs"
+          "examples/ada/balanced_ops.adb"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Cpu"
+        "relation": "UnsafeCode->Cpu"
       },
       {
         "source_category": "PathTraversal",
@@ -460,6 +469,16 @@
       },
       {
         "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/whitespace/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
@@ -469,24 +488,15 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
         "files": [
-          "examples/scheme/nop.scm"
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
         ],
         "frameworks": [],
-        "relation": "ResourceLeak->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/whitespace/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "ResourceLeak",
@@ -497,16 +507,6 @@
         ],
         "frameworks": [],
         "relation": "ResourceLeak->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "examples/ada/balanced_ops.adb"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Cpu"
       }
     ]
   }

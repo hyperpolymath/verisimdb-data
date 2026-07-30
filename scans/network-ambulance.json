@@ -222,10 +222,10 @@
   ],
   "recommended_attacks": [
     "memory",
+    "concurrency",
     "cpu",
     "disk",
-    "network",
-    "concurrency"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -236,9 +236,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/d/core/repairs/interface_repair.d",
-        "to": "src/d/core/repairs/dns_repair.d",
-        "relation": "shared_dir:src/d/core/repairs",
+        "from": "src/diagnostics/interfaces.sh",
+        "to": "src/diagnostics/connectivity.sh",
+        "relation": "shared_dir:src/diagnostics",
         "weight": 1.0
       },
       {
@@ -254,35 +254,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/diagnostics/interfaces.sh",
-        "to": "src/diagnostics/connectivity.sh",
-        "relation": "shared_dir:src/diagnostics",
+        "from": "src/d/core/repairs/interface_repair.d",
+        "to": "src/d/core/repairs/dns_repair.d",
+        "relation": "shared_dir:src/d/core/repairs",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/diagnostics/connectivity.sh"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "src-tauri/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
-      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -302,6 +282,26 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/diagnostics/connectivity.sh"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src-tauri/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

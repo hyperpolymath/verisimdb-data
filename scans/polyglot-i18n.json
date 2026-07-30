@@ -574,17 +574,41 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "memory",
     "cpu",
-    "disk"
+    "network",
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tui/src/polyglot_tui-main.adb",
-        "to": "tui/src/polyglot_tui-terminal.adb",
-        "relation": "shared_dir:tui/src",
+        "from": "src/lib/ocaml/Segmenter.res",
+        "to": "src/lib/ocaml/Stemmer.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/Stemmer.res",
+        "to": "src/lib/ocaml/Plural.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/Plural.res",
+        "to": "src/lib/ocaml/DocumentExtract.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/DocumentExtract.res",
+        "to": "src/lib/ocaml/I18n.res",
+        "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/ocaml/I18n.res",
+        "to": "src/lib/ocaml/FuzzyMatch.res",
+        "relation": "shared_dir:src/lib/ocaml",
         "weight": 1.0
       },
       {
@@ -615,6 +639,12 @@
         "from": "src/core/I18n.res",
         "to": "src/core/FuzzyMatch.res",
         "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "tui/src/polyglot_tui-main.adb",
+        "to": "tui/src/polyglot_tui-terminal.adb",
+        "relation": "shared_dir:tui/src",
         "weight": 1.0
       },
       {
@@ -675,36 +705,6 @@
         "from": "src/lib/bs/core/I18n.res",
         "to": "src/lib/bs/core/FuzzyMatch.res",
         "relation": "shared_dir:src/lib/bs/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/ocaml/Segmenter.res",
-        "to": "src/lib/ocaml/Stemmer.res",
-        "relation": "shared_dir:src/lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/ocaml/Stemmer.res",
-        "to": "src/lib/ocaml/Plural.res",
-        "relation": "shared_dir:src/lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/ocaml/Plural.res",
-        "to": "src/lib/ocaml/DocumentExtract.res",
-        "relation": "shared_dir:src/lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/ocaml/DocumentExtract.res",
-        "to": "src/lib/ocaml/I18n.res",
-        "relation": "shared_dir:src/lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/ocaml/I18n.res",
-        "to": "src/lib/ocaml/FuzzyMatch.res",
-        "relation": "shared_dir:src/lib/ocaml",
         "weight": 1.0
       },
       {
@@ -970,22 +970,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "examples/node-http-autoreload/test.js",
-          "examples/fastify/test.js",
-          "examples/testlib/visitrest.js",
-          "julia/src/LanguageCladogram.jl",
-          "audit/forensics.js",
-          "test/i18n.makePlurals.js",
-          "test/i18n.writenewPhrase.js"
+          "adapters/crm/salesforce.js"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "InputBoundary->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "PanicPath",
@@ -1005,16 +999,22 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "adapters/crm/salesforce.js"
+          "examples/node-http-autoreload/test.js",
+          "examples/fastify/test.js",
+          "examples/testlib/visitrest.js",
+          "julia/src/LanguageCladogram.jl",
+          "audit/forensics.js",
+          "test/i18n.makePlurals.js",
+          "test/i18n.writenewPhrase.js"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

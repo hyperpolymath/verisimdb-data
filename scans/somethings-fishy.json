@@ -260,12 +260,48 @@
   ],
   "recommended_attacks": [
     "memory",
+    "cpu",
     "concurrency",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "build.rs",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/scanners.rs",
+        "to": "tests/e2e.sh",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "safety_kernel/src/robofishy_io.adb",
+        "to": "safety_kernel/src/robofishy_c_api.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
+      {
+        "from": "safety_kernel/src/robofishy_c_api.adb",
+        "to": "safety_kernel/src/robofishy_write_guard.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/scene.rs",
+        "to": "src/report.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/report.rs",
+        "to": "src/safe_io.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
       {
         "from": "src/scanners/panic_attack.rs",
         "to": "src/scanners/commit_trailers.rs",
@@ -283,57 +319,11 @@
         "to": "src/scanners/banned_patterns.rs",
         "relation": "shared_dir:src/scanners",
         "weight": 1.0
-      },
-      {
-        "from": "src/scene.rs",
-        "to": "src/report.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/report.rs",
-        "to": "src/safe_io.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "safety_kernel/src/robofishy_io.adb",
-        "to": "safety_kernel/src/robofishy_c_api.adb",
-        "relation": "shared_dir:safety_kernel/src",
-        "weight": 1.0
-      },
-      {
-        "from": "safety_kernel/src/robofishy_c_api.adb",
-        "to": "safety_kernel/src/robofishy_write_guard.adb",
-        "relation": "shared_dir:safety_kernel/src",
-        "weight": 1.0
-      },
-      {
-        "from": "build.rs",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/scanners.rs",
-        "to": "tests/e2e.sh",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/scanners.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -355,6 +345,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/scanners.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnsafeCode",

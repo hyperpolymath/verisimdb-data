@@ -234,12 +234,18 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/mod.rs",
         "to": "src/codegen/benchmark.rs",
@@ -257,39 +263,11 @@
         "to": "src/codegen/julia_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_tests.rs",
-          "src/codegen/benchmark.rs",
-          "src/codegen/julia_gen.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -300,6 +278,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/codegen/benchmark.rs"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -313,14 +301,16 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/codegen/benchmark.rs"
+          "tests/integration_tests.rs",
+          "src/codegen/benchmark.rs",
+          "src/codegen/julia_gen.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -333,6 +323,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }
