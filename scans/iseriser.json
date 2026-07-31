@@ -273,12 +273,24 @@
   ],
   "recommended_attacks": [
     "memory",
-    "disk",
+    "network",
     "cpu",
-    "network"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/abi/verify.rs",
+        "to": "src/abi/zig_ffi_parser.rs",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/zig_ffi_parser.rs",
+        "to": "src/abi/idris_emitter.rs",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
       {
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
@@ -302,36 +314,14 @@
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "src/abi/verify.rs",
-        "to": "src/abi/zig_ffi_parser.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/zig_ffi_parser.rs",
-        "to": "src/abi/idris_emitter.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/abi/verify.rs",
@@ -340,7 +330,7 @@
           "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -351,6 +341,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "InsecureProtocol",
@@ -364,7 +364,7 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "src/abi/verify.rs",
@@ -373,7 +373,7 @@
           "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

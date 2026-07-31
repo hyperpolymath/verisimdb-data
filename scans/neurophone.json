@@ -406,11 +406,11 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
     "concurrency",
+    "disk",
     "network",
-    "disk"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -433,21 +433,9 @@
         "weight": 1.0
       },
       {
-        "from": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
-        "to": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
-        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
-        "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
-        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
-        "to": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
-        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
+        "to": "crates/neurophone-core/benches/pipeline_bench.rs",
+        "relation": "shared_dir:crates/neurophone-core/benches",
         "weight": 1.0
       },
       {
@@ -469,9 +457,21 @@
         "weight": 1.0
       },
       {
-        "from": "crates/neurophone-core/benches/neurophone_bench.rs",
-        "to": "crates/neurophone-core/benches/pipeline_bench.rs",
-        "relation": "shared_dir:crates/neurophone-core/benches",
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
+        "to": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
+        "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "to": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
         "weight": 1.0
       },
       {
@@ -803,6 +803,19 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "crates/claude-client/src/egress_gate.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -818,37 +831,6 @@
           "Concurrent"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/install-on-phone.sh",
-          "scripts/uninstall.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/neurophone-core/tests/property_test.rs",
-          "crates/neurophone-core/tests/aspect_concurrency.rs",
-          "crates/neurophone-core/tests/integration_pipeline.rs",
-          "crates/neurophone-core/benches/neurophone_bench.rs",
-          "crates/sensors/tests/integration_pipeline.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -877,17 +859,35 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "crates/claude-client/src/egress_gate.rs"
+          "crates/neurophone-core/tests/property_test.rs",
+          "crates/neurophone-core/tests/aspect_concurrency.rs",
+          "crates/neurophone-core/tests/integration_pipeline.rs",
+          "crates/neurophone-core/benches/neurophone_bench.rs",
+          "crates/sensors/tests/integration_pipeline.rs"
         ],
         "frameworks": [
           "Networking",
           "Concurrent"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/install-on-phone.sh",
+          "scripts/uninstall.sh"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

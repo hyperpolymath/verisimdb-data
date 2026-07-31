@@ -493,11 +493,11 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
-    "concurrency",
     "memory",
-    "network"
+    "network",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -562,12 +562,6 @@
         "weight": 1.0
       },
       {
-        "from": "play.sh",
-        "to": "game-server-admin-launcher.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/ffi/src/cli.zig",
         "to": "src/interface/ffi/src/game_profiles.zig",
         "relation": "shared_dir:src/interface/ffi/src",
@@ -604,6 +598,30 @@
         "weight": 1.0
       },
       {
+        "from": "src/core/Shell.eph",
+        "to": "src/core/Bridge.eph",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/Bridge.eph",
+        "to": "src/core/GrooveClient.eph",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/GrooveClient.eph",
+        "to": "src/core/Types.eph",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/test/property_test.zig",
+        "to": "src/interface/ffi/test/mock_servers.zig",
+        "relation": "shared_dir:src/interface/ffi/test",
+        "weight": 1.0
+      },
+      {
         "from": "src/wasm/launch-gsa.sh",
         "to": "src/wasm/build-complete.sh",
         "relation": "shared_dir:src/wasm",
@@ -628,33 +646,48 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/ffi/test/property_test.zig",
-        "to": "src/interface/ffi/test/mock_servers.zig",
-        "relation": "shared_dir:src/interface/ffi/test",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/Shell.eph",
-        "to": "src/core/Bridge.eph",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/Bridge.eph",
-        "to": "src/core/GrooveClient.eph",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/GrooveClient.eph",
-        "to": "src/core/Types.eph",
-        "relation": "shared_dir:src/core",
+        "from": "play.sh",
+        "to": "game-server-admin-launcher.sh",
+        "relation": "shared_dir:",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "game-server-admin-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/steam-stage.sh",
+          "src/wasm/launch-gsa.sh",
+          "game-server-admin-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/wizard.sh",
+          "scripts/steam-stage.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -679,17 +712,6 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/wizard.sh",
-          "scripts/steam-stage.sh"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -701,28 +723,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "game-server-admin-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/steam-stage.sh",
-          "src/wasm/launch-gsa.sh",
-          "game-server-admin-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }

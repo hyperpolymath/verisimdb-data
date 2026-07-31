@@ -372,13 +372,19 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "concurrency",
+    "cpu",
     "disk",
-    "cpu"
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/tier1/temporal.rs",
+        "to": "src/tier1/provenance.rs",
+        "relation": "shared_dir:src/tier1",
+        "weight": 1.0
+      },
       {
         "from": "src/gc.rs",
         "to": "src/doctor.rs",
@@ -389,12 +395,6 @@
         "from": "src/doctor.rs",
         "to": "src/main.rs",
         "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/sidecar/lock.rs",
-        "to": "src/sidecar/json.rs",
-        "relation": "shared_dir:src/sidecar",
         "weight": 1.0
       },
       {
@@ -416,9 +416,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/tier1/temporal.rs",
-        "to": "src/tier1/provenance.rs",
-        "relation": "shared_dir:src/tier1",
+        "from": "src/sidecar/lock.rs",
+        "to": "src/sidecar/json.rs",
+        "relation": "shared_dir:src/sidecar",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -444,12 +450,6 @@
         "to": "tests/logging_test.rs",
         "relation": "shared_dir:tests",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
@@ -468,18 +468,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/sqlite_intercept_e2e.rs",
-          "tests/logging_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -490,6 +478,18 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/provenance_fork_test.rs",
+          "tests/sqlite_intercept_e2e.rs",
+          "tests/logging_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",

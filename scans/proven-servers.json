@@ -4175,11 +4175,11 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "disk",
+    "concurrency",
     "network",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -4217,12 +4217,6 @@
         "from": "bindings/java/src/main/java/com/hyperpolymath/proven/ProvenDns.java",
         "to": "bindings/java/src/main/java/com/hyperpolymath/proven/ProvenMqtt.java",
         "relation": "shared_dir:bindings/java/src/main/java/com/hyperpolymath/proven",
-        "weight": 1.0
-      },
-      {
-        "from": "connectors/proven-nesy-solver-api/zig/src/rgtv.zig",
-        "to": "connectors/proven-nesy-solver-api/zig/src/main.zig",
-        "relation": "shared_dir:connectors/proven-nesy-solver-api/zig/src",
         "weight": 1.0
       },
       {
@@ -4868,6 +4862,18 @@
         "weight": 1.0
       },
       {
+        "from": "src/abi/Types.idr",
+        "to": "src/abi/Foreign.idr",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "connectors/proven-nesy-solver-api/zig/src/rgtv.zig",
+        "to": "connectors/proven-nesy-solver-api/zig/src/main.zig",
+        "relation": "shared_dir:connectors/proven-nesy-solver-api/zig/src",
+        "weight": 1.0
+      },
+      {
         "from": "bindings/rust/src/core.rs",
         "to": "bindings/rust/src/ffi_httpd.rs",
         "relation": "shared_dir:bindings/rust/src",
@@ -4934,12 +4940,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/maintenance/run-maintenance.sh",
         "to": "scripts/maintenance/perms-state.sh",
         "relation": "shared_dir:scripts/maintenance",
@@ -4950,24 +4950,18 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "bindings/ruby/lib/proven_servers/grpc.rb"
+          "protocols/proven-socks/src/SOCKS/Types.idr",
+          "protocols/proven-authserver/src/Authserver/Types.idr",
+          "protocols/proven-kms/src/KMS/Types.idr",
+          "protocols/proven-radius/src/RADIUS/Types.idr",
+          "not-proven/proven-ssh-bastion/src/SSH/Auth.idr"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "bindings/rust/benches/protocols.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "MutationGap",
@@ -4986,14 +4980,14 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "CommandInjection",
         "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "bindings/ruby/lib/proven_servers/grpc.rb"
+          "scripts/maintenance/run-maintenance.sh"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -5019,6 +5013,68 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "bindings/ruby/lib/proven_servers/grpc.rb"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "protocols/proven-semweb/ffi/zig/test/integration_test.zig",
+          "protocols/proven-triplestore/ffi/zig/test/integration_test.zig",
+          "connectors/proven-nesy-solver-api/zig/deploy-fly.sh"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "bindings/rust/benches/protocols.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "bindings/rust/src/core.rs",
+          "bindings/rust/src/ffi_httpd.rs",
+          "bindings/rust/src/ffi_ftp.rs",
+          "bindings/rust/src/ffi_macros.rs",
+          "bindings/rust/src/ffi_grpc.rs",
+          "bindings/rust/src/ffi_smtp.rs",
+          "bindings/rust/src/ffi_mqtt.rs",
+          "bindings/rust/src/ffi_firewall.rs",
+          "bindings/rust/src/ffi_graphql.rs",
+          "bindings/rust/src/ffi_ssh.rs",
+          "bindings/rust/src/ffi_dns.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "bindings/ruby/lib/proven_servers/grpc.rb"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "UnsafeFFI",
@@ -5128,36 +5184,6 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "bindings/rust/src/core.rs",
-          "bindings/rust/src/ffi_httpd.rs",
-          "bindings/rust/src/ffi_ftp.rs",
-          "bindings/rust/src/ffi_macros.rs",
-          "bindings/rust/src/ffi_grpc.rs",
-          "bindings/rust/src/ffi_smtp.rs",
-          "bindings/rust/src/ffi_mqtt.rs",
-          "bindings/rust/src/ffi_firewall.rs",
-          "bindings/rust/src/ffi_graphql.rs",
-          "bindings/rust/src/ffi_ssh.rs",
-          "bindings/rust/src/ffi_dns.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/maintenance/run-maintenance.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -5166,32 +5192,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "protocols/proven-socks/src/SOCKS/Types.idr",
-          "protocols/proven-authserver/src/Authserver/Types.idr",
-          "protocols/proven-kms/src/KMS/Types.idr",
-          "protocols/proven-radius/src/RADIUS/Types.idr",
-          "not-proven/proven-ssh-bastion/src/SSH/Auth.idr"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "protocols/proven-semweb/ffi/zig/test/integration_test.zig",
-          "protocols/proven-triplestore/ffi/zig/test/integration_test.zig",
-          "connectors/proven-nesy-solver-api/zig/deploy-fly.sh"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       }
     ]
   }
