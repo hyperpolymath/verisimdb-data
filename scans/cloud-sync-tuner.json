@@ -172,23 +172,23 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "concurrency",
     "memory",
-    "concurrency"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/config-import.sh",
-        "to": "scripts/config-sync.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "tests/test_runner.adb",
         "to": "tests/verify_formal.adb",
         "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/config-import.sh",
+        "to": "scripts/config-sync.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
@@ -196,24 +196,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "tray-daemon/src/main.rs"
+          "aur/submit-to-aur.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tray-daemon/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -226,14 +216,24 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "aur/submit-to-aur.sh"
+          "tray-daemon/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tray-daemon/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }
