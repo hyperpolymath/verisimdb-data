@@ -5,11 +5,23 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "PanicPath",
+      "location": "ui/tests/WasmStoreTests.res",
+      "file": "ui/tests/WasmStoreTests.res",
+      "severity": "Medium",
+      "description": "4 unsafe get calls in ui/tests/WasmStoreTests.res",
+      "recommended_attack": [
+        "memory"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
       "category": "InputBoundary",
       "location": "ui/tests/contract.test.js",
       "file": "ui/tests/contract.test.js",
       "severity": "Medium",
-      "description": "1 JSON.parse call(s) with 0 try block(s) in ui/tests/contract.test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "description": "2 JSON.parse call(s) with 0 try block(s) in ui/tests/contract.test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
       "recommended_attack": [
         "cpu"
       ],
@@ -20,7 +32,7 @@
       "location": "ui/tests/UpdateTests.res",
       "file": "ui/tests/UpdateTests.res",
       "severity": "Medium",
-      "description": "6 unsafe get calls in ui/tests/UpdateTests.res",
+      "description": "7 unsafe get calls in ui/tests/UpdateTests.res",
       "recommended_attack": [
         "memory"
       ],
@@ -64,15 +76,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "deno.json",
-      "file": "deno.json",
-      "severity": "Medium",
-      "description": "1 import map entry/ies in deno.json without a version pin — specifiers are not reproducibly resolved",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -83,18 +86,18 @@
     }
   ],
   "statistics": {
-    "total_lines": 9678,
-    "unsafe_blocks": 30,
+    "total_lines": 10110,
+    "unsafe_blocks": 39,
     "panic_sites": 0,
-    "unwrap_calls": 21,
+    "unwrap_calls": 28,
     "allocation_sites": 73,
-    "io_operations": 8,
+    "io_operations": 9,
     "threading_constructs": 2
   },
   "file_statistics": [
     {
       "file_path": "web/service-worker.js",
-      "lines": 51,
+      "lines": 62,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -103,18 +106,28 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ui/tests/UpdateTests.res",
-      "lines": 104,
+      "file_path": "ui/tests/WasmStoreTests.res",
+      "lines": 55,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 6,
+      "unwrap_calls": 4,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ui/tests/UpdateTests.res",
+      "lines": 110,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 7,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
       "file_path": "ui/src/View.res",
-      "lines": 601,
+      "lines": 629,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 1,
@@ -124,8 +137,8 @@
     },
     {
       "file_path": "ui/src/store/WasmStore.res",
-      "lines": 173,
-      "unsafe_blocks": 20,
+      "lines": 219,
+      "unsafe_blocks": 29,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 1,
@@ -174,12 +187,32 @@
       "threading_constructs": 2
     },
     {
+      "file_path": "scripts/dev.js",
+      "lines": 110,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "core/tests/invariants.rs",
-      "lines": 104,
+      "lines": 170,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "core/src/lambdadelta_host/tests.rs",
+      "lines": 234,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 2,
+      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -323,6 +356,18 @@
         "weight": 1.0
       },
       {
+        "from": "ui/src/store/WasmStore.res",
+        "to": "ui/src/store/Persist.res",
+        "relation": "shared_dir:ui/src/store",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/tests/WasmStoreTests.res",
+        "to": "ui/tests/UpdateTests.res",
+        "relation": "shared_dir:ui/tests",
+        "weight": 1.0
+      },
+      {
         "from": "core/src/storage.rs",
         "to": "core/src/notebook.rs",
         "relation": "shared_dir:core/src",
@@ -369,17 +414,34 @@
         "to": "core/src/lambdadelta/eval.rs",
         "relation": "shared_dir:core/src/lambdadelta",
         "weight": 1.0
-      },
-      {
-        "from": "ui/src/store/WasmStore.res",
-        "to": "ui/src/store/Persist.res",
-        "relation": "shared_dir:ui/src/store",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "ui/tests/WasmStoreTests.res",
+          "ui/tests/UpdateTests.res",
+          "ui/src/View.res",
+          "desktop/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "desktop/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -389,18 +451,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "ui/tests/UpdateTests.res",
-          "ui/src/View.res",
-          "desktop/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -421,16 +471,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "desktop/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

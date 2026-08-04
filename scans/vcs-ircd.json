@@ -166,12 +166,18 @@
   ],
   "recommended_attacks": [
     "disk",
+    "cpu",
     "concurrency",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "vext-tools/src/hooks/Install.res",
+        "to": "vext-tools/src/hooks/Git.res",
+        "relation": "shared_dir:vext-tools/src/hooks",
+        "weight": 1.0
+      },
       {
         "from": "vext-core/src/pool.rs",
         "to": "vext-core/src/error.rs",
@@ -206,12 +212,6 @@
         "from": "vext-core/src/config.rs",
         "to": "vext-core/src/main.rs",
         "relation": "shared_dir:vext-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "vext-tools/src/hooks/Install.res",
-        "to": "vext-tools/src/hooks/Git.res",
-        "relation": "shared_dir:vext-tools/src/hooks",
         "weight": 1.0
       },
       {
@@ -291,16 +291,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "vext-tools/src/hooks/Git.res"
+          "vext-core/src/config.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -315,16 +315,16 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "vext-core/src/config.rs"
+          "vext-tools/src/hooks/Git.res"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

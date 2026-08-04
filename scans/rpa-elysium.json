@@ -423,47 +423,17 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "disk",
     "cpu",
-    "concurrency",
-    "memory"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/rpa-fs-workflow/src/config.rs",
-        "to": "crates/rpa-fs-workflow/src/runner.rs",
-        "relation": "shared_dir:crates/rpa-fs-workflow/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-fs-workflow/src/runner.rs",
-        "to": "crates/rpa-fs-workflow/src/watcher.rs",
-        "relation": "shared_dir:crates/rpa-fs-workflow/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-fs-workflow/src/watcher.rs",
-        "to": "crates/rpa-fs-workflow/src/main.rs",
-        "relation": "shared_dir:crates/rpa-fs-workflow/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-fs-workflow/tests/e2e_workflow_tests.rs",
-        "to": "crates/rpa-fs-workflow/tests/error_handling_tests.rs",
-        "relation": "shared_dir:crates/rpa-fs-workflow/tests",
-        "weight": 1.0
-      },
-      {
         "from": "crates/rpa-core/src/error.rs",
         "to": "crates/rpa-core/src/action.rs",
         "relation": "shared_dir:crates/rpa-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-config/src/types.rs",
-        "to": "crates/rpa-config/src/loader.rs",
-        "relation": "shared_dir:crates/rpa-config/src",
         "weight": 1.0
       },
       {
@@ -500,6 +470,36 @@
         "from": "crates/rpa-fs-workflow/src/actions/plugin.rs",
         "to": "crates/rpa-fs-workflow/src/actions/delete.rs",
         "relation": "shared_dir:crates/rpa-fs-workflow/src/actions",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-fs-workflow/src/config.rs",
+        "to": "crates/rpa-fs-workflow/src/runner.rs",
+        "relation": "shared_dir:crates/rpa-fs-workflow/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-fs-workflow/src/runner.rs",
+        "to": "crates/rpa-fs-workflow/src/watcher.rs",
+        "relation": "shared_dir:crates/rpa-fs-workflow/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-fs-workflow/src/watcher.rs",
+        "to": "crates/rpa-fs-workflow/src/main.rs",
+        "relation": "shared_dir:crates/rpa-fs-workflow/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-fs-workflow/tests/e2e_workflow_tests.rs",
+        "to": "crates/rpa-fs-workflow/tests/error_handling_tests.rs",
+        "relation": "shared_dir:crates/rpa-fs-workflow/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-config/src/types.rs",
+        "to": "crates/rpa-config/src/loader.rs",
+        "relation": "shared_dir:crates/rpa-config/src",
         "weight": 1.0
       },
       {
@@ -729,18 +729,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/rpa-fs-workflow/tests/e2e_workflow_tests.rs",
-          "crates/rpa-fs-workflow/tests/error_handling_tests.rs",
-          "crates/rpa-core/tests/concurrency_tests.rs"
+          "crates/rpa-fs-workflow/src/actions/archive.rs",
+          "crates/rpa-config/src/loader.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -770,17 +769,18 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/rpa-fs-workflow/src/actions/archive.rs",
-          "crates/rpa-config/src/loader.rs"
+          "crates/rpa-fs-workflow/tests/e2e_workflow_tests.rs",
+          "crates/rpa-fs-workflow/tests/error_handling_tests.rs",
+          "crates/rpa-core/tests/concurrency_tests.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

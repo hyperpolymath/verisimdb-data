@@ -230,18 +230,12 @@
   ],
   "recommended_attacks": [
     "concurrency",
-    "disk",
     "cpu",
+    "disk",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "backend/src/candy_crash/middleware/cors.gleam",
-        "to": "backend/src/candy_crash/middleware/auth.gleam",
-        "relation": "shared_dir:backend/src/candy_crash/middleware",
-        "weight": 1.0
-      },
       {
         "from": "backend/src/candy_crash/handlers/dashboard.gleam",
         "to": "backend/src/candy_crash/handlers/courses.gleam",
@@ -283,20 +277,26 @@
         "to": "backend/src/candy_crash/handlers/achievements.gleam",
         "relation": "shared_dir:backend/src/candy_crash/handlers",
         "weight": 1.0
+      },
+      {
+        "from": "backend/src/candy_crash/middleware/cors.gleam",
+        "to": "backend/src/candy_crash/middleware/auth.gleam",
+        "relation": "shared_dir:backend/src/candy_crash/middleware",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
-          "src/safety_core/ffi/zig/guardian.zig"
+          "scripts/check-languages.sh"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -309,14 +309,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "scripts/check-languages.sh"
+          "src/safety_core/ffi/zig/guardian.zig"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

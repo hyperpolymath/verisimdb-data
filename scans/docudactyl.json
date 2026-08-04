@@ -628,41 +628,23 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "network",
-    "disk"
+    "memory",
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/ocaml/pdf_parser.ml",
-        "to": "src/ocaml/scheme_emit.ml",
-        "relation": "shared_dir:src/ocaml",
+        "from": "src/Docudactyl/ABI/Types.idr",
+        "to": "src/Docudactyl/ABI/Foreign.idr",
+        "relation": "shared_dir:src/Docudactyl/ABI",
         "weight": 1.0
       },
       {
-        "from": "src/ocaml/scheme_emit.ml",
-        "to": "src/ocaml/docudactyl_scm.ml",
-        "relation": "shared_dir:src/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ada/terminal_utils.adb",
-        "to": "src/ada/document_model.adb",
-        "relation": "shared_dir:src/ada",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ada/document_model.adb",
-        "to": "src/ada/docudactyl_tui.adb",
-        "relation": "shared_dir:src/ada",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ada/docudactyl_tui.adb",
-        "to": "src/ada/document_model.ads",
-        "relation": "shared_dir:src/ada",
+        "from": "src/julia/extract.jl",
+        "to": "src/julia/export.jl",
+        "relation": "shared_dir:src/julia",
         "weight": 1.0
       },
       {
@@ -750,21 +732,27 @@
         "weight": 1.0
       },
       {
+        "from": "src/ada/terminal_utils.adb",
+        "to": "src/ada/document_model.adb",
+        "relation": "shared_dir:src/ada",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ada/document_model.adb",
+        "to": "src/ada/docudactyl_tui.adb",
+        "relation": "shared_dir:src/ada",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ada/docudactyl_tui.adb",
+        "to": "src/ada/document_model.ads",
+        "relation": "shared_dir:src/ada",
+        "weight": 1.0
+      },
+      {
         "from": "src/abi/Types.idr",
         "to": "src/abi/Foreign.idr",
         "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/Docudactyl/ABI/Types.idr",
-        "to": "src/Docudactyl/ABI/Foreign.idr",
-        "relation": "shared_dir:src/Docudactyl/ABI",
-        "weight": 1.0
-      },
-      {
-        "from": "src/julia/extract.jl",
-        "to": "src/julia/export.jl",
-        "relation": "shared_dir:src/julia",
         "weight": 1.0
       },
       {
@@ -832,11 +820,36 @@
         "to": "src/chapel/ResultAggregator.chpl",
         "relation": "shared_dir:src/chapel",
         "weight": 1.0
+      },
+      {
+        "from": "src/ocaml/pdf_parser.ml",
+        "to": "src/ocaml/scheme_emit.ml",
+        "relation": "shared_dir:src/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ocaml/scheme_emit.ml",
+        "to": "src/ocaml/docudactyl_scm.ml",
+        "relation": "shared_dir:src/ocaml",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/src/redaction_recovery.zig",
+          "ffi/zig/src/docudactyl_ffi.zig",
+          "ffi/zig/src/stages.zig",
+          "ffi/zig/src/cache.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -866,19 +879,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/src/redaction_recovery.zig",
-          "ffi/zig/src/docudactyl_ffi.zig",
-          "ffi/zig/src/stages.zig",
-          "ffi/zig/src/cache.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

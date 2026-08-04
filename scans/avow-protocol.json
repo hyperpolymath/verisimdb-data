@@ -253,18 +253,18 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "concurrency",
-    "network",
     "memory",
-    "cpu"
+    "concurrency",
+    "cpu",
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "telegram-bot/src/bindings/Sqlite.res",
-        "to": "telegram-bot/src/bindings/Grammy.res",
-        "relation": "shared_dir:telegram-bot/src/bindings",
+        "from": "src/bindings/Fetch_Api.res",
+        "to": "src/bindings/Deno_Api.res",
+        "relation": "shared_dir:src/bindings",
         "weight": 1.0
       },
       {
@@ -298,9 +298,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/bindings/Fetch_Api.res",
-        "to": "src/bindings/Deno_Api.res",
-        "relation": "shared_dir:src/bindings",
+        "from": "telegram-bot/src/bindings/Sqlite.res",
+        "to": "telegram-bot/src/bindings/Grammy.res",
+        "relation": "shared_dir:telegram-bot/src/bindings",
         "weight": 1.0
       }
     ]
@@ -308,24 +308,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/GenerateProof.res"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "disk",
         "severity_value": 3.5,
         "files": [
-          "public/demo.js"
+          "deploy-repos.sh"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "ExcessivePermissions->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -338,14 +328,34 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/GenerateProof.res"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "avow-lib/examples/rust/src/main.rs"
+          "public/demo.js"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "public/demo.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "ExcessivePermissions",
@@ -358,24 +368,14 @@
         "relation": "ExcessivePermissions->Network"
       },
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "deploy-repos.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "public/demo.js"
+          "avow-lib/examples/rust/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "UnsafeCode->Memory"
       }
     ]
   },
