@@ -234,26 +234,14 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "network",
+    "disk",
     "cpu",
+    "network",
     "memory",
-    "disk"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "server/src/formats/toml.rs",
-        "to": "server/src/formats/yaml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
-      },
-      {
-        "from": "server/src/formats/yaml.rs",
-        "to": "server/src/formats/xml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
-      },
       {
         "from": "server/tests/contract_tests.rs",
         "to": "server/tests/core_tests.rs",
@@ -313,6 +301,18 @@
         "to": "server/src/main.rs",
         "relation": "shared_dir:server/src",
         "weight": 1.0
+      },
+      {
+        "from": "server/src/formats/toml.rs",
+        "to": "server/src/formats/yaml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/formats/yaml.rs",
+        "to": "server/src/formats/xml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
       }
     ]
   },
@@ -327,6 +327,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "server/tests/core_tests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -347,16 +357,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "server/tests/core_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

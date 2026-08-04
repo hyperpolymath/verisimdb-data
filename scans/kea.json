@@ -187,11 +187,23 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bivouac/src/playbook/mod.rs",
+        "to": "bivouac/src/playbook/executor.rs",
+        "relation": "shared_dir:bivouac/src/playbook",
+        "weight": 1.0
+      },
+      {
+        "from": "bivouac/src/playbook/executor.rs",
+        "to": "bivouac/src/playbook/parser.rs",
+        "relation": "shared_dir:bivouac/src/playbook",
+        "weight": 1.0
+      },
       {
         "from": "bivouac/tests/e2e_test.rs",
         "to": "bivouac/tests/integration_test.rs",
@@ -221,18 +233,6 @@
         "to": "bivouac/src/main.rs",
         "relation": "shared_dir:bivouac/src",
         "weight": 1.0
-      },
-      {
-        "from": "bivouac/src/playbook/mod.rs",
-        "to": "bivouac/src/playbook/executor.rs",
-        "relation": "shared_dir:bivouac/src/playbook",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/src/playbook/executor.rs",
-        "to": "bivouac/src/playbook/parser.rs",
-        "relation": "shared_dir:bivouac/src/playbook",
-        "weight": 1.0
       }
     ]
   },
@@ -247,6 +247,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "bivouac/tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -267,16 +277,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "bivouac/tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

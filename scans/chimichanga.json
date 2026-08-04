@@ -180,9 +180,9 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "concurrency",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -251,19 +251,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "test/integration/crash_capture_test.exs",
-          "test/integration/memory_isolation_test.exs",
-          "test/integration/fuel_exhaustion_test.exs",
-          "test/munition_test.exs"
+          "test_wasm/src/lib.rs",
+          "test_wasm/src/lib.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "MutationGap->Cpu"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -279,17 +277,19 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "test_wasm/src/lib.rs",
-          "test_wasm/src/lib.rs"
+          "test/integration/crash_capture_test.exs",
+          "test/integration/memory_isolation_test.exs",
+          "test/integration/fuel_exhaustion_test.exs",
+          "test/munition_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "MutationGap->Cpu"
       }
     ]
   }

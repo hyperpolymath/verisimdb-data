@@ -3,9 +3,9 @@
   "program_path": "echidnabot",
   "language": "rust",
   "frameworks": [
-    "Networking",
+    "Database",
     "WebServer",
-    "Database"
+    "Networking"
   ],
   "weak_points": [
     {
@@ -26,7 +26,7 @@
       "location": "tests/seam_test.rs",
       "file": "tests/seam_test.rs",
       "severity": "Medium",
-      "description": "26 unwrap/expect calls in tests/seam_test.rs",
+      "description": "23 unwrap/expect calls in tests/seam_test.rs",
       "recommended_attack": [
         "memory",
         "disk"
@@ -80,10 +80,10 @@
     }
   ],
   "statistics": {
-    "total_lines": 21578,
+    "total_lines": 21589,
     "unsafe_blocks": 15,
     "panic_sites": 0,
-    "unwrap_calls": 67,
+    "unwrap_calls": 64,
     "allocation_sites": 83,
     "io_operations": 14,
     "threading_constructs": 23
@@ -104,7 +104,7 @@
       "lines": 756,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 26,
+      "unwrap_calls": 23,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 1
@@ -121,7 +121,7 @@
     },
     {
       "file_path": "tests/smoke.rs",
-      "lines": 218,
+      "lines": 217,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -263,7 +263,7 @@
     },
     {
       "file_path": "src/observability.rs",
-      "lines": 437,
+      "lines": 446,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -445,47 +445,29 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
+    "cpu",
     "concurrency",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/shutdown.rs",
-        "to": "src/error.rs",
-        "relation": "shared_dir:src",
+        "from": "src/adapters/mod.rs",
+        "to": "src/adapters/bitbucket.rs",
+        "relation": "shared_dir:src/adapters",
         "weight": 1.0
       },
       {
-        "from": "src/error.rs",
-        "to": "src/result_formatter.rs",
-        "relation": "shared_dir:src",
+        "from": "src/adapters/bitbucket.rs",
+        "to": "src/adapters/codeberg.rs",
+        "relation": "shared_dir:src/adapters",
         "weight": 1.0
       },
       {
-        "from": "src/result_formatter.rs",
-        "to": "src/observability.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/observability.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/feedback/reranker.rs",
-        "to": "src/feedback/corpus_delta.rs",
-        "relation": "shared_dir:src/feedback",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "src/adapters/codeberg.rs",
+        "to": "src/adapters/gitlab.rs",
+        "relation": "shared_dir:src/adapters",
         "weight": 1.0
       },
       {
@@ -513,21 +495,39 @@
         "weight": 1.0
       },
       {
-        "from": "src/adapters/mod.rs",
-        "to": "src/adapters/bitbucket.rs",
-        "relation": "shared_dir:src/adapters",
+        "from": "src/feedback/reranker.rs",
+        "to": "src/feedback/corpus_delta.rs",
+        "relation": "shared_dir:src/feedback",
         "weight": 1.0
       },
       {
-        "from": "src/adapters/bitbucket.rs",
-        "to": "src/adapters/codeberg.rs",
-        "relation": "shared_dir:src/adapters",
+        "from": "src/abi/Types.idr",
+        "to": "src/abi/Foreign.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
-        "from": "src/adapters/codeberg.rs",
-        "to": "src/adapters/gitlab.rs",
-        "relation": "shared_dir:src/adapters",
+        "from": "src/shutdown.rs",
+        "to": "src/error.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/error.rs",
+        "to": "src/result_formatter.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/result_formatter.rs",
+        "to": "src/observability.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/observability.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -550,7 +550,7 @@
       },
       {
         "from": "tests/integration_tests.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 6.0
       },
@@ -562,39 +562,27 @@
       },
       {
         "from": "tests/integration_tests.rs",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 6.0
       },
       {
         "from": "tests/seam_test.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
-        "weight": 28.0
+        "weight": 25.0
       },
       {
         "from": "tests/seam_test.rs",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 28.0
+        "weight": 25.0
       },
       {
         "from": "tests/seam_test.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 28.0
-      },
-      {
-        "from": "tests/lifecycle.rs",
         "to": "Networking",
         "relation": "framework",
-        "weight": 34.0
-      },
-      {
-        "from": "tests/lifecycle.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 34.0
+        "weight": 25.0
       },
       {
         "from": "tests/lifecycle.rs",
@@ -603,16 +591,16 @@
         "weight": 34.0
       },
       {
-        "from": "tests/smoke.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "tests/smoke.rs",
+        "from": "tests/lifecycle.rs",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 34.0
+      },
+      {
+        "from": "tests/lifecycle.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 34.0
       },
       {
         "from": "tests/smoke.rs",
@@ -621,16 +609,16 @@
         "weight": 2.0
       },
       {
-        "from": "proofs/lean/sorry_stub.lean",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "proofs/lean/sorry_stub.lean",
+        "from": "tests/smoke.rs",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 3.0
+        "weight": 2.0
+      },
+      {
+        "from": "tests/smoke.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
       },
       {
         "from": "proofs/lean/sorry_stub.lean",
@@ -639,14 +627,14 @@
         "weight": 3.0
       },
       {
-        "from": "proofs/coq/admitted_stub.v",
-        "to": "Networking",
+        "from": "proofs/lean/sorry_stub.lean",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 3.0
       },
       {
-        "from": "proofs/coq/admitted_stub.v",
-        "to": "WebServer",
+        "from": "proofs/lean/sorry_stub.lean",
+        "to": "Networking",
         "relation": "framework",
         "weight": 3.0
       },
@@ -657,8 +645,20 @@
         "weight": 3.0
       },
       {
-        "from": "scripts/governance/apply-branch-protection.sh",
+        "from": "proofs/coq/admitted_stub.v",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "proofs/coq/admitted_stub.v",
         "to": "Networking",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "scripts/governance/apply-branch-protection.sh",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -670,13 +670,13 @@
       },
       {
         "from": "scripts/governance/apply-branch-protection.sh",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/shutdown.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 6.0
       },
@@ -688,13 +688,13 @@
       },
       {
         "from": "src/shutdown.rs",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 6.0
       },
       {
         "from": "src/abi/Types.idr",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 3.0
       },
@@ -706,13 +706,13 @@
       },
       {
         "from": "src/abi/Types.idr",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 3.0
       },
       {
         "from": "src/abi/Foreign.idr",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 36.0
       },
@@ -724,13 +724,13 @@
       },
       {
         "from": "src/abi/Foreign.idr",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 36.0
       },
       {
         "from": "src/error.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -742,7 +742,19 @@
       },
       {
         "from": "src/error.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/dispatcher/echidna_client.rs",
         "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/dispatcher/echidna_client.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -753,20 +765,8 @@
         "weight": 1.0
       },
       {
-        "from": "src/dispatcher/echidna_client.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/dispatcher/echidna_client.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "src/result_formatter.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -778,7 +778,19 @@
       },
       {
         "from": "src/result_formatter.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trust/axiom_tracker.rs",
         "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trust/axiom_tracker.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -789,20 +801,8 @@
         "weight": 1.0
       },
       {
-        "from": "src/trust/axiom_tracker.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/trust/axiom_tracker.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "src/scheduler/job_queue.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 5.0
       },
@@ -814,13 +814,13 @@
       },
       {
         "from": "src/scheduler/job_queue.rs",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 5.0
       },
       {
         "from": "src/scheduler/limiter.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 6.0
       },
@@ -832,7 +832,19 @@
       },
       {
         "from": "src/scheduler/limiter.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "src/scheduler/retry.rs",
         "to": "Database",
+        "relation": "framework",
+        "weight": 6.0
+      },
+      {
+        "from": "src/scheduler/retry.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 6.0
       },
@@ -843,20 +855,8 @@
         "weight": 6.0
       },
       {
-        "from": "src/scheduler/retry.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/scheduler/retry.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
         "from": "src/observability.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -868,37 +868,25 @@
       },
       {
         "from": "src/observability.rs",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/feedback/reranker.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "src/feedback/reranker.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "src/feedback/reranker.rs",
         "to": "Database",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "src/feedback/corpus_delta.rs",
-        "to": "Networking",
+        "from": "src/feedback/reranker.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "src/feedback/corpus_delta.rs",
-        "to": "WebServer",
+        "from": "src/feedback/reranker.rs",
+        "to": "Networking",
         "relation": "framework",
         "weight": 2.0
       },
@@ -909,8 +897,20 @@
         "weight": 2.0
       },
       {
-        "from": "src/store/sqlite.rs",
+        "from": "src/feedback/corpus_delta.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "src/feedback/corpus_delta.rs",
         "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "src/store/sqlite.rs",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -922,7 +922,19 @@
       },
       {
         "from": "src/store/sqlite.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/executor/container.rs",
         "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/executor/container.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -933,16 +945,16 @@
         "weight": 1.0
       },
       {
-        "from": "src/executor/container.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/executor/container.rs",
+        "from": "src/api/webhooks.rs",
         "to": "Database",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
+      },
+      {
+        "from": "src/api/webhooks.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
       },
       {
         "from": "src/api/webhooks.rs",
@@ -951,38 +963,26 @@
         "weight": 2.0
       },
       {
-        "from": "src/api/webhooks.rs",
-        "to": "WebServer",
+        "from": "src/api/graphql.rs",
+        "to": "Database",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "src/api/webhooks.rs",
-        "to": "Database",
+        "from": "src/api/graphql.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "src/api/graphql.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "src/api/graphql.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "src/api/graphql.rs",
-        "to": "Database",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "src/api/rate_limit.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 3.0
       },
@@ -994,13 +994,13 @@
       },
       {
         "from": "src/api/rate_limit.rs",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 3.0
       },
       {
         "from": "src/adapters/mod.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1012,7 +1012,19 @@
       },
       {
         "from": "src/adapters/mod.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/adapters/bitbucket.rs",
         "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/adapters/bitbucket.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1023,20 +1035,8 @@
         "weight": 1.0
       },
       {
-        "from": "src/adapters/bitbucket.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/bitbucket.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "src/adapters/codeberg.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1048,7 +1048,19 @@
       },
       {
         "from": "src/adapters/codeberg.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/adapters/gitlab.rs",
         "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/adapters/gitlab.rs",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1059,20 +1071,8 @@
         "weight": 1.0
       },
       {
-        "from": "src/adapters/gitlab.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/gitlab.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "src/main.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 2.0
       },
@@ -1084,13 +1084,13 @@
       },
       {
         "from": "src/main.rs",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "ffi/zig/src/main.zig",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1102,13 +1102,13 @@
       },
       {
         "from": "ffi/zig/src/main.zig",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 4.0
       },
@@ -1120,13 +1120,13 @@
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 4.0
       },
       {
         "from": "fuzz/fuzz_targets/fuzz_hmac.rs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1138,13 +1138,13 @@
       },
       {
         "from": "fuzz/fuzz_targets/fuzz_hmac.rs",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "contractiles/trust/Trustfile.hs",
-        "to": "Networking",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -1156,7 +1156,7 @@
       },
       {
         "from": "contractiles/trust/Trustfile.hs",
-        "to": "Database",
+        "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       }
@@ -1164,6 +1164,21 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "proofs/lean/sorry_stub.lean",
+          "proofs/coq/admitted_stub.v"
+        ],
+        "frameworks": [
+          "Database",
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "ProofDrift->Cpu"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -1174,26 +1189,11 @@
           "tests/lifecycle.rs"
         ],
         "frameworks": [
-          "Networking",
+          "Database",
           "WebServer",
-          "Database"
+          "Networking"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "proofs/lean/sorry_stub.lean",
-          "proofs/coq/admitted_stub.v"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer",
-          "Database"
-        ],
-        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -1205,9 +1205,9 @@
           "tests/lifecycle.rs"
         ],
         "frameworks": [
-          "Networking",
+          "Database",
           "WebServer",
-          "Database"
+          "Networking"
         ],
         "relation": "PanicPath->Disk"
       }
