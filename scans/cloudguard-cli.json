@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "cloudguard-cli",
-  "language": "shell",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -176,10 +176,10 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
-    "concurrency",
     "memory",
-    "disk"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -200,24 +200,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/maintenance/run-maintenance.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
+          "src/api/mod.rs",
           "src/main.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -241,15 +232,24 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/maintenance/run-maintenance.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/api/mod.rs",
           "src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

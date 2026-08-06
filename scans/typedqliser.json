@@ -218,12 +218,24 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "disk",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e_test.rs",
+        "to": "tests/integration_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
       {
         "from": "src/plugins/sql.rs",
         "to": "src/plugins/mod.rs",
@@ -235,33 +247,21 @@
         "to": "src/plugins/wasm.rs",
         "relation": "shared_dir:src/plugins",
         "weight": 1.0
-      },
-      {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/integration_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
+          "tests/e2e_test.rs",
+          "tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -275,6 +275,17 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -284,17 +295,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e_test.rs",
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

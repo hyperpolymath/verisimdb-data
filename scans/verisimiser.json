@@ -372,23 +372,47 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "memory",
     "cpu",
-    "disk"
+    "disk",
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/sidecar/lock.rs",
-        "to": "src/sidecar/json.rs",
-        "relation": "shared_dir:src/sidecar",
+        "from": "tests/integration_test.rs",
+        "to": "tests/sidecar_cli_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/sidecar_cli_test.rs",
+        "to": "tests/provenance_fork_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/provenance_fork_test.rs",
+        "to": "tests/sqlite_intercept_e2e.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/sqlite_intercept_e2e.rs",
+        "to": "tests/logging_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
         "from": "src/tier1/temporal.rs",
         "to": "src/tier1/provenance.rs",
         "relation": "shared_dir:src/tier1",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -422,51 +446,15 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/integration_test.rs",
-        "to": "tests/sidecar_cli_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/sidecar_cli_test.rs",
-        "to": "tests/provenance_fork_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/provenance_fork_test.rs",
-        "to": "tests/sqlite_intercept_e2e.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/sqlite_intercept_e2e.rs",
-        "to": "tests/logging_test.rs",
-        "relation": "shared_dir:tests",
+        "from": "src/sidecar/lock.rs",
+        "to": "src/sidecar/json.rs",
+        "relation": "shared_dir:src/sidecar",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/parser.rs",
-          "src/sidecar/json.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -490,6 +478,18 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs",
+          "src/sidecar/json.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",

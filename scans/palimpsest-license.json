@@ -292,10 +292,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
     "cpu",
-    "network"
+    "network",
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -448,18 +448,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-verify/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -476,17 +464,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "bof-meetings/presentations/demo-http-headers.sh",
-          "bof-meetings/presentations/demo-dns-discovery.sh"
+          "tools/pmpl-verify/src/main.rs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -499,6 +486,19 @@
           "Ecto"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "bof-meetings/presentations/demo-http-headers.sh",
+          "bof-meetings/presentations/demo-dns-discovery.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",

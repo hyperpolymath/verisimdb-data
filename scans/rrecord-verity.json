@@ -239,13 +239,19 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "network",
     "disk",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "modules/virusTotalIntegration.mjs.js",
+        "to": "modules/extensionUtils.mjs.js",
+        "relation": "shared_dir:modules",
+        "weight": 1.0
+      },
       {
         "from": "scripts/pack.js",
         "to": "scripts/atnChangelog.js",
@@ -257,28 +263,11 @@
         "to": "scripts/update-thirdparty.js",
         "relation": "shared_dir:scripts",
         "weight": 1.0
-      },
-      {
-        "from": "modules/virusTotalIntegration.mjs.js",
-        "to": "modules/extensionUtils.mjs.js",
-        "relation": "shared_dir:modules",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
-          "scripts/verify-rsr.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
@@ -288,21 +277,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
-          "modules/resultStorage.mjs.js",
-          "modules/dkim/favicon.mjs.js",
-          "scripts/update-thirdparty.js",
-          "test/unittest/authVerifierSpec.mjs.js",
-          "test/helpers/initWebExtensions.mjs.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -323,6 +297,32 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
+          "modules/resultStorage.mjs.js",
+          "modules/dkim/favicon.mjs.js",
+          "scripts/update-thirdparty.js",
+          "test/unittest/authVerifierSpec.mjs.js",
+          "test/helpers/initWebExtensions.mjs.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
+          "scripts/verify-rsr.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

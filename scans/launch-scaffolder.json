@@ -208,15 +208,21 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "docs/ruleset-audit-2026-04-10/wave1-apply.sh",
-        "to": "docs/ruleset-audit-2026-04-10/audit.sh",
-        "relation": "shared_dir:docs/ruleset-audit-2026-04-10",
+        "from": "crates/launcher/src/cmd_config.rs",
+        "to": "crates/launcher/src/cmd_mint.rs",
+        "relation": "shared_dir:crates/launcher/src",
         "weight": 1.0
       },
       {
-        "from": "docs/ruleset-audit-2026-04-10/audit.sh",
-        "to": "docs/ruleset-audit-2026-04-10/wave2-apply.sh",
-        "relation": "shared_dir:docs/ruleset-audit-2026-04-10",
+        "from": "crates/launcher/src/cmd_mint.rs",
+        "to": "crates/launcher/src/cmd_realign.rs",
+        "relation": "shared_dir:crates/launcher/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher/src/cmd_realign.rs",
+        "to": "crates/launcher/src/cmd_provision.rs",
+        "relation": "shared_dir:crates/launcher/src",
         "weight": 1.0
       },
       {
@@ -244,27 +250,34 @@
         "weight": 1.0
       },
       {
-        "from": "crates/launcher/src/cmd_config.rs",
-        "to": "crates/launcher/src/cmd_mint.rs",
-        "relation": "shared_dir:crates/launcher/src",
+        "from": "docs/ruleset-audit-2026-04-10/wave1-apply.sh",
+        "to": "docs/ruleset-audit-2026-04-10/audit.sh",
+        "relation": "shared_dir:docs/ruleset-audit-2026-04-10",
         "weight": 1.0
       },
       {
-        "from": "crates/launcher/src/cmd_mint.rs",
-        "to": "crates/launcher/src/cmd_realign.rs",
-        "relation": "shared_dir:crates/launcher/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher/src/cmd_realign.rs",
-        "to": "crates/launcher/src/cmd_provision.rs",
-        "relation": "shared_dir:crates/launcher/src",
+        "from": "docs/ruleset-audit-2026-04-10/audit.sh",
+        "to": "docs/ruleset-audit-2026-04-10/wave2-apply.sh",
+        "relation": "shared_dir:docs/ruleset-audit-2026-04-10",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/launcher-common/src/standard.rs",
+          "crates/launcher-common/src/config.rs",
+          "crates/launcher/src/cmd_config.rs",
+          "crates/launcher/src/cmd_realign.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -287,19 +300,6 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/launcher-common/src/standard.rs",
-          "crates/launcher-common/src/config.rs",
-          "crates/launcher/src/cmd_config.rs",
-          "crates/launcher/src/cmd_realign.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

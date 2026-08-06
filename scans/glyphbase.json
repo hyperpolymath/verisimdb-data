@@ -314,16 +314,22 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "server/src/glyphbase_server.gleam",
-        "to": "server/src/router.gleam",
-        "relation": "shared_dir:server/src",
+        "from": "ui/src/views/GalleryStore.res",
+        "to": "ui/src/views/FormStore.res",
+        "relation": "shared_dir:ui/src/views",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/views/FormStore.res",
+        "to": "ui/src/views/CalendarStore.res",
+        "relation": "shared_dir:ui/src/views",
         "weight": 1.0
       },
       {
@@ -333,9 +339,9 @@
         "weight": 1.0
       },
       {
-        "from": "ui/src/bindings/Fetch.res",
-        "to": "ui/src/bindings/Webapi.res",
-        "relation": "shared_dir:ui/src/bindings",
+        "from": "server/src/glyphbase_server.gleam",
+        "to": "server/src/router.gleam",
+        "relation": "shared_dir:server/src",
         "weight": 1.0
       },
       {
@@ -351,15 +357,9 @@
         "weight": 1.0
       },
       {
-        "from": "ui/src/views/GalleryStore.res",
-        "to": "ui/src/views/FormStore.res",
-        "relation": "shared_dir:ui/src/views",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/views/FormStore.res",
-        "to": "ui/src/views/CalendarStore.res",
-        "relation": "shared_dir:ui/src/views",
+        "from": "ui/src/bindings/Fetch.res",
+        "to": "ui/src/bindings/Webapi.res",
+        "relation": "shared_dir:ui/src/bindings",
         "weight": 1.0
       }
     ]
@@ -367,14 +367,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeCode",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "ui/src/components/Grid.res"
+          "server/native/src/lithoglyph_nif.zig",
+          "server/ffi/zig/src/main.zig"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -387,15 +388,14 @@
         "relation": "UncheckedError->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "server/native/src/lithoglyph_nif.zig",
-          "server/ffi/zig/src/main.zig"
+          "ui/src/components/Grid.res"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnsafeFFI",

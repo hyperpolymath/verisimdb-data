@@ -574,10 +574,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "memory",
     "cpu",
-    "network"
+    "network",
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -612,60 +612,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/lib/bs/core/Segmenter.res",
-        "to": "src/lib/bs/core/Stemmer.res",
-        "relation": "shared_dir:src/lib/bs/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/bs/core/Stemmer.res",
-        "to": "src/lib/bs/core/Plural.res",
-        "relation": "shared_dir:src/lib/bs/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/bs/core/Plural.res",
-        "to": "src/lib/bs/core/DocumentExtract.res",
-        "relation": "shared_dir:src/lib/bs/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/bs/core/DocumentExtract.res",
-        "to": "src/lib/bs/core/I18n.res",
-        "relation": "shared_dir:src/lib/bs/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/bs/core/I18n.res",
-        "to": "src/lib/bs/core/FuzzyMatch.res",
-        "relation": "shared_dir:src/lib/bs/core",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/rsr-verify.js",
-        "to": "tools/missing-translations.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/missing-translations.js",
-        "to": "tools/sync-locales.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/sync-locales.js",
-        "to": "tools/locale-validator.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/locale-validator.js",
-        "to": "tools/extract-strings.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
         "from": "src/core/Segmenter.res",
         "to": "src/core/Stemmer.res",
         "relation": "shared_dir:src/core",
@@ -693,6 +639,30 @@
         "from": "src/core/I18n.res",
         "to": "src/core/FuzzyMatch.res",
         "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/rsr-verify.js",
+        "to": "tools/missing-translations.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/missing-translations.js",
+        "to": "tools/sync-locales.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sync-locales.js",
+        "to": "tools/locale-validator.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/locale-validator.js",
+        "to": "tools/extract-strings.js",
+        "relation": "shared_dir:tools",
         "weight": 1.0
       },
       {
@@ -729,6 +699,36 @@
         "from": "test/i18n.writenewPhrase.js",
         "to": "test/i18n.configureLocales.js",
         "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/core/Segmenter.res",
+        "to": "src/lib/bs/core/Stemmer.res",
+        "relation": "shared_dir:src/lib/bs/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/core/Stemmer.res",
+        "to": "src/lib/bs/core/Plural.res",
+        "relation": "shared_dir:src/lib/bs/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/core/Plural.res",
+        "to": "src/lib/bs/core/DocumentExtract.res",
+        "relation": "shared_dir:src/lib/bs/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/core/DocumentExtract.res",
+        "to": "src/lib/bs/core/I18n.res",
+        "relation": "shared_dir:src/lib/bs/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lib/bs/core/I18n.res",
+        "to": "src/lib/bs/core/FuzzyMatch.res",
+        "relation": "shared_dir:src/lib/bs/core",
         "weight": 1.0
       },
       {
@@ -970,21 +970,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/lib/bs/core/Segmenter.res",
-          "src/lib/bs/core/FuzzyMatch.res",
-          "src/lib/ocaml/Segmenter.res",
-          "src/lib/ocaml/FuzzyMatch.res",
-          "src/core/Segmenter.res",
-          "src/core/FuzzyMatch.res"
+          "adapters/crm/salesforce.js"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "InputBoundary",
@@ -1005,16 +1000,21 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "adapters/crm/salesforce.js"
+          "src/lib/bs/core/Segmenter.res",
+          "src/lib/bs/core/FuzzyMatch.res",
+          "src/lib/ocaml/Segmenter.res",
+          "src/lib/ocaml/FuzzyMatch.res",
+          "src/core/Segmenter.res",
+          "src/core/FuzzyMatch.res"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

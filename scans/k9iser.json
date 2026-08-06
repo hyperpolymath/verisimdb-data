@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "k9iser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -206,12 +206,18 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/interface/abi/K9iser/ABI/Types.idr",
         "to": "src/interface/abi/K9iser/ABI/Foreign.idr",
@@ -235,27 +241,11 @@
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -268,13 +258,13 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -286,6 +276,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
