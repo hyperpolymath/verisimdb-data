@@ -201,20 +201,14 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "network",
+    "disk",
     "memory",
     "cpu",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/interface/abi/Types.idr",
-        "to": "src/interface/abi/Foreign.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
-      },
       {
         "from": "src/core/scanner.eph",
         "to": "src/core/diagnostics.eph",
@@ -262,20 +256,26 @@
         "to": "src/interface/ffi/src/dbus.zig",
         "relation": "shared_dir:src/interface/ffi/src",
         "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Types.idr",
+        "to": "src/interface/abi/Foreign.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "systemd/install.sh"
+          "src/interface/ffi/src/dbus.zig"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -298,14 +298,14 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/interface/ffi/src/dbus.zig"
+          "systemd/install.sh"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

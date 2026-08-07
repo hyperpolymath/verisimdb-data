@@ -218,18 +218,12 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/integration_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
       {
         "from": "src/plugins/sql.rs",
         "to": "src/plugins/mod.rs",
@@ -247,22 +241,17 @@
         "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
+      },
+      {
+        "from": "tests/e2e_test.rs",
+        "to": "tests/integration_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e_test.rs",
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -295,6 +284,17 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e_test.rs",
+          "tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }
