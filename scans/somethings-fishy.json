@@ -259,13 +259,31 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
     "concurrency",
-    "cpu"
+    "memory",
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/scene.rs",
+        "to": "src/report.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/report.rs",
+        "to": "src/safe_io.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/scanners.rs",
+        "to": "tests/e2e.sh",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
       {
         "from": "safety_kernel/src/robofishy_io.adb",
         "to": "safety_kernel/src/robofishy_c_api.adb",
@@ -301,24 +319,6 @@
         "to": "setup.sh",
         "relation": "shared_dir:",
         "weight": 1.0
-      },
-      {
-        "from": "tests/scanners.rs",
-        "to": "tests/e2e.sh",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scene.rs",
-        "to": "src/report.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/report.rs",
-        "to": "src/safe_io.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
       }
     ]
   },
@@ -347,16 +347,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/scanners.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
@@ -366,6 +356,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/scanners.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

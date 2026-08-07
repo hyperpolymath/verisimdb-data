@@ -157,10 +157,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
+    "concurrency",
     "memory",
-    "concurrency"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -241,17 +241,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/hesinfo/src/main.rs",
-          "crates/hesiod-lib/src/config.rs"
+          "crates/hesiod-lib/tests/e2e_test.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -267,16 +266,17 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/hesiod-lib/tests/e2e_test.rs"
+          "crates/hesinfo/src/main.rs",
+          "crates/hesiod-lib/src/config.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",

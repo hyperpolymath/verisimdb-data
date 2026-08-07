@@ -628,25 +628,13 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
     "disk",
-    "network"
+    "network",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/Docudactyl/ABI/Types.idr",
-        "to": "src/Docudactyl/ABI/Foreign.idr",
-        "relation": "shared_dir:src/Docudactyl/ABI",
-        "weight": 1.0
-      },
-      {
-        "from": "src/julia/extract.jl",
-        "to": "src/julia/export.jl",
-        "relation": "shared_dir:src/julia",
-        "weight": 1.0
-      },
       {
         "from": "ffi/zig/src/dragonfly.zig",
         "to": "ffi/zig/src/investigator_summary.zig",
@@ -732,6 +720,18 @@
         "weight": 1.0
       },
       {
+        "from": "src/abi/Types.idr",
+        "to": "src/abi/Foreign.idr",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/julia/extract.jl",
+        "to": "src/julia/export.jl",
+        "relation": "shared_dir:src/julia",
+        "weight": 1.0
+      },
+      {
         "from": "src/ada/terminal_utils.adb",
         "to": "src/ada/document_model.adb",
         "relation": "shared_dir:src/ada",
@@ -747,12 +747,6 @@
         "from": "src/ada/docudactyl_tui.adb",
         "to": "src/ada/document_model.ads",
         "relation": "shared_dir:src/ada",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -822,6 +816,12 @@
         "weight": 1.0
       },
       {
+        "from": "src/Docudactyl/ABI/Types.idr",
+        "to": "src/Docudactyl/ABI/Foreign.idr",
+        "relation": "shared_dir:src/Docudactyl/ABI",
+        "weight": 1.0
+      },
+      {
         "from": "src/ocaml/pdf_parser.ml",
         "to": "src/ocaml/scheme_emit.ml",
         "relation": "shared_dir:src/ocaml",
@@ -837,6 +837,26 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/src/dragonfly.zig",
+          "ffi/zig/src/gpu_ocr.zig",
+          "ffi/zig/src/redaction_recovery.zig",
+          "ffi/zig/src/docudactyl_ffi.zig",
+          "ffi/zig/src/ml_inference.zig",
+          "ffi/zig/src/stages.zig",
+          "ffi/zig/src/reextract.zig",
+          "ffi/zig/src/capnp.zig",
+          "ffi/zig/src/cache.zig",
+          "ffi/zig/src/prefetch.zig",
+          "ffi/zig/src/lith_adapter.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
       {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
@@ -859,26 +879,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/src/dragonfly.zig",
-          "ffi/zig/src/gpu_ocr.zig",
-          "ffi/zig/src/redaction_recovery.zig",
-          "ffi/zig/src/docudactyl_ffi.zig",
-          "ffi/zig/src/ml_inference.zig",
-          "ffi/zig/src/stages.zig",
-          "ffi/zig/src/reextract.zig",
-          "ffi/zig/src/capnp.zig",
-          "ffi/zig/src/cache.zig",
-          "ffi/zig/src/prefetch.zig",
-          "ffi/zig/src/lith_adapter.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
       }
     ]
   }
