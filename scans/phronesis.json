@@ -1074,13 +1074,25 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "concurrency",
-    "memory",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "lib/phronesis/consensus/raft.ex",
+        "to": "lib/phronesis/consensus/server.ex",
+        "relation": "shared_dir:lib/phronesis/consensus",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/phronesis/package_manager/manifest.ex",
+        "to": "lib/phronesis/package_manager/registry.ex",
+        "relation": "shared_dir:lib/phronesis/package_manager",
+        "weight": 1.0
+      },
       {
         "from": "lib/phronesis/doc_generator.ex",
         "to": "lib/phronesis/analyzer.ex",
@@ -1166,12 +1178,6 @@
         "weight": 1.0
       },
       {
-        "from": "lib/phronesis/consensus/raft.ex",
-        "to": "lib/phronesis/consensus/server.ex",
-        "relation": "shared_dir:lib/phronesis/consensus",
-        "weight": 1.0
-      },
-      {
         "from": "test/conformance_test.exs",
         "to": "test/compiler_test.exs",
         "relation": "shared_dir:test",
@@ -1187,12 +1193,6 @@
         "from": "test/analyzer_test.exs",
         "to": "test/doc_generator_test.exs",
         "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/phronesis/package_manager/manifest.ex",
-        "to": "lib/phronesis/package_manager/registry.ex",
-        "relation": "shared_dir:lib/phronesis/package_manager",
         "weight": 1.0
       },
       {
@@ -1386,18 +1386,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "lib/phronesis/consensus/server/machine.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -1473,6 +1461,18 @@
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "lib/phronesis/consensus/server/machine.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

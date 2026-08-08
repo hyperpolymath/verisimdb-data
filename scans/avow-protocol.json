@@ -5,18 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "ExcessivePermissions",
-      "location": "deploy-repos.sh",
-      "file": "deploy-repos.sh",
-      "severity": "High",
-      "description": "Deno -A (all permissions) in deploy-repos.sh",
-      "recommended_attack": [
-        "network",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "SupplyChain",
       "location": "flake.nix",
       "file": "flake.nix",
@@ -62,7 +50,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 6371,
+    "total_lines": 6378,
     "unsafe_blocks": 22,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -253,20 +241,14 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu",
-    "disk",
+    "concurrency",
     "network",
-    "concurrency"
+    "disk",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "telegram-bot/src/StampMock.res",
-        "to": "telegram-bot/src/Bot.res",
-        "relation": "shared_dir:telegram-bot/src",
-        "weight": 1.0
-      },
       {
         "from": "scripts/DeployAllProjects.res",
         "to": "scripts/CreatePagesProjects.res",
@@ -292,6 +274,12 @@
         "weight": 1.0
       },
       {
+        "from": "telegram-bot/src/StampMock.res",
+        "to": "telegram-bot/src/Bot.res",
+        "relation": "shared_dir:telegram-bot/src",
+        "weight": 1.0
+      },
+      {
         "from": "src/bindings/Fetch_Api.res",
         "to": "src/bindings/Deno_Api.res",
         "relation": "shared_dir:src/bindings",
@@ -308,16 +296,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "deploy-repos.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -326,16 +304,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/GenerateProof.res"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -348,16 +316,6 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "deploy-repos.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
@@ -366,6 +324,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/GenerateProof.res"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "DynamicCodeExecution",

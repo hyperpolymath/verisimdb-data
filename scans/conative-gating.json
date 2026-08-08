@@ -347,24 +347,12 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
+    "network",
     "disk",
-    "network"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "tests/property_test.rs",
-        "to": "tests/gating_pipeline_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/gating_pipeline_test.rs",
-        "to": "tests/security_aspect_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
       {
         "from": "scripts/apply-justfiles.sh",
         "to": "scripts/apply-common-files.sh",
@@ -381,6 +369,18 @@
         "from": "scripts/mass-apply-templates.sh",
         "to": "scripts/reconcile-wharf-repos.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property_test.rs",
+        "to": "tests/gating_pipeline_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/gating_pipeline_test.rs",
+        "to": "tests/security_aspect_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -595,35 +595,23 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "scripts/mass-apply-templates.sh"
+          "tests/gating_pipeline_test.rs",
+          "tests/security_aspect_test.rs",
+          "src/main.rs"
         ],
         "frameworks": [
           "Networking",
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh",
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "src/contract/src/lib.rs",
@@ -633,7 +621,7 @@
           "Networking",
           "OTP"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "HardcodedSecret",
@@ -666,8 +654,22 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "CommandInjection",
         "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh",
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/contract/src/lib.rs",
@@ -677,22 +679,20 @@
           "Networking",
           "OTP"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
-          "tests/gating_pipeline_test.rs",
-          "tests/security_aspect_test.rs",
-          "src/main.rs"
+          "scripts/mass-apply-templates.sh"
         ],
         "frameworks": [
           "Networking",
           "OTP"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

@@ -234,26 +234,14 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "cpu",
-    "concurrency",
     "disk",
-    "memory"
+    "network",
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "server/src/formats/toml.rs",
-        "to": "server/src/formats/yaml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
-      },
-      {
-        "from": "server/src/formats/yaml.rs",
-        "to": "server/src/formats/xml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
-      },
       {
         "from": "server/tests/contract_tests.rs",
         "to": "server/tests/core_tests.rs",
@@ -313,30 +301,32 @@
         "to": "server/src/main.rs",
         "relation": "shared_dir:server/src",
         "weight": 1.0
+      },
+      {
+        "from": "server/src/formats/toml.rs",
+        "to": "server/src/formats/yaml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/formats/yaml.rs",
+        "to": "server/src/formats/xml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "server/tests/core_tests.rs"
+          "web/app.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "server/tests/core_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -349,14 +339,24 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "web/app.js"
+          "server/tests/core_tests.rs"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "server/tests/core_tests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

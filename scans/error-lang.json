@@ -172,8 +172,8 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -181,12 +181,6 @@
         "from": "error-pkg/src/install.rs",
         "to": "error-pkg/src/resolve.rs",
         "relation": "shared_dir:error-pkg/src",
-        "weight": 1.0
-      },
-      {
-        "from": "levels/03-unterminated-string.err",
-        "to": "levels/09-operators.err",
-        "relation": "shared_dir:levels",
         "weight": 1.0
       },
       {
@@ -200,11 +194,27 @@
         "to": "examples/09-null-cascade.err",
         "relation": "shared_dir:examples",
         "weight": 1.0
+      },
+      {
+        "from": "levels/03-unterminated-string.err",
+        "to": "levels/09-operators.err",
+        "relation": "shared_dir:levels",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "verification/check-affinescript.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -224,16 +234,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "verification/check-affinescript.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }
