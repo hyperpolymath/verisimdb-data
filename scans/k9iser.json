@@ -206,12 +206,18 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/interface/abi/K9iser/ABI/Types.idr",
+        "to": "src/interface/abi/K9iser/ABI/Foreign.idr",
+        "relation": "shared_dir:src/interface/abi/K9iser/ABI",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/mod.rs",
         "to": "src/codegen/contract.rs",
@@ -234,12 +240,6 @@
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/abi/K9iser/ABI/Types.idr",
-        "to": "src/interface/abi/K9iser/ABI/Foreign.idr",
-        "relation": "shared_dir:src/interface/abi/K9iser/ABI",
         "weight": 1.0
       }
     ]
@@ -267,6 +267,16 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -276,16 +286,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
