@@ -263,20 +263,14 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
-    "concurrency",
     "disk",
-    "network"
+    "concurrency",
+    "cpu",
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "launcher.sh",
-        "to": "test_verisimdb_simple.js",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "gossamer/verisimdb.js",
         "to": "gossamer/launch.sh",
@@ -288,11 +282,27 @@
         "to": "gossamer/app_gossamer.js",
         "relation": "shared_dir:gossamer",
         "weight": 1.0
+      },
+      {
+        "from": "launcher.sh",
+        "to": "test_verisimdb_simple.js",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -303,6 +313,47 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "launcher.sh",
+          "run.js"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Network"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PathTraversal",
@@ -319,37 +370,6 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "launcher.sh",
-          "run.js"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
-      },
-      {
         "source_category": "ExcessivePermissions",
         "sink_axis": "disk",
         "severity_value": 3.5,
@@ -359,26 +379,6 @@
         ],
         "frameworks": [],
         "relation": "ExcessivePermissions->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }
