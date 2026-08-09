@@ -292,13 +292,19 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "network",
     "disk",
-    "memory"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/migrate-version.jl",
+        "to": "scripts/generate-structure.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "bof-meetings/presentations/demo-http-headers.sh",
         "to": "bof-meetings/presentations/demo-dns-discovery.sh",
@@ -327,12 +333,6 @@
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/Metadata.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/Utils.hs",
         "relation": "shared_dir:TOOLS/validation/haskell/src/Palimpsest/Validator",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/migrate-version.jl",
-        "to": "scripts/generate-structure.sh",
-        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -464,16 +464,17 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
-          "tools/pmpl-verify/src/main.rs"
+          "bof-meetings/presentations/demo-http-headers.sh",
+          "bof-meetings/presentations/demo-dns-discovery.sh"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -501,17 +502,16 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "bof-meetings/presentations/demo-http-headers.sh",
-          "bof-meetings/presentations/demo-dns-discovery.sh"
+          "tools/pmpl-verify/src/main.rs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

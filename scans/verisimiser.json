@@ -372,41 +372,23 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
     "memory",
+    "cpu",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/integration_test.rs",
-        "to": "tests/sidecar_cli_test.rs",
-        "relation": "shared_dir:tests",
+        "from": "src/gc.rs",
+        "to": "src/doctor.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
-        "from": "tests/sidecar_cli_test.rs",
-        "to": "tests/provenance_fork_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/provenance_fork_test.rs",
-        "to": "tests/sqlite_intercept_e2e.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/sqlite_intercept_e2e.rs",
-        "to": "tests/logging_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/tier1/temporal.rs",
-        "to": "src/tier1/provenance.rs",
-        "relation": "shared_dir:src/tier1",
+        "from": "src/doctor.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -434,15 +416,27 @@
         "weight": 1.0
       },
       {
-        "from": "src/gc.rs",
-        "to": "src/doctor.rs",
-        "relation": "shared_dir:src",
+        "from": "tests/integration_test.rs",
+        "to": "tests/sidecar_cli_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
-        "from": "src/doctor.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
+        "from": "tests/sidecar_cli_test.rs",
+        "to": "tests/provenance_fork_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/provenance_fork_test.rs",
+        "to": "tests/sqlite_intercept_e2e.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/sqlite_intercept_e2e.rs",
+        "to": "tests/logging_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -450,11 +444,29 @@
         "to": "src/sidecar/json.rs",
         "relation": "shared_dir:src/sidecar",
         "weight": 1.0
+      },
+      {
+        "from": "src/tier1/temporal.rs",
+        "to": "src/tier1/provenance.rs",
+        "relation": "shared_dir:src/tier1",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/provenance_fork_test.rs",
+          "tests/sqlite_intercept_e2e.rs",
+          "tests/logging_test.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -490,18 +502,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/sqlite_intercept_e2e.rs",
-          "tests/logging_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

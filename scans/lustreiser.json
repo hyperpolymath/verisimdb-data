@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "lustreiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -152,38 +152,28 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "src/codegen/mod.rs",
         "to": "src/codegen/lustre_gen.rs",
         "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
@@ -213,6 +203,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

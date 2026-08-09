@@ -346,13 +346,25 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "memory",
     "cpu",
     "network",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "tests/property_test.rs",
+        "to": "tests/gating_pipeline_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/gating_pipeline_test.rs",
+        "to": "tests/security_aspect_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
       {
         "from": "scripts/apply-justfiles.sh",
         "to": "scripts/apply-common-files.sh",
@@ -369,18 +381,6 @@
         "from": "scripts/mass-apply-templates.sh",
         "to": "scripts/reconcile-wharf-repos.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/property_test.rs",
-        "to": "tests/gating_pipeline_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/gating_pipeline_test.rs",
-        "to": "tests/security_aspect_test.rs",
-        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -580,23 +580,8 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/gating_pipeline_test.rs",
-          "tests/security_aspect_test.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "src/contract/src/lib.rs",
@@ -606,48 +591,7 @@
           "Networking",
           "OTP"
         ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "templates/rsr-metadata.ncl"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/gating_pipeline_test.rs",
-          "tests/security_aspect_test.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "CommandInjection->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "HardcodedSecret",
@@ -682,7 +626,7 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/contract/src/lib.rs",
@@ -692,7 +636,63 @@
           "Networking",
           "OTP"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/gating_pipeline_test.rs",
+          "tests/security_aspect_test.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "templates/rsr-metadata.ncl"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/gating_pipeline_test.rs",
+          "tests/security_aspect_test.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

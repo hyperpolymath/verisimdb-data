@@ -309,11 +309,23 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/standardize_readmes.sh",
+        "to": "scripts/branch-protection-apply.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/branch-protection-apply.sh",
+        "to": "scripts/wiki-audit.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "lib/script_manager/git_syncer.ex",
         "to": "lib/script_manager/estate_deployer.ex",
@@ -349,18 +361,6 @@
         "to": "lib/script_manager/ownership_guard.ex",
         "relation": "shared_dir:lib/script_manager",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/standardize_readmes.sh",
-        "to": "scripts/branch-protection-apply.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/branch-protection-apply.sh",
-        "to": "scripts/wiki-audit.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
@@ -375,6 +375,25 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "lib/script_manager/repo_cleanup.ex",
+          "lib/script_manager/git_syncer.ex",
+          "lib/script_manager/tui.ex",
+          "lib/script_manager/estate_deployer.ex",
+          "lib/script_manager/toolchain_linker.ex",
+          "lib/script_manager/dependency_fixer.ex",
+          "lib/script_manager/media_finder.ex",
+          "lib/script_manager/ownership_guard.ex",
+          "lib/script_manager/script_runner.ex",
+          "scripts/lib/common.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "PathTraversal",
@@ -404,25 +423,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "lib/script_manager/repo_cleanup.ex",
-          "lib/script_manager/git_syncer.ex",
-          "lib/script_manager/tui.ex",
-          "lib/script_manager/estate_deployer.ex",
-          "lib/script_manager/toolchain_linker.ex",
-          "lib/script_manager/dependency_fixer.ex",
-          "lib/script_manager/media_finder.ex",
-          "lib/script_manager/ownership_guard.ex",
-          "lib/script_manager/script_runner.ex",
-          "scripts/lib/common.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       }
     ]
   }
