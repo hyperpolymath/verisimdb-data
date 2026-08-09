@@ -476,17 +476,17 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk",
     "memory",
-    "concurrency"
+    "concurrency",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/fmt/src/lib.rs",
-        "to": "src/interface/fmt/src/main.rs",
-        "relation": "shared_dir:src/interface/fmt/src",
+        "from": "src/interface/lint/src/lib.rs",
+        "to": "src/interface/lint/src/main.rs",
+        "relation": "shared_dir:src/interface/lint/src",
         "weight": 1.0
       },
       {
@@ -505,6 +505,18 @@
         "from": "src/interface/parse/src/parser.rs",
         "to": "src/interface/parse/src/wire.rs",
         "relation": "shared_dir:src/interface/parse/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/fmt/src/lib.rs",
+        "to": "src/interface/fmt/src/main.rs",
+        "relation": "shared_dir:src/interface/fmt/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/lsp/src/lib.rs",
+        "to": "src/interface/lsp/src/main.rs",
+        "relation": "shared_dir:src/interface/lsp/src",
         "weight": 1.0
       },
       {
@@ -530,23 +542,23 @@
         "to": "src/interface/parse/tests/wire.rs",
         "relation": "shared_dir:src/interface/parse/tests",
         "weight": 1.0
-      },
-      {
-        "from": "src/interface/lsp/src/lib.rs",
-        "to": "src/interface/lsp/src/main.rs",
-        "relation": "shared_dir:src/interface/lsp/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/lint/src/lib.rs",
-        "to": "src/interface/lint/src/main.rs",
-        "relation": "shared_dir:src/interface/lint/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/interface/lint/src/main.rs",
+          "src/interface/parse/src/bin/vclt-gate.rs",
+          "src/interface/fmt/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
@@ -557,18 +569,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/interface/lint/src/main.rs",
-          "src/interface/parse/src/bin/vclt-gate.rs",
-          "src/interface/fmt/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -583,6 +583,18 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/interface/lint/src/main.rs",
+          "src/interface/parse/src/bin/vclt-gate.rs",
+          "src/interface/fmt/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "ResourceLeak",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -591,18 +603,6 @@
         ],
         "frameworks": [],
         "relation": "ResourceLeak->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/interface/lint/src/main.rs",
-          "src/interface/parse/src/bin/vclt-gate.rs",
-          "src/interface/fmt/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

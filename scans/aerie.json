@@ -620,11 +620,11 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
     "concurrency",
-    "network",
-    "disk"
+    "disk",
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -777,20 +777,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/api/zig/smokeping_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/main.zig",
-          "src/api/zig/librespeed_client.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -829,6 +815,16 @@
         "relation": "HardcodedSecret->Network"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "aerie-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -840,14 +836,18 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "aerie-launcher.sh"
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/main.zig",
+          "src/api/zig/librespeed_client.zig"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

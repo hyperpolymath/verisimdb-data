@@ -295,13 +295,25 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "concurrency",
     "disk",
-    "memory",
-    "concurrency"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/har-meta/src/a2ml.rs",
+        "to": "crates/har-meta/src/graph.rs",
+        "relation": "shared_dir:crates/har-meta/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/har-install/src/capture.rs",
+        "to": "crates/har-install/src/mapping.rs",
+        "relation": "shared_dir:crates/har-install/src",
+        "weight": 1.0
+      },
       {
         "from": "crates/har-install/tests/gate_idempotent_reinstall.rs",
         "to": "crates/har-install/tests/declarative_roundtrip_a2ml.rs",
@@ -324,18 +336,6 @@
         "from": "crates/har-core/src/target.rs",
         "to": "crates/har-core/src/route.rs",
         "relation": "shared_dir:crates/har-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/har-meta/src/a2ml.rs",
-        "to": "crates/har-meta/src/graph.rs",
-        "relation": "shared_dir:crates/har-meta/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/har-install/src/capture.rs",
-        "to": "crates/har-install/src/mapping.rs",
-        "relation": "shared_dir:crates/har-install/src",
         "weight": 1.0
       },
       {
@@ -475,17 +475,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/har-config/src/loader.rs",
-          "crates/har-dispatch/src/lib.rs"
+          "crates/har-metrics/src/lib.rs",
+          "crates/har-meta/tests/roundtrip_props.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -501,19 +501,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/har-metrics/src/lib.rs",
-          "crates/har-meta/tests/roundtrip_props.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -525,6 +512,19 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/har-config/src/loader.rs",
+          "crates/har-dispatch/src/lib.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

@@ -194,10 +194,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "network",
-    "memory",
-    "disk"
+    "disk",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -212,14 +212,26 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "tests/e2e.sh"
+          "mvt/src/ui/app.js"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "mvt/src/kernel/index.js",
+          "mvt/src/engine/utils.js",
+          "mvt/src/engine/gameState.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -233,16 +245,6 @@
       },
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "mvt/src/ui/app.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
@@ -252,16 +254,14 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "mvt/src/kernel/index.js",
-          "mvt/src/engine/utils.js",
-          "mvt/src/engine/gameState.js"
+          "tests/e2e.sh"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

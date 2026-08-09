@@ -222,10 +222,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "network",
+    "disk",
     "cpu",
-    "disk"
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -257,6 +257,30 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "services/seamstressd/test/seamstressd_test.exs",
+          "services/seamstressd/test/e2e_test.exs",
+          "services/seamstressd/test/runner_test.exs"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "services/seamstressd/lib/seamstressd/runner.ex",
+          "services/seamstressd/bench/runner_bench.exs",
+          "services/seamstressd/test/runner_test.exs"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -303,30 +327,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "services/seamstressd/lib/seamstressd/runner.ex",
-          "services/seamstressd/bench/runner_bench.exs",
-          "services/seamstressd/test/runner_test.exs"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "services/seamstressd/test/seamstressd_test.exs",
-          "services/seamstressd/test/e2e_test.exs",
-          "services/seamstressd/test/runner_test.exs"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
       }
     ]
   }
