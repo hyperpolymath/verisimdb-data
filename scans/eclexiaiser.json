@@ -5,19 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "tests/integration_tests.rs",
-      "file": "tests/integration_tests.rs",
-      "severity": "Medium",
-      "description": "18 unwrap/expect calls in tests/integration_tests.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "UnsafeCode",
       "location": "src/interface/ffi/src/main.zig",
       "file": "src/interface/ffi/src/main.zig",
@@ -25,6 +12,18 @@
       "description": "2 unsafe pointer casts in src/interface/ffi/src/main.zig",
       "recommended_attack": [
         "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/codegen/parser.rs",
+      "file": "src/codegen/parser.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -54,7 +53,7 @@
     "total_lines": 6362,
     "unsafe_blocks": 26,
     "panic_sites": 0,
-    "unwrap_calls": 19,
+    "unwrap_calls": 1,
     "allocation_sites": 9,
     "io_operations": 8,
     "threading_constructs": 0
@@ -65,7 +64,7 @@
       "lines": 415,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 18,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
       "threading_constructs": 0
@@ -151,15 +150,15 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/abi/Eclexiaiser/ABI/Types.idr",
-        "to": "src/interface/abi/Eclexiaiser/ABI/Foreign.idr",
-        "relation": "shared_dir:src/interface/abi/Eclexiaiser/ABI",
-        "weight": 1.0
-      },
-      {
         "from": "src/codegen/reporter.rs",
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Eclexiaiser/ABI/Types.idr",
+        "to": "src/interface/abi/Eclexiaiser/ABI/Foreign.idr",
+        "relation": "shared_dir:src/interface/abi/Eclexiaiser/ABI",
         "weight": 1.0
       }
     ]
@@ -167,31 +166,11 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/integration_tests.rs"
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
@@ -207,14 +186,34 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tests/integration_tests.rs"
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

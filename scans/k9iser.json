@@ -1,22 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "k9iser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "PanicPath",
-      "location": "tests/integration_test.rs",
-      "file": "tests/integration_test.rs",
-      "severity": "Medium",
-      "description": "22 unwrap/expect calls in tests/integration_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
     {
       "category": "UnsafeCode",
       "location": "src/interface/ffi/src/main.zig",
@@ -25,6 +12,18 @@
       "description": "15 unsafe pointer casts in src/interface/ffi/src/main.zig",
       "recommended_attack": [
         "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/codegen/validator.rs",
+      "file": "src/codegen/validator.rs",
+      "severity": "Medium",
+      "description": "1 panic sites and 0 unwrap/expect calls in src/codegen/validator.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -66,7 +65,7 @@
     "total_lines": 7747,
     "unsafe_blocks": 35,
     "panic_sites": 1,
-    "unwrap_calls": 22,
+    "unwrap_calls": 0,
     "allocation_sites": 37,
     "io_operations": 16,
     "threading_constructs": 0
@@ -77,7 +76,7 @@
       "lines": 274,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 22,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 6,
       "threading_constructs": 0
@@ -207,17 +206,11 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/interface/abi/K9iser/ABI/Types.idr",
-        "to": "src/interface/abi/K9iser/ABI/Foreign.idr",
-        "relation": "shared_dir:src/interface/abi/K9iser/ABI",
-        "weight": 1.0
-      },
       {
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
@@ -241,6 +234,12 @@
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/K9iser/ABI/Types.idr",
+        "to": "src/interface/abi/K9iser/ABI/Foreign.idr",
+        "relation": "shared_dir:src/interface/abi/K9iser/ABI",
+        "weight": 1.0
       }
     ]
   },
@@ -251,7 +250,7 @@
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tests/integration_test.rs"
+          "src/codegen/validator.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
@@ -267,16 +266,6 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -286,6 +275,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/validator.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",

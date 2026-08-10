@@ -340,37 +340,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu",
+    "disk",
     "network",
-    "disk"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "web/src/Generators.res",
-        "to": "web/src/WasmLoader.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WasmLoader.res",
-        "to": "web/src/WasmBindings.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WasmBindings.res",
-        "to": "web/src/WebDom.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WebDom.res",
-        "to": "web/src/Hash.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
       {
         "from": "crates/generators/src/lib.rs",
         "to": "crates/generators/src/pattern.rs",
@@ -393,6 +369,30 @@
         "from": "src/dicti0nary.chpl",
         "to": "src/main.rs",
         "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/Generators.res",
+        "to": "web/src/WasmLoader.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/WasmLoader.res",
+        "to": "web/src/WasmBindings.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/WasmBindings.res",
+        "to": "web/src/WebDom.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/WebDom.res",
+        "to": "web/src/Hash.res",
+        "relation": "shared_dir:web/src",
         "weight": 1.0
       },
       {
@@ -716,17 +716,17 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
-        "severity_value": 5.0,
+        "severity_value": 3.5,
         "files": [
-          "tests/test_random.chpl"
+          "lib/es6/web/src/App.res.js"
         ],
         "frameworks": [
           "Concurrent",
           "Networking"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -743,6 +743,20 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "crates/generators/src/leetspeak.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -756,31 +770,17 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "HardcodedSecret",
         "sink_axis": "network",
-        "severity_value": 3.5,
+        "severity_value": 5.0,
         "files": [
-          "lib/es6/web/src/App.res.js"
+          "tests/test_random.chpl"
         ],
         "frameworks": [
           "Concurrent",
           "Networking"
         ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "crates/generators/src/leetspeak.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "HardcodedSecret->Network"
       }
     ]
   },

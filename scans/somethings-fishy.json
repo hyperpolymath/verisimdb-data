@@ -5,19 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "tests/scanners.rs",
-      "file": "tests/scanners.rs",
-      "severity": "Medium",
-      "description": "11 unwrap/expect calls in tests/scanners.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "UnsafeCode",
       "location": "safety_kernel/src/robofishy_c_api.adb",
       "file": "safety_kernel/src/robofishy_c_api.adb",
@@ -53,6 +40,30 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "src/scanners/commit_trailers.rs",
+      "file": "src/scanners/commit_trailers.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/scanners/commit_trailers.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/scanners/banned_patterns.rs",
+      "file": "src/scanners/banned_patterns.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/scanners/banned_patterns.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -65,8 +76,8 @@
   "statistics": {
     "total_lines": 7435,
     "unsafe_blocks": 9,
-    "panic_sites": 2,
-    "unwrap_calls": 17,
+    "panic_sites": 0,
+    "unwrap_calls": 2,
     "allocation_sites": 8,
     "io_operations": 21,
     "threading_constructs": 3
@@ -80,17 +91,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/scanners.rs",
-      "lines": 261,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 11,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 0,
-      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -241,8 +241,8 @@
       "file_path": "build.rs",
       "lines": 124,
       "unsafe_blocks": 0,
-      "panic_sites": 2,
-      "unwrap_calls": 4,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
       "allocation_sites": 2,
       "io_operations": 1,
       "threading_constructs": 0
@@ -259,17 +259,29 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
+    "disk",
     "memory",
-    "disk"
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/scanners.rs",
-        "to": "tests/e2e.sh",
-        "relation": "shared_dir:tests",
+        "from": "build.rs",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "safety_kernel/src/robofishy_io.adb",
+        "to": "safety_kernel/src/robofishy_c_api.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
+      {
+        "from": "safety_kernel/src/robofishy_c_api.adb",
+        "to": "safety_kernel/src/robofishy_write_guard.adb",
+        "relation": "shared_dir:safety_kernel/src",
         "weight": 1.0
       },
       {
@@ -291,24 +303,6 @@
         "weight": 1.0
       },
       {
-        "from": "build.rs",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "safety_kernel/src/robofishy_io.adb",
-        "to": "safety_kernel/src/robofishy_c_api.adb",
-        "relation": "shared_dir:safety_kernel/src",
-        "weight": 1.0
-      },
-      {
-        "from": "safety_kernel/src/robofishy_c_api.adb",
-        "to": "safety_kernel/src/robofishy_write_guard.adb",
-        "relation": "shared_dir:safety_kernel/src",
-        "weight": 1.0
-      },
-      {
         "from": "src/scene.rs",
         "to": "src/report.rs",
         "relation": "shared_dir:src",
@@ -325,24 +319,37 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "tests/scanners.rs"
+          "src/safe_io.rs",
+          "src/safe_io.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tests/scanners.rs"
+          "src/scanners/commit_trailers.rs",
+          "src/scanners/banned_patterns.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/scanners/commit_trailers.rs",
+          "src/scanners/banned_patterns.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -355,17 +362,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "src/safe_io.rs",
-          "src/safe_io.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

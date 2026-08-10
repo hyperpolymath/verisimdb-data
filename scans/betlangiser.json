@@ -1,22 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "betlangiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "PanicPath",
-      "location": "tests/integration_test.rs",
-      "file": "tests/integration_test.rs",
-      "severity": "Medium",
-      "description": "14 unwrap/expect calls in tests/integration_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
     {
       "category": "UnsafeCode",
       "location": "src/interface/ffi/src/main.zig",
@@ -33,12 +20,11 @@
       "location": "src/codegen/codegen.rs",
       "file": "src/codegen/codegen.rs",
       "severity": "Medium",
-      "description": "61 unwrap/expect calls in src/codegen/codegen.rs",
+      "description": "0 panic sites and 61 unwrap/expect calls in src/codegen/codegen.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
       "test_context": "production"
     },
     {
@@ -78,7 +64,7 @@
     "total_lines": 7841,
     "unsafe_blocks": 29,
     "panic_sites": 0,
-    "unwrap_calls": 75,
+    "unwrap_calls": 61,
     "allocation_sites": 2,
     "io_operations": 5,
     "threading_constructs": 0
@@ -89,7 +75,7 @@
       "lines": 402,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 14,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
       "threading_constructs": 0
@@ -156,6 +142,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/codegen.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -176,15 +172,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "tests/integration_test.rs",
           "src/codegen/codegen.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -197,25 +192,14 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/codegen/codegen.rs"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tests/integration_test.rs",
           "src/codegen/codegen.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

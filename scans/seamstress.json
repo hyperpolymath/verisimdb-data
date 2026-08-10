@@ -125,6 +125,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "tools/seamctl/src/graph.rs",
+      "file": "tools/seamctl/src/graph.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 2 unwrap/expect calls in tools/seamctl/src/graph.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnboundedAllocation",
       "location": "tools/seamctl/src/report.rs",
       "file": "tools/seamctl/src/report.rs",
@@ -222,10 +234,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu",
     "network",
-    "memory"
+    "memory",
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -270,6 +282,28 @@
         "relation": "MutationGap->Cpu"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/seamctl/src/graph.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tools/seamctl/src/validate.rs",
+          "tools/seamctl/src/graph.rs",
+          "tools/seamctl/src/report.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -305,16 +339,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tools/seamctl/src/validate.rs",
-          "tools/seamctl/src/graph.rs",
-          "tools/seamctl/src/report.rs"
+          "tools/seamctl/src/graph.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "CommandInjection",

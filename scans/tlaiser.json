@@ -6,16 +6,39 @@
   "weak_points": [
     {
       "category": "PanicPath",
-      "location": "tests/integration.rs",
-      "file": "tests/integration.rs",
+      "location": "src/codegen/tlc_gen.rs",
+      "file": "src/codegen/tlc_gen.rs",
       "severity": "Medium",
-      "description": "39 unwrap/expect calls in tests/integration.rs",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/tlc_gen.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
-      "test_context": "test_only"
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/codegen/pluscal_gen.rs",
+      "file": "src/codegen/pluscal_gen.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/pluscal_gen.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/codegen/parser.rs",
+      "file": "src/codegen/parser.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
     },
     {
       "category": "UnboundedAllocation",
@@ -43,22 +66,12 @@
     "total_lines": 8903,
     "unsafe_blocks": 22,
     "panic_sites": 0,
-    "unwrap_calls": 42,
+    "unwrap_calls": 3,
     "allocation_sites": 51,
     "io_operations": 8,
     "threading_constructs": 3
   },
   "file_statistics": [
-    {
-      "file_path": "tests/integration.rs",
-      "lines": 556,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 39,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
     {
       "file_path": "scripts/abi-ffi-gate.jl",
       "lines": 116,
@@ -182,18 +195,12 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/tla_gen.rs",
         "to": "src/codegen/tlc_gen.rs",
@@ -211,6 +218,12 @@
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
@@ -221,20 +234,12 @@
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tests/integration.rs"
+          "src/codegen/tlc_gen.rs",
+          "src/codegen/pluscal_gen.rs",
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -251,10 +256,22 @@
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/integration.rs"
+          "src/codegen/tlc_gen.rs",
+          "src/codegen/pluscal_gen.rs",
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

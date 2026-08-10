@@ -28,6 +28,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "rs/src/parser.rs",
+      "file": "rs/src/parser.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in rs/src/parser.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "ex/test/k9_bench_test.exs",
       "file": "ex/test/k9_bench_test.exs",
@@ -357,12 +369,24 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
+    "memory",
     "concurrency",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "rs/generated/idrisiser/idris2/K9/Verified/component_parser.idr",
+        "to": "rs/generated/idrisiser/idris2/K9/Verified/component_types.idr",
+        "relation": "shared_dir:rs/generated/idrisiser/idris2/K9/Verified",
+        "weight": 1.0
+      },
+      {
+        "from": "rs/generated/idrisiser/idris2/K9/Verified/component_types.idr",
+        "to": "rs/generated/idrisiser/idris2/K9/Verified/round_trip.idr",
+        "relation": "shared_dir:rs/generated/idrisiser/idris2/K9/Verified",
+        "weight": 1.0
+      },
       {
         "from": "rs/src/types.rs",
         "to": "rs/src/error.rs",
@@ -380,23 +404,36 @@
         "to": "rs/src/parser.rs",
         "relation": "shared_dir:rs/src",
         "weight": 1.0
-      },
-      {
-        "from": "rs/generated/idrisiser/idris2/K9/Verified/component_parser.idr",
-        "to": "rs/generated/idrisiser/idris2/K9/Verified/component_types.idr",
-        "relation": "shared_dir:rs/generated/idrisiser/idris2/K9/Verified",
-        "weight": 1.0
-      },
-      {
-        "from": "rs/generated/idrisiser/idris2/K9/Verified/component_types.idr",
-        "to": "rs/generated/idrisiser/idris2/K9/Verified/round_trip.idr",
-        "relation": "shared_dir:rs/generated/idrisiser/idris2/K9/Verified",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "ex/test/k9_bench_test.exs",
+          "ex/test/k9_property_test.exs",
+          "ex/test/k9_aspect_test.exs",
+          "ex/test/k9_test.exs",
+          "ex/test/k9_contract_test.exs"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "deno/src/K9_Parser.res",
+          "rs/src/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -418,28 +455,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "ex/test/k9_bench_test.exs",
-          "ex/test/k9_property_test.exs",
-          "ex/test/k9_aspect_test.exs",
-          "ex/test/k9_test.exs",
-          "ex/test/k9_contract_test.exs"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "deno/src/K9_Parser.res"
+          "rs/src/parser.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

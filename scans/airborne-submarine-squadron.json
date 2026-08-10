@@ -137,6 +137,18 @@
         "concurrency"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "tray/src/main.rs",
+      "file": "tray/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in tray/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
@@ -263,11 +275,11 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "memory",
     "cpu",
+    "memory",
+    "disk",
     "network",
-    "disk"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -294,18 +306,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "launcher.sh",
-          "desktop/install-debug.sh",
-          "desktop/install.sh",
-          "gossamer/launch.sh",
-          "install.sh"
+          "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -318,35 +326,14 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/bench.js",
-          "test/compatibility_test.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -370,6 +357,30 @@
         "relation": "ExcessivePermissions->Network"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "launcher.sh",
+          "desktop/install-debug.sh",
+          "desktop/install.sh",
+          "gossamer/launch.sh",
+          "install.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
         "source_category": "ExcessivePermissions",
         "sink_axis": "disk",
         "severity_value": 3.5,
@@ -379,6 +390,27 @@
         ],
         "frameworks": [],
         "relation": "ExcessivePermissions->Disk"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/bench.js",
+          "test/compatibility_test.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

@@ -51,15 +51,38 @@
     },
     {
       "category": "PanicPath",
-      "location": "rust_core/src/lib.rs",
-      "file": "rust_core/src/lib.rs",
+      "location": "rust_core/src/schedule.rs",
+      "file": "rust_core/src/schedule.rs",
       "severity": "Medium",
-      "description": "7 unwrap/expect calls in rust_core/src/lib.rs",
+      "description": "1 panic sites and 0 unwrap/expect calls in rust_core/src/schedule.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "rust_core/src/lib.rs",
+      "file": "rust_core/src/lib.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 7 unwrap/expect calls in rust_core/src/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "rust_core/src/profile.rs",
+      "file": "rust_core/src/profile.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 5 unwrap/expect calls in rust_core/src/profile.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
       "test_context": "production"
     },
     {
@@ -67,12 +90,23 @@
       "location": "rust_core/src/interests.rs",
       "file": "rust_core/src/interests.rs",
       "severity": "Medium",
-      "description": "31 unwrap/expect calls in rust_core/src/interests.rs",
+      "description": "0 panic sites and 31 unwrap/expect calls in rust_core/src/interests.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "rust_core/src/form_data.rs",
+      "file": "rust_core/src/form_data.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 3 unwrap/expect calls in rust_core/src/form_data.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
       "test_context": "production"
     }
   ],
@@ -339,10 +373,10 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
     "network",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -417,6 +451,20 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rust_core/src/schedule.rs",
+          "rust_core/src/lib.rs",
+          "rust_core/src/profile.rs",
+          "rust_core/src/interests.rs",
+          "rust_core/src/form_data.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -425,16 +473,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "InputBoundary",
@@ -451,8 +489,11 @@
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
+          "rust_core/src/schedule.rs",
           "rust_core/src/lib.rs",
-          "rust_core/src/interests.rs"
+          "rust_core/src/profile.rs",
+          "rust_core/src/interests.rs",
+          "rust_core/src/form_data.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
@@ -469,15 +510,14 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "rust_core/src/lib.rs",
-          "rust_core/src/interests.rs"
+          "src/dashboard/Dashboard.res.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   },

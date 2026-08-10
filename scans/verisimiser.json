@@ -6,42 +6,15 @@
   "weak_points": [
     {
       "category": "PanicPath",
-      "location": "tests/provenance_fork_test.rs",
-      "file": "tests/provenance_fork_test.rs",
+      "location": "src/codegen/ident.rs",
+      "file": "src/codegen/ident.rs",
       "severity": "Medium",
-      "description": "9 unwrap/expect calls in tests/provenance_fork_test.rs",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/ident.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
-      "category": "PanicPath",
-      "location": "tests/sqlite_intercept_e2e.rs",
-      "file": "tests/sqlite_intercept_e2e.rs",
-      "severity": "Medium",
-      "description": "9 unwrap/expect calls in tests/sqlite_intercept_e2e.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
-      "category": "PanicPath",
-      "location": "tests/logging_test.rs",
-      "file": "tests/logging_test.rs",
-      "severity": "Medium",
-      "description": "10 unwrap/expect calls in tests/logging_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
+      "test_context": "production"
     },
     {
       "category": "UnboundedAllocation",
@@ -52,6 +25,30 @@
       "recommended_attack": [
         "memory",
         "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/codegen/parser.rs",
+      "file": "src/codegen/parser.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/codegen/overlay.rs",
+      "file": "src/codegen/overlay.rs",
+      "severity": "Medium",
+      "description": "1 panic sites and 1 unwrap/expect calls in src/codegen/overlay.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -80,6 +77,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "src/main.rs",
+      "file": "src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -93,7 +102,7 @@
     "total_lines": 15382,
     "unsafe_blocks": 25,
     "panic_sites": 1,
-    "unwrap_calls": 40,
+    "unwrap_calls": 4,
     "allocation_sites": 52,
     "io_operations": 42,
     "threading_constructs": 12
@@ -104,7 +113,7 @@
       "lines": 513,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 5,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
@@ -114,20 +123,9 @@
       "lines": 92,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 3,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/provenance_fork_test.rs",
-      "lines": 181,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 9,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 0,
-      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -135,21 +133,10 @@
       "lines": 177,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 9,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 1
-    },
-    {
-      "file_path": "tests/logging_test.rs",
-      "lines": 146,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 10,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
     },
     {
       "file_path": "scripts/abi-ffi-gate.jl",
@@ -372,13 +359,19 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "memory",
     "cpu",
+    "memory",
+    "disk",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/sidecar/lock.rs",
+        "to": "src/sidecar/json.rs",
+        "relation": "shared_dir:src/sidecar",
+        "weight": 1.0
+      },
       {
         "from": "src/gc.rs",
         "to": "src/doctor.rs",
@@ -395,6 +388,18 @@
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration_test.rs",
+        "to": "tests/sidecar_cli_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/sidecar_cli_test.rs",
+        "to": "tests/sqlite_intercept_e2e.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -416,36 +421,6 @@
         "weight": 1.0
       },
       {
-        "from": "tests/integration_test.rs",
-        "to": "tests/sidecar_cli_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/sidecar_cli_test.rs",
-        "to": "tests/provenance_fork_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/provenance_fork_test.rs",
-        "to": "tests/sqlite_intercept_e2e.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/sqlite_intercept_e2e.rs",
-        "to": "tests/logging_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/sidecar/lock.rs",
-        "to": "src/sidecar/json.rs",
-        "relation": "shared_dir:src/sidecar",
-        "weight": 1.0
-      },
-      {
         "from": "src/tier1/temporal.rs",
         "to": "src/tier1/provenance.rs",
         "relation": "shared_dir:src/tier1",
@@ -455,30 +430,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/sqlite_intercept_e2e.rs",
-          "tests/logging_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/provenance_fork_test.rs",
-          "tests/sqlite_intercept_e2e.rs",
-          "tests/logging_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -492,6 +443,19 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/ident.rs",
+          "src/codegen/parser.rs",
+          "src/codegen/overlay.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -502,6 +466,19 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/ident.rs",
+          "src/codegen/parser.rs",
+          "src/codegen/overlay.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

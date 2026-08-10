@@ -8,6 +8,18 @@
   ],
   "weak_points": [
     {
+      "category": "PanicPath",
+      "location": "xtask/src/main.rs",
+      "file": "xtask/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 3 unwrap/expect calls in xtask/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "PathTraversal",
       "location": "project-wharf-launcher.sh",
       "file": "project-wharf-launcher.sh",
@@ -53,6 +65,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "bin/yacht-agent/src/main.rs",
+      "file": "bin/yacht-agent/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 3 unwrap/expect calls in bin/yacht-agent/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "PathTraversal",
       "location": "scripts/smoke_test.sh",
       "file": "scripts/smoke_test.sh",
@@ -89,19 +113,6 @@
       "test_context": "production"
     },
     {
-      "category": "PanicPath",
-      "location": "crates/wharf-core/tests/integration.rs",
-      "file": "crates/wharf-core/tests/integration.rs",
-      "severity": "Medium",
-      "description": "44 unwrap/expect calls in crates/wharf-core/tests/integration.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "InsecureProtocol",
       "location": "crates/wharf-core/tests/integration.rs",
       "file": "crates/wharf-core/tests/integration.rs",
@@ -110,7 +121,6 @@
       "recommended_attack": [
         "network"
       ],
-      "suppressed": true,
       "test_context": "test_only"
     },
     {
@@ -150,6 +160,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "crates/wharf-core/src/crypto.rs",
+      "file": "crates/wharf-core/src/crypto.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 4 unwrap/expect calls in crates/wharf-core/src/crypto.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnboundedAllocation",
       "location": "crates/wharf-core/src/nebula.rs",
       "file": "crates/wharf-core/src/nebula.rs",
@@ -166,7 +188,7 @@
     "total_lines": 12961,
     "unsafe_blocks": 14,
     "panic_sites": 0,
-    "unwrap_calls": 54,
+    "unwrap_calls": 10,
     "allocation_sites": 78,
     "io_operations": 77,
     "threading_constructs": 1
@@ -306,16 +328,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "crates/wharf-core/tests/integration.rs",
-      "lines": 448,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 44,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "crates/wharf-core/src/fleet.rs",
       "lines": 373,
       "unsafe_blocks": 0,
@@ -427,9 +439,9 @@
   "recommended_attacks": [
     "concurrency",
     "memory",
-    "disk",
+    "cpu",
     "network",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -674,18 +686,6 @@
         "weight": 42.0
       },
       {
-        "from": "crates/wharf-core/tests/integration.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 44.0
-      },
-      {
-        "from": "crates/wharf-core/tests/integration.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 44.0
-      },
-      {
         "from": "crates/wharf-core/src/fleet.rs",
         "to": "WebServer",
         "relation": "framework",
@@ -810,8 +810,8 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
           "crates/wharf-core/tests/integration.rs"
@@ -820,7 +820,22 @@
           "WebServer",
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "xtask/src/main.rs",
+          "bin/yacht-agent/src/main.rs",
+          "crates/wharf-core/src/crypto.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PathTraversal",
@@ -837,6 +852,38 @@
           "Networking"
         ],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "bin/yacht-agent/src/ebpf.rs",
+          "crates/wharf-core/src/fleet.rs",
+          "crates/wharf-core/src/integrity.rs",
+          "crates/wharf-core/src/config.rs",
+          "crates/wharf-core/src/nebula.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "xtask/src/main.rs",
+          "bin/yacht-agent/src/main.rs",
+          "crates/wharf-core/src/crypto.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -870,23 +917,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "bin/yacht-agent/src/ebpf.rs",
-          "crates/wharf-core/src/fleet.rs",
-          "crates/wharf-core/src/integrity.rs",
-          "crates/wharf-core/src/config.rs",
-          "crates/wharf-core/src/nebula.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
@@ -899,32 +929,6 @@
           "Networking"
         ],
         "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Networking"
-        ],
-        "relation": "InsecureProtocol->Network"
       }
     ]
   }

@@ -55,7 +55,19 @@
       "location": "desktop/src/main.rs",
       "file": "desktop/src/main.rs",
       "severity": "Medium",
-      "description": "14 unwrap/expect calls in desktop/src/main.rs",
+      "description": "0 panic sites and 14 unwrap/expect calls in desktop/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "core/src/lambdadelta_host/tests.rs",
+      "file": "core/src/lambdadelta_host/tests.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 2 unwrap/expect calls in core/src/lambdadelta_host/tests.rs",
       "recommended_attack": [
         "memory",
         "disk"
@@ -343,8 +355,8 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
@@ -356,15 +368,33 @@
         "weight": 1.0
       },
       {
-        "from": "ui/src/store/WasmStore.res",
-        "to": "ui/src/store/Persist.res",
-        "relation": "shared_dir:ui/src/store",
+        "from": "core/src/lambdadelta/mod.rs",
+        "to": "core/src/lambdadelta/reader.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/reader.rs",
+        "to": "core/src/lambdadelta/builtins.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/builtins.rs",
+        "to": "core/src/lambdadelta/eval.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
         "weight": 1.0
       },
       {
         "from": "ui/tests/WasmStoreTests.res",
         "to": "ui/tests/UpdateTests.res",
         "relation": "shared_dir:ui/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/store/WasmStore.res",
+        "to": "ui/src/store/Persist.res",
+        "relation": "shared_dir:ui/src/store",
         "weight": 1.0
       },
       {
@@ -396,38 +426,21 @@
         "to": "core/src/wasm.rs",
         "relation": "shared_dir:core/src",
         "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/mod.rs",
-        "to": "core/src/lambdadelta/reader.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/reader.rs",
-        "to": "core/src/lambdadelta/builtins.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/builtins.rs",
-        "to": "core/src/lambdadelta/eval.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "ui/tests/contract.test.js"
+          "desktop/src/main.rs",
+          "core/src/lambdadelta_host/tests.rs"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -437,20 +450,21 @@
           "ui/tests/WasmStoreTests.res",
           "ui/tests/UpdateTests.res",
           "ui/src/View.res",
-          "desktop/src/main.rs"
+          "desktop/src/main.rs",
+          "core/src/lambdadelta_host/tests.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "desktop/src/main.rs"
+          "ui/tests/contract.test.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",

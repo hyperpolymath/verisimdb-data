@@ -241,14 +241,20 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "network",
+    "memory",
     "concurrency",
+    "network",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/bindings/Fetch_Api.res",
+        "to": "src/bindings/Deno_Api.res",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
       {
         "from": "scripts/DeployAllProjects.res",
         "to": "scripts/CreatePagesProjects.res",
@@ -274,12 +280,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/bindings/Fetch_Api.res",
-        "to": "src/bindings/Deno_Api.res",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
-      {
         "from": "telegram-bot/src/bindings/Sqlite.res",
         "to": "telegram-bot/src/bindings/Grammy.res",
         "relation": "shared_dir:telegram-bot/src/bindings",
@@ -295,26 +295,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "public/demo.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "avow-lib/examples/rust/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -336,6 +316,16 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "avow-lib/examples/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -344,6 +334,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "public/demo.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   },

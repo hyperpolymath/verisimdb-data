@@ -7,6 +7,18 @@
   ],
   "weak_points": [
     {
+      "category": "PanicPath",
+      "location": "src/network/client.rs",
+      "file": "src/network/client.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/network/client.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnboundedAllocation",
       "location": "src/levels/mod.rs",
       "file": "src/levels/mod.rs",
@@ -154,8 +166,9 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu"
+    "disk",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -264,6 +277,30 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/network/client.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/network/client.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
       }
     ]
   }
