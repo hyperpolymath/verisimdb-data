@@ -19,19 +19,6 @@
       "test_context": "production"
     },
     {
-      "category": "PanicPath",
-      "location": "crates/hesiod-lib/tests/e2e_test.rs",
-      "file": "crates/hesiod-lib/tests/e2e_test.rs",
-      "severity": "Medium",
-      "description": "7 unwrap/expect calls in crates/hesiod-lib/tests/e2e_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "crates/hesiod-lib/src/config.rs",
       "file": "crates/hesiod-lib/src/config.rs",
@@ -57,7 +44,7 @@
     "total_lines": 4587,
     "unsafe_blocks": 0,
     "panic_sites": 0,
-    "unwrap_calls": 7,
+    "unwrap_calls": 0,
     "allocation_sites": 2,
     "io_operations": 8,
     "threading_constructs": 6
@@ -92,16 +79,6 @@
       "safe_unwrap_calls": 4,
       "allocation_sites": 0,
       "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/hesiod-lib/tests/e2e_test.rs",
-      "lines": 337,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 7,
-      "allocation_sites": 0,
-      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -157,10 +134,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
-    "concurrency",
-    "disk"
+    "cpu",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -201,12 +178,6 @@
         "weight": 1.0
       },
       {
-        "from": "crates/hesiod-lib/tests/e2e_test.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 7.0
-      },
-      {
         "from": "crates/hesiod-lib/src/server.rs",
         "to": "Networking",
         "relation": "framework",
@@ -242,31 +213,6 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/hesinfo/src/main.rs",
-          "crates/hesiod-lib/src/config.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/hesiod-lib/tests/e2e_test.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
@@ -279,16 +225,17 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/hesiod-lib/tests/e2e_test.rs"
+          "crates/hesinfo/src/main.rs",
+          "crates/hesiod-lib/src/config.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

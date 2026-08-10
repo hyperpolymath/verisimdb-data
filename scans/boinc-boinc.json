@@ -7,19 +7,6 @@
   ],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "rust-parser/tests/integration_tests.rs",
-      "file": "rust-parser/tests/integration_tests.rs",
-      "severity": "Medium",
-      "description": "9 unwrap/expect calls in rust-parser/tests/integration_tests.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "rust-parser/src/bin/oblibeny-cli.rs",
       "file": "rust-parser/src/bin/oblibeny-cli.rs",
@@ -36,7 +23,7 @@
       "location": "rust-parser/src/parser/parser.rs",
       "file": "rust-parser/src/parser/parser.rs",
       "severity": "Medium",
-      "description": "50 unwrap/expect calls in rust-parser/src/parser/parser.rs",
+      "description": "0 panic sites and 50 unwrap/expect calls in rust-parser/src/parser/parser.rs",
       "recommended_attack": [
         "memory",
         "disk"
@@ -61,22 +48,12 @@
     "total_lines": 7392,
     "unsafe_blocks": 0,
     "panic_sites": 0,
-    "unwrap_calls": 59,
+    "unwrap_calls": 50,
     "allocation_sites": 99,
     "io_operations": 4,
     "threading_constructs": 7
   },
   "file_statistics": [
-    {
-      "file_path": "rust-parser/tests/integration_tests.rs",
-      "lines": 441,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 9,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
     {
       "file_path": "rust-parser/tests/property_tests.rs",
       "lines": 242,
@@ -239,19 +216,13 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "disk",
     "cpu",
-    "memory",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "rust-parser/src/analyzer/termination.rs",
-        "to": "rust-parser/src/analyzer/call_graph.rs",
-        "relation": "shared_dir:rust-parser/src/analyzer",
-        "weight": 1.0
-      },
       {
         "from": "rust-parser/src/ast/pretty_print.rs",
         "to": "rust-parser/src/ast/visitor.rs",
@@ -259,9 +230,9 @@
         "weight": 1.0
       },
       {
-        "from": "rust-parser/tests/integration_tests.rs",
-        "to": "rust-parser/tests/property_tests.rs",
-        "relation": "shared_dir:rust-parser/tests",
+        "from": "rust-parser/src/analyzer/termination.rs",
+        "to": "rust-parser/src/analyzer/call_graph.rs",
+        "relation": "shared_dir:rust-parser/src/analyzer",
         "weight": 1.0
       },
       {
@@ -287,12 +258,6 @@
         "to": "elixir-coordinator/lib/coordinator/proof_tracker.ex",
         "relation": "shared_dir:elixir-coordinator/lib/coordinator",
         "weight": 1.0
-      },
-      {
-        "from": "rust-parser/tests/integration_tests.rs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 9.0
       },
       {
         "from": "rust-parser/tests/property_tests.rs",
@@ -396,18 +361,6 @@
     "rows": [
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "deployment/arangodb/init-db.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 5.0,
         "files": [
@@ -420,29 +373,27 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "rust-parser/tests/integration_tests.rs",
-          "rust-parser/src/parser/parser.rs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "rust-parser/tests/integration_tests.rs",
           "rust-parser/src/parser/parser.rs"
         ],
         "frameworks": [
           "OTP"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "rust-parser/src/bin/oblibeny-cli.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -457,16 +408,28 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "rust-parser/src/bin/oblibeny-cli.rs"
+          "rust-parser/src/parser/parser.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "deployment/arangodb/init-db.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

@@ -15,26 +15,13 @@
         "network"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "server/tests/core_tests.rs",
-      "file": "server/tests/core_tests.rs",
-      "severity": "Medium",
-      "description": "10 unwrap/expect calls in server/tests/core_tests.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
     }
   ],
   "statistics": {
     "total_lines": 7743,
     "unsafe_blocks": 0,
     "panic_sites": 0,
-    "unwrap_calls": 15,
+    "unwrap_calls": 0,
     "allocation_sites": 25,
     "io_operations": 8,
     "threading_constructs": 14
@@ -61,16 +48,6 @@
       "threading_constructs": 1
     },
     {
-      "file_path": "server/tests/core_tests.rs",
-      "lines": 212,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 10,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "server/tests/aspect_tests.rs",
       "lines": 407,
       "unsafe_blocks": 0,
@@ -85,7 +62,7 @@
       "lines": 312,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 5,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 1
@@ -234,22 +211,16 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "network",
+    "disk",
     "concurrency",
+    "network",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
         "from": "server/tests/contract_tests.rs",
-        "to": "server/tests/core_tests.rs",
-        "relation": "shared_dir:server/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "server/tests/core_tests.rs",
         "to": "server/tests/aspect_tests.rs",
         "relation": "shared_dir:server/tests",
         "weight": 1.0
@@ -258,6 +229,18 @@
         "from": "server/tests/aspect_tests.rs",
         "to": "server/tests/e2e_tests.rs",
         "relation": "shared_dir:server/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/formats/toml.rs",
+        "to": "server/src/formats/yaml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/formats/yaml.rs",
+        "to": "server/src/formats/xml.rs",
+        "relation": "shared_dir:server/src/formats",
         "weight": 1.0
       },
       {
@@ -301,32 +284,20 @@
         "to": "server/src/main.rs",
         "relation": "shared_dir:server/src",
         "weight": 1.0
-      },
-      {
-        "from": "server/src/formats/toml.rs",
-        "to": "server/src/formats/yaml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
-      },
-      {
-        "from": "server/src/formats/yaml.rs",
-        "to": "server/src/formats/xml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "server/tests/core_tests.rs"
+          "web/app.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -337,26 +308,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "server/tests/core_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "web/app.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

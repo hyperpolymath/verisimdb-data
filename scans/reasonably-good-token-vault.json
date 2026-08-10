@@ -17,6 +17,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "rgtv-cli/src/main.rs",
+      "file": "rgtv-cli/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 2 unwrap/expect calls in rgtv-cli/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "ResourceLeak",
       "location": "rgtv-cli/src/main.rs",
       "file": "rgtv-cli/src/main.rs",
@@ -30,15 +42,26 @@
     },
     {
       "category": "PanicPath",
-      "location": "vault-broker/src/main.rs",
-      "file": "vault-broker/src/main.rs",
+      "location": "vault-worker/src/lib.rs",
+      "file": "vault-worker/src/lib.rs",
       "severity": "Medium",
-      "description": "7 unwrap/expect calls in vault-broker/src/main.rs",
+      "description": "0 panic sites and 2 unwrap/expect calls in vault-worker/src/lib.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "vault-broker/src/main.rs",
+      "file": "vault-broker/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 7 unwrap/expect calls in vault-broker/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
       "test_context": "production"
     }
   ],
@@ -107,14 +130,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "vault-broker/src/main.rs"
+          "rgtv-cli/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "ResourceLeak",
@@ -128,16 +151,6 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "rgtv-cli/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -148,9 +161,23 @@
       },
       {
         "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "rgtv-cli/src/main.rs",
+          "vault-worker/src/lib.rs",
+          "vault-broker/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
+          "rgtv-cli/src/main.rs",
+          "vault-worker/src/lib.rs",
           "vault-broker/src/main.rs"
         ],
         "frameworks": [],

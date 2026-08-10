@@ -19,6 +19,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "crates/presswerk-app/src/main.rs",
+      "file": "crates/presswerk-app/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in crates/presswerk-app/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnsafeCode",
       "location": "crates/presswerk-bridge/src/ios/mod.rs",
       "file": "crates/presswerk-bridge/src/ios/mod.rs",
@@ -51,6 +63,42 @@
       "recommended_attack": [
         "memory",
         "concurrency"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "crates/presswerk-document/src/scan/enhance.rs",
+      "file": "crates/presswerk-document/src/scan/enhance.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 2 unwrap/expect calls in crates/presswerk-document/src/scan/enhance.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "crates/presswerk-print/src/diagnostics.rs",
+      "file": "crates/presswerk-print/src/diagnostics.rs",
+      "severity": "Medium",
+      "description": "1 panic sites and 0 unwrap/expect calls in crates/presswerk-print/src/diagnostics.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "crates/presswerk-print/src/discovery.rs",
+      "file": "crates/presswerk-print/src/discovery.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in crates/presswerk-print/src/discovery.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -454,17 +502,23 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "concurrency",
     "disk",
-    "cpu",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/presswerk-app/src/services/data_dir.rs",
-        "to": "crates/presswerk-app/src/services/app_services.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/services",
+        "from": "crates/presswerk-core/src/types.rs",
+        "to": "crates/presswerk-core/src/error.rs",
+        "relation": "shared_dir:crates/presswerk-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-core/src/error.rs",
+        "to": "crates/presswerk-core/src/human_errors.rs",
+        "relation": "shared_dir:crates/presswerk-core/src",
         "weight": 1.0
       },
       {
@@ -489,6 +543,30 @@
         "from": "crates/presswerk-app/src/pages/print.rs",
         "to": "crates/presswerk-app/src/pages/easy_print.rs",
         "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/services/data_dir.rs",
+        "to": "crates/presswerk-app/src/services/app_services.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/services",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/state.rs",
+        "to": "crates/presswerk-app/src/main.rs",
+        "relation": "shared_dir:crates/presswerk-app/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-security/src/storage.rs",
+        "to": "crates/presswerk-security/src/audit.rs",
+        "relation": "shared_dir:crates/presswerk-security/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-document/src/pdf/reader.rs",
+        "to": "crates/presswerk-document/src/pdf/writer.rs",
+        "relation": "shared_dir:crates/presswerk-document/src/pdf",
         "weight": 1.0
       },
       {
@@ -537,36 +615,6 @@
         "from": "crates/presswerk-print/src/retry.rs",
         "to": "crates/presswerk-print/src/ipp_client.rs",
         "relation": "shared_dir:crates/presswerk-print/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/state.rs",
-        "to": "crates/presswerk-app/src/main.rs",
-        "relation": "shared_dir:crates/presswerk-app/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-security/src/storage.rs",
-        "to": "crates/presswerk-security/src/audit.rs",
-        "relation": "shared_dir:crates/presswerk-security/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-document/src/pdf/reader.rs",
-        "to": "crates/presswerk-document/src/pdf/writer.rs",
-        "relation": "shared_dir:crates/presswerk-document/src/pdf",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-core/src/types.rs",
-        "to": "crates/presswerk-core/src/error.rs",
-        "relation": "shared_dir:crates/presswerk-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-core/src/error.rs",
-        "to": "crates/presswerk-core/src/human_errors.rs",
-        "relation": "shared_dir:crates/presswerk-core/src",
         "weight": 1.0
       },
       {
@@ -791,7 +839,7 @@
     "rows": [
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "memory",
+        "sink_axis": "concurrency",
         "severity_value": 3.5,
         "files": [
           "crates/presswerk-bridge/src/ios/mod.rs",
@@ -801,7 +849,7 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -814,6 +862,36 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/presswerk-app/src/main.rs",
+          "crates/presswerk-document/src/scan/enhance.rs",
+          "crates/presswerk-print/src/diagnostics.rs",
+          "crates/presswerk-print/src/discovery.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/presswerk-app/src/main.rs",
+          "crates/presswerk-document/src/scan/enhance.rs",
+          "crates/presswerk-print/src/diagnostics.rs",
+          "crates/presswerk-print/src/discovery.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -829,7 +907,7 @@
       },
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
           "crates/presswerk-bridge/src/ios/mod.rs",
@@ -839,7 +917,7 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

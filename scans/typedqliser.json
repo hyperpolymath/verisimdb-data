@@ -5,32 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "tests/e2e_test.rs",
-      "file": "tests/e2e_test.rs",
-      "severity": "Medium",
-      "description": "17 unwrap/expect calls in tests/e2e_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
-      "category": "PanicPath",
-      "location": "tests/integration_test.rs",
-      "file": "tests/integration_test.rs",
-      "severity": "Medium",
-      "description": "118 unwrap/expect calls in tests/integration_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "src/codegen/mod.rs",
       "file": "src/codegen/mod.rs",
@@ -68,32 +42,12 @@
     "total_lines": 9035,
     "unsafe_blocks": 6,
     "panic_sites": 0,
-    "unwrap_calls": 135,
+    "unwrap_calls": 0,
     "allocation_sites": 47,
     "io_operations": 11,
     "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "tests/e2e_test.rs",
-      "lines": 330,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 17,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/integration_test.rs",
-      "lines": 1202,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 118,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
     {
       "file_path": "scripts/abi-ffi-gate.jl",
       "lines": 116,
@@ -218,16 +172,16 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/integration_test.rs",
-        "relation": "shared_dir:tests",
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -241,39 +195,11 @@
         "to": "src/plugins/wasm.rs",
         "relation": "shared_dir:src/plugins",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e_test.rs",
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -286,15 +212,15 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "tests/e2e_test.rs",
-          "tests/integration_test.rs"
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

@@ -41,32 +41,6 @@
       "test_context": "production"
     },
     {
-      "category": "PanicPath",
-      "location": "tests/diff_selftest.rs",
-      "file": "tests/diff_selftest.rs",
-      "severity": "Medium",
-      "description": "25 unwrap/expect calls in tests/diff_selftest.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
-      "category": "PanicPath",
-      "location": "tests/fix_selftest.rs",
-      "file": "tests/fix_selftest.rs",
-      "severity": "Medium",
-      "description": "8 unwrap/expect calls in tests/fix_selftest.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "src/audit.rs",
       "file": "src/audit.rs",
@@ -139,6 +113,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "plasma-engine/src/schema.rs",
+      "file": "plasma-engine/src/schema.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in plasma-engine/src/schema.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnboundedAllocation",
       "location": "plasma-engine/src/apply.rs",
       "file": "plasma-engine/src/apply.rs",
@@ -164,7 +150,7 @@
     "total_lines": 8989,
     "unsafe_blocks": 0,
     "panic_sites": 0,
-    "unwrap_calls": 34,
+    "unwrap_calls": 1,
     "allocation_sites": 60,
     "io_operations": 16,
     "threading_constructs": 0
@@ -231,26 +217,6 @@
       "unwrap_calls": 0,
       "safe_unwrap_calls": 1,
       "allocation_sites": 6,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/diff_selftest.rs",
-      "lines": 137,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 25,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/fix_selftest.rs",
-      "lines": 97,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 8,
-      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -373,9 +339,9 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -383,24 +349,6 @@
         "from": "src/audit.rs",
         "to": "src/diff_cmd.rs",
         "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "plasma-parser/src/spdx/mod.rs",
-        "to": "plasma-parser/src/spdx/lexer.rs",
-        "relation": "shared_dir:plasma-parser/src/spdx",
-        "weight": 1.0
-      },
-      {
-        "from": "plasma-parser/src/zone/policy.rs",
-        "to": "plasma-parser/src/zone/boundary.rs",
-        "relation": "shared_dir:plasma-parser/src/zone",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/diff_selftest.rs",
-        "to": "tests/fix_selftest.rs",
-        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -432,21 +380,41 @@
         "to": "plasma-engine/src/apply.rs",
         "relation": "shared_dir:plasma-engine/src",
         "weight": 1.0
+      },
+      {
+        "from": "plasma-parser/src/zone/policy.rs",
+        "to": "plasma-parser/src/zone/boundary.rs",
+        "relation": "shared_dir:plasma-parser/src/zone",
+        "weight": 1.0
+      },
+      {
+        "from": "plasma-parser/src/spdx/mod.rs",
+        "to": "plasma-parser/src/spdx/lexer.rs",
+        "relation": "shared_dir:plasma-parser/src/spdx",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/diff_selftest.rs",
-          "tests/fix_selftest.rs"
+          "plasma-parser/src/family/fallback.rs",
+          "plasma-parser/src/zone/boundary.rs",
+          "plasma-parser/src/audit/scan.rs",
+          "src/audit.rs",
+          "src/init.rs",
+          "src/migrate.rs",
+          "src/diff_cmd.rs",
+          "plasma-engine/src/facts.rs",
+          "plasma-engine/src/schema.rs",
+          "plasma-engine/src/apply.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -472,30 +440,20 @@
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/diff_selftest.rs",
-          "tests/fix_selftest.rs"
+          "plasma-engine/src/schema.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "plasma-parser/src/family/fallback.rs",
-          "plasma-parser/src/zone/boundary.rs",
-          "plasma-parser/src/audit/scan.rs",
-          "src/audit.rs",
-          "src/init.rs",
-          "src/migrate.rs",
-          "src/diff_cmd.rs",
-          "plasma-engine/src/facts.rs",
-          "plasma-engine/src/schema.rs",
-          "plasma-engine/src/apply.rs"
+          "plasma-engine/src/schema.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

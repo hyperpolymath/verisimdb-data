@@ -64,12 +64,11 @@
       "location": "crates/invariant-path-core/src/doc_claims.rs",
       "file": "crates/invariant-path-core/src/doc_claims.rs",
       "severity": "Medium",
-      "description": "9 unwrap/expect calls in crates/invariant-path-core/src/doc_claims.rs",
+      "description": "0 panic sites and 9 unwrap/expect calls in crates/invariant-path-core/src/doc_claims.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
       "test_context": "production"
     },
     {
@@ -159,9 +158,9 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -194,16 +193,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/verify-same-cube.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -214,14 +203,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PathTraversal",
+        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "test_multi_root.sh"
+          "crates/invariant-path-core/src/doc_claims.rs"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -236,14 +225,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/invariant-path-core/src/doc_claims.rs"
+          "scripts/verify-same-cube.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -256,6 +245,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "test_multi_root.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

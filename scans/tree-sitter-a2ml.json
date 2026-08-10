@@ -45,7 +45,7 @@
     "total_lines": 3881,
     "unsafe_blocks": 1,
     "panic_sites": 0,
-    "unwrap_calls": 1,
+    "unwrap_calls": 0,
     "allocation_sites": 3,
     "io_operations": 3,
     "threading_constructs": 0
@@ -72,16 +72,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "bindings/rust/build.rs",
-      "lines": 17,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "setup.sh",
       "lines": 278,
       "unsafe_blocks": 0,
@@ -93,42 +83,15 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
-    "edges": [
-      {
-        "from": "bindings/rust/lib.rs",
-        "to": "bindings/rust/build.rs",
-        "relation": "shared_dir:bindings/rust",
-        "weight": 1.0
-      }
-    ]
+    "edges": []
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UncheckedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "src/tree_sitter/array.h"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedAllocation->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "tests/aspect/grammar_aspect_test.ts"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
@@ -138,6 +101,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "bindings/rust/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -150,14 +123,24 @@
         "relation": "DynamicCodeExecution->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 5.0,
         "files": [
-          "bindings/rust/lib.rs"
+          "tests/aspect/grammar_aspect_test.ts"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "UncheckedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "src/tree_sitter/array.h"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedAllocation->Memory"
       }
     ]
   }

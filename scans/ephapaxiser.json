@@ -42,7 +42,7 @@
     "total_lines": 7247,
     "unsafe_blocks": 21,
     "panic_sites": 0,
-    "unwrap_calls": 4,
+    "unwrap_calls": 0,
     "allocation_sites": 22,
     "io_operations": 6,
     "threading_constructs": 0
@@ -53,7 +53,7 @@
       "lines": 467,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 4,
+      "unwrap_calls": 0,
       "allocation_sites": 4,
       "io_operations": 1,
       "threading_constructs": 0
@@ -173,12 +173,18 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/mod.rs",
         "to": "src/codegen/wrapper_gen.rs",
@@ -198,12 +204,6 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/abi/Ephapaxiser/ABI/Types.idr",
         "to": "src/interface/abi/Ephapaxiser/ABI/Foreign.idr",
         "relation": "shared_dir:src/interface/abi/Ephapaxiser/ABI",
@@ -215,17 +215,6 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -234,6 +223,17 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

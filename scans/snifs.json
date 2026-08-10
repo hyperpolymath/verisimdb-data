@@ -19,6 +19,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "rust-guest/src/lib.rs",
+      "file": "rust-guest/src/lib.rs",
+      "severity": "Medium",
+      "description": "1 panic sites and 0 unwrap/expect calls in rust-guest/src/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnsafeCode",
       "location": "rust-guest/src/lib.rs",
       "file": "rust-guest/src/lib.rs",
@@ -119,6 +131,18 @@
       "recommended_attack": [
         "memory",
         "concurrency"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "rust/crates/demo-guest/src/lib.rs",
+      "file": "rust/crates/demo-guest/src/lib.rs",
+      "severity": "Medium",
+      "description": "2 panic sites and 0 unwrap/expect calls in rust/crates/demo-guest/src/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -339,12 +363,18 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
+    "concurrency",
     "memory",
-    "concurrency"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "zig/src/safe_nif.zig",
+        "to": "zig/src/buffer_abi.zig",
+        "relation": "shared_dir:zig/src",
+        "weight": 1.0
+      },
       {
         "from": "demo/lib/snif_demo/pool.ex",
         "to": "demo/lib/snif_demo/rust_guest.ex",
@@ -367,12 +397,6 @@
         "from": "demo/lib/snif_demo/loader.ex",
         "to": "demo/lib/snif_demo/worker.ex",
         "relation": "shared_dir:demo/lib/snif_demo",
-        "weight": 1.0
-      },
-      {
-        "from": "zig/src/safe_nif.zig",
-        "to": "zig/src/buffer_abi.zig",
-        "relation": "shared_dir:zig/src",
         "weight": 1.0
       },
       {
@@ -488,29 +512,21 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "demo/bench/snif_bench.exs",
-          "benches/snif_eval.sh"
+          "rust-guest/src/lib.rs",
+          "rust-guest/src/lib.rs",
+          "rust/crates/snif-abi/src/lib.rs",
+          "rust/crates/snif-abi/src/lib.rs",
+          "rust/crates/demo-guest/src/lib.rs",
+          "rust/crates/demo-guest/src/lib.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e.sh"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "PathTraversal->Disk"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "MutationGap",
@@ -527,21 +543,29 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "rust-guest/src/lib.rs",
-          "rust-guest/src/lib.rs",
-          "rust/crates/snif-abi/src/lib.rs",
-          "rust/crates/snif-abi/src/lib.rs",
-          "rust/crates/demo-guest/src/lib.rs",
-          "rust/crates/demo-guest/src/lib.rs"
+          "demo/bench/snif_bench.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "demo/bench/snif_bench.exs",
+          "benches/snif_eval.sh"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -561,16 +585,42 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "demo/bench/snif_bench.exs"
+          "rust-guest/src/lib.rs",
+          "rust/crates/demo-guest/src/lib.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rust-guest/src/lib.rs",
+          "rust/crates/demo-guest/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tests/e2e.sh"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

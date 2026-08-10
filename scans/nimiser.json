@@ -1,22 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "nimiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "PanicPath",
-      "location": "tests/integration_tests.rs",
-      "file": "tests/integration_tests.rs",
-      "severity": "Medium",
-      "description": "26 unwrap/expect calls in tests/integration_tests.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
     {
       "category": "UnboundedAllocation",
       "location": "src/manifest/mod.rs",
@@ -43,7 +30,7 @@
     "total_lines": 7452,
     "unsafe_blocks": 20,
     "panic_sites": 0,
-    "unwrap_calls": 26,
+    "unwrap_calls": 0,
     "allocation_sites": 75,
     "io_operations": 9,
     "threading_constructs": 0
@@ -54,7 +41,7 @@
       "lines": 405,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 26,
+      "unwrap_calls": 0,
       "allocation_sites": 4,
       "io_operations": 0,
       "threading_constructs": 0
@@ -183,17 +170,11 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "src/interface/abi/Nimiser/ABI/Types.idr",
         "to": "src/interface/abi/Nimiser/ABI/Foreign.idr",
@@ -217,30 +198,26 @@
         "to": "src/codegen/parser.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/integration_tests.rs"
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -251,16 +228,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

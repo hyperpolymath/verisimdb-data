@@ -202,6 +202,30 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "src/api/rust/src/redis_client.rs",
+      "file": "src/api/rust/src/redis_client.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/api/rust/src/redis_client.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/api/rust/src/main.rs",
+      "file": "src/api/rust/src/main.rs",
+      "severity": "Medium",
+      "description": "1 panic sites and 0 unwrap/expect calls in src/api/rust/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "CommandInjection",
       "location": "aerie-launcher.sh",
       "file": "aerie-launcher.sh",
@@ -620,14 +644,56 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "concurrency",
     "disk",
+    "network",
     "cpu",
-    "network"
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/api/zig/smokeping_client.zig",
+        "to": "src/api/zig/hyperglass_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/hyperglass_client.zig",
+        "to": "src/api/zig/verisim_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/verisim_client.zig",
+        "to": "src/api/zig/verb_governance.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/verb_governance.zig",
+        "to": "src/api/zig/redis_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/redis_client.zig",
+        "to": "src/api/zig/main.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/main.zig",
+        "to": "src/api/zig/librespeed_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/librespeed_client.zig",
+        "to": "src/api/zig/proof.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
       {
         "from": "src/api/rust/src/proof.rs",
         "to": "src/api/rust/src/resolvers.rs",
@@ -729,48 +795,6 @@
         "to": "specs/components/vcl-mapping.k9.ncl",
         "relation": "shared_dir:specs/components",
         "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/smokeping_client.zig",
-        "to": "src/api/zig/hyperglass_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/hyperglass_client.zig",
-        "to": "src/api/zig/verisim_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/verisim_client.zig",
-        "to": "src/api/zig/verb_governance.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/verb_governance.zig",
-        "to": "src/api/zig/redis_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/redis_client.zig",
-        "to": "src/api/zig/main.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/main.zig",
-        "to": "src/api/zig/librespeed_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/librespeed_client.zig",
-        "to": "src/api/zig/proof.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
       }
     ]
   },
@@ -805,26 +829,6 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "src/api/zig/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "aerie-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -848,6 +852,48 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/redis_client.rs",
+          "src/api/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "aerie-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "src/api/zig/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/redis_client.rs",
+          "src/api/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

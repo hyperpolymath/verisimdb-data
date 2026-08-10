@@ -5,19 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "src/rust/tests/end_to_end.rs",
-      "file": "src/rust/tests/end_to_end.rs",
-      "severity": "Medium",
-      "description": "7 unwrap/expect calls in src/rust/tests/end_to_end.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "CommandInjection",
       "location": "contractiles/trust/run-checks.sh",
       "file": "contractiles/trust/run-checks.sh",
@@ -43,7 +30,7 @@
     "total_lines": 6238,
     "unsafe_blocks": 12,
     "panic_sites": 0,
-    "unwrap_calls": 9,
+    "unwrap_calls": 0,
     "allocation_sites": 9,
     "io_operations": 4,
     "threading_constructs": 0
@@ -66,26 +53,6 @@
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/rust/tests/point_to_point.rs",
-      "lines": 222,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/rust/tests/end_to_end.rs",
-      "lines": 268,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 7,
-      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -142,47 +109,13 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
-    "edges": [
-      {
-        "from": "src/rust/tests/aspect.rs",
-        "to": "src/rust/tests/point_to_point.rs",
-        "relation": "shared_dir:src/rust/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rust/tests/point_to_point.rs",
-        "to": "src/rust/tests/end_to_end.rs",
-        "relation": "shared_dir:src/rust/tests",
-        "weight": 1.0
-      }
-    ]
+    "edges": []
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/tests/end_to_end.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "contractiles/trust/run-checks.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -194,14 +127,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
-          "src/rust/tests/end_to_end.rs"
+          "contractiles/trust/run-checks.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

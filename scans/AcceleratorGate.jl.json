@@ -17,6 +17,17 @@
       "test_context": "production"
     },
     {
+      "category": "UnsafeFFI",
+      "location": "src/operations.jl",
+      "file": "src/operations.jl",
+      "severity": "Medium",
+      "description": "5 ccall/FFI calls in src/operations.jl",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "ProofDrift",
       "location": "test/property_test.jl",
       "file": "test/property_test.jl",
@@ -60,19 +71,29 @@
     }
   ],
   "statistics": {
-    "total_lines": 1592,
-    "unsafe_blocks": 0,
+    "total_lines": 1981,
+    "unsafe_blocks": 5,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 0,
-    "io_operations": 1,
+    "io_operations": 2,
     "threading_constructs": 0
   },
   "file_statistics": [
     {
       "file_path": "src/AcceleratorGate.jl",
-      "lines": 825,
+      "lines": 832,
       "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/operations.jl",
+      "lines": 307,
+      "unsafe_blocks": 5,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -85,7 +106,14 @@
     "memory"
   ],
   "dependency_graph": {
-    "edges": []
+    "edges": [
+      {
+        "from": "src/AcceleratorGate.jl",
+        "to": "src/operations.jl",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      }
+    ]
   },
   "taint_matrix": {
     "rows": [
@@ -102,14 +130,14 @@
         "relation": "ProofDrift->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "src/AcceleratorGate.jl"
+          "src/operations.jl"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -120,6 +148,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/AcceleratorGate.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

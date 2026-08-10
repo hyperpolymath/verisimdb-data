@@ -1,22 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "lustreiser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "PanicPath",
-      "location": "tests/integration_test.rs",
-      "file": "tests/integration_test.rs",
-      "severity": "Medium",
-      "description": "42 unwrap/expect calls in tests/integration_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
     {
       "category": "UnboundedAllocation",
       "location": "src/manifest/mod.rs",
@@ -26,6 +13,18 @@
       "recommended_attack": [
         "memory",
         "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/manifest/mod.rs",
+      "file": "src/manifest/mod.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/manifest/mod.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -43,22 +42,12 @@
     "total_lines": 8147,
     "unsafe_blocks": 22,
     "panic_sites": 0,
-    "unwrap_calls": 43,
+    "unwrap_calls": 1,
     "allocation_sites": 15,
     "io_operations": 8,
     "threading_constructs": 0
   },
   "file_statistics": [
-    {
-      "file_path": "tests/integration_test.rs",
-      "lines": 454,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 42,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
     {
       "file_path": "scripts/abi-ffi-gate.jl",
       "lines": 116,
@@ -152,38 +141,28 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/codegen/mod.rs",
-        "to": "src/codegen/lustre_gen.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/mod.rs",
+        "to": "src/codegen/lustre_gen.rs",
+        "relation": "shared_dir:src/codegen",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -196,10 +175,20 @@
       },
       {
         "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/integration_test.rs"
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"

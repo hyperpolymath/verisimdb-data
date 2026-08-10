@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "cloudguard-cli",
-  "language": "rust",
+  "language": "shell",
   "frameworks": [],
   "weak_points": [
     {
@@ -28,6 +28,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "src/api/mod.rs",
+      "file": "src/api/mod.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 2 unwrap/expect calls in src/api/mod.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnboundedAllocation",
       "location": "src/main.rs",
       "file": "src/main.rs",
@@ -44,12 +56,11 @@
       "location": "src/main.rs",
       "file": "src/main.rs",
       "severity": "Medium",
-      "description": "7 unwrap/expect calls in src/main.rs",
+      "description": "0 panic sites and 7 unwrap/expect calls in src/main.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
       "test_context": "production"
     },
     {
@@ -184,42 +195,21 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/maintenance/run-maintenance.sh",
         "to": "scripts/maintenance/perms-state.sh",
         "relation": "shared_dir:scripts/maintenance",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/Types.idr",
+        "to": "src/abi/Foreign.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/maintenance/run-maintenance.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/mod.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -236,20 +226,43 @@
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
+          "src/api/mod.rs",
           "src/main.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/maintenance/run-maintenance.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
+          "src/api/mod.rs",
           "src/main.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/mod.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

@@ -5,19 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "bivouac/tests/integration_test.rs",
-      "file": "bivouac/tests/integration_test.rs",
-      "severity": "Medium",
-      "description": "25 unwrap/expect calls in bivouac/tests/integration_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "bivouac/src/playbook/parser.rs",
       "file": "bivouac/src/playbook/parser.rs",
@@ -34,7 +21,7 @@
     "total_lines": 6103,
     "unsafe_blocks": 0,
     "panic_sites": 0,
-    "unwrap_calls": 31,
+    "unwrap_calls": 0,
     "allocation_sites": 26,
     "io_operations": 37,
     "threading_constructs": 1
@@ -55,7 +42,7 @@
       "lines": 316,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 25,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 13,
       "threading_constructs": 0
@@ -65,19 +52,9 @@
       "lines": 177,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 4,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "bivouac/tests/aspect_tests.rs",
-      "lines": 298,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -186,8 +163,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
@@ -205,24 +182,6 @@
         "weight": 1.0
       },
       {
-        "from": "bivouac/tests/e2e_test.rs",
-        "to": "bivouac/tests/integration_test.rs",
-        "relation": "shared_dir:bivouac/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/tests/integration_test.rs",
-        "to": "bivouac/tests/contract_tests.rs",
-        "relation": "shared_dir:bivouac/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/tests/contract_tests.rs",
-        "to": "bivouac/tests/aspect_tests.rs",
-        "relation": "shared_dir:bivouac/tests",
-        "weight": 1.0
-      },
-      {
         "from": "bivouac/src/error.rs",
         "to": "bivouac/src/config.rs",
         "relation": "shared_dir:bivouac/src",
@@ -233,21 +192,23 @@
         "to": "bivouac/src/main.rs",
         "relation": "shared_dir:bivouac/src",
         "weight": 1.0
+      },
+      {
+        "from": "bivouac/tests/e2e_test.rs",
+        "to": "bivouac/tests/integration_test.rs",
+        "relation": "shared_dir:bivouac/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "bivouac/tests/integration_test.rs",
+        "to": "bivouac/tests/contract_tests.rs",
+        "relation": "shared_dir:bivouac/tests",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "bivouac/src/playbook/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -259,24 +220,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "bivouac/tests/integration_test.rs"
+          "bivouac/src/playbook/parser.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "bivouac/tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

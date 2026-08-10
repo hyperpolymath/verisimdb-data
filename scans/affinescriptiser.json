@@ -9,12 +9,11 @@
       "location": "src/codegen/wasm_gen.rs",
       "file": "src/codegen/wasm_gen.rs",
       "severity": "Medium",
-      "description": "32 unwrap/expect calls in src/codegen/wasm_gen.rs",
+      "description": "0 panic sites and 32 unwrap/expect calls in src/codegen/wasm_gen.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
       "test_context": "production"
     },
     {
@@ -22,12 +21,11 @@
       "location": "src/codegen/affine_gen.rs",
       "file": "src/codegen/affine_gen.rs",
       "severity": "Medium",
-      "description": "29 unwrap/expect calls in src/codegen/affine_gen.rs",
+      "description": "0 panic sites and 29 unwrap/expect calls in src/codegen/affine_gen.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
       "test_context": "production"
     },
     {
@@ -39,6 +37,18 @@
       "recommended_attack": [
         "memory",
         "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/codegen/parser.rs",
+      "file": "src/codegen/parser.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -154,9 +164,9 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -183,15 +193,26 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/codegen/wasm_gen.rs",
-          "src/codegen/affine_gen.rs"
+          "src/codegen/affine_gen.rs",
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -205,24 +226,15 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "src/codegen/wasm_gen.rs",
-          "src/codegen/affine_gen.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
+          "src/codegen/affine_gen.rs",
           "src/codegen/parser.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

@@ -16,6 +16,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "src/rust-routing/src/main.rs",
+      "file": "src/rust-routing/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 4 unwrap/expect calls in src/rust-routing/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "InputBoundary",
       "location": "test/integration/test_dragonfly.jl",
       "file": "test/integration/test_dragonfly.jl",
@@ -194,13 +206,19 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "disk",
-    "concurrency",
     "memory",
-    "cpu"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/deno-api/src/main.ts",
+        "to": "src/deno-api/src/Router.res",
+        "relation": "shared_dir:src/deno-api/src",
+        "weight": 1.0
+      },
       {
         "from": "test/integration/test_xtdb.jl",
         "to": "test/integration/test_dragonfly.jl",
@@ -212,17 +230,31 @@
         "to": "test/integration/test_surrealdb.jl",
         "relation": "shared_dir:test/integration",
         "weight": 1.0
-      },
-      {
-        "from": "src/deno-api/src/main.ts",
-        "to": "src/deno-api/src/Router.res",
-        "relation": "shared_dir:src/deno-api/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust-routing/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust-routing/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",

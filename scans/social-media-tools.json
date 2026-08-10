@@ -3,8 +3,8 @@
   "program_path": "social-media-tools",
   "language": "rust",
   "frameworks": [
-    "OTP",
-    "Phoenix"
+    "Phoenix",
+    "OTP"
   ],
   "weak_points": [
     {
@@ -48,6 +48,30 @@
       "description": "5 HTTP (non-HTTPS) URLs in dipstick/services/gateway-rescript/src/Gateway.res",
       "recommended_attack": [
         "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "dipstick/services/collector/src/main.rs",
+      "file": "dipstick/services/collector/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 2 unwrap/expect calls in dipstick/services/collector/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "dipstick/services/analyzer-rescript/wasm/src/lib.rs",
+      "file": "dipstick/services/analyzer-rescript/wasm/src/lib.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in dipstick/services/analyzer-rescript/wasm/src/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -248,20 +272,14 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
-    "network",
     "concurrency",
-    "disk"
+    "cpu",
+    "disk",
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "dipstick/tools/cli/rollback.sh",
-        "to": "dipstick/tools/cli/migrate.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
-        "weight": 1.0
-      },
       {
         "from": "dipstick/services/collector/src/lib.rs",
         "to": "dipstick/services/collector/src/platforms.rs",
@@ -293,13 +311,25 @@
         "weight": 1.0
       },
       {
+        "from": "dipstick/tools/cli/rollback.sh",
+        "to": "dipstick/tools/cli/migrate.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
         "from": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
+        "from": "polygraph/elixir/lib/polygraph/verisimdb.ex",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
@@ -311,25 +341,13 @@
         "weight": 2.0
       },
       {
-        "from": "polygraph/elixir/lib/polygraph/verisimdb.ex",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "polygraph/browser-extension/src/background.js",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "polygraph/browser-extension/src/background.js",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "polygraph/backend/src/services/fact_check_apis.rs",
+        "from": "polygraph/browser-extension/src/background.js",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -341,10 +359,10 @@
         "weight": 1.0
       },
       {
-        "from": "dipstick/services/scraper-julia/src/NUJScraper.jl",
+        "from": "polygraph/backend/src/services/fact_check_apis.rs",
         "to": "OTP",
         "relation": "framework",
-        "weight": 4.0
+        "weight": 1.0
       },
       {
         "from": "dipstick/services/scraper-julia/src/NUJScraper.jl",
@@ -353,13 +371,25 @@
         "weight": 4.0
       },
       {
+        "from": "dipstick/services/scraper-julia/src/NUJScraper.jl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "dipstick/services/collector/tests/contract_tests.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "dipstick/services/collector/tests/contract_tests.rs",
+        "from": "dipstick/services/collector/tests/reflexive_tests.rs",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
@@ -371,25 +401,13 @@
         "weight": 1.0
       },
       {
-        "from": "dipstick/services/collector/tests/reflexive_tests.rs",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/tests/aspect_tests.rs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
         "from": "dipstick/services/collector/tests/aspect_tests.rs",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "dipstick/services/collector/src/lib.rs",
+        "from": "dipstick/services/collector/tests/aspect_tests.rs",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
@@ -401,13 +419,25 @@
         "weight": 2.0
       },
       {
+        "from": "dipstick/services/collector/src/lib.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "dipstick/services/collector/src/platforms.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "dipstick/services/collector/src/platforms.rs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "dipstick/services/collector/src/platforms.rs",
+        "from": "dipstick/services/collector/src/scheduler.rs",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
@@ -419,10 +449,10 @@
         "weight": 1.0
       },
       {
-        "from": "dipstick/services/collector/src/scheduler.rs",
+        "from": "dipstick/services/collector/src/main.rs",
         "to": "Phoenix",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 4.0
       },
       {
         "from": "dipstick/services/collector/src/main.rs",
@@ -431,25 +461,13 @@
         "weight": 4.0
       },
       {
-        "from": "dipstick/services/collector/src/main.rs",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "dipstick/services/tui-ada/src/nuj_tui.adb",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "dipstick/services/tui-ada/src/nuj_tui.adb",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "dipstick/services/analyzer-rescript/wasm/src/lib.rs",
+        "from": "dipstick/services/tui-ada/src/nuj_tui.adb",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -461,7 +479,7 @@
         "weight": 1.0
       },
       {
-        "from": "dipstick/tools/cli/rollback.sh",
+        "from": "dipstick/services/analyzer-rescript/wasm/src/lib.rs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -473,7 +491,7 @@
         "weight": 1.0
       },
       {
-        "from": "dipstick/tools/cli/migrate.sh",
+        "from": "dipstick/tools/cli/rollback.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -485,7 +503,7 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
+        "from": "dipstick/tools/cli/migrate.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -493,6 +511,12 @@
       {
         "from": "setup.sh",
         "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       }
@@ -501,31 +525,32 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+          "dipstick/services/collector/src/main.rs",
+          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
         ],
         "frameworks": [
-          "OTP",
-          "Phoenix"
+          "Phoenix",
+          "OTP"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "polygraph/browser-extension/src/popup.js",
-          "polygraph/browser-extension/src/content.js"
+          "dipstick/services/collector/src/main.rs",
+          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
         ],
         "frameworks": [
-          "OTP",
-          "Phoenix"
+          "Phoenix",
+          "OTP"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "InsecureProtocol",
@@ -535,8 +560,8 @@
           "dipstick/services/gateway-rescript/src/Gateway.res"
         ],
         "frameworks": [
-          "OTP",
-          "Phoenix"
+          "Phoenix",
+          "OTP"
         ],
         "relation": "InsecureProtocol->Network"
       },
@@ -549,10 +574,37 @@
           "polygraph/browser-extension/src/content.js"
         ],
         "frameworks": [
-          "OTP",
-          "Phoenix"
+          "Phoenix",
+          "OTP"
         ],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "polygraph/browser-extension/src/popup.js",
+          "polygraph/browser-extension/src/content.js"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

@@ -6,16 +6,15 @@
   "weak_points": [
     {
       "category": "PanicPath",
-      "location": "tests/integration_tests.rs",
-      "file": "tests/integration_tests.rs",
+      "location": "src/codegen/parser.rs",
+      "file": "src/codegen/parser.rs",
       "severity": "Medium",
-      "description": "18 unwrap/expect calls in tests/integration_tests.rs",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
       "recommended_attack": [
         "memory",
         "disk"
       ],
-      "suppressed": true,
-      "test_context": "test_only"
+      "test_context": "production"
     },
     {
       "category": "UnboundedAllocation",
@@ -43,7 +42,7 @@
     "total_lines": 8210,
     "unsafe_blocks": 16,
     "panic_sites": 0,
-    "unwrap_calls": 19,
+    "unwrap_calls": 1,
     "allocation_sites": 9,
     "io_operations": 9,
     "threading_constructs": 0
@@ -54,7 +53,7 @@
       "lines": 424,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 18,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
@@ -142,9 +141,9 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "memory",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -165,11 +164,31 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/integration_tests.rs"
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
@@ -183,26 +202,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration_tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

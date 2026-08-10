@@ -183,12 +183,24 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "network",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "firmware/src/sensors.cpp",
+        "to": "firmware/src/main.cpp",
+        "relation": "shared_dir:firmware/src",
+        "weight": 1.0
+      },
+      {
+        "from": "firmware/src/main.cpp",
+        "to": "firmware/src/data_buffer.cpp",
+        "relation": "shared_dir:firmware/src",
+        "weight": 1.0
+      },
       {
         "from": "backend-deno/bindings/Oak.res",
         "to": "backend-deno/bindings/Postgres.res",
@@ -205,18 +217,6 @@
         "from": "backend-deno/bindings/Deno.res",
         "to": "backend-deno/bindings/Redis_Client.res",
         "relation": "shared_dir:backend-deno/bindings",
-        "weight": 1.0
-      },
-      {
-        "from": "firmware/src/sensors.cpp",
-        "to": "firmware/src/main.cpp",
-        "relation": "shared_dir:firmware/src",
-        "weight": 1.0
-      },
-      {
-        "from": "firmware/src/main.cpp",
-        "to": "firmware/src/data_buffer.cpp",
-        "relation": "shared_dir:firmware/src",
         "weight": 1.0
       },
       {
@@ -476,20 +476,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "backend/api/tests/api.test.js"
-        ],
-        "frameworks": [
-          "Cache",
-          "Database",
-          "WebServer"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -502,6 +488,20 @@
           "WebServer"
         ],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "backend/api/tests/api.test.js"
+        ],
+        "frameworks": [
+          "Cache",
+          "Database",
+          "WebServer"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   },

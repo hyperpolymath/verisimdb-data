@@ -5,19 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "tests/e2e_test.rs",
-      "file": "tests/e2e_test.rs",
-      "severity": "Medium",
-      "description": "9 unwrap/expect calls in tests/e2e_test.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
       "category": "SupplyChain",
       "location": "flake.nix",
       "file": "flake.nix",
@@ -75,6 +62,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "src/main.rs",
+      "file": "src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 3 unwrap/expect calls in src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -88,7 +87,7 @@
     "total_lines": 6515,
     "unsafe_blocks": 0,
     "panic_sites": 0,
-    "unwrap_calls": 12,
+    "unwrap_calls": 3,
     "allocation_sites": 5,
     "io_operations": 14,
     "threading_constructs": 3
@@ -99,7 +98,7 @@
       "lines": 273,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 9,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
@@ -200,18 +199,12 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
     "disk",
+    "memory",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "flake.nix",
-        "to": "validate-nickel-configs.k9.ncl",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "src/error.rs",
         "to": "src/schema.rs",
@@ -229,30 +222,56 @@
         "to": "src/main.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
+      },
+      {
+        "from": "flake.nix",
+        "to": "validate-nickel-configs.k9.ncl",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "tests/e2e_test.rs"
+          "src/ffi.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tests/e2e_test.rs"
+          "src/main.rs"
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/ffi.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -267,16 +286,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "src/ffi.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -287,16 +296,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/ffi.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
       }
     ]
   }
