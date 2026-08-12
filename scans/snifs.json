@@ -364,8 +364,8 @@
   "recommended_attacks": [
     "disk",
     "concurrency",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -512,47 +512,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "rust-guest/src/lib.rs",
-          "rust-guest/src/lib.rs",
-          "rust/crates/snif-abi/src/lib.rs",
-          "rust/crates/snif-abi/src/lib.rs",
-          "rust/crates/demo-guest/src/lib.rs",
-          "rust/crates/demo-guest/src/lib.rs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "demo/test/snif_demo_test.exs",
-          "demo/test/burble_fft_test.exs",
-          "demo/test/snif_pool_test.exs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
+        "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "demo/bench/snif_bench.exs"
+          "tests/e2e.sh"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -566,6 +535,18 @@
           "OTP"
         ],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "demo/bench/snif_bench.exs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -583,6 +564,37 @@
           "OTP"
         ],
         "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "demo/test/snif_demo_test.exs",
+          "demo/test/burble_fft_test.exs",
+          "demo/test/snif_pool_test.exs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "rust-guest/src/lib.rs",
+          "rust-guest/src/lib.rs",
+          "rust/crates/snif-abi/src/lib.rs",
+          "rust/crates/snif-abi/src/lib.rs",
+          "rust/crates/demo-guest/src/lib.rs",
+          "rust/crates/demo-guest/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -609,18 +621,6 @@
           "OTP"
         ],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e.sh"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }

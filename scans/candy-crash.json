@@ -229,19 +229,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "concurrency",
     "cpu",
-    "disk"
+    "memory",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "backend/src/candy_crash/middleware/cors.gleam",
-        "to": "backend/src/candy_crash/middleware/auth.gleam",
-        "relation": "shared_dir:backend/src/candy_crash/middleware",
-        "weight": 1.0
-      },
       {
         "from": "backend/src/candy_crash/handlers/dashboard.gleam",
         "to": "backend/src/candy_crash/handlers/courses.gleam",
@@ -283,6 +277,12 @@
         "to": "backend/src/candy_crash/handlers/achievements.gleam",
         "relation": "shared_dir:backend/src/candy_crash/handlers",
         "weight": 1.0
+      },
+      {
+        "from": "backend/src/candy_crash/middleware/cors.gleam",
+        "to": "backend/src/candy_crash/middleware/auth.gleam",
+        "relation": "shared_dir:backend/src/candy_crash/middleware",
+        "weight": 1.0
       }
     ]
   },
@@ -299,16 +299,6 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/safety_core/ffi/zig/guardian.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
@@ -317,6 +307,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/safety_core/ffi/zig/guardian.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

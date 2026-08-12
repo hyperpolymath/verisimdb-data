@@ -304,19 +304,13 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
     "disk",
-    "network"
+    "memory",
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "bof-meetings/presentations/demo-http-headers.sh",
-        "to": "bof-meetings/presentations/demo-dns-discovery.sh",
-        "relation": "shared_dir:bof-meetings/presentations",
-        "weight": 1.0
-      },
       {
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/Reference.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/Bilingual.hs",
@@ -345,6 +339,12 @@
         "from": "scripts/migrate-version.jl",
         "to": "scripts/generate-structure.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "bof-meetings/presentations/demo-http-headers.sh",
+        "to": "bof-meetings/presentations/demo-dns-discovery.sh",
+        "relation": "shared_dir:bof-meetings/presentations",
         "weight": 1.0
       },
       {
@@ -460,6 +460,30 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/pmpl-audit/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tools/pmpl-audit/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -524,30 +548,6 @@
           "Ecto"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-audit/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-audit/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

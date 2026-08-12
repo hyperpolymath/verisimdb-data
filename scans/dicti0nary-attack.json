@@ -340,37 +340,13 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "network",
     "cpu",
+    "disk",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/generators/src/lib.rs",
-        "to": "crates/generators/src/pattern.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/generators/src/pattern.rs",
-        "to": "crates/generators/src/leetspeak.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/generators/src/leetspeak.rs",
-        "to": "crates/generators/src/phonetic.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/dicti0nary.chpl",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
       {
         "from": "web/src/Generators.res",
         "to": "web/src/WasmLoader.res",
@@ -393,6 +369,24 @@
         "from": "web/src/WebDom.res",
         "to": "web/src/Hash.res",
         "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/dicti0nary.chpl",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/generators/Markov.chpl",
+        "to": "src/generators/Phonetic.chpl",
+        "relation": "shared_dir:src/generators",
+        "weight": 1.0
+      },
+      {
+        "from": "src/generators/Phonetic.chpl",
+        "to": "src/generators/Random.chpl",
+        "relation": "shared_dir:src/generators",
         "weight": 1.0
       },
       {
@@ -420,15 +414,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/generators/Markov.chpl",
-        "to": "src/generators/Phonetic.chpl",
-        "relation": "shared_dir:src/generators",
+        "from": "crates/generators/src/lib.rs",
+        "to": "crates/generators/src/pattern.rs",
+        "relation": "shared_dir:crates/generators/src",
         "weight": 1.0
       },
       {
-        "from": "src/generators/Phonetic.chpl",
-        "to": "src/generators/Random.chpl",
-        "relation": "shared_dir:src/generators",
+        "from": "crates/generators/src/pattern.rs",
+        "to": "crates/generators/src/leetspeak.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/leetspeak.rs",
+        "to": "crates/generators/src/phonetic.rs",
+        "relation": "shared_dir:crates/generators/src",
         "weight": 1.0
       },
       {
@@ -700,22 +700,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "web/src/Generators.res",
-          "web/src/Hash.res",
-          "lib/ocaml/Generators.res",
-          "lib/ocaml/Hash.res"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -729,18 +713,17 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "src/main.rs",
-          "crates/generators/src/leetspeak.rs"
+          "tests/test_random.chpl"
         ],
         "frameworks": [
           "Concurrent",
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -757,6 +740,36 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "web/src/Generators.res",
+          "web/src/Hash.res",
+          "lib/ocaml/Generators.res",
+          "lib/ocaml/Hash.res"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "crates/generators/src/leetspeak.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -768,19 +781,6 @@
           "Networking"
         ],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "tests/test_random.chpl"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "HardcodedSecret->Network"
       }
     ]
   },

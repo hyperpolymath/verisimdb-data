@@ -1074,13 +1074,31 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "concurrency",
     "memory",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "verification/tests/conformance_test.exs",
+        "to": "verification/tests/compiler_test.exs",
+        "relation": "shared_dir:verification/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/compiler_test.exs",
+        "to": "verification/tests/analyzer_test.exs",
+        "relation": "shared_dir:verification/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/analyzer_test.exs",
+        "to": "verification/tests/doc_generator_test.exs",
+        "relation": "shared_dir:verification/tests",
+        "weight": 1.0
+      },
       {
         "from": "lib/phronesis/doc_generator.ex",
         "to": "lib/phronesis/analyzer.ex",
@@ -1148,27 +1166,9 @@
         "weight": 1.0
       },
       {
-        "from": "lib/phronesis/package_manager/manifest.ex",
-        "to": "lib/phronesis/package_manager/registry.ex",
-        "relation": "shared_dir:lib/phronesis/package_manager",
-        "weight": 1.0
-      },
-      {
-        "from": "verification/tests/conformance_test.exs",
-        "to": "verification/tests/compiler_test.exs",
-        "relation": "shared_dir:verification/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "verification/tests/compiler_test.exs",
-        "to": "verification/tests/analyzer_test.exs",
-        "relation": "shared_dir:verification/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "verification/tests/analyzer_test.exs",
-        "to": "verification/tests/doc_generator_test.exs",
-        "relation": "shared_dir:verification/tests",
+        "from": "lib/phronesis/consensus/raft.ex",
+        "to": "lib/phronesis/consensus/server.ex",
+        "relation": "shared_dir:lib/phronesis/consensus",
         "weight": 1.0
       },
       {
@@ -1190,9 +1190,9 @@
         "weight": 1.0
       },
       {
-        "from": "lib/phronesis/consensus/raft.ex",
-        "to": "lib/phronesis/consensus/server.ex",
-        "relation": "shared_dir:lib/phronesis/consensus",
+        "from": "lib/phronesis/package_manager/manifest.ex",
+        "to": "lib/phronesis/package_manager/registry.ex",
+        "relation": "shared_dir:lib/phronesis/package_manager",
         "weight": 1.0
       },
       {
@@ -1386,6 +1386,18 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "lib/phronesis/consensus/server/machine.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -1461,18 +1473,6 @@
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "lib/phronesis/consensus/server/machine.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }
