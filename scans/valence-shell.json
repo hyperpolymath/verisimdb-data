@@ -1181,10 +1181,10 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
     "memory",
-    "disk"
+    "cpu",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -1237,12 +1237,6 @@
         "weight": 1.0
       },
       {
-        "from": "launch.sh",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
         "from": "ffi/rust/src/lib.rs",
         "to": "ffi/rust/src/rmo.rs",
         "relation": "shared_dir:ffi/rust/src",
@@ -1273,9 +1267,33 @@
         "weight": 1.0
       },
       {
-        "from": "impl/rust-cli/fuzz/fuzz_targets/fuzz_state_machine.rs",
-        "to": "impl/rust-cli/fuzz/fuzz_targets/fuzz_path_operations.rs",
-        "relation": "shared_dir:impl/rust-cli/fuzz/fuzz_targets",
+        "from": "impl/elixir/lib/vsh/state.ex",
+        "to": "impl/elixir/lib/vsh/daemon.ex",
+        "relation": "shared_dir:impl/elixir/lib/vsh",
+        "weight": 1.0
+      },
+      {
+        "from": "impl/elixir/lib/vsh/daemon.ex",
+        "to": "impl/elixir/lib/vsh/filesystem.ex",
+        "relation": "shared_dir:impl/elixir/lib/vsh",
+        "weight": 1.0
+      },
+      {
+        "from": "impl/elixir/lib/vsh/filesystem.ex",
+        "to": "impl/elixir/lib/vsh/.Elixir.VSH.NIF.zig",
+        "relation": "shared_dir:impl/elixir/lib/vsh",
+        "weight": 1.0
+      },
+      {
+        "from": "impl/ocaml/filesystem_ffi.ml",
+        "to": "impl/ocaml/lean_wrapper.c",
+        "relation": "shared_dir:impl/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "launch.sh",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -1429,12 +1447,6 @@
         "weight": 1.0
       },
       {
-        "from": "impl/ocaml/filesystem_ffi.ml",
-        "to": "impl/ocaml/lean_wrapper.c",
-        "relation": "shared_dir:impl/ocaml",
-        "weight": 1.0
-      },
-      {
         "from": "impl/rust-cli/tests/integration_tests.rs",
         "to": "impl/rust-cli/tests/integration_test.rs",
         "relation": "shared_dir:impl/rust-cli/tests",
@@ -1507,21 +1519,9 @@
         "weight": 1.0
       },
       {
-        "from": "impl/elixir/lib/vsh/state.ex",
-        "to": "impl/elixir/lib/vsh/daemon.ex",
-        "relation": "shared_dir:impl/elixir/lib/vsh",
-        "weight": 1.0
-      },
-      {
-        "from": "impl/elixir/lib/vsh/daemon.ex",
-        "to": "impl/elixir/lib/vsh/filesystem.ex",
-        "relation": "shared_dir:impl/elixir/lib/vsh",
-        "weight": 1.0
-      },
-      {
-        "from": "impl/elixir/lib/vsh/filesystem.ex",
-        "to": "impl/elixir/lib/vsh/.Elixir.VSH.NIF.zig",
-        "relation": "shared_dir:impl/elixir/lib/vsh",
+        "from": "impl/rust-cli/fuzz/fuzz_targets/fuzz_state_machine.rs",
+        "to": "impl/rust-cli/fuzz/fuzz_targets/fuzz_path_operations.rs",
+        "relation": "shared_dir:impl/rust-cli/fuzz/fuzz_targets",
         "weight": 1.0
       },
       {
@@ -1979,6 +1979,39 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "tests/integration_test.sh",
+          "scripts/verify-proofs.sh",
+          "impl/elixir/lib/vsh/secure_erase.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "impl/rust-cli/src/arith.rs",
+          "impl/rust-cli/src/test_command.rs",
+          "impl/rust-cli/src/glob.rs",
+          "impl/rust-cli/src/parser.rs",
+          "impl/rust-cli/src/external.rs",
+          "impl/rust-cli/src/quotes.rs",
+          "impl/rust-cli/fuzz/fuzz_targets/fuzz_state_machine.rs",
+          "impl/rust-cli/fuzz/fuzz_targets/fuzz_path_operations.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -2000,23 +2033,28 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "impl/rust-cli/src/arith.rs",
-          "impl/rust-cli/src/test_command.rs",
-          "impl/rust-cli/src/glob.rs",
-          "impl/rust-cli/src/parser.rs",
-          "impl/rust-cli/src/external.rs",
-          "impl/rust-cli/src/quotes.rs",
-          "impl/rust-cli/fuzz/fuzz_targets/fuzz_state_machine.rs",
-          "impl/rust-cli/fuzz/fuzz_targets/fuzz_path_operations.rs"
+          "proofs/agda/FilesystemModel.agda"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "proofs/idris2/src/Filesystem/Axioms.idr"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "ProofDrift->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -2032,8 +2070,26 @@
         "relation": "CommandInjection->Disk"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "impl/rust-cli/tests/secure_audit_prop_tests.rs",
+          "impl/rust-cli/tests/security_tests.rs",
+          "impl/rust-cli/src/process_sub.rs",
+          "impl/rust-cli/src/external.rs",
+          "impl/rust-cli/src/commands.rs",
+          "ffi/rust/src/audit.rs",
+          "ffi/rust/src/operations.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
         "source_category": "UnsafeDeserialization",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 3.5,
         "files": [
           "impl/mcp/src/Server.res"
@@ -2041,33 +2097,7 @@
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeDeserialization->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "tests/integration_test.sh",
-          "scripts/verify-proofs.sh",
-          "impl/elixir/lib/vsh/secure_erase.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "proofs/idris2/src/Filesystem/Axioms.idr"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "ProofDrift->Memory"
+        "relation": "UnsafeDeserialization->Cpu"
       },
       {
         "source_category": "MutationGap",
@@ -2100,18 +2130,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeDeserialization",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "impl/mcp/src/Server.res"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeDeserialization->Cpu"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -2130,8 +2148,20 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "impl/mcp/src/Server.res"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeDeserialization->Memory"
+      },
+      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "impl/rust-cli/src/arith.rs",
@@ -2146,37 +2176,7 @@
         "frameworks": [
           "OTP"
         ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "impl/rust-cli/tests/secure_audit_prop_tests.rs",
-          "impl/rust-cli/tests/security_tests.rs",
-          "impl/rust-cli/src/process_sub.rs",
-          "impl/rust-cli/src/external.rs",
-          "impl/rust-cli/src/commands.rs",
-          "ffi/rust/src/audit.rs",
-          "ffi/rust/src/operations.rs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "proofs/agda/FilesystemModel.agda"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "ProofDrift->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

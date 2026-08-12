@@ -163,12 +163,24 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bivouac/tests/e2e_test.rs",
+        "to": "bivouac/tests/integration_test.rs",
+        "relation": "shared_dir:bivouac/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "bivouac/tests/integration_test.rs",
+        "to": "bivouac/tests/contract_tests.rs",
+        "relation": "shared_dir:bivouac/tests",
+        "weight": 1.0
+      },
       {
         "from": "bivouac/src/playbook/mod.rs",
         "to": "bivouac/src/playbook/executor.rs",
@@ -192,33 +204,11 @@
         "to": "bivouac/src/main.rs",
         "relation": "shared_dir:bivouac/src",
         "weight": 1.0
-      },
-      {
-        "from": "bivouac/tests/e2e_test.rs",
-        "to": "bivouac/tests/integration_test.rs",
-        "relation": "shared_dir:bivouac/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "bivouac/tests/integration_test.rs",
-        "to": "bivouac/tests/contract_tests.rs",
-        "relation": "shared_dir:bivouac/tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "bivouac/src/playbook/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -228,6 +218,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "bivouac/src/playbook/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

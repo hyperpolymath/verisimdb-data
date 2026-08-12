@@ -277,10 +277,10 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu",
     "disk",
-    "memory"
+    "memory",
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -451,21 +451,8 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/main.rs"
@@ -474,7 +461,21 @@
           "Networking",
           "OTP"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/contract/src/lib.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "HardcodedSecret",
@@ -495,33 +496,6 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/contract/src/lib.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "templates/rsr-metadata.ncl"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
@@ -535,17 +509,17 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
-          "src/main.rs"
+          "scripts/mass-apply-templates.sh"
         ],
         "frameworks": [
           "Networking",
           "OTP"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -560,6 +534,32 @@
           "OTP"
         ],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "templates/rsr-metadata.ncl"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

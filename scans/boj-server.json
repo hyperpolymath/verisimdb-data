@@ -801,20 +801,14 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "network",
-    "memory",
     "concurrency",
-    "cpu"
+    "disk",
+    "cpu",
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/maintenance/run-maintenance.sh",
-        "to": "scripts/maintenance/perms-state.sh",
-        "relation": "shared_dir:scripts/maintenance",
-        "weight": 1.0
-      },
       {
         "from": "ffi/zig/src/loader.zig",
         "to": "ffi/zig/src/boj_invoke_cli.zig",
@@ -858,27 +852,15 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/hcg-policy-smoke.sh",
-        "to": "scripts/boj-health-check.sh",
-        "relation": "shared_dir:scripts",
+        "from": "tests/federation_multinode.sh",
+        "to": "tests/e2e_full.sh",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
-        "from": "scripts/boj-health-check.sh",
-        "to": "scripts/hcg-spec-coverage-check.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/hcg-spec-coverage-check.sh",
-        "to": "scripts/check-shebang-first.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/check-shebang-first.sh",
-        "to": "scripts/hcg-surface-drift-check.sh",
-        "relation": "shared_dir:scripts",
+        "from": "scripts/maintenance/run-maintenance.sh",
+        "to": "scripts/maintenance/perms-state.sh",
+        "relation": "shared_dir:scripts/maintenance",
         "weight": 1.0
       },
       {
@@ -909,6 +891,30 @@
         "from": "elixir/lib/boj_rest/js_invoker.ex",
         "to": "elixir/lib/boj_rest/node_key.ex",
         "relation": "shared_dir:elixir/lib/boj_rest",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/hcg-policy-smoke.sh",
+        "to": "scripts/boj-health-check.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/boj-health-check.sh",
+        "to": "scripts/hcg-spec-coverage-check.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/hcg-spec-coverage-check.sh",
+        "to": "scripts/check-shebang-first.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/check-shebang-first.sh",
+        "to": "scripts/hcg-surface-drift-check.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -948,18 +954,6 @@
         "weight": 1.0
       },
       {
-        "from": "tests/federation_multinode.sh",
-        "to": "tests/e2e_full.sh",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig",
-        "to": "tests/fixtures/cartridges/feedback-mcp/ffi/cartridge_shim.zig",
-        "relation": "shared_dir:tests/fixtures/cartridges/feedback-mcp/ffi",
-        "weight": 1.0
-      },
-      {
         "from": "mcp-bridge/lib/api-clients.js",
         "to": "mcp-bridge/lib/otel.js",
         "relation": "shared_dir:mcp-bridge/lib",
@@ -969,6 +963,12 @@
         "from": "mcp-bridge/lib/otel.js",
         "to": "mcp-bridge/lib/dispatcher.js",
         "relation": "shared_dir:mcp-bridge/lib",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig",
+        "to": "tests/fixtures/cartridges/feedback-mcp/ffi/cartridge_shim.zig",
+        "relation": "shared_dir:tests/fixtures/cartridges/feedback-mcp/ffi",
         "weight": 1.0
       },
       {
@@ -1528,6 +1528,45 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "coord-tui/src/main.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "tests/aspect_security_test.zig"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "mcp-bridge/main.d.ts"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "ExcessivePermissions->Network"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -1543,6 +1582,45 @@
         "relation": "CommandInjection->Disk"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/server.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "mcp-bridge/lib/security.js"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "coord-tui/src/main.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "ExcessivePermissions",
         "sink_axis": "disk",
         "severity_value": 3.5,
@@ -1556,17 +1634,30 @@
         "relation": "ExcessivePermissions->Disk"
       },
       {
-        "source_category": "ProofDrift",
+        "source_category": "UnsafeCode",
         "sink_axis": "memory",
-        "severity_value": 5.0,
+        "severity_value": 3.5,
         "files": [
-          "src/abi/Boj/SafetyLemmas.idr"
+          "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig"
         ],
         "frameworks": [
           "OTP",
           "WebServer"
         ],
-        "relation": "ProofDrift->Memory"
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/server.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "MutationGap",
@@ -1593,43 +1684,20 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "ExcessivePermissions",
+        "source_category": "InsecureProtocol",
         "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "mcp-bridge/main.d.ts"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "ExcessivePermissions->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tray/src/server.rs"
+          "tests/aspect_security_test.zig",
+          "elixir/lib/boj_rest/catalog.ex",
+          "ffi/zig/src/verisimdb.zig",
+          "ffi/zig/src/abi_verify.zig"
         ],
         "frameworks": [
           "OTP",
           "WebServer"
         ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "mcp-bridge/lib/security.js"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -1662,85 +1730,17 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "coord-tui/src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "tests/aspect_security_test.zig",
-          "elixir/lib/boj_rest/catalog.ex",
-          "ffi/zig/src/verisimdb.zig",
-          "ffi/zig/src/abi_verify.zig"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "PanicPath",
+        "source_category": "ProofDrift",
         "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "coord-tui/src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
         "severity_value": 5.0,
         "files": [
-          "tests/aspect_security_test.zig"
+          "src/abi/Boj/SafetyLemmas.idr"
         ],
         "frameworks": [
           "OTP",
           "WebServer"
         ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/server.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "ProofDrift->Memory"
       }
     ]
   }

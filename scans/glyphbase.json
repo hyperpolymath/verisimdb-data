@@ -314,12 +314,36 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "disk",
     "memory",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "ui/src/stores/CollaborationStore.res",
+        "to": "ui/src/stores/CommentsStore.res",
+        "relation": "shared_dir:ui/src/stores",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/stores/CommentsStore.res",
+        "to": "ui/src/stores/KanbanStore.res",
+        "relation": "shared_dir:ui/src/stores",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/glyphbase_server.gleam",
+        "to": "server/src/router.gleam",
+        "relation": "shared_dir:server/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/bindings/Fetch.res",
+        "to": "ui/src/bindings/Webapi.res",
+        "relation": "shared_dir:ui/src/bindings",
+        "weight": 1.0
+      },
       {
         "from": "server/src/lithoglyph/nif_ffi.gleam",
         "to": "server/src/lithoglyph/client.gleam",
@@ -337,45 +361,11 @@
         "to": "ui/src/views/CalendarStore.res",
         "relation": "shared_dir:ui/src/views",
         "weight": 1.0
-      },
-      {
-        "from": "server/src/glyphbase_server.gleam",
-        "to": "server/src/router.gleam",
-        "relation": "shared_dir:server/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/stores/CollaborationStore.res",
-        "to": "ui/src/stores/CommentsStore.res",
-        "relation": "shared_dir:ui/src/stores",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/stores/CommentsStore.res",
-        "to": "ui/src/stores/KanbanStore.res",
-        "relation": "shared_dir:ui/src/stores",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/bindings/Fetch.res",
-        "to": "ui/src/bindings/Webapi.res",
-        "relation": "shared_dir:ui/src/bindings",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "ui/src/components/Grid.res"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "UncheckedError",
         "sink_axis": "cpu",
@@ -385,6 +375,16 @@
         ],
         "frameworks": [],
         "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "ui/src/components/Grid.res"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnsafeCode",

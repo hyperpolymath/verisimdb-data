@@ -339,10 +339,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu",
+    "memory",
     "concurrency",
-    "memory"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -383,33 +383,21 @@
         "weight": 1.0
       },
       {
-        "from": "verification/benchmarks/bench_sigma_ops.rs",
-        "to": "verification/benchmarks/bench_lexer.rs",
-        "relation": "shared_dir:verification/benchmarks",
-        "weight": 1.0
-      },
-      {
         "from": "bench/bench_sigma_ops.rs",
         "to": "bench/bench_lexer.rs",
         "relation": "shared_dir:bench",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/benchmarks/bench_sigma_ops.rs",
+        "to": "verification/benchmarks/bench_lexer.rs",
+        "relation": "shared_dir:verification/benchmarks",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/src/lexer.rs",
-          "src/rust/src/parser_jtv.rs",
-          "src/rust/src/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -423,16 +411,27 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
-          "verification/benchmarks/bench_lexer.rs",
-          "bench/bench_lexer.rs",
-          "src/rust/src/main.rs"
+          "proofs/bootstrap-lean.sh",
+          "proofs/check-tg3-differential.sh"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/lexer.rs",
+          "src/rust/src/parser_jtv.rs",
+          "src/rust/src/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -446,15 +445,16 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "proofs/bootstrap-lean.sh",
-          "proofs/check-tg3-differential.sh"
+          "verification/benchmarks/bench_lexer.rs",
+          "bench/bench_lexer.rs",
+          "src/rust/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",

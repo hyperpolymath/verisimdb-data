@@ -437,14 +437,38 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "memory",
+    "disk",
     "cpu",
     "network",
-    "disk"
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "deploy/local-test.sh",
+        "to": "deploy/verify-sqli.sh",
+        "relation": "shared_dir:deploy",
+        "weight": 1.0
+      },
+      {
+        "from": "deploy/verify-sqli.sh",
+        "to": "deploy/setup.sh",
+        "relation": "shared_dir:deploy",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/smoke_test.sh",
+        "to": "scripts/render_zone.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/render_zone.sh",
+        "to": "scripts/deploy_yacht.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "crates/wharf-core/src/fleet.rs",
         "to": "crates/wharf-core/src/integrity.rs",
@@ -497,30 +521,6 @@
         "from": "crates/wharf-core/src/crypto.rs",
         "to": "crates/wharf-core/src/nebula.rs",
         "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/local-test.sh",
-        "to": "deploy/verify-sqli.sh",
-        "relation": "shared_dir:deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/verify-sqli.sh",
-        "to": "deploy/setup.sh",
-        "relation": "shared_dir:deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/smoke_test.sh",
-        "to": "scripts/render_zone.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/render_zone.sh",
-        "to": "scripts/deploy_yacht.sh",
-        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -810,34 +810,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Networking"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "xtask/src/main.rs",
-          "bin/yacht-agent/src/main.rs",
-          "crates/wharf-core/src/crypto.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -854,36 +826,18 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "bin/yacht-agent/src/ebpf.rs",
-          "crates/wharf-core/src/fleet.rs",
-          "crates/wharf-core/src/integrity.rs",
-          "crates/wharf-core/src/config.rs",
-          "crates/wharf-core/src/nebula.rs"
+          "crates/wharf-ebpf/src/main.rs",
+          "crates/wharf-ebpf/src/main.rs"
         ],
         "frameworks": [
           "WebServer",
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "xtask/src/main.rs",
-          "bin/yacht-agent/src/main.rs",
-          "crates/wharf-core/src/crypto.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnsafeCode",
@@ -898,6 +852,19 @@
           "Networking"
         ],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "crates/wharf-core/tests/integration.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -917,18 +884,51 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "crates/wharf-ebpf/src/main.rs",
-          "crates/wharf-ebpf/src/main.rs"
+          "xtask/src/main.rs",
+          "bin/yacht-agent/src/main.rs",
+          "crates/wharf-core/src/crypto.rs"
         ],
         "frameworks": [
           "WebServer",
           "Networking"
         ],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "xtask/src/main.rs",
+          "bin/yacht-agent/src/main.rs",
+          "crates/wharf-core/src/crypto.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "bin/yacht-agent/src/ebpf.rs",
+          "crates/wharf-core/src/fleet.rs",
+          "crates/wharf-core/src/integrity.rs",
+          "crates/wharf-core/src/config.rs",
+          "crates/wharf-core/src/nebula.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
