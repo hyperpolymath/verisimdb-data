@@ -6,6 +6,8 @@ K9!
 
 {
   pedigree = {
+    name = "template-yard.k9.ncl",
+    security = { leash = 'Yard },
     schema_version = "1.0.0",
     component_type = "TODO: describe component type (e.g., 'validated-config', 'schema')",
     security = {
@@ -16,7 +18,7 @@ K9!
       allow_subprocess = false,
     },
     metadata = {
-      name = "TODO: component-name",
+      
       version = "1.0.0",
       description = "TODO: Brief description with validation details",
       author = "{{AUTHOR}} <{{AUTHOR_EMAIL}}>",

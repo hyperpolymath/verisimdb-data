@@ -7,6 +7,8 @@ K9!
 
 {
   pedigree = {
+    name = "burble-metadata.k9.ncl",
+    security = { leash = 'Yard },
     schema_version = "1.0.0",
     component_type = "comms-platform-metadata",
     security = {
@@ -17,7 +19,7 @@ K9!
       allow_subprocess = false,
     },
     metadata = {
-      name = "burble-metadata",
+      
       version = "0.1.0",
       description = "Burble: self-hostable WebRTC communications platform — project invariants",
       author = "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>",

@@ -6,6 +6,8 @@ K9!
 
 {
   pedigree = {
+    name = "project-metadata.k9.ncl",
+    security = { leash = 'Yard },
     schema_version = "1.0.0",
     component_type = "project-metadata",
     security = {
@@ -16,7 +18,7 @@ K9!
       allow_subprocess = false,
     },
     metadata = {
-      name = "project-metadata",
+      
       version = "1.0.0",
       description = "Pure data configuration for project metadata",
       author = "{{AUTHOR}} <{{AUTHOR_EMAIL}}>",
@@ -25,7 +27,7 @@ K9!
 
   # Project configuration
   project = {
-    name = "my-project",
+    
     version = "0.1.0",
     description = "A project following Rhodium Standard Repositories",
 
@@ -35,7 +37,7 @@ K9!
     },
 
     author = {
-      name = "{{AUTHOR}}",
+      
       email = "{{AUTHOR_EMAIL}}",
       organization = "{{AUTHOR_ORG}}",
     },

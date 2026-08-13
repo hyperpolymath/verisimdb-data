@@ -6,6 +6,8 @@ K9!
 
 {
   pedigree = {
+    name = "setup-repo.k9.ncl",
+    security = { leash = 'Yard },
     schema_version = "1.0.0",
     component_type = "repository-setup",
     security = {
@@ -17,7 +19,7 @@ K9!
       signature_required = true,
     },
     metadata = {
-      name = "setup-repo",
+      
       version = "1.0.0",
       description = "Automated repository setup with RSR standards",
       author = "{{AUTHOR}} <{{AUTHOR_EMAIL}}>",

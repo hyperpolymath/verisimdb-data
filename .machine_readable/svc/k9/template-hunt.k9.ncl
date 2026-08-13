@@ -6,6 +6,8 @@ K9!
 
 {
   pedigree = {
+    name = "template-hunt.k9.ncl",
+    security = { leash = 'Yard },
     schema_version = "1.0.0",
     component_type = "TODO: describe component type (e.g., 'deployment', 'setup-script')",
     security = {
@@ -17,7 +19,7 @@ K9!
       signature_required = true,
     },
     metadata = {
-      name = "TODO: component-name",
+      
       version = "1.0.0",
       description = "TODO: Detailed description of what this component does",
       author = "{{AUTHOR}} <{{AUTHOR_EMAIL}}>",
