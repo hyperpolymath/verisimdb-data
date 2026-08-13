@@ -56,7 +56,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 10588,
+    "total_lines": 10613,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -217,7 +217,7 @@
     },
     {
       "file_path": "crates/bt-presence/build.rs",
-      "lines": 111,
+      "lines": 121,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -271,11 +271,11 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "memory",
     "concurrency",
-    "cpu",
-    "network"
+    "disk",
+    "network",
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -298,6 +298,12 @@
         "weight": 1.0
       },
       {
+        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
+        "to": "crates/neurophone-core/tests/lifecycle.rs",
+        "relation": "shared_dir:crates/neurophone-core/tests",
+        "weight": 1.0
+      },
+      {
         "from": "scripts/install-on-phone.sh",
         "to": "scripts/build-android.sh",
         "relation": "shared_dir:scripts",
@@ -313,12 +319,6 @@
         "from": "scripts/install-termux.sh",
         "to": "scripts/setup.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
-        "to": "crates/neurophone-core/tests/lifecycle.rs",
-        "relation": "shared_dir:crates/neurophone-core/tests",
         "weight": 1.0
       },
       {
@@ -566,19 +566,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/bt-presence/build.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -617,6 +604,19 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/bt-presence/build.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

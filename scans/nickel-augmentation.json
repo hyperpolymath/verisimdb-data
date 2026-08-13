@@ -222,12 +222,24 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "network",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "augmented/examples/nickel/infra.ncl",
+        "to": "augmented/examples/nickel/ci.ncl",
+        "relation": "shared_dir:augmented/examples/nickel",
+        "weight": 1.0
+      },
+      {
+        "from": "augmented/examples/nickel/ci.ncl",
+        "to": "augmented/examples/nickel/build.ncl",
+        "relation": "shared_dir:augmented/examples/nickel",
+        "weight": 1.0
+      },
       {
         "from": "augmented/lib/infra.ncl",
         "to": "augmented/lib/ci.ncl",
@@ -251,35 +263,20 @@
         "to": "augmented/lib/prelude.ncl",
         "relation": "shared_dir:augmented/lib",
         "weight": 1.0
-      },
-      {
-        "from": "augmented/examples/nickel/infra.ncl",
-        "to": "augmented/examples/nickel/ci.ncl",
-        "relation": "shared_dir:augmented/examples/nickel",
-        "weight": 1.0
-      },
-      {
-        "from": "augmented/examples/nickel/ci.ncl",
-        "to": "augmented/examples/nickel/build.ncl",
-        "relation": "shared_dir:augmented/examples/nickel",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
+        "source_category": "HardcodedSecret",
         "sink_axis": "network",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "tests/integration/test_contracts.sh",
-          "tests/e2e/test_pipeline.sh",
-          "tests/property/test_invariants.sh",
-          "tests/unit/test_basic.sh"
+          "tests/integration/test_contracts.sh"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -306,14 +303,17 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "HardcodedSecret",
+        "source_category": "InsecureProtocol",
         "sink_axis": "network",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "tests/integration/test_contracts.sh"
+          "tests/integration/test_contracts.sh",
+          "tests/e2e/test_pipeline.sh",
+          "tests/property/test_invariants.sh",
+          "tests/unit/test_basic.sh"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

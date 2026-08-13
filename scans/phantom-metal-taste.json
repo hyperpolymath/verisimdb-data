@@ -100,23 +100,23 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/orchestrator/db/Bindings.res",
-        "to": "src/orchestrator/db/ArangoDb.res",
-        "relation": "shared_dir:src/orchestrator/db",
-        "weight": 1.0
-      },
-      {
         "from": "src/analytics/causal_inference.jl",
         "to": "src/analytics/impact_analysis.jl",
         "relation": "shared_dir:src/analytics",
+        "weight": 1.0
+      },
+      {
+        "from": "src/orchestrator/db/Bindings.res",
+        "to": "src/orchestrator/db/ArangoDb.res",
+        "relation": "shared_dir:src/orchestrator/db",
         "weight": 1.0
       }
     ]
@@ -124,14 +124,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/orchestrator/Config.res"
+          "src/orchestrator/db/ArangoDb.res"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "InputBoundary",
@@ -144,14 +144,14 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/orchestrator/db/ArangoDb.res"
+          "src/orchestrator/Config.res"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "InsecureProtocol->Network"
       }
     ]
   },
