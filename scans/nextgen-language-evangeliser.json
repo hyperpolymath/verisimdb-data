@@ -5,30 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "gui/app.js",
-      "file": "gui/app.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in gui/app.js",
-      "recommended_attack": [
-        "memory",
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "ExcessivePermissions",
-      "location": "scripts/launch-gui.sh",
-      "file": "scripts/launch-gui.sh",
-      "severity": "High",
-      "description": "Deno -A (all permissions) in scripts/launch-gui.sh",
-      "recommended_attack": [
-        "network",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "ExcessivePermissions",
       "location": "scripts/validate-cartridges.js",
       "file": "scripts/validate-cartridges.js",
@@ -48,6 +24,30 @@
       "description": "2 JSON.parse call(s) with 0 try block(s) in scripts/validate-cartridges.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
       "recommended_attack": [
         "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "ExcessivePermissions",
+      "location": "scripts/launch-gui.sh",
+      "file": "scripts/launch-gui.sh",
+      "severity": "High",
+      "description": "Deno -A (all permissions) in scripts/launch-gui.sh",
+      "recommended_attack": [
+        "network",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "gui/app.js",
+      "file": "gui/app.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in gui/app.js",
+      "recommended_attack": [
+        "memory",
+        "network"
       ],
       "test_context": "production"
     },
@@ -72,16 +72,6 @@
   },
   "file_statistics": [
     {
-      "file_path": "gui/app.js",
-      "lines": 258,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "setup.sh",
       "lines": 278,
       "unsafe_blocks": 0,
@@ -90,30 +80,29 @@
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "gui/app.js",
+      "lines": 258,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "memory",
     "network",
-    "disk",
     "cpu",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "scripts/launch-gui.sh",
-          "scripts/validate-cartridges.js"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
@@ -123,16 +112,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/validate-cartridges.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -149,11 +128,32 @@
         "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
-          "scripts/launch-gui.sh",
-          "scripts/validate-cartridges.js"
+          "scripts/validate-cartridges.js",
+          "scripts/launch-gui.sh"
         ],
         "frameworks": [],
         "relation": "ExcessivePermissions->Network"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "disk",
+        "severity_value": 3.5,
+        "files": [
+          "scripts/validate-cartridges.js",
+          "scripts/launch-gui.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Disk"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/validate-cartridges.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

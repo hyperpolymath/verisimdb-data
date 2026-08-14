@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "betlangiser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
     {
@@ -71,23 +71,13 @@
   },
   "file_statistics": [
     {
-      "file_path": "tests/integration_test.rs",
-      "lines": 402,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/ffi/src/main.zig",
+      "lines": 659,
+      "unsafe_blocks": 2,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/install-zig.sh",
-      "lines": 59,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -97,16 +87,6 @@
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 659,
-      "unsafe_blocks": 2,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -129,12 +109,32 @@
       "allocation_sites": 0,
       "io_operations": 2,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/integration_test.rs",
+      "lines": 402,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": []
@@ -142,14 +142,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
           "src/codegen/codegen.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -160,16 +160,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/codegen.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -200,6 +190,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/codegen/codegen.rs"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       }
     ]
   }

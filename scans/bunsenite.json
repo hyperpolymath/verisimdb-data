@@ -5,23 +5,14 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
-      "category": "UnsafeCode",
-      "location": "src/ffi.rs",
-      "file": "src/ffi.rs",
-      "severity": "High",
-      "description": "Raw pointer cast in src/ffi.rs",
+      "category": "UnboundedAllocation",
+      "location": "src/loader.rs",
+      "file": "src/loader.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/loader.rs",
       "recommended_attack": [
         "memory",
-        "concurrency"
+        "cpu"
       ],
       "test_context": "production"
     },
@@ -38,14 +29,14 @@
       "test_context": "production"
     },
     {
-      "category": "UnboundedAllocation",
-      "location": "src/loader.rs",
-      "file": "src/loader.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in src/loader.rs",
+      "category": "UnsafeCode",
+      "location": "src/ffi.rs",
+      "file": "src/ffi.rs",
+      "severity": "High",
+      "description": "Raw pointer cast in src/ffi.rs",
       "recommended_attack": [
         "memory",
-        "cpu"
+        "concurrency"
       ],
       "test_context": "production"
     },
@@ -74,6 +65,15 @@
       "test_context": "production"
     },
     {
+      "category": "SupplyChain",
+      "location": "flake.nix",
+      "file": "flake.nix",
+      "severity": "Low",
+      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
+      "recommended_attack": [],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -94,33 +94,14 @@
   },
   "file_statistics": [
     {
-      "file_path": "tests/e2e_test.rs",
+      "file_path": "src/loader.rs",
       "lines": 273,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
       "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 201,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/error.rs",
-      "lines": 245,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 5,
       "threading_constructs": 0
     },
     {
@@ -135,14 +116,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/loader.rs",
-      "lines": 273,
+      "file_path": "src/error.rs",
+      "lines": 245,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
       "allocation_sites": 0,
-      "io_operations": 5,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -155,6 +135,26 @@
       "allocation_sites": 4,
       "io_operations": 1,
       "threading_constructs": 1
+    },
+    {
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e_test.rs",
+      "lines": 273,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
     },
     {
       "file_path": "ffi/zig/src/main.zig",
@@ -177,13 +177,13 @@
       "threading_constructs": 2
     },
     {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
+      "file_path": "flake.nix",
+      "lines": 201,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -198,35 +198,35 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "concurrency",
+    "disk",
     "memory",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "flake.nix",
-        "to": "validate-nickel-configs.k9.ncl",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src/error.rs",
+        "from": "src/loader.rs",
         "to": "src/schema.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
         "from": "src/schema.rs",
-        "to": "src/loader.rs",
+        "to": "src/error.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
-        "from": "src/loader.rs",
+        "from": "src/error.rs",
         "to": "src/main.rs",
         "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "flake.nix",
+        "to": "validate-nickel-configs.k9.ncl",
+        "relation": "shared_dir:",
         "weight": 1.0
       }
     ]
@@ -234,36 +234,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeCode",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "src/main.rs"
+          "src/ffi.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/schema.rs",
-          "src/loader.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -280,22 +258,44 @@
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/schema.rs",
           "src/loader.rs",
+          "src/schema.rs",
           "src/main.rs"
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "src/ffi.rs"
+          "src/loader.rs",
+          "src/schema.rs",
+          "src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

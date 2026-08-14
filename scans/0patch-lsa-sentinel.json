@@ -5,6 +5,18 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "UnboundedAllocation",
+      "location": "host-rust/src/collectors/opatch.rs",
+      "file": "host-rust/src/collectors/opatch.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in host-rust/src/collectors/opatch.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnsafeCode",
       "location": "host-rust/src/ffi.rs",
       "file": "host-rust/src/ffi.rs",
@@ -15,18 +27,6 @@
         "concurrency"
       ],
       "suppressed": true,
-      "test_context": "production"
-    },
-    {
-      "category": "UnboundedAllocation",
-      "location": "host-rust/src/collectors/opatch.rs",
-      "file": "host-rust/src/collectors/opatch.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in host-rust/src/collectors/opatch.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
       "test_context": "production"
     },
     {
@@ -50,13 +50,14 @@
   },
   "file_statistics": [
     {
-      "file_path": "host-rust/src/ffi.rs",
-      "lines": 26,
-      "unsafe_blocks": 1,
+      "file_path": "host-rust/src/collectors/snapshot.rs",
+      "lines": 76,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -70,17 +71,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "host-rust/src/collectors/snapshot.rs",
-      "lines": 76,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "host-rust/src/collectors/parse.rs",
       "lines": 294,
       "unsafe_blocks": 0,
@@ -89,23 +79,33 @@
       "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "host-rust/src/ffi.rs",
+      "lines": 26,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "concurrency",
     "memory",
-    "concurrency"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "host-rust/src/collectors/opatch.rs",
-        "to": "host-rust/src/collectors/snapshot.rs",
+        "from": "host-rust/src/collectors/snapshot.rs",
+        "to": "host-rust/src/collectors/opatch.rs",
         "relation": "shared_dir:host-rust/src/collectors",
         "weight": 1.0
       },
       {
-        "from": "host-rust/src/collectors/snapshot.rs",
+        "from": "host-rust/src/collectors/opatch.rs",
         "to": "host-rust/src/collectors/parse.rs",
         "relation": "shared_dir:host-rust/src/collectors",
         "weight": 1.0
@@ -114,16 +114,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "host-rust/src/ffi.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -135,16 +125,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "host-rust/src/ffi.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -153,6 +133,26 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "host-rust/src/ffi.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "host-rust/src/ffi.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }
