@@ -5,17 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "InputBoundary",
-      "location": "gnome-extension/extension.js",
-      "file": "gnome-extension/extension.js",
-      "severity": "Medium",
-      "description": "1 JSON.parse call(s) with 0 try block(s) in gnome-extension/extension.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "ProofDrift",
       "location": "test/runtests.jl",
       "file": "test/runtests.jl",
@@ -36,6 +25,17 @@
         "cpu"
       ],
       "test_context": "test_only"
+    },
+    {
+      "category": "InputBoundary",
+      "location": "gnome-extension/extension.js",
+      "file": "gnome-extension/extension.js",
+      "severity": "Medium",
+      "description": "1 JSON.parse call(s) with 0 try block(s) in gnome-extension/extension.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
@@ -68,6 +68,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "gnome-extension/extension.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -77,16 +87,6 @@
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "gnome-extension/extension.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   }

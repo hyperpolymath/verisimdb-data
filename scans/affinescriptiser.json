@@ -6,18 +6,6 @@
   "weak_points": [
     {
       "category": "PanicPath",
-      "location": "src/codegen/wasm_gen.rs",
-      "file": "src/codegen/wasm_gen.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 32 unwrap/expect calls in src/codegen/wasm_gen.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
       "location": "src/codegen/affine_gen.rs",
       "file": "src/codegen/affine_gen.rs",
       "severity": "Medium",
@@ -53,6 +41,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "src/codegen/wasm_gen.rs",
+      "file": "src/codegen/wasm_gen.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 32 unwrap/expect calls in src/codegen/wasm_gen.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -73,46 +73,6 @@
   },
   "file_statistics": [
     {
-      "file_path": "tests/integration_tests.rs",
-      "lines": 409,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/abi-ffi-gate.jl",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/install-zig.sh",
-      "lines": 59,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/interface/abi/Affinescriptiser/ABI/Foreign.idr",
-      "lines": 318,
-      "unsafe_blocks": 20,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "src/interface/ffi/src/main.zig",
       "lines": 441,
       "unsafe_blocks": 0,
@@ -123,12 +83,12 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/codegen/wasm_gen.rs",
-      "lines": 271,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/abi/Affinescriptiser/ABI/Foreign.idr",
+      "lines": 318,
+      "unsafe_blocks": 20,
       "panic_sites": 0,
-      "unwrap_calls": 32,
-      "allocation_sites": 6,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -153,8 +113,48 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "src/codegen/wasm_gen.rs",
+      "lines": 271,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 32,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "src/manifest/mod.rs",
       "lines": 360,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/integration_tests.rs",
+      "lines": 409,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/abi-ffi-gate.jl",
+      "lines": 116,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -171,9 +171,9 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/codegen/wasm_gen.rs",
-        "to": "src/codegen/affine_gen.rs",
-        "relation": "shared_dir:src/codegen",
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -183,15 +183,39 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/codegen/parser.rs",
+        "to": "src/codegen/wasm_gen.rs",
+        "relation": "shared_dir:src/codegen",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/affine_gen.rs",
+          "src/codegen/parser.rs",
+          "src/codegen/wasm_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/affine_gen.rs",
+          "src/codegen/parser.rs",
+          "src/codegen/wasm_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -201,30 +225,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/wasm_gen.rs",
-          "src/codegen/affine_gen.rs",
-          "src/codegen/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/wasm_gen.rs",
-          "src/codegen/affine_gen.rs",
-          "src/codegen/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",

@@ -51,6 +51,16 @@
   },
   "file_statistics": [
     {
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "src/game/validation.rs",
       "lines": 393,
       "unsafe_blocks": 0,
@@ -67,17 +77,6 @@
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/network/client.rs",
-      "lines": 117,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -109,6 +108,17 @@
       "unwrap_calls": 0,
       "safe_unwrap_calls": 2,
       "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/network/client.rs",
+      "lines": 117,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -153,16 +163,6 @@
       "allocation_sites": 4,
       "io_operations": 0,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "setup.sh",
-      "lines": 278,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
@@ -173,15 +173,21 @@
   "dependency_graph": {
     "edges": [
       {
+        "from": "src/editor/mod.rs",
+        "to": "src/editor/ui.rs",
+        "relation": "shared_dir:src/editor",
+        "weight": 1.0
+      },
+      {
         "from": "src/game/validation.rs",
         "to": "src/game/board.rs",
         "relation": "shared_dir:src/game",
         "weight": 1.0
       },
       {
-        "from": "src/editor/mod.rs",
-        "to": "src/editor/ui.rs",
-        "relation": "shared_dir:src/editor",
+        "from": "setup.sh",
+        "to": "Networking",
+        "relation": "framework",
         "weight": 1.0
       },
       {
@@ -192,12 +198,6 @@
       },
       {
         "from": "src/game/board.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/network/client.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -216,6 +216,12 @@
       },
       {
         "from": "src/editor/ui.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/network/client.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -243,41 +249,11 @@
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/network/client.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/levels/mod.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -301,6 +277,30 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/levels/mod.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/network/client.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

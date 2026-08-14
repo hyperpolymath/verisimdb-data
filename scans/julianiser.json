@@ -16,6 +16,18 @@
       "test_context": "production"
     },
     {
+      "category": "PanicPath",
+      "location": "src/codegen/parser.rs",
+      "file": "src/codegen/parser.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnboundedAllocation",
       "location": "src/codegen/mod.rs",
       "file": "src/codegen/mod.rs",
@@ -47,18 +59,6 @@
       "description": "14 TODO/FIXME/HACK markers in src/codegen/benchmark.rs",
       "recommended_attack": [
         "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "src/codegen/parser.rs",
-      "file": "src/codegen/parser.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
       ],
       "test_context": "production"
     },
@@ -107,43 +107,22 @@
   },
   "file_statistics": [
     {
-      "file_path": "tests/integration_tests.rs",
-      "lines": 557,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 8,
-      "io_operations": 10,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/abi-ffi-gate.jl",
-      "lines": 116,
+      "file_path": "setup.sh",
+      "lines": 287,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 3,
       "threading_constructs": 0
     },
     {
-      "file_path": "scripts/install-zig.sh",
-      "lines": 59,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/ffi/src/main.zig",
+      "lines": 416,
+      "unsafe_blocks": 3,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/mod.rs",
-      "lines": 411,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 14,
+      "allocation_sites": 1,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -158,12 +137,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 416,
-      "unsafe_blocks": 3,
+      "file_path": "src/codegen/parser.rs",
+      "lines": 789,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 5,
+      "allocation_sites": 6,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -189,23 +169,23 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/codegen/parser.rs",
-      "lines": 789,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "safe_unwrap_calls": 5,
-      "allocation_sites": 6,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "src/codegen/julia_gen.rs",
       "lines": 502,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 39,
       "allocation_sites": 16,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/abi/mod.rs",
+      "lines": 411,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 14,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -220,27 +200,47 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "setup.sh",
-      "lines": 287,
+      "file_path": "tests/integration_tests.rs",
+      "lines": 557,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 8,
+      "io_operations": 10,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 3,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/abi-ffi-gate.jl",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/codegen/parser.rs",
+        "to": "src/codegen/mod.rs",
+        "relation": "shared_dir:src/codegen",
         "weight": 1.0
       },
       {
@@ -251,42 +251,20 @@
       },
       {
         "from": "src/codegen/benchmark.rs",
-        "to": "src/codegen/parser.rs",
+        "to": "src/codegen/julia_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
       },
       {
-        "from": "src/codegen/parser.rs",
-        "to": "src/codegen/julia_gen.rs",
-        "relation": "shared_dir:src/codegen",
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/benchmark.rs",
-          "src/codegen/parser.rs",
-          "src/codegen/julia_gen.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -297,18 +275,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/benchmark.rs",
-          "src/codegen/parser.rs",
-          "src/codegen/julia_gen.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -330,6 +296,40 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs",
+          "src/codegen/benchmark.rs",
+          "src/codegen/julia_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs",
+          "src/codegen/benchmark.rs",
+          "src/codegen/julia_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

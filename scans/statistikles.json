@@ -5,6 +5,17 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "InputBoundary",
+      "location": "src/bridge/aspasia_bridge.jl",
+      "file": "src/bridge/aspasia_bridge.jl",
+      "severity": "Medium",
+      "description": "1 JSON3.read/JSON.parse call(s) with 0 try block(s) in src/bridge/aspasia_bridge.jl — these throw on malformed input; wrap in try/catch",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "UnboundedAllocation",
       "location": ".github/scripts/validate_eclexiaiser.rs",
       "file": ".github/scripts/validate_eclexiaiser.rs",
@@ -12,17 +23,6 @@
       "description": "Potential unbounded allocation pattern detected in .github/scripts/validate_eclexiaiser.rs",
       "recommended_attack": [
         "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "InputBoundary",
-      "location": "src/bridge/aspasia_bridge.jl",
-      "file": "src/bridge/aspasia_bridge.jl",
-      "severity": "Medium",
-      "description": "1 JSON3.read/JSON.parse call(s) with 0 try block(s) in src/bridge/aspasia_bridge.jl — these throw on malformed input; wrap in try/catch",
-      "recommended_attack": [
         "cpu"
       ],
       "test_context": "production"
@@ -51,10 +51,21 @@
     },
     {
       "category": "ProofDrift",
-      "location": "test/degenerate_input_test.jl",
-      "file": "test/degenerate_input_test.jl",
+      "location": "test/runtests.jl",
+      "file": "test/runtests.jl",
       "severity": "Medium",
-      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/degenerate_input_test.jl",
+      "description": "13 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
+      "severity": "Medium",
+      "description": "8 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
       "recommended_attack": [
         "cpu"
       ],
@@ -84,10 +95,10 @@
     },
     {
       "category": "ProofDrift",
-      "location": "test/runtests.jl",
-      "file": "test/runtests.jl",
+      "location": "test/degenerate_input_test.jl",
+      "file": "test/degenerate_input_test.jl",
       "severity": "Medium",
-      "description": "13 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/degenerate_input_test.jl",
       "recommended_attack": [
         "cpu"
       ],
@@ -99,17 +110,6 @@
       "file": "test/observability_test.jl",
       "severity": "Medium",
       "description": "8 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/observability_test.jl",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "ProofDrift",
-      "location": "test/e2e_test.jl",
-      "file": "test/e2e_test.jl",
-      "severity": "Medium",
-      "description": "8 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
       "recommended_attack": [
         "cpu"
       ],
@@ -127,16 +127,6 @@
   },
   "file_statistics": [
     {
-      "file_path": ".github/scripts/validate_eclexiaiser.rs",
-      "lines": 137,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 8,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "guix.scm",
       "lines": 119,
       "unsafe_blocks": 0,
@@ -147,8 +137,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/bridge/verisimdb_schema.jl",
-      "lines": 85,
+      "file_path": "setup.sh",
+      "lines": 278,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -167,8 +157,28 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "src/bridge/verisimdb_schema.jl",
+      "lines": 85,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "src/bridge/echidna_adapter.jl",
       "lines": 185,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/output/export.jl",
+      "lines": 87,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -184,16 +194,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/output/export.jl",
-      "lines": 87,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -217,20 +217,20 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "setup.sh",
-      "lines": 278,
+      "file_path": ".github/scripts/validate_eclexiaiser.rs",
+      "lines": 137,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
+      "allocation_sites": 8,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -241,13 +241,13 @@
         "weight": 1.0
       },
       {
-        "from": "src/bridge/verisimdb_schema.jl",
-        "to": "src/bridge/aspasia_bridge.jl",
+        "from": "src/bridge/aspasia_bridge.jl",
+        "to": "src/bridge/verisimdb_schema.jl",
         "relation": "shared_dir:src/bridge",
         "weight": 1.0
       },
       {
-        "from": "src/bridge/aspasia_bridge.jl",
+        "from": "src/bridge/verisimdb_schema.jl",
         "to": "src/bridge/echidna_adapter.jl",
         "relation": "shared_dir:src/bridge",
         "weight": 1.0
@@ -257,14 +257,19 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
+        "source_category": "ProofDrift",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/bridge/aspasia_bridge.jl"
+          "test/property_test.jl",
+          "test/runtests.jl",
+          "test/e2e_test.jl",
+          "test/executor_router_test.jl",
+          "test/degenerate_input_test.jl",
+          "test/observability_test.jl"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -275,21 +280,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/property_test.jl",
-          "test/degenerate_input_test.jl",
-          "test/executor_router_test.jl",
-          "test/runtests.jl",
-          "test/observability_test.jl",
-          "test/e2e_test.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -311,6 +301,16 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/bridge/aspasia_bridge.jl"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

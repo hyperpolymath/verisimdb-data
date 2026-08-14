@@ -6,18 +6,6 @@
   "weak_points": [
     {
       "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/tpu.jl",
-      "file": "src/coprocessors/tpu.jl",
-      "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/tpu.jl",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
       "location": "src/coprocessors/math.jl",
       "file": "src/coprocessors/math.jl",
       "severity": "High",
@@ -42,10 +30,10 @@
     },
     {
       "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/npu.jl",
-      "file": "src/coprocessors/npu.jl",
+      "location": "src/coprocessors/dsp.jl",
+      "file": "src/coprocessors/dsp.jl",
       "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/npu.jl",
+      "description": "eval/Meta.parse in src/coprocessors/dsp.jl",
       "recommended_attack": [
         "cpu",
         "memory"
@@ -54,10 +42,22 @@
     },
     {
       "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/dsp.jl",
-      "file": "src/coprocessors/dsp.jl",
+      "location": "src/coprocessors/tpu.jl",
+      "file": "src/coprocessors/tpu.jl",
       "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/dsp.jl",
+      "description": "eval/Meta.parse in src/coprocessors/tpu.jl",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "src/coprocessors/npu.jl",
+      "file": "src/coprocessors/npu.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/coprocessors/npu.jl",
       "recommended_attack": [
         "cpu",
         "memory"
@@ -120,9 +120,9 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Types.idr",
-      "lines": 233,
-      "unsafe_blocks": 1,
+      "file_path": "src/abi/Foreign.idr",
+      "lines": 219,
+      "unsafe_blocks": 12,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -130,9 +130,9 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 219,
-      "unsafe_blocks": 12,
+      "file_path": "src/abi/Types.idr",
+      "lines": 233,
+      "unsafe_blocks": 1,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -177,8 +177,8 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/abi/Types.idr",
-        "to": "src/abi/Foreign.idr",
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
         "relation": "shared_dir:src/abi",
         "weight": 1.0
       }
@@ -186,36 +186,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "src/coprocessors/tpu.jl",
-          "src/coprocessors/math.jl",
-          "src/coprocessors/vpu.jl",
-          "src/coprocessors/npu.jl",
-          "src/coprocessors/dsp.jl",
-          "src/backends/abstract.jl"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/coprocessors/tpu.jl",
-          "src/coprocessors/math.jl",
-          "src/coprocessors/vpu.jl",
-          "src/coprocessors/npu.jl",
-          "src/coprocessors/dsp.jl",
-          "src/backends/abstract.jl"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
@@ -226,6 +196,36 @@
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/coprocessors/math.jl",
+          "src/coprocessors/vpu.jl",
+          "src/coprocessors/dsp.jl",
+          "src/coprocessors/tpu.jl",
+          "src/coprocessors/npu.jl",
+          "src/backends/abstract.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/coprocessors/math.jl",
+          "src/coprocessors/vpu.jl",
+          "src/coprocessors/dsp.jl",
+          "src/coprocessors/tpu.jl",
+          "src/coprocessors/npu.jl",
+          "src/backends/abstract.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

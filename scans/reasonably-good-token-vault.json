@@ -76,6 +76,16 @@
   },
   "file_statistics": [
     {
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "rgtv-cli/src/main.rs",
       "lines": 645,
       "unsafe_blocks": 0,
@@ -107,22 +117,12 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "setup.sh",
-      "lines": 278,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": []
@@ -130,14 +130,36 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "ResourceLeak",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
           "rgtv-cli/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "ResourceLeak->Memory"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "rgtv-cli/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rgtv-cli/src/main.rs",
+          "vault-worker/src/lib.rs",
+          "vault-broker/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -152,36 +174,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "rgtv-cli/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
+        "source_category": "ResourceLeak",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
           "rgtv-cli/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "rgtv-cli/src/main.rs",
-          "vault-worker/src/lib.rs",
-          "vault-broker/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "ResourceLeak->Memory"
       }
     ]
   }

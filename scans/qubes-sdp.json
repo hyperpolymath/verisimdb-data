@@ -41,24 +41,23 @@
       "test_context": "test_only"
     },
     {
+      "category": "PathTraversal",
+      "location": "tools/qubes-policy-generator.sh",
+      "file": "tools/qubes-policy-generator.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in tools/qubes-policy-generator.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "SupplyChain",
       "location": "flake.nix",
       "file": "flake.nix",
       "severity": "Low",
       "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
       "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
-      "category": "CommandInjection",
-      "location": "scripts/rsr-verify.sh",
-      "file": "scripts/rsr-verify.sh",
-      "severity": "Critical",
-      "description": "eval usage in scripts/rsr-verify.sh",
-      "recommended_attack": [
-        "cpu",
-        "disk"
-      ],
       "test_context": "production"
     },
     {
@@ -86,12 +85,13 @@
       "test_context": "production"
     },
     {
-      "category": "PathTraversal",
-      "location": "tools/qubes-policy-generator.sh",
-      "file": "tools/qubes-policy-generator.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in tools/qubes-policy-generator.sh",
+      "category": "CommandInjection",
+      "location": "scripts/rsr-verify.sh",
+      "file": "scripts/rsr-verify.sh",
+      "severity": "Critical",
+      "description": "eval usage in scripts/rsr-verify.sh",
       "recommended_attack": [
+        "cpu",
         "disk"
       ],
       "test_context": "production"
@@ -132,26 +132,6 @@
   },
   "file_statistics": [
     {
-      "file_path": "tests/security-tests.sh",
-      "lines": 160,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/rsr-verify.sh",
-      "lines": 266,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "src/WikiMain.res",
       "lines": 206,
       "unsafe_blocks": 29,
@@ -162,8 +142,38 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "qubes-setup.sh",
-      "lines": 442,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/security-tests.sh",
+      "lines": 160,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/qubes-backup-validator.sh",
+      "lines": 230,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/qubes-restore.sh",
+      "lines": 258,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -192,8 +202,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/qubes-restore.sh",
-      "lines": 258,
+      "file_path": "qubes-setup.sh",
+      "lines": 442,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -202,18 +212,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/qubes-backup-validator.sh",
-      "lines": 230,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
+      "file_path": "scripts/rsr-verify.sh",
+      "lines": 266,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -233,15 +233,21 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "qubes-setup.sh",
-        "to": "qubes-setup-advanced.sh",
-        "relation": "shared_dir:",
+        "from": "tools/qubes-backup-validator.sh",
+        "to": "tools/qubes-restore.sh",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/qubes-restore.sh",
+        "to": "tools/qubes-template-manager.sh",
+        "relation": "shared_dir:tools",
         "weight": 1.0
       },
       {
@@ -251,15 +257,9 @@
         "weight": 1.0
       },
       {
-        "from": "tools/qubes-policy-generator.sh",
-        "to": "tools/qubes-restore.sh",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/qubes-restore.sh",
-        "to": "tools/qubes-backup-validator.sh",
-        "relation": "shared_dir:tools",
+        "from": "qubes-setup.sh",
+        "to": "qubes-setup-advanced.sh",
+        "relation": "shared_dir:",
         "weight": 1.0
       }
     ]
@@ -274,12 +274,24 @@
           "tests/security-tests.sh",
           "tests/integration-tests.sh",
           "tests/unit-tests.sh",
-          "scripts/rsr-verify.sh",
           "qubes-setup.sh",
+          "scripts/rsr-verify.sh",
           "qubes-setup-advanced.sh"
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/qubes-policy-generator.sh",
+          "qubes-setup.sh",
+          "qubes-setup-advanced.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -289,24 +301,12 @@
           "tests/security-tests.sh",
           "tests/integration-tests.sh",
           "tests/unit-tests.sh",
-          "scripts/rsr-verify.sh",
           "qubes-setup.sh",
+          "scripts/rsr-verify.sh",
           "qubes-setup-advanced.sh"
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "qubes-setup.sh",
-          "tools/qubes-policy-generator.sh",
-          "qubes-setup-advanced.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }
