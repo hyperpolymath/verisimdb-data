@@ -362,12 +362,6 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "ui/src/Dispatcher.res",
-        "to": "ui/src/View.res",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
-      },
-      {
         "from": "core/src/exchange.rs",
         "to": "core/src/note.rs",
         "relation": "shared_dir:core/src",
@@ -398,15 +392,9 @@
         "weight": 1.0
       },
       {
-        "from": "ui/src/store/Persist.res",
-        "to": "ui/src/store/WasmStore.res",
-        "relation": "shared_dir:ui/src/store",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/tests/UpdateTests.res",
-        "to": "ui/tests/WasmStoreTests.res",
-        "relation": "shared_dir:ui/tests",
+        "from": "ui/src/Dispatcher.res",
+        "to": "ui/src/View.res",
+        "relation": "shared_dir:ui/src",
         "weight": 1.0
       },
       {
@@ -426,21 +414,42 @@
         "to": "core/src/lambdadelta/eval.rs",
         "relation": "shared_dir:core/src/lambdadelta",
         "weight": 1.0
+      },
+      {
+        "from": "ui/tests/UpdateTests.res",
+        "to": "ui/tests/WasmStoreTests.res",
+        "relation": "shared_dir:ui/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/store/Persist.res",
+        "to": "ui/src/store/WasmStore.res",
+        "relation": "shared_dir:ui/src/store",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "core/src/lambdadelta_host/tests.rs",
-          "desktop/src/main.rs"
+          "core/src/storage.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "ui/tests/contract.test.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -467,24 +476,15 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "ui/tests/contract.test.js"
+          "core/src/lambdadelta_host/tests.rs",
+          "desktop/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "core/src/storage.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

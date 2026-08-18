@@ -251,19 +251,13 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
     "disk",
+    "memory",
+    "cpu",
     "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "modules/virusTotalIntegration.mjs.js",
-        "to": "modules/extensionUtils.mjs.js",
-        "relation": "shared_dir:modules",
-        "weight": 1.0
-      },
       {
         "from": "scripts/pack.js",
         "to": "scripts/atnChangelog.js",
@@ -275,11 +269,27 @@
         "to": "scripts/update-thirdparty.js",
         "relation": "shared_dir:scripts",
         "weight": 1.0
+      },
+      {
+        "from": "modules/virusTotalIntegration.mjs.js",
+        "to": "modules/extensionUtils.mjs.js",
+        "relation": "shared_dir:modules",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "wasm/parser/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -296,6 +306,16 @@
         "relation": "InputBoundary->Cpu"
       },
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "modules/dnsbl.mjs.js"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 5.0,
@@ -305,26 +325,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "modules/dnsbl.mjs.js"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "PanicPath",
@@ -347,14 +347,14 @@
         "relation": "DynamicCodeExecution->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "wasm/parser/src/lib.rs"
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

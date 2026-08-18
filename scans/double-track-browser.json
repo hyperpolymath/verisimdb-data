@@ -373,10 +373,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
     "network",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -451,6 +451,20 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "rust_core/src/profile.rs",
+          "rust_core/src/form_data.rs",
+          "rust_core/src/lib.rs",
+          "rust_core/src/schedule.rs",
+          "rust_core/src/interests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -472,18 +486,14 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "rust_core/src/profile.rs",
-          "rust_core/src/form_data.rs",
-          "rust_core/src/lib.rs",
-          "rust_core/src/schedule.rs",
-          "rust_core/src/interests.rs"
+          "tests/e2e/extension_lifecycle_test.ts"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -508,16 +518,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e/extension_lifecycle_test.ts"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   },

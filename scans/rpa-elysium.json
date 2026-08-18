@@ -424,17 +424,17 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "disk",
     "cpu",
-    "concurrency",
-    "memory"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/rpa-config/src/loader.rs",
-        "to": "crates/rpa-config/src/types.rs",
-        "relation": "shared_dir:crates/rpa-config/src",
+        "from": "crates/rpa-state/src/store.rs",
+        "to": "crates/rpa-state/src/backend.rs",
+        "relation": "shared_dir:crates/rpa-state/src",
         "weight": 1.0
       },
       {
@@ -504,9 +504,9 @@
         "weight": 1.0
       },
       {
-        "from": "crates/rpa-state/src/store.rs",
-        "to": "crates/rpa-state/src/backend.rs",
-        "relation": "shared_dir:crates/rpa-state/src",
+        "from": "crates/rpa-config/src/loader.rs",
+        "to": "crates/rpa-config/src/types.rs",
+        "relation": "shared_dir:crates/rpa-config/src",
         "weight": 1.0
       },
       {
@@ -712,6 +712,22 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/rpa-plugin/src/sandbox.rs",
+          "crates/rpa-plugin/src/host.rs",
+          "crates/rpa-events/src/groove.rs",
+          "crates/rpa-fs-workflow/src/runner.rs",
+          "crates/rpa-fs-workflow/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -736,22 +752,6 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/rpa-plugin/src/sandbox.rs",
-          "crates/rpa-plugin/src/host.rs",
-          "crates/rpa-events/src/groove.rs",
-          "crates/rpa-fs-workflow/src/runner.rs",
-          "crates/rpa-fs-workflow/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",

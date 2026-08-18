@@ -340,12 +340,24 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
     "disk",
-    "concurrency"
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "verification/benchmarks/bench_lexer.rs",
+        "to": "verification/benchmarks/bench_sigma_ops.rs",
+        "relation": "shared_dir:verification/benchmarks",
+        "weight": 1.0
+      },
+      {
+        "from": "bench/bench_lexer.rs",
+        "to": "bench/bench_sigma_ops.rs",
+        "relation": "shared_dir:bench",
+        "weight": 1.0
+      },
       {
         "from": "src/rust/src/sexpr.rs",
         "to": "src/rust/src/parser_jtv.rs",
@@ -381,23 +393,35 @@
         "to": "src/rust/src/ast.rs",
         "relation": "shared_dir:src/rust/src",
         "weight": 1.0
-      },
-      {
-        "from": "bench/bench_lexer.rs",
-        "to": "bench/bench_sigma_ops.rs",
-        "relation": "shared_dir:bench",
-        "weight": 1.0
-      },
-      {
-        "from": "verification/benchmarks/bench_lexer.rs",
-        "to": "verification/benchmarks/bench_sigma_ops.rs",
-        "relation": "shared_dir:verification/benchmarks",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/main.rs",
+          "bench/bench_lexer.rs",
+          "verification/benchmarks/bench_lexer.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/main.rs",
+          "bench/bench_lexer.rs",
+          "verification/benchmarks/bench_lexer.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -433,18 +457,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/src/main.rs",
-          "bench/bench_lexer.rs",
-          "verification/benchmarks/bench_lexer.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -455,18 +467,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/src/main.rs",
-          "bench/bench_lexer.rs",
-          "verification/benchmarks/bench_lexer.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

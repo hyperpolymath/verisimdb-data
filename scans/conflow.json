@@ -521,24 +521,12 @@
   ],
   "recommended_attacks": [
     "memory",
-    "disk",
     "concurrency",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "examples/multi-env/environments/prod.ncl",
-        "to": "examples/multi-env/environments/staging.ncl",
-        "relation": "shared_dir:examples/multi-env/environments",
-        "weight": 1.0
-      },
-      {
-        "from": "examples/multi-env/environments/staging.ncl",
-        "to": "examples/multi-env/environments/dev.ncl",
-        "relation": "shared_dir:examples/multi-env/environments",
-        "weight": 1.0
-      },
       {
         "from": "src/rsr/diff.rs",
         "to": "src/rsr/requirements.rs",
@@ -582,6 +570,12 @@
         "weight": 1.0
       },
       {
+        "from": "src/analyzer/recommender.rs",
+        "to": "src/analyzer/patterns.rs",
+        "relation": "shared_dir:src/analyzer",
+        "weight": 1.0
+      },
+      {
         "from": "src/cli/watch.rs",
         "to": "src/cli/run.rs",
         "relation": "shared_dir:src/cli",
@@ -612,15 +606,21 @@
         "weight": 1.0
       },
       {
+        "from": "tests/e2e_test.rs",
+        "to": "tests/property_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
         "from": "src/errors/mod.rs",
         "to": "src/errors/recovery.rs",
         "relation": "shared_dir:src/errors",
         "weight": 1.0
       },
       {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/property_test.rs",
-        "relation": "shared_dir:tests",
+        "from": "src/cache/hash.rs",
+        "to": "src/cache/filesystem.rs",
+        "relation": "shared_dir:src/cache",
         "weight": 1.0
       },
       {
@@ -642,15 +642,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/analyzer/recommender.rs",
-        "to": "src/analyzer/patterns.rs",
-        "relation": "shared_dir:src/analyzer",
+        "from": "examples/multi-env/environments/prod.ncl",
+        "to": "examples/multi-env/environments/staging.ncl",
+        "relation": "shared_dir:examples/multi-env/environments",
         "weight": 1.0
       },
       {
-        "from": "src/cache/hash.rs",
-        "to": "src/cache/filesystem.rs",
-        "relation": "shared_dir:src/cache",
+        "from": "examples/multi-env/environments/staging.ncl",
+        "to": "examples/multi-env/environments/dev.ncl",
+        "relation": "shared_dir:examples/multi-env/environments",
         "weight": 1.0
       },
       {
@@ -882,34 +882,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/rsr/compliance.rs",
-          "src/utils/spinner.rs",
-          "src/pipeline/dag.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rsr/compliance.rs",
-          "src/utils/spinner.rs",
-          "src/pipeline/dag.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -928,6 +900,34 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rsr/compliance.rs",
+          "src/utils/spinner.rs",
+          "src/pipeline/dag.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/rsr/compliance.rs",
+          "src/utils/spinner.rs",
+          "src/pipeline/dag.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

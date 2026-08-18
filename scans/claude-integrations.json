@@ -348,13 +348,19 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "network",
     "cpu",
-    "disk"
+    "network",
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "firefox-mcp/host/Server.res",
+        "to": "firefox-mcp/host/NativeHost.res",
+        "relation": "shared_dir:firefox-mcp/host",
+        "weight": 1.0
+      },
       {
         "from": "gitlab-bridge/src/bindings/Crypto.res",
         "to": "gitlab-bridge/src/bindings/Vitest.res",
@@ -365,12 +371,6 @@
         "from": "gitlab-bridge/src/bindings/Vitest.res",
         "to": "gitlab-bridge/src/bindings/Express.res",
         "relation": "shared_dir:gitlab-bridge/src/bindings",
-        "weight": 1.0
-      },
-      {
-        "from": "firefox-mcp/host/Server.res",
-        "to": "firefox-mcp/host/NativeHost.res",
-        "relation": "shared_dir:firefox-mcp/host",
         "weight": 1.0
       },
       {
@@ -522,16 +522,29 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeDeserialization",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "gitlab-bridge/src/services/MRReviewer.res"
+          "firefox-lsp/test/claude_firefox/lsp_test.exs",
+          "firefox-lsp/test/adapters/firefox_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeDeserialization->Memory"
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "firefox-lsp/lib/lsp/server.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "AtomExhaustion->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -546,16 +559,28 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "mozilla-extension/src/core/storage.js"
+          "gitlab-bridge/src/services/MRReviewer.res"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "UnsafeDeserialization->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "gecko-browser-extension/src/content/content.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -582,16 +607,16 @@
         "relation": "UnsafeDeserialization->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "gecko-browser-extension/src/content/content.js"
+          "mozilla-extension/src/core/storage.js"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -604,31 +629,6 @@
           "OTP"
         ],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "firefox-lsp/test/claude_firefox/lsp_test.exs",
-          "firefox-lsp/test/adapters/firefox_test.exs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "firefox-lsp/lib/lsp/server.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "AtomExhaustion->Memory"
       }
     ]
   },

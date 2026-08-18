@@ -281,23 +281,23 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "disk",
     "cpu",
-    "memory"
+    "memory",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/fslint-cli/src/query.rs",
-        "to": "crates/fslint-cli/src/output.rs",
-        "relation": "shared_dir:crates/fslint-cli/src",
-        "weight": 1.0
-      },
-      {
         "from": "crates/fslint-core/src/scanner.rs",
         "to": "crates/fslint-core/src/plugin_loader.rs",
         "relation": "shared_dir:crates/fslint-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/fslint-cli/src/query.rs",
+        "to": "crates/fslint-cli/src/output.rs",
+        "relation": "shared_dir:crates/fslint-cli/src",
         "weight": 1.0
       }
     ]
@@ -306,13 +306,13 @@
     "rows": [
       {
         "source_category": "CommandInjection",
-        "sink_axis": "disk",
+        "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
           "scripts/verify-rsr.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -330,38 +330,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/verify-rsr.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "plugins/secret-scanner/src/lib.rs",
-          "crates/fslint-core/src/config.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "plugins/secret-scanner/src/lib.rs",
-          "crates/fslint-core/src/config.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -375,6 +343,38 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "plugins/secret-scanner/src/lib.rs",
+          "crates/fslint-core/src/config.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/verify-rsr.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "plugins/secret-scanner/src/lib.rs",
+          "crates/fslint-core/src/config.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "HardcodedSecret",

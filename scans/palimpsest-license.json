@@ -304,13 +304,19 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
     "network",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bof-meetings/presentations/demo-dns-discovery.sh",
+        "to": "bof-meetings/presentations/demo-http-headers.sh",
+        "relation": "shared_dir:bof-meetings/presentations",
+        "weight": 1.0
+      },
       {
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/License.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/Bilingual.hs",
@@ -339,12 +345,6 @@
         "from": "scripts/generate-structure.sh",
         "to": "scripts/migrate-version.jl",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "bof-meetings/presentations/demo-dns-discovery.sh",
-        "to": "bof-meetings/presentations/demo-http-headers.sh",
-        "relation": "shared_dir:bof-meetings/presentations",
         "weight": 1.0
       },
       {
@@ -460,16 +460,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
         "files": [
-          "tools/pmpl-audit/src/main.rs"
+          "bof-meetings/presentations/demo-dns-discovery.sh",
+          "bof-meetings/presentations/demo-http-headers.sh"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -486,7 +487,7 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tools/pmpl-audit/src/main.rs"
@@ -494,7 +495,7 @@
         "frameworks": [
           "Ecto"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -513,17 +514,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "bof-meetings/presentations/demo-dns-discovery.sh",
-          "bof-meetings/presentations/demo-http-headers.sh"
+          "tools/pmpl-verify/src/main.rs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -538,16 +538,16 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tools/pmpl-verify/src/main.rs"
+          "tools/pmpl-audit/src/main.rs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
       }
     ]
   }
