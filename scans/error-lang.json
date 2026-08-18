@@ -183,8 +183,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
@@ -193,6 +193,12 @@
         "from": "error-pkg/src/install.rs",
         "to": "error-pkg/src/resolve.rs",
         "relation": "shared_dir:error-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "levels/09-operators.err",
+        "to": "levels/03-unterminated-string.err",
+        "relation": "shared_dir:levels",
         "weight": 1.0
       },
       {
@@ -206,27 +212,11 @@
         "to": "examples/09-null-cascade.err",
         "relation": "shared_dir:examples",
         "weight": 1.0
-      },
-      {
-        "from": "levels/09-operators.err",
-        "to": "levels/03-unterminated-string.err",
-        "relation": "shared_dir:levels",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "verification/check-affinescript.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
@@ -248,16 +238,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "error-pkg/src/types.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -266,6 +246,26 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "verification/check-affinescript.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "error-pkg/src/types.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

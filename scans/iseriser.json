@@ -76,6 +76,29 @@
       "test_context": "production"
     },
     {
+      "category": "UnsafeCode",
+      "location": "satellites/a2mliser/src/interface/ffi/src/main.zig",
+      "file": "satellites/a2mliser/src/interface/ffi/src/main.zig",
+      "severity": "High",
+      "description": "2 unsafe pointer casts in satellites/a2mliser/src/interface/ffi/src/main.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "satellites/a2mliser/src/manifest/mod.rs",
+      "file": "satellites/a2mliser/src/manifest/mod.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in satellites/a2mliser/src/manifest/mod.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -86,12 +109,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 12434,
-    "unsafe_blocks": 16,
+    "total_lines": 17434,
+    "unsafe_blocks": 36,
     "panic_sites": 0,
     "unwrap_calls": 1,
-    "allocation_sites": 43,
-    "io_operations": 20,
+    "allocation_sites": 46,
+    "io_operations": 25,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -240,6 +263,56 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "satellites/a2mliser/src/interface/ffi/src/main.zig",
+      "lines": 610,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 3,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "satellites/a2mliser/src/interface/abi/A2mliser/ABI/Foreign.idr",
+      "lines": 323,
+      "unsafe_blocks": 18,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "satellites/a2mliser/src/manifest/mod.rs",
+      "lines": 71,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "satellites/a2mliser/scripts/install-zig.sh",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "scripts/install-zig.sh",
       "lines": 59,
       "unsafe_blocks": 0,
@@ -261,13 +334,25 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "satellites/a2mliser/scripts/install-zig.sh",
+        "to": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:satellites/a2mliser/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/customizer.rs",
         "to": "src/codegen/cartridge.rs",
@@ -287,12 +372,6 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "src/abi/idris_emitter.rs",
         "to": "src/abi/zig_ffi_parser.rs",
         "relation": "shared_dir:src/abi",
@@ -309,6 +388,20 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/abi/idris_emitter.rs",
+          "src/abi/verify.rs",
+          "src/manifest/mod.rs",
+          "src/scan/mod.rs",
+          "satellites/a2mliser/src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -317,32 +410,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/abi/idris_emitter.rs",
-          "src/abi/verify.rs",
-          "src/manifest/mod.rs",
-          "src/scan/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/abi/idris_emitter.rs",
-          "src/abi/verify.rs",
-          "src/manifest/mod.rs",
-          "src/scan/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -363,6 +430,30 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/abi/idris_emitter.rs",
+          "src/abi/verify.rs",
+          "src/manifest/mod.rs",
+          "src/scan/mod.rs",
+          "satellites/a2mliser/src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "satellites/a2mliser/src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

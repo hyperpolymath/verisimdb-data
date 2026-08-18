@@ -710,32 +710,14 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu",
     "memory",
-    "disk",
-    "concurrency"
+    "concurrency",
+    "cpu",
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "rescript-templater/init-raczotbuild.rkt",
-        "to": "rescript-templater/init-zotero-plugin.sh",
-        "relation": "shared_dir:rescript-templater",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/scripts/sign-release.sh",
-        "to": "rescript-templater/scripts/generate-sbom.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/scripts/generate-sbom.sh",
-        "to": "rescript-templater/scripts/verify-release.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
-        "weight": 1.0
-      },
       {
         "from": "zotpress/src/rescript/Zotpress.res",
         "to": "zotpress/src/rescript/Utils.res",
@@ -749,15 +731,9 @@
         "weight": 1.0
       },
       {
-        "from": "formbd/migration/src/sync.jl",
-        "to": "formbd/migration/src/server.jl",
-        "relation": "shared_dir:formbd/migration/src",
-        "weight": 1.0
-      },
-      {
-        "from": "formbd/migration/src/server.jl",
-        "to": "formbd/migration/src/migrate.jl",
-        "relation": "shared_dir:formbd/migration/src",
+        "from": "rescript-templater/init-raczotbuild.rkt",
+        "to": "rescript-templater/init-zotero-plugin.sh",
+        "relation": "shared_dir:rescript-templater",
         "weight": 1.0
       },
       {
@@ -776,6 +752,30 @@
         "from": "formbd/migration/bin/publisher.jl",
         "to": "formbd/migration/bin/score.jl",
         "relation": "shared_dir:formbd/migration/bin",
+        "weight": 1.0
+      },
+      {
+        "from": "formbd/migration/src/sync.jl",
+        "to": "formbd/migration/src/server.jl",
+        "relation": "shared_dir:formbd/migration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "formbd/migration/src/server.jl",
+        "to": "formbd/migration/src/migrate.jl",
+        "relation": "shared_dir:formbd/migration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/sign-release.sh",
+        "to": "rescript-templater/scripts/generate-sbom.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/generate-sbom.sh",
+        "to": "rescript-templater/scripts/verify-release.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
         "weight": 1.0
       },
       {
@@ -1089,6 +1089,58 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/wasm/crypto/src/lib.rs"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/engine/MysteryClustering.res",
+          "fogbinder/src/wasm/crypto/src/lib.rs",
+          "fogbinder/src/core/FamilyResemblance.res"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "formbd/migration/bin/doi.jl",
+          "formbd/migration/bin/score.jl"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "rescript-templater/tests/bash-tests.sh",
+          "rescript-templater/init-raczotbuild.rkt"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -1107,29 +1159,17 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "formbd/migration/bin/doi.jl",
-          "formbd/migration/bin/score.jl"
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "fogbinder/src/wasm/crypto/src/lib.rs"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "PanicPath->Disk"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -1156,46 +1196,6 @@
           "WebServer"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "rescript-templater/tests/bash-tests.sh",
-          "rescript-templater/init-raczotbuild.rkt"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "fogbinder/src/engine/MysteryClustering.res",
-          "fogbinder/src/wasm/crypto/src/lib.rs",
-          "fogbinder/src/core/FamilyResemblance.res"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
       }
     ]
   }
