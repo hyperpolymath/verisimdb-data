@@ -39,12 +39,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 8210,
+    "total_lines": 8238,
     "unsafe_blocks": 16,
     "panic_sites": 0,
     "unwrap_calls": 1,
     "allocation_sites": 9,
-    "io_operations": 9,
+    "io_operations": 11,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -138,15 +138,31 @@
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/abi-ffi-gate.py",
+      "lines": 103,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.py",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/halide_gen.rs",
@@ -174,6 +190,16 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -192,16 +218,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

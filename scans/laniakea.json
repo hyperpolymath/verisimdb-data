@@ -3,9 +3,9 @@
   "program_path": "laniakea",
   "language": "elixir",
   "frameworks": [
-    "Phoenix",
+    "WebServer",
     "OTP",
-    "WebServer"
+    "Phoenix"
   ],
   "weak_points": [
     {
@@ -188,15 +188,15 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "disk",
-    "network",
-    "cpu"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
         "from": "setup.sh",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -208,13 +208,13 @@
       },
       {
         "from": "setup.sh",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "client/src/transport/Channel.res",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 27.0
       },
@@ -226,13 +226,13 @@
       },
       {
         "from": "client/src/transport/Channel.res",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 27.0
       },
       {
         "from": "client/src/adapters/Capabilities.res",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 9.0
       },
@@ -244,37 +244,25 @@
       },
       {
         "from": "client/src/adapters/Capabilities.res",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 9.0
       },
       {
         "from": "client/lib/ocaml/Channel.res",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 27.0
-      },
-      {
-        "from": "client/lib/ocaml/Channel.res",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 27.0
-      },
-      {
-        "from": "client/lib/ocaml/Channel.res",
         "to": "WebServer",
         "relation": "framework",
         "weight": 27.0
       },
       {
-        "from": "client/lib/bs/src/transport/Channel.res",
-        "to": "Phoenix",
+        "from": "client/lib/ocaml/Channel.res",
+        "to": "OTP",
         "relation": "framework",
         "weight": 27.0
       },
       {
-        "from": "client/lib/bs/src/transport/Channel.res",
-        "to": "OTP",
+        "from": "client/lib/ocaml/Channel.res",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 27.0
       },
@@ -285,8 +273,20 @@
         "weight": 27.0
       },
       {
-        "from": "cli/laniakea.ts",
+        "from": "client/lib/bs/src/transport/Channel.res",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 27.0
+      },
+      {
+        "from": "client/lib/bs/src/transport/Channel.res",
         "to": "Phoenix",
+        "relation": "framework",
+        "weight": 27.0
+      },
+      {
+        "from": "cli/laniakea.ts",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -298,13 +298,13 @@
       },
       {
         "from": "cli/laniakea.ts",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "server/lib/laniakea/command/bus.ex",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
@@ -316,13 +316,13 @@
       },
       {
         "from": "server/lib/laniakea/command/bus.ex",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "server/lib/laniakea/policy/engine.ex",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
@@ -334,13 +334,13 @@
       },
       {
         "from": "server/lib/laniakea/policy/engine.ex",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "server/lib/laniakea/crdt/registry.ex",
-        "to": "Phoenix",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
@@ -352,7 +352,7 @@
       },
       {
         "from": "server/lib/laniakea/crdt/registry.ex",
-        "to": "WebServer",
+        "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
       }
@@ -360,34 +360,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "server/lib/laniakea_web.ex"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "schemas/config.ncl"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -400,11 +372,39 @@
           "server/test/e2e/crdt_e2e_test.exs"
         ],
         "frameworks": [
-          "Phoenix",
+          "WebServer",
           "OTP",
-          "WebServer"
+          "Phoenix"
         ],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "server/lib/laniakea_web.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "schemas/config.ncl"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

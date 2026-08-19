@@ -287,10 +287,10 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
     "disk",
-    "memory"
+    "concurrency",
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -443,6 +443,34 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/har-dispatch/src/lib.rs",
+          "crates/har-meta/src/graph.rs",
+          "crates/har-metrics/src/lib.rs",
+          "crates/har-router/src/lib.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/har-config/src/loader.rs",
+          "crates/har-dispatch/src/lib.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -469,34 +497,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/har-config/src/loader.rs",
-          "crates/har-dispatch/src/lib.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/har-dispatch/src/lib.rs",
-          "crates/har-meta/src/graph.rs",
-          "crates/har-metrics/src/lib.rs",
-          "crates/har-router/src/lib.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
       }
     ]
   }
