@@ -202,10 +202,10 @@
   ],
   "recommended_attacks": [
     "memory",
-    "network",
     "concurrency",
+    "cpu",
     "disk",
-    "cpu"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -268,14 +268,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "src/interface/ffi/src/dbus.zig"
+          "src/core/monitor.eph"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "PathTraversal",
@@ -288,6 +288,16 @@
         "relation": "PathTraversal->Disk"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/dbus.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -296,16 +306,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/core/monitor.eph"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
       }
     ]
   }

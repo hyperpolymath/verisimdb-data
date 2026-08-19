@@ -3,9 +3,9 @@
   "program_path": "kaldor-iiot",
   "language": "rescript",
   "frameworks": [
-    "Database",
+    "WebServer",
     "Cache",
-    "WebServer"
+    "Database"
   ],
   "weak_points": [
     {
@@ -183,12 +183,24 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "cpu",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "firmware/src/main.cpp",
+        "to": "firmware/src/data_buffer.cpp",
+        "relation": "shared_dir:firmware/src",
+        "weight": 1.0
+      },
+      {
+        "from": "firmware/src/data_buffer.cpp",
+        "to": "firmware/src/sensors.cpp",
+        "relation": "shared_dir:firmware/src",
+        "weight": 1.0
+      },
       {
         "from": "backend-deno/bindings/Deno.res",
         "to": "backend-deno/bindings/Oak.res",
@@ -208,20 +220,8 @@
         "weight": 1.0
       },
       {
-        "from": "firmware/src/main.cpp",
-        "to": "firmware/src/data_buffer.cpp",
-        "relation": "shared_dir:firmware/src",
-        "weight": 1.0
-      },
-      {
-        "from": "firmware/src/data_buffer.cpp",
-        "to": "firmware/src/sensors.cpp",
-        "relation": "shared_dir:firmware/src",
-        "weight": 1.0
-      },
-      {
         "from": "setup.sh",
-        "to": "Database",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -233,7 +233,19 @@
       },
       {
         "from": "setup.sh",
+        "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "backend/analytics/src/Analytics.jl",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "backend/analytics/src/Analytics.jl",
+        "to": "Cache",
         "relation": "framework",
         "weight": 1.0
       },
@@ -244,20 +256,8 @@
         "weight": 1.0
       },
       {
-        "from": "backend/analytics/src/Analytics.jl",
-        "to": "Cache",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "backend/analytics/src/Analytics.jl",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "backend-deno/Main.res",
-        "to": "Database",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -269,21 +269,9 @@
       },
       {
         "from": "backend-deno/Main.res",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "backend-deno/services/Logger.res",
         "to": "Database",
         "relation": "framework",
-        "weight": 9.0
-      },
-      {
-        "from": "backend-deno/services/Logger.res",
-        "to": "Cache",
-        "relation": "framework",
-        "weight": 9.0
+        "weight": 1.0
       },
       {
         "from": "backend-deno/services/Logger.res",
@@ -292,8 +280,20 @@
         "weight": 9.0
       },
       {
-        "from": "backend-deno/bindings/Deno.res",
+        "from": "backend-deno/services/Logger.res",
+        "to": "Cache",
+        "relation": "framework",
+        "weight": 9.0
+      },
+      {
+        "from": "backend-deno/services/Logger.res",
         "to": "Database",
+        "relation": "framework",
+        "weight": 9.0
+      },
+      {
+        "from": "backend-deno/bindings/Deno.res",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 15.0
       },
@@ -305,13 +305,13 @@
       },
       {
         "from": "backend-deno/bindings/Deno.res",
-        "to": "WebServer",
+        "to": "Database",
         "relation": "framework",
         "weight": 15.0
       },
       {
         "from": "backend-deno/bindings/Oak.res",
-        "to": "Database",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 81.0
       },
@@ -323,13 +323,13 @@
       },
       {
         "from": "backend-deno/bindings/Oak.res",
-        "to": "WebServer",
+        "to": "Database",
         "relation": "framework",
         "weight": 81.0
       },
       {
         "from": "backend-deno/bindings/Redis_Client.res",
-        "to": "Database",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 30.0
       },
@@ -341,13 +341,13 @@
       },
       {
         "from": "backend-deno/bindings/Redis_Client.res",
-        "to": "WebServer",
+        "to": "Database",
         "relation": "framework",
         "weight": 30.0
       },
       {
         "from": "backend-deno/bindings/Postgres.res",
-        "to": "Database",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 12.0
       },
@@ -359,13 +359,13 @@
       },
       {
         "from": "backend-deno/bindings/Postgres.res",
-        "to": "WebServer",
+        "to": "Database",
         "relation": "framework",
         "weight": 12.0
       },
       {
         "from": "scripts/deployment/deploy.sh",
-        "to": "Database",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -377,13 +377,13 @@
       },
       {
         "from": "scripts/deployment/deploy.sh",
-        "to": "WebServer",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "firmware-zig/src/hal.zig",
-        "to": "Database",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 2.0
       },
@@ -395,37 +395,25 @@
       },
       {
         "from": "firmware-zig/src/hal.zig",
-        "to": "WebServer",
+        "to": "Database",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "firmware/src/main.cpp",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "firmware/src/main.cpp",
-        "to": "Cache",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "firmware/src/main.cpp",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "firmware/src/data_buffer.cpp",
-        "to": "Database",
+        "from": "firmware/src/main.cpp",
+        "to": "Cache",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "firmware/src/data_buffer.cpp",
-        "to": "Cache",
+        "from": "firmware/src/main.cpp",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
@@ -436,8 +424,20 @@
         "weight": 1.0
       },
       {
-        "from": "firmware/src/sensors.cpp",
+        "from": "firmware/src/data_buffer.cpp",
+        "to": "Cache",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "firmware/src/data_buffer.cpp",
         "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "firmware/src/sensors.cpp",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -449,13 +449,13 @@
       },
       {
         "from": "firmware/src/sensors.cpp",
-        "to": "WebServer",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "firmware/include/sensors.h",
-        "to": "Database",
+        "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
@@ -467,7 +467,7 @@
       },
       {
         "from": "firmware/include/sensors.h",
-        "to": "WebServer",
+        "to": "Database",
         "relation": "framework",
         "weight": 1.0
       }
@@ -483,9 +483,9 @@
           "backend-deno/services/Opcua.res"
         ],
         "frameworks": [
-          "Database",
+          "WebServer",
           "Cache",
-          "WebServer"
+          "Database"
         ],
         "relation": "InsecureProtocol->Network"
       },
@@ -497,9 +497,9 @@
           "backend/api/tests/api.test.js"
         ],
         "frameworks": [
-          "Database",
+          "WebServer",
           "Cache",
-          "WebServer"
+          "Database"
         ],
         "relation": "HardcodedSecret->Network"
       }

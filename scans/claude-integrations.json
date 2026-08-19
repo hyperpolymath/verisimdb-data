@@ -348,19 +348,13 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
     "network",
-    "disk",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "firefox-mcp/host/Server.res",
-        "to": "firefox-mcp/host/NativeHost.res",
-        "relation": "shared_dir:firefox-mcp/host",
-        "weight": 1.0
-      },
       {
         "from": "gitlab-bridge/src/bindings/Crypto.res",
         "to": "gitlab-bridge/src/bindings/Vitest.res",
@@ -371,6 +365,12 @@
         "from": "gitlab-bridge/src/bindings/Vitest.res",
         "to": "gitlab-bridge/src/bindings/Express.res",
         "relation": "shared_dir:gitlab-bridge/src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "firefox-mcp/host/Server.res",
+        "to": "firefox-mcp/host/NativeHost.res",
+        "relation": "shared_dir:firefox-mcp/host",
         "weight": 1.0
       },
       {
@@ -522,17 +522,40 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "firefox-lsp/test/claude_firefox/lsp_test.exs",
-          "firefox-lsp/test/adapters/firefox_test.exs"
+          "gecko-browser-extension/src/content/content.js"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "MutationGap->Cpu"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "gitlab-bridge/src/services/MRReviewer.res"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeDeserialization->Memory"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "mozilla-extension/src/core/storage.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "AtomExhaustion",
@@ -560,7 +583,7 @@
       },
       {
         "source_category": "UnsafeDeserialization",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 3.5,
         "files": [
           "gitlab-bridge/src/services/MRReviewer.res"
@@ -568,19 +591,7 @@
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeDeserialization->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "gecko-browser-extension/src/content/content.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "UnsafeDeserialization->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -595,28 +606,17 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "UnsafeDeserialization",
+        "source_category": "MutationGap",
         "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "severity_value": 1.0,
         "files": [
-          "gitlab-bridge/src/services/MRReviewer.res"
+          "firefox-lsp/test/claude_firefox/lsp_test.exs",
+          "firefox-lsp/test/adapters/firefox_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeDeserialization->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "mozilla-extension/src/core/storage.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "CommandInjection",

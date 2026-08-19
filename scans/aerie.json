@@ -644,11 +644,11 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "network",
-    "cpu",
     "concurrency",
-    "disk"
+    "disk",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -692,24 +692,6 @@
         "from": "src/api/zig/smokeping_client.zig",
         "to": "src/api/zig/main.zig",
         "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/resolvers.rs",
-        "to": "src/api/rust/src/redis_client.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/redis_client.rs",
-        "to": "src/api/rust/src/proof.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/proof.rs",
-        "to": "src/api/rust/src/main.rs",
-        "relation": "shared_dir:src/api/rust/src",
         "weight": 1.0
       },
       {
@@ -795,21 +777,29 @@
         "to": "specs/components/subscription-auth-flow.k9.ncl",
         "relation": "shared_dir:specs/components",
         "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/resolvers.rs",
+        "to": "src/api/rust/src/redis_client.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/redis_client.rs",
+        "to": "src/api/rust/src/proof.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/proof.rs",
+        "to": "src/api/rust/src/main.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "src/api/zig/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -831,6 +821,41 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "aerie-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/redis_client.rs",
+          "src/api/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "InsecureProtocol",
@@ -861,39 +886,14 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "src/api/rust/src/redis_client.rs",
-          "src/api/rust/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig",
           "src/api/zig/main.zig"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "aerie-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

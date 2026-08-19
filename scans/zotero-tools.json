@@ -710,11 +710,11 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "concurrency",
+    "disk",
     "cpu",
+    "memory",
     "network",
-    "disk"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -722,18 +722,6 @@
         "from": "zotpress/src/rescript/Zotpress.res",
         "to": "zotpress/src/rescript/Utils.res",
         "relation": "shared_dir:zotpress/src/rescript",
-        "weight": 1.0
-      },
-      {
-        "from": "voyant-export/src/Exporter.res",
-        "to": "voyant-export/src/Performance.res",
-        "relation": "shared_dir:voyant-export/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/init-raczotbuild.rkt",
-        "to": "rescript-templater/init-zotero-plugin.sh",
-        "relation": "shared_dir:rescript-templater",
         "weight": 1.0
       },
       {
@@ -776,6 +764,18 @@
         "from": "rescript-templater/scripts/generate-sbom.sh",
         "to": "rescript-templater/scripts/verify-release.sh",
         "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "voyant-export/src/Exporter.res",
+        "to": "voyant-export/src/Performance.res",
+        "relation": "shared_dir:voyant-export/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/init-raczotbuild.rkt",
+        "to": "rescript-templater/init-zotero-plugin.sh",
+        "relation": "shared_dir:rescript-templater",
         "weight": 1.0
       },
       {
@@ -1101,6 +1101,19 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -1115,19 +1128,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "formbd/migration/bin/doi.jl",
-          "formbd/migration/bin/score.jl"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 5.0,
@@ -1139,6 +1139,32 @@
           "WebServer"
         ],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "formbd/migration/bin/doi.jl",
+          "formbd/migration/bin/score.jl"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -1157,32 +1183,6 @@
           "WebServer"
         ],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "CommandInjection",

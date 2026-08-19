@@ -326,22 +326,34 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
+    "memory",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "analyzers/code-haskell/src/Eco/Analysis.hs",
-        "to": "analyzers/code-haskell/src/Eco/Pareto.hs",
-        "relation": "shared_dir:analyzers/code-haskell/src/Eco",
+        "from": "crates/oikosbot-telemetry/src/collect.rs",
+        "to": "crates/oikosbot-telemetry/src/snapshot.rs",
+        "relation": "shared_dir:crates/oikosbot-telemetry/src",
         "weight": 1.0
       },
       {
-        "from": "policies/finding_taxonomy.ecl",
-        "to": "policies/carbon_budget.ecl",
-        "relation": "shared_dir:policies",
+        "from": "crates/oikosbot-telemetry/src/snapshot.rs",
+        "to": "crates/oikosbot-telemetry/src/derive.rs",
+        "relation": "shared_dir:crates/oikosbot-telemetry/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-cli/src/estate.rs",
+        "to": "crates/oikosbot-cli/src/config.rs",
+        "relation": "shared_dir:crates/oikosbot-cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-cli/src/config.rs",
+        "to": "crates/oikosbot-cli/src/main.rs",
+        "relation": "shared_dir:crates/oikosbot-cli/src",
         "weight": 1.0
       },
       {
@@ -375,27 +387,15 @@
         "weight": 1.0
       },
       {
-        "from": "crates/oikosbot-cli/src/estate.rs",
-        "to": "crates/oikosbot-cli/src/config.rs",
-        "relation": "shared_dir:crates/oikosbot-cli/src",
+        "from": "analyzers/code-haskell/src/Eco/Analysis.hs",
+        "to": "analyzers/code-haskell/src/Eco/Pareto.hs",
+        "relation": "shared_dir:analyzers/code-haskell/src/Eco",
         "weight": 1.0
       },
       {
-        "from": "crates/oikosbot-cli/src/config.rs",
-        "to": "crates/oikosbot-cli/src/main.rs",
-        "relation": "shared_dir:crates/oikosbot-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/oikosbot-telemetry/src/collect.rs",
-        "to": "crates/oikosbot-telemetry/src/snapshot.rs",
-        "relation": "shared_dir:crates/oikosbot-telemetry/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/oikosbot-telemetry/src/snapshot.rs",
-        "to": "crates/oikosbot-telemetry/src/derive.rs",
-        "relation": "shared_dir:crates/oikosbot-telemetry/src",
+        "from": "policies/finding_taxonomy.ecl",
+        "to": "policies/carbon_budget.ecl",
+        "relation": "shared_dir:policies",
         "weight": 1.0
       },
       {
@@ -523,22 +523,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/oikosbot-analysis/src/dependencies.rs",
-          "crates/oikosbot-analysis/src/migration.rs",
-          "crates/oikosbot-analysis/src/analyzer.rs",
-          "crates/oikosbot-fleet/src/lib.rs",
-          "crates/oikosbot-eclexia/src/lib.rs",
-          "crates/oikosbot-cli/src/config.rs",
-          "crates/oikosbot-cli/src/main.rs"
+          "crates/oikosbot-analysis/src/migration.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -571,16 +565,22 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/oikosbot-analysis/src/migration.rs"
+          "crates/oikosbot-analysis/src/dependencies.rs",
+          "crates/oikosbot-analysis/src/migration.rs",
+          "crates/oikosbot-analysis/src/analyzer.rs",
+          "crates/oikosbot-fleet/src/lib.rs",
+          "crates/oikosbot-eclexia/src/lib.rs",
+          "crates/oikosbot-cli/src/config.rs",
+          "crates/oikosbot-cli/src/main.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
