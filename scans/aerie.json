@@ -644,11 +644,11 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "concurrency",
-    "disk",
+    "memory",
+    "network",
     "cpu",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -823,6 +823,45 @@
         "relation": "PathTraversal->Disk"
       },
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/backends.rs",
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/smokeping_client.zig"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/redis_client.rs",
+          "src/api/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -845,45 +884,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/rust/src/redis_client.rs",
-          "src/api/rust/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/rust/src/backends.rs",
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig",
-          "src/api/zig/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "HardcodedSecret",

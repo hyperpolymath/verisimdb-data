@@ -240,9 +240,9 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
     "network",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -257,6 +257,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/sign-extension.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -268,14 +278,26 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
+        "source_category": "InsecureProtocol",
         "sink_axis": "network",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "scripts/sign-extension.sh"
+          ".screenshots/generate-mockups.sh"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/property/FlagPropertiesTest.res",
+          "tests/e2e/ExtensionLifecycleTest.res",
+          "tests/aspect/SecurityTest.res"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -296,28 +318,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/property/FlagPropertiesTest.res",
-          "tests/e2e/ExtensionLifecycleTest.res",
-          "tests/aspect/SecurityTest.res"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          ".screenshots/generate-mockups.sh"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       }
     ]
   }

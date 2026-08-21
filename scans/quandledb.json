@@ -233,8 +233,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
@@ -243,31 +243,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "beam/native/quandle_db_nif.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "server/test_quandle_axioms.jl",
-          "server/krl/test/sql_test.jl",
-          "server/krl/test/lexer_test.jl",
-          "server/krl/test/seam_test.jl",
-          "server/krl/test/explain_test.jl",
-          "server/krl/test/parser_test.jl",
-          "server/test_semantic_index.jl",
-          "server/test_br5_fuzz.jl"
+          "beam/mix.exs",
+          "beam/test/quandle_db_nif_live_integration_test.exs"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -291,17 +275,6 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "beam/mix.exs",
-          "beam/test/quandle_db_nif_live_integration_test.exs"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -312,6 +285,33 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "server/test_quandle_axioms.jl",
+          "server/krl/test/sql_test.jl",
+          "server/krl/test/lexer_test.jl",
+          "server/krl/test/seam_test.jl",
+          "server/krl/test/explain_test.jl",
+          "server/krl/test/parser_test.jl",
+          "server/test_semantic_index.jl",
+          "server/test_br5_fuzz.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "beam/native/quandle_db_nif.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

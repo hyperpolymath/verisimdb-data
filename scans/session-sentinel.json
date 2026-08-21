@@ -201,14 +201,32 @@
     }
   ],
   "recommended_attacks": [
+    "network",
     "memory",
-    "concurrency",
     "cpu",
     "disk",
-    "network"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/verisimdb.zig",
+        "to": "src/interface/ffi/src/dbus.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/dbus.zig",
+        "to": "src/interface/ffi/src/main.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
       {
         "from": "src/core/diagnostics.eph",
         "to": "src/core/config.eph",
@@ -244,24 +262,6 @@
         "to": "src/core/scanner.eph",
         "relation": "shared_dir:src/core",
         "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/verisimdb.zig",
-        "to": "src/interface/ffi/src/dbus.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/dbus.zig",
-        "to": "src/interface/ffi/src/main.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
       }
     ]
   },
@@ -278,16 +278,6 @@
         "relation": "UncheckedError->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "systemd/install.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -296,6 +286,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "systemd/install.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "InsecureProtocol",

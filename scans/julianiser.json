@@ -231,12 +231,18 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/mod.rs",
@@ -254,26 +260,21 @@
         "to": "src/codegen/julia_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "severity_value": 2.5,
         "files": [
-          "src/codegen/benchmark.rs"
+          "src/codegen/mod.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -288,14 +289,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "src/interface/ffi/src/main.zig"
+          "src/codegen/benchmark.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -311,17 +312,6 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/mod.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -330,6 +320,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }
