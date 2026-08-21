@@ -315,6 +315,18 @@
   "dependency_graph": {
     "edges": [
       {
+        "from": "scripts/wiki-audit.sh",
+        "to": "scripts/standardize_readmes.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/standardize_readmes.sh",
+        "to": "scripts/branch-protection-apply.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
         "from": "lib/script_manager/media_finder.ex",
         "to": "lib/script_manager/estate_deployer.ex",
         "relation": "shared_dir:lib/script_manager",
@@ -349,18 +361,6 @@
         "to": "lib/script_manager/health_dashboard.ex",
         "relation": "shared_dir:lib/script_manager",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/wiki-audit.sh",
-        "to": "scripts/standardize_readmes.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/standardize_readmes.sh",
-        "to": "scripts/branch-protection-apply.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
@@ -377,14 +377,23 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "CommandInjection",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "lib/script_manager/tui.ex"
+          "scripts/lib/common.sh",
+          "lib/script_manager/media_finder.ex",
+          "lib/script_manager/tui.ex",
+          "lib/script_manager/estate_deployer.ex",
+          "lib/script_manager/toolchain_linker.ex",
+          "lib/script_manager/git_syncer.ex",
+          "lib/script_manager/dependency_fixer.ex",
+          "lib/script_manager/script_runner.ex",
+          "lib/script_manager/ownership_guard.ex",
+          "lib/script_manager/repo_cleanup.ex"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -406,23 +415,14 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "scripts/lib/common.sh",
-          "lib/script_manager/media_finder.ex",
-          "lib/script_manager/tui.ex",
-          "lib/script_manager/estate_deployer.ex",
-          "lib/script_manager/toolchain_linker.ex",
-          "lib/script_manager/git_syncer.ex",
-          "lib/script_manager/dependency_fixer.ex",
-          "lib/script_manager/script_runner.ex",
-          "lib/script_manager/ownership_guard.ex",
-          "lib/script_manager/repo_cleanup.ex"
+          "lib/script_manager/tui.ex"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

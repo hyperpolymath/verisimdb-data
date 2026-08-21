@@ -326,24 +326,12 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "disk",
     "memory",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/oikosbot-telemetry/src/collect.rs",
-        "to": "crates/oikosbot-telemetry/src/snapshot.rs",
-        "relation": "shared_dir:crates/oikosbot-telemetry/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/oikosbot-telemetry/src/snapshot.rs",
-        "to": "crates/oikosbot-telemetry/src/derive.rs",
-        "relation": "shared_dir:crates/oikosbot-telemetry/src",
-        "weight": 1.0
-      },
       {
         "from": "crates/oikosbot-cli/src/estate.rs",
         "to": "crates/oikosbot-cli/src/config.rs",
@@ -396,6 +384,18 @@
         "from": "policies/finding_taxonomy.ecl",
         "to": "policies/carbon_budget.ecl",
         "relation": "shared_dir:policies",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-telemetry/src/collect.rs",
+        "to": "crates/oikosbot-telemetry/src/snapshot.rs",
+        "relation": "shared_dir:crates/oikosbot-telemetry/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-telemetry/src/snapshot.rs",
+        "to": "crates/oikosbot-telemetry/src/derive.rs",
+        "relation": "shared_dir:crates/oikosbot-telemetry/src",
         "weight": 1.0
       },
       {
@@ -523,6 +523,24 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/oikosbot-analysis/src/dependencies.rs",
+          "crates/oikosbot-analysis/src/migration.rs",
+          "crates/oikosbot-analysis/src/analyzer.rs",
+          "crates/oikosbot-fleet/src/lib.rs",
+          "crates/oikosbot-eclexia/src/lib.rs",
+          "crates/oikosbot-cli/src/config.rs",
+          "crates/oikosbot-cli/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -563,24 +581,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/oikosbot-analysis/src/dependencies.rs",
-          "crates/oikosbot-analysis/src/migration.rs",
-          "crates/oikosbot-analysis/src/analyzer.rs",
-          "crates/oikosbot-fleet/src/lib.rs",
-          "crates/oikosbot-eclexia/src/lib.rs",
-          "crates/oikosbot-cli/src/config.rs",
-          "crates/oikosbot-cli/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

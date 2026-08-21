@@ -629,31 +629,13 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "network",
     "disk",
-    "memory"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/rescript/adapters/OfficeJsAdapter.res",
-        "to": "src/rescript/adapters/UnoAdapter.res",
-        "relation": "shared_dir:src/rescript/adapters",
-        "weight": 1.0
-      },
-      {
-        "from": "src/visualization/report_generator.jl",
-        "to": "src/visualization/charts.rs",
-        "relation": "shared_dir:src/visualization",
-        "weight": 1.0
-      },
-      {
-        "from": "src/collaboration/websocket_server.jl",
-        "to": "src/collaboration/comments.res",
-        "relation": "shared_dir:src/collaboration",
-        "weight": 1.0
-      },
       {
         "from": "src/plugins/webhooks.jl",
         "to": "src/plugins/plugin_system.jl",
@@ -664,6 +646,30 @@
         "from": "src/plugins/plugin_system.jl",
         "to": "src/plugins/marketplace.jl",
         "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/collaboration/websocket_server.jl",
+        "to": "src/collaboration/comments.res",
+        "relation": "shared_dir:src/collaboration",
+        "weight": 1.0
+      },
+      {
+        "from": "src/visualization/report_generator.jl",
+        "to": "src/visualization/charts.rs",
+        "relation": "shared_dir:src/visualization",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rescript/adapters/OfficeJsAdapter.res",
+        "to": "src/rescript/adapters/UnoAdapter.res",
+        "relation": "shared_dir:src/rescript/adapters",
+        "weight": 1.0
+      },
+      {
+        "from": "src/julia/server/authentication.jl",
+        "to": "src/julia/server/rate_limiting.jl",
+        "relation": "shared_dir:src/julia/server",
         "weight": 1.0
       },
       {
@@ -731,46 +737,23 @@
         "to": "src/rescript/Settings.res",
         "relation": "shared_dir:src/rescript",
         "weight": 1.0
-      },
-      {
-        "from": "src/julia/server/authentication.jl",
-        "to": "src/julia/server/rate_limiting.jl",
-        "relation": "shared_dir:src/julia/server",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/julia/test_elasticity.jl"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
+          "src/rescript/ConstraintEditor.res",
+          "src/rescript/Settings.res",
+          "src/collaboration/comments.res",
           "src/visualization/charts.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/julia/test_client.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "InputBoundary",
@@ -790,19 +773,6 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rescript/ConstraintEditor.res",
-          "src/rescript/Settings.res",
-          "src/collaboration/comments.res",
-          "src/visualization/charts.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -815,6 +785,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/visualization/charts.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -825,6 +805,26 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/julia/test_elasticity.jl"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/julia/test_client.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
       }
     ]
   }

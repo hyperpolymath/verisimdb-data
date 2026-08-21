@@ -206,13 +206,19 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
+    "memory",
     "disk",
     "cpu",
-    "memory"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/deno-api/src/Router.res",
+        "to": "src/deno-api/src/main.ts",
+        "relation": "shared_dir:src/deno-api/src",
+        "weight": 1.0
+      },
       {
         "from": "test/integration/test_dragonfly.jl",
         "to": "test/integration/test_xtdb.jl",
@@ -224,27 +230,11 @@
         "to": "test/integration/test_surrealdb.jl",
         "relation": "shared_dir:test/integration",
         "weight": 1.0
-      },
-      {
-        "from": "src/deno-api/src/Router.res",
-        "to": "src/deno-api/src/main.ts",
-        "relation": "shared_dir:src/deno-api/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust-routing/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -265,6 +255,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust-routing/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }
