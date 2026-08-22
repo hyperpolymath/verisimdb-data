@@ -494,13 +494,49 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "disk",
     "concurrency",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "test/e2e_boj_integration_test.exs",
+        "to": "test/concurrency_test.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/concurrency_test.exs",
+        "to": "test/policy_loader_test.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/policy_loader_test.exs",
+        "to": "test/mtls_test.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/mtls_test.exs",
+        "to": "test/performance_test.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "test/performance_test.exs",
+        "to": "test/test_helper.exs",
+        "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/HttpServer.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
       {
         "from": "bench/compare.exs",
         "to": "bench/rebaseline.exs",
@@ -565,42 +601,6 @@
         "from": "lib/http_capability_gateway/policy_loader.ex",
         "to": "lib/http_capability_gateway/policy_compiler.ex",
         "relation": "shared_dir:lib/http_capability_gateway",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/HttpServer.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "test/e2e_boj_integration_test.exs",
-        "to": "test/concurrency_test.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/concurrency_test.exs",
-        "to": "test/policy_loader_test.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/policy_loader_test.exs",
-        "to": "test/mtls_test.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/mtls_test.exs",
-        "to": "test/performance_test.exs",
-        "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "test/performance_test.exs",
-        "to": "test/test_helper.exs",
-        "relation": "shared_dir:test",
         "weight": 1.0
       },
       {
@@ -920,19 +920,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "lib/http_capability_gateway/policy_compiler.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "AtomExhaustion->Memory"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -961,6 +948,19 @@
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "lib/http_capability_gateway/policy_compiler.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "AtomExhaustion->Memory"
       }
     ]
   }

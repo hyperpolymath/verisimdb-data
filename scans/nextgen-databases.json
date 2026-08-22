@@ -450,24 +450,12 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "disk",
     "memory",
+    "disk",
     "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "nqc/nqc-enhanced-launcher.sh",
-        "to": "nqc/nqc-launcher.sh",
-        "relation": "shared_dir:nqc",
-        "weight": 1.0
-      },
-      {
-        "from": "nqc/verification/tests/nqc/cache_test.gleam",
-        "to": "nqc/verification/tests/nqc/formatter_test.gleam",
-        "relation": "shared_dir:nqc/verification/tests/nqc",
-        "weight": 1.0
-      },
       {
         "from": "nqc/src/nqc/profiles.gleam",
         "to": "nqc/src/nqc/formatter.gleam",
@@ -497,34 +485,43 @@
         "to": "nqc/test/nqc/formatter_test.gleam",
         "relation": "shared_dir:nqc/test/nqc",
         "weight": 1.0
+      },
+      {
+        "from": "nqc/verification/tests/nqc/cache_test.gleam",
+        "to": "nqc/verification/tests/nqc/formatter_test.gleam",
+        "relation": "shared_dir:nqc/verification/tests/nqc",
+        "weight": 1.0
+      },
+      {
+        "from": "nqc/nqc-enhanced-launcher.sh",
+        "to": "nqc/nqc-launcher.sh",
+        "relation": "shared_dir:nqc",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "verisim-modular-experiment/test/runtests.jl"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "verisim-modular-experiment/test/test_krladapter_integration.jl",
+          "verisim-modular-experiment/examples/krladapter_integration.jl",
+          "verisim-modular-experiment/src/Verisim.jl",
+          "verisim-modular-experiment/test/test_verisim_core.jl",
           "verisim-modular-experiment/test/test_vcl.jl",
+          "verisim-modular-experiment/test/test_federation_parity.jl",
+          "verisim-modular-experiment/test/test_noninterference.jl",
           "verisim-modular-experiment/test/test_seams.jl",
           "verisim-modular-experiment/test/runtests.jl",
+          "nqc/ffi/zig/src/main.zig",
+          "nqc/verification/tests/nqc/database_test.gleam",
+          "nqc/test/nqc/database_test.gleam",
           "verisim-core/test/runtests.jl"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "PathTraversal",
@@ -547,6 +544,30 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "verisim-modular-experiment/test/test_krladapter_integration.jl",
+          "verisim-modular-experiment/test/test_vcl.jl",
+          "verisim-modular-experiment/test/test_seams.jl",
+          "verisim-modular-experiment/test/runtests.jl",
+          "verisim-core/test/runtests.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "verisim-modular-experiment/test/runtests.jl"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -555,27 +576,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "verisim-modular-experiment/examples/krladapter_integration.jl",
-          "verisim-modular-experiment/src/Verisim.jl",
-          "verisim-modular-experiment/test/test_verisim_core.jl",
-          "verisim-modular-experiment/test/test_vcl.jl",
-          "verisim-modular-experiment/test/test_federation_parity.jl",
-          "verisim-modular-experiment/test/test_noninterference.jl",
-          "verisim-modular-experiment/test/test_seams.jl",
-          "verisim-modular-experiment/test/runtests.jl",
-          "nqc/ffi/zig/src/main.zig",
-          "nqc/verification/tests/nqc/database_test.gleam",
-          "nqc/test/nqc/database_test.gleam",
-          "verisim-core/test/runtests.jl"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       }
     ]
   }

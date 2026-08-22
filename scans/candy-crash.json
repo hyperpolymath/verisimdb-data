@@ -229,13 +229,19 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "concurrency",
     "disk",
-    "cpu"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "backend/src/candy_crash/middleware/cors.gleam",
+        "to": "backend/src/candy_crash/middleware/auth.gleam",
+        "relation": "shared_dir:backend/src/candy_crash/middleware",
+        "weight": 1.0
+      },
       {
         "from": "backend/src/candy_crash/handlers/dashboard.gleam",
         "to": "backend/src/candy_crash/handlers/training.gleam",
@@ -277,27 +283,11 @@
         "to": "backend/src/candy_crash/handlers/lessons.gleam",
         "relation": "shared_dir:backend/src/candy_crash/handlers",
         "weight": 1.0
-      },
-      {
-        "from": "backend/src/candy_crash/middleware/cors.gleam",
-        "to": "backend/src/candy_crash/middleware/auth.gleam",
-        "relation": "shared_dir:backend/src/candy_crash/middleware",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/check-languages.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
@@ -317,6 +307,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/check-languages.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }
