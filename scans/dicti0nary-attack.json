@@ -340,59 +340,23 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "network",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/generators/src/leetspeak.rs",
-        "to": "crates/generators/src/phonetic.rs",
-        "relation": "shared_dir:crates/generators/src",
+        "from": "src/generators/Phonetic.chpl",
+        "to": "src/generators/Random.chpl",
+        "relation": "shared_dir:src/generators",
         "weight": 1.0
       },
       {
-        "from": "crates/generators/src/phonetic.rs",
-        "to": "crates/generators/src/lib.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/generators/src/lib.rs",
-        "to": "crates/generators/src/pattern.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WasmLoader.res",
-        "to": "web/src/Hash.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/Hash.res",
-        "to": "web/src/WebDom.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WebDom.res",
-        "to": "web/src/WasmBindings.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WasmBindings.res",
-        "to": "web/src/Generators.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/dicti0nary.chpl",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
+        "from": "src/generators/Random.chpl",
+        "to": "src/generators/Markov.chpl",
+        "relation": "shared_dir:src/generators",
         "weight": 1.0
       },
       {
@@ -420,15 +384,51 @@
         "weight": 1.0
       },
       {
-        "from": "src/generators/Phonetic.chpl",
-        "to": "src/generators/Random.chpl",
-        "relation": "shared_dir:src/generators",
+        "from": "web/src/WasmLoader.res",
+        "to": "web/src/Hash.res",
+        "relation": "shared_dir:web/src",
         "weight": 1.0
       },
       {
-        "from": "src/generators/Random.chpl",
-        "to": "src/generators/Markov.chpl",
-        "relation": "shared_dir:src/generators",
+        "from": "web/src/Hash.res",
+        "to": "web/src/WebDom.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/WebDom.res",
+        "to": "web/src/WasmBindings.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/WasmBindings.res",
+        "to": "web/src/Generators.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/leetspeak.rs",
+        "to": "crates/generators/src/phonetic.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/phonetic.rs",
+        "to": "crates/generators/src/lib.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/lib.rs",
+        "to": "crates/generators/src/pattern.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/dicti0nary.chpl",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -700,20 +700,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "crates/generators/src/leetspeak.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -730,17 +716,17 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "lib/es6/web/src/App.res.js"
+          "tests/test_random.chpl"
         ],
         "frameworks": [
           "Concurrent",
           "Networking"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -770,17 +756,31 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "tests/test_random.chpl"
+          "lib/es6/web/src/App.res.js"
         ],
         "frameworks": [
           "Concurrent",
           "Networking"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "crates/generators/src/leetspeak.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   },

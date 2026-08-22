@@ -3,9 +3,9 @@
   "program_path": "laniakea",
   "language": "elixir",
   "frameworks": [
+    "Phoenix",
     "OTP",
-    "WebServer",
-    "Phoenix"
+    "WebServer"
   ],
   "weak_points": [
     {
@@ -196,6 +196,12 @@
     "edges": [
       {
         "from": "setup.sh",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -207,10 +213,10 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
+        "from": "client/src/transport/Channel.res",
         "to": "Phoenix",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 27.0
       },
       {
         "from": "client/src/transport/Channel.res",
@@ -225,10 +231,10 @@
         "weight": 27.0
       },
       {
-        "from": "client/src/transport/Channel.res",
+        "from": "client/src/adapters/Capabilities.res",
         "to": "Phoenix",
         "relation": "framework",
-        "weight": 27.0
+        "weight": 9.0
       },
       {
         "from": "client/src/adapters/Capabilities.res",
@@ -243,10 +249,10 @@
         "weight": 9.0
       },
       {
-        "from": "client/src/adapters/Capabilities.res",
+        "from": "client/lib/ocaml/Channel.res",
         "to": "Phoenix",
         "relation": "framework",
-        "weight": 9.0
+        "weight": 27.0
       },
       {
         "from": "client/lib/ocaml/Channel.res",
@@ -261,7 +267,7 @@
         "weight": 27.0
       },
       {
-        "from": "client/lib/ocaml/Channel.res",
+        "from": "client/lib/bs/src/transport/Channel.res",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 27.0
@@ -279,10 +285,10 @@
         "weight": 27.0
       },
       {
-        "from": "client/lib/bs/src/transport/Channel.res",
+        "from": "cli/laniakea.ts",
         "to": "Phoenix",
         "relation": "framework",
-        "weight": 27.0
+        "weight": 1.0
       },
       {
         "from": "cli/laniakea.ts",
@@ -297,10 +303,10 @@
         "weight": 1.0
       },
       {
-        "from": "cli/laniakea.ts",
+        "from": "server/lib/laniakea/command/bus.ex",
         "to": "Phoenix",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 2.0
       },
       {
         "from": "server/lib/laniakea/command/bus.ex",
@@ -315,7 +321,7 @@
         "weight": 2.0
       },
       {
-        "from": "server/lib/laniakea/command/bus.ex",
+        "from": "server/lib/laniakea/policy/engine.ex",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
@@ -333,7 +339,7 @@
         "weight": 2.0
       },
       {
-        "from": "server/lib/laniakea/policy/engine.ex",
+        "from": "server/lib/laniakea/crdt/registry.ex",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
@@ -347,12 +353,6 @@
       {
         "from": "server/lib/laniakea/crdt/registry.ex",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "server/lib/laniakea/crdt/registry.ex",
-        "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
       }
@@ -360,20 +360,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "server/lib/laniakea_web.ex"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer",
-          "Phoenix"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -386,11 +372,25 @@
           "server/test/e2e/crdt_e2e_test.exs"
         ],
         "frameworks": [
+          "Phoenix",
           "OTP",
-          "WebServer",
-          "Phoenix"
+          "WebServer"
         ],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "server/lib/laniakea_web.ex"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "HardcodedSecret",
@@ -400,9 +400,9 @@
           "schemas/config.ncl"
         ],
         "frameworks": [
+          "Phoenix",
           "OTP",
-          "WebServer",
-          "Phoenix"
+          "WebServer"
         ],
         "relation": "HardcodedSecret->Network"
       }

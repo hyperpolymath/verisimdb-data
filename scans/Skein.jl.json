@@ -133,28 +133,40 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/storage.jl",
-        "to": "src/import_export.jl",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
         "from": "test/runtests.jl",
         "to": "test/e2e_test.jl",
         "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "src/storage.jl",
+        "to": "src/import_export.jl",
+        "relation": "shared_dir:src",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/knot_theory_ext_test.jl",
+          "test/runtests.jl",
+          "test/e2e_test.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
@@ -174,18 +186,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/knot_theory_ext_test.jl",
-          "test/runtests.jl",
-          "test/e2e_test.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
       }
     ]
   }

@@ -272,14 +272,32 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "disk",
-    "memory",
     "cpu",
-    "concurrency"
+    "network",
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "dipstick/services/collector/tests/reflexive_tests.rs",
+        "to": "dipstick/services/collector/tests/contract_tests.rs",
+        "relation": "shared_dir:dipstick/services/collector/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/tests/contract_tests.rs",
+        "to": "dipstick/services/collector/tests/aspect_tests.rs",
+        "relation": "shared_dir:dipstick/services/collector/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/tools/cli/migrate.sh",
+        "to": "dipstick/tools/cli/rollback.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
+        "weight": 1.0
+      },
       {
         "from": "dipstick/services/collector/src/platforms.rs",
         "to": "dipstick/services/collector/src/lib.rs",
@@ -296,24 +314,6 @@
         "from": "dipstick/services/collector/src/scheduler.rs",
         "to": "dipstick/services/collector/src/main.rs",
         "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/tools/cli/migrate.sh",
-        "to": "dipstick/tools/cli/rollback.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/tests/reflexive_tests.rs",
-        "to": "dipstick/services/collector/tests/contract_tests.rs",
-        "relation": "shared_dir:dipstick/services/collector/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/tests/contract_tests.rs",
-        "to": "dipstick/services/collector/tests/aspect_tests.rs",
-        "relation": "shared_dir:dipstick/services/collector/tests",
         "weight": 1.0
       },
       {
@@ -539,6 +539,20 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "dipstick/services/collector/src/main.rs",
+          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -563,20 +577,6 @@
           "OTP"
         ],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "dipstick/services/collector/src/main.rs",
-          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "DynamicCodeExecution",
