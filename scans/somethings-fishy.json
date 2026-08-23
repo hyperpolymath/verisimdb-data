@@ -260,12 +260,24 @@
   ],
   "recommended_attacks": [
     "concurrency",
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "safety_kernel/src/robofishy_write_guard.adb",
+        "to": "safety_kernel/src/robofishy_c_api.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
+      {
+        "from": "safety_kernel/src/robofishy_c_api.adb",
+        "to": "safety_kernel/src/robofishy_io.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
       {
         "from": "src/report.rs",
         "to": "src/safe_io.rs",
@@ -279,15 +291,9 @@
         "weight": 1.0
       },
       {
-        "from": "safety_kernel/src/robofishy_write_guard.adb",
-        "to": "safety_kernel/src/robofishy_c_api.adb",
-        "relation": "shared_dir:safety_kernel/src",
-        "weight": 1.0
-      },
-      {
-        "from": "safety_kernel/src/robofishy_c_api.adb",
-        "to": "safety_kernel/src/robofishy_io.adb",
-        "relation": "shared_dir:safety_kernel/src",
+        "from": "setup.sh",
+        "to": "build.rs",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -307,12 +313,6 @@
         "to": "src/scanners/banned_patterns.rs",
         "relation": "shared_dir:src/scanners",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "build.rs",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
@@ -328,6 +328,17 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/scanners/commit_trailers.rs",
+          "src/scanners/banned_patterns.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -351,17 +362,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/scanners/commit_trailers.rs",
-          "src/scanners/banned_patterns.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

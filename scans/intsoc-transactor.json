@@ -518,23 +518,35 @@
     }
   ],
   "recommended_attacks": [
-    "network",
+    "cpu",
     "disk",
-    "memory",
-    "cpu"
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "nickel/policies/stream-rules.ncl",
-        "to": "nickel/policies/ipr-check.ncl",
-        "relation": "shared_dir:nickel/policies",
+        "from": "crates/intsoc-nickel/src/lib.rs",
+        "to": "crates/intsoc-nickel/src/policy.rs",
+        "relation": "shared_dir:crates/intsoc-nickel/src",
         "weight": 1.0
       },
       {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "crates/intsoc-fixer/src/generators/references.rs",
+        "to": "crates/intsoc-fixer/src/generators/boilerplate.rs",
+        "relation": "shared_dir:crates/intsoc-fixer/src/generators",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-fixer/src/generators/boilerplate.rs",
+        "to": "crates/intsoc-fixer/src/generators/date.rs",
+        "relation": "shared_dir:crates/intsoc-fixer/src/generators",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-fixer/src/generators/date.rs",
+        "to": "crates/intsoc-fixer/src/generators/header.rs",
+        "relation": "shared_dir:crates/intsoc-fixer/src/generators",
         "weight": 1.0
       },
       {
@@ -574,45 +586,21 @@
         "weight": 1.0
       },
       {
-        "from": "crates/intsoc-nickel/src/lib.rs",
-        "to": "crates/intsoc-nickel/src/policy.rs",
-        "relation": "shared_dir:crates/intsoc-nickel/src",
+        "from": "nickel/policies/stream-rules.ncl",
+        "to": "nickel/policies/ipr-check.ncl",
+        "relation": "shared_dir:nickel/policies",
         "weight": 1.0
       },
       {
-        "from": "crates/intsoc-parser/src/idnits.rs",
-        "to": "crates/intsoc-parser/src/plain_text.rs",
-        "relation": "shared_dir:crates/intsoc-parser/src",
+        "from": "gui/src/tea/Tea_Render.res",
+        "to": "gui/src/tea/Tea_Sub.res",
+        "relation": "shared_dir:gui/src/tea",
         "weight": 1.0
       },
       {
-        "from": "crates/intsoc-parser/src/plain_text.rs",
-        "to": "crates/intsoc-parser/src/xml.rs",
-        "relation": "shared_dir:crates/intsoc-parser/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-api/src/datatracker.rs",
-        "to": "crates/intsoc-api/src/iana.rs",
-        "relation": "shared_dir:crates/intsoc-api/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-fixer/src/generators/references.rs",
-        "to": "crates/intsoc-fixer/src/generators/boilerplate.rs",
-        "relation": "shared_dir:crates/intsoc-fixer/src/generators",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-fixer/src/generators/boilerplate.rs",
-        "to": "crates/intsoc-fixer/src/generators/date.rs",
-        "relation": "shared_dir:crates/intsoc-fixer/src/generators",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-fixer/src/generators/date.rs",
-        "to": "crates/intsoc-fixer/src/generators/header.rs",
-        "relation": "shared_dir:crates/intsoc-fixer/src/generators",
+        "from": "gui/src/tea/Tea_Sub.res",
+        "to": "gui/src/tea/Tea_Cmd.res",
+        "relation": "shared_dir:gui/src/tea",
         "weight": 1.0
       },
       {
@@ -634,15 +622,27 @@
         "weight": 1.0
       },
       {
-        "from": "gui/src/tea/Tea_Render.res",
-        "to": "gui/src/tea/Tea_Sub.res",
-        "relation": "shared_dir:gui/src/tea",
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
-        "from": "gui/src/tea/Tea_Sub.res",
-        "to": "gui/src/tea/Tea_Cmd.res",
-        "relation": "shared_dir:gui/src/tea",
+        "from": "crates/intsoc-api/src/datatracker.rs",
+        "to": "crates/intsoc-api/src/iana.rs",
+        "relation": "shared_dir:crates/intsoc-api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-parser/src/idnits.rs",
+        "to": "crates/intsoc-parser/src/plain_text.rs",
+        "relation": "shared_dir:crates/intsoc-parser/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-parser/src/plain_text.rs",
+        "to": "crates/intsoc-parser/src/xml.rs",
+        "relation": "shared_dir:crates/intsoc-parser/src",
         "weight": 1.0
       },
       {
@@ -895,7 +895,7 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "crates/intsoc-cli/src/commands/submit.rs",
@@ -905,19 +905,7 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "crates/intsoc-cli/src/commands/init.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -934,8 +922,20 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "crates/intsoc-cli/src/commands/init.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "crates/intsoc-cli/src/commands/submit.rs",
@@ -945,7 +945,7 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
