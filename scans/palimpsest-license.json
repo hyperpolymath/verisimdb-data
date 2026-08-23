@@ -304,19 +304,13 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
     "disk",
-    "network",
-    "cpu"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/generate-structure.sh",
-        "to": "scripts/migrate-version.jl",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/License.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/Bilingual.hs",
@@ -345,6 +339,12 @@
         "from": "bof-meetings/presentations/demo-dns-discovery.sh",
         "to": "bof-meetings/presentations/demo-http-headers.sh",
         "relation": "shared_dir:bof-meetings/presentations",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/generate-structure.sh",
+        "to": "scripts/migrate-version.jl",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -460,6 +460,19 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "bof-meetings/presentations/demo-dns-discovery.sh",
+          "bof-meetings/presentations/demo-http-headers.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -510,19 +523,6 @@
           "Ecto"
         ],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "bof-meetings/presentations/demo-dns-discovery.sh",
-          "bof-meetings/presentations/demo-http-headers.sh"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",

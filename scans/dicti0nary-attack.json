@@ -341,12 +341,60 @@
   ],
   "recommended_attacks": [
     "network",
+    "disk",
     "memory",
-    "cpu",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/generators/src/leetspeak.rs",
+        "to": "crates/generators/src/phonetic.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/phonetic.rs",
+        "to": "crates/generators/src/lib.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/lib.rs",
+        "to": "crates/generators/src/pattern.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/WasmLoader.res",
+        "to": "web/src/Hash.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/Hash.res",
+        "to": "web/src/WebDom.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/WebDom.res",
+        "to": "web/src/WasmBindings.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "web/src/WasmBindings.res",
+        "to": "web/src/Generators.res",
+        "relation": "shared_dir:web/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/dicti0nary.chpl",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
       {
         "from": "src/generators/Phonetic.chpl",
         "to": "src/generators/Random.chpl",
@@ -381,54 +429,6 @@
         "from": "lib/ocaml/WasmBindings.res",
         "to": "lib/ocaml/Generators.res",
         "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WasmLoader.res",
-        "to": "web/src/Hash.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/Hash.res",
-        "to": "web/src/WebDom.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WebDom.res",
-        "to": "web/src/WasmBindings.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "web/src/WasmBindings.res",
-        "to": "web/src/Generators.res",
-        "relation": "shared_dir:web/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/generators/src/leetspeak.rs",
-        "to": "crates/generators/src/phonetic.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/generators/src/phonetic.rs",
-        "to": "crates/generators/src/lib.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/generators/src/lib.rs",
-        "to": "crates/generators/src/pattern.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/dicti0nary.chpl",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -700,6 +700,20 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "crates/generators/src/leetspeak.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -730,6 +744,19 @@
       },
       {
         "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "lib/es6/web/src/App.res.js"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
@@ -754,33 +781,6 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "lib/es6/web/src/App.res.js"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "crates/generators/src/leetspeak.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   },

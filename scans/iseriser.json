@@ -334,13 +334,19 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "memory",
-    "cpu",
-    "disk"
+    "disk",
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "satellites/a2mliser/scripts/install-zig.sh",
+        "to": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:satellites/a2mliser/scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/customizer.rs",
         "to": "src/codegen/cartridge.rs",
@@ -366,12 +372,6 @@
         "weight": 1.0
       },
       {
-        "from": "satellites/a2mliser/scripts/install-zig.sh",
-        "to": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:satellites/a2mliser/scripts",
-        "weight": 1.0
-      },
-      {
         "from": "src/abi/idris_emitter.rs",
         "to": "src/abi/zig_ffi_parser.rs",
         "relation": "shared_dir:src/abi",
@@ -388,14 +388,18 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/scaffold.rs"
+          "src/abi/idris_emitter.rs",
+          "src/abi/verify.rs",
+          "src/manifest/mod.rs",
+          "src/scan/mod.rs",
+          "satellites/a2mliser/src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -428,18 +432,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/abi/idris_emitter.rs",
-          "src/abi/verify.rs",
-          "src/manifest/mod.rs",
-          "src/scan/mod.rs",
-          "satellites/a2mliser/src/manifest/mod.rs"
+          "src/codegen/scaffold.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "UnboundedAllocation",

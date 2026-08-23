@@ -272,14 +272,20 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
+    "network",
     "disk",
     "cpu",
-    "network",
-    "concurrency",
-    "memory"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "dipstick/tools/cli/migrate.sh",
+        "to": "dipstick/tools/cli/rollback.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
+        "weight": 1.0
+      },
       {
         "from": "dipstick/services/collector/tests/reflexive_tests.rs",
         "to": "dipstick/services/collector/tests/contract_tests.rs",
@@ -290,12 +296,6 @@
         "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "dipstick/services/collector/tests/aspect_tests.rs",
         "relation": "shared_dir:dipstick/services/collector/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/tools/cli/migrate.sh",
-        "to": "dipstick/tools/cli/rollback.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
         "weight": 1.0
       },
       {
@@ -525,6 +525,20 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "polygraph/browser-extension/src/content.js",
+          "polygraph/browser-extension/src/popup.js"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -537,6 +551,32 @@
           "OTP"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "dipstick/services/gateway-rescript/src/Gateway.res"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP"
+        ],
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "PanicPath",
@@ -553,32 +593,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "dipstick/services/gateway-rescript/src/Gateway.res"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "dipstick/tools/autoconfig/smtp_autoconfig.py"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -591,20 +605,6 @@
           "OTP"
         ],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "polygraph/browser-extension/src/content.js",
-          "polygraph/browser-extension/src/popup.js"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

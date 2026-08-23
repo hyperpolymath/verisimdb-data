@@ -644,9 +644,9 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "network",
     "disk",
+    "network",
+    "memory",
     "concurrency",
     "cpu"
   ],
@@ -801,16 +801,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "aerie-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -822,40 +812,28 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
+          "src/api/rust/src/backends.rs",
           "src/api/zig/librespeed_client.zig",
           "src/api/zig/verisim_client.zig",
           "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig",
-          "src/api/zig/main.zig"
+          "src/api/zig/smokeping_client.zig"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/api/rust/src/redis_client.rs",
-          "src/api/rust/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/stale/hyperglass/.tests/ga-backend-app.sh",
           "aerie-launcher.sh"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnsafeFFI",
@@ -872,6 +850,28 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/stale/hyperglass/.tests/ga-backend-app.sh",
+          "aerie-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/redis_client.rs",
+          "src/api/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -882,18 +882,18 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "src/api/rust/src/backends.rs",
           "src/api/zig/librespeed_client.zig",
           "src/api/zig/verisim_client.zig",
           "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig"
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/main.zig"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

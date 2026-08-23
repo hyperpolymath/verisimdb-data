@@ -502,13 +502,25 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
-    "cpu",
-    "disk"
+    "memory",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/presswerk-document/src/pdf/reader.rs",
+        "to": "crates/presswerk-document/src/pdf/writer.rs",
+        "relation": "shared_dir:crates/presswerk-document/src/pdf",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/services/data_dir.rs",
+        "to": "crates/presswerk-app/src/services/app_services.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/services",
+        "weight": 1.0
+      },
       {
         "from": "crates/presswerk-app/src/state.rs",
         "to": "crates/presswerk-app/src/main.rs",
@@ -525,48 +537,6 @@
         "from": "crates/presswerk-core/src/human_errors.rs",
         "to": "crates/presswerk-core/src/error.rs",
         "relation": "shared_dir:crates/presswerk-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-security/src/storage.rs",
-        "to": "crates/presswerk-security/src/audit.rs",
-        "relation": "shared_dir:crates/presswerk-security/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/pages/edit.rs",
-        "to": "crates/presswerk-app/src/pages/add_printer.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/pages/add_printer.rs",
-        "to": "crates/presswerk-app/src/pages/print.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/pages/print.rs",
-        "to": "crates/presswerk-app/src/pages/scan.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/pages/scan.rs",
-        "to": "crates/presswerk-app/src/pages/easy_print.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-document/src/pdf/reader.rs",
-        "to": "crates/presswerk-document/src/pdf/writer.rs",
-        "relation": "shared_dir:crates/presswerk-document/src/pdf",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/services/data_dir.rs",
-        "to": "crates/presswerk-app/src/services/app_services.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/services",
         "weight": 1.0
       },
       {
@@ -615,6 +585,36 @@
         "from": "crates/presswerk-print/src/discovery.rs",
         "to": "crates/presswerk-print/src/capabilities.rs",
         "relation": "shared_dir:crates/presswerk-print/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/pages/edit.rs",
+        "to": "crates/presswerk-app/src/pages/add_printer.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/pages/add_printer.rs",
+        "to": "crates/presswerk-app/src/pages/print.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/pages/print.rs",
+        "to": "crates/presswerk-app/src/pages/scan.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/pages/scan.rs",
+        "to": "crates/presswerk-app/src/pages/easy_print.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-security/src/storage.rs",
+        "to": "crates/presswerk-security/src/audit.rs",
+        "relation": "shared_dir:crates/presswerk-security/src",
         "weight": 1.0
       },
       {
@@ -853,18 +853,16 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "crates/presswerk-bridge/src/android/mod.rs",
-          "crates/presswerk-bridge/src/ios/mod.rs",
-          "crates/presswerk-bridge/src/ios/mod.rs"
+          "crates/presswerk-security/src/storage.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -877,6 +875,20 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "crates/presswerk-bridge/src/android/mod.rs",
+          "crates/presswerk-bridge/src/ios/mod.rs",
+          "crates/presswerk-bridge/src/ios/mod.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "PanicPath",
@@ -895,7 +907,7 @@
       },
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
           "crates/presswerk-bridge/src/android/mod.rs",
@@ -905,19 +917,7 @@
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/presswerk-security/src/storage.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }
