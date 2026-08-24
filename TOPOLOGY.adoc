@@ -1,0 +1,52 @@
+== TOPOLOGY.md — verisimdb-data
+
+=== Purpose
+
+This repository serves two explicit purposes per
+link:docs/decisions/ADR-0001-repo-purpose.adoc[`+docs/decisions/ADR-0001-repo-purpose.adoc+`]:
+
+[arabic]
+. *Flat-file data store* for panic-attacker scan results,
+hardware-crash-team findings, and drift snapshots received via GitHub
+Actions `+workflow_dispatch+` events. Maintains a master index for
+historical analysis of repository health and compliance drift over time.
+. *ABI dogfood* for the hyperpolymath Idris2 + Zig ABI standard (shared
+with `+proven+`, `+burble+`, `+gossamer+`). Lives in `+ffi/zig/+`.
+
+=== Module map
+
+....
+verisimdb-data/
+├── scans/             # panic-attacker scan results per repo (data)
+├── dispatch/          # dispatch records (data)
+├── patterns/          # drift / scan pattern definitions (data)
+├── recipes/           # ingest and aggregation recipes (data)
+├── outcomes/          # outcome records (data)
+├── policy/            # storage and retention policy notes (data)
+├── health/            # health-state snapshots (data)
+├── index.json         # master index of stored data (data)
+├── ffi/
+│   └── zig/           # Zig FFI implementation (ABI dogfood)
+├── scripts/           # ingest + index regen scripts (data)
+├── docs/
+│   └── decisions/     # ADRs
+└── .github/workflows/ # ingest + governance workflows
+....
+
+=== Data flow (Purpose 1)
+
+....
+[Workflow Dispatch] ──► [Ingest Handler] ──► [JSON Validation] ──► [File Storage]
+                                                                    │
+                                                        [Index Regen on push] ──► [Query Ready]
+....
+
+=== Integration points
+
+* *panic-attacker*: Upstream scanner sending results into `+scans/+`.
+* *hardware-crash-team*: Hardware failure analysis (Purpose 1 consumer).
+* *Drift detection*: Compliance change tracking against `+scans/+`
+history.
+* *verisimiser*: Consumes scan/drift data when wired to this repo as its
+sidecar storage. Not a runtime dependency.
+* *hyperpolymath CI/CD*: Automated data aggregation.
