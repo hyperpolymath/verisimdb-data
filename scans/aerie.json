@@ -259,15 +259,25 @@
     }
   ],
   "statistics": {
-    "total_lines": 9377,
+    "total_lines": 9621,
     "unsafe_blocks": 46,
     "panic_sites": 7,
     "unwrap_calls": 1,
     "allocation_sites": 8,
-    "io_operations": 63,
+    "io_operations": 71,
     "threading_constructs": 8
   },
   "file_statistics": [
+    {
+      "file_path": "examples/SafeDOMExample.affine",
+      "lines": 129,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
     {
       "file_path": "src/ui/tea/aerie_tea.js",
       "lines": 67,
@@ -644,14 +654,32 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "network",
-    "memory",
+    "disk",
     "concurrency",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/api/rust/src/resolvers.rs",
+        "to": "src/api/rust/src/redis_client.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/redis_client.rs",
+        "to": "src/api/rust/src/proof.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/proof.rs",
+        "to": "src/api/rust/src/main.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
       {
         "from": "specs/components/subscription-transport.k9.ncl",
         "to": "specs/components/policy-entitlements.k9.ncl",
@@ -777,29 +805,46 @@
         "to": "src/api/zig/main.zig",
         "relation": "shared_dir:src/api/zig",
         "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/resolvers.rs",
-        "to": "src/api/rust/src/redis_client.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/redis_client.rs",
-        "to": "src/api/rust/src/proof.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/proof.rs",
-        "to": "src/api/rust/src/main.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/redis_client.rs",
+          "src/api/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "src/api/zig/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -859,41 +904,6 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/rust/src/redis_client.rs",
-          "src/api/rust/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "src/api/zig/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig",
-          "src/api/zig/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
       }
     ]
   }

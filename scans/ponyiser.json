@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "ponyiser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
     {
@@ -50,15 +50,25 @@
     }
   ],
   "statistics": {
-    "total_lines": 8104,
+    "total_lines": 8183,
     "unsafe_blocks": 17,
     "panic_sites": 0,
     "unwrap_calls": 1,
     "allocation_sites": 15,
-    "io_operations": 8,
+    "io_operations": 16,
     "threading_constructs": 0
   },
   "file_statistics": [
+    {
+      "file_path": "examples/SafeDOMExample.affine",
+      "lines": 129,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
     {
       "file_path": "setup.sh",
       "lines": 287,
@@ -163,17 +173,11 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "disk",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/capability.rs",
@@ -184,6 +188,12 @@
         "from": "src/codegen/capability.rs",
         "to": "src/codegen/pony_gen.rs",
         "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
@@ -211,16 +221,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -229,6 +229,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",

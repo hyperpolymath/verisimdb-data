@@ -52,7 +52,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 8846,
+    "total_lines": 8263,
     "unsafe_blocks": 18,
     "panic_sites": 0,
     "unwrap_calls": 2,
@@ -233,24 +233,24 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "concurrency",
-    "memory",
     "cpu",
-    "network"
+    "network",
+    "memory",
+    "concurrency",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/d/core/repairs/dns_repair.d",
-        "to": "src/d/core/repairs/interface_repair.d",
-        "relation": "shared_dir:src/d/core/repairs",
-        "weight": 1.0
-      },
-      {
         "from": "src/ada/tui/network_ambulance_tui.adb",
         "to": "src/ada/tui/tui_display.adb",
         "relation": "shared_dir:src/ada/tui",
+        "weight": 1.0
+      },
+      {
+        "from": "src/diagnostics/connectivity.sh",
+        "to": "src/diagnostics/interfaces.sh",
+        "relation": "shared_dir:src/diagnostics",
         "weight": 1.0
       },
       {
@@ -266,9 +266,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/diagnostics/connectivity.sh",
-        "to": "src/diagnostics/interfaces.sh",
-        "relation": "shared_dir:src/diagnostics",
+        "from": "src/d/core/repairs/dns_repair.d",
+        "to": "src/d/core/repairs/interface_repair.d",
+        "relation": "shared_dir:src/d/core/repairs",
         "weight": 1.0
       }
     ]
@@ -276,14 +276,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
           "src-tauri/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -294,26 +294,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src-tauri/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src-tauri/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PathTraversal",
@@ -334,6 +314,26 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src-tauri/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src-tauri/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

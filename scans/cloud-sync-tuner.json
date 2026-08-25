@@ -5,15 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "SupplyChain",
-      "location": "packaging/nix/flake.nix",
-      "file": "packaging/nix/flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in packaging/nix/flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "CommandInjection",
       "location": "aur/submit-to-aur.sh",
       "file": "aur/submit-to-aur.sh",
@@ -39,25 +30,15 @@
     }
   ],
   "statistics": {
-    "total_lines": 6419,
+    "total_lines": 6270,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 15,
     "allocation_sites": 8,
-    "io_operations": 19,
+    "io_operations": 17,
     "threading_constructs": 6
   },
   "file_statistics": [
-    {
-      "file_path": "packaging/nix/default.nix",
-      "lines": 95,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
     {
       "file_path": "aur/submit-to-aur.sh",
       "lines": 90,
@@ -171,29 +152,39 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "disk",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/config-import.sh",
-        "to": "scripts/config-sync.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "tests/test_runner.adb",
         "to": "tests/verify_formal.adb",
         "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/config-import.sh",
+        "to": "scripts/config-sync.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "aur/submit-to-aur.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -223,16 +214,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "aur/submit-to-aur.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       }
     ]
   }

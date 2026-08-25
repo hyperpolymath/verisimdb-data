@@ -89,19 +89,10 @@
         "disk"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "deno.json",
-      "file": "deno.json",
-      "severity": "Medium",
-      "description": "1 import map entry/ies in deno.json without a version pin — specifiers are not reproducibly resolved",
-      "recommended_attack": [],
-      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 10508,
+    "total_lines": 10496,
     "unsafe_blocks": 12,
     "panic_sites": 0,
     "unwrap_calls": 6,
@@ -424,65 +415,17 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "memory",
     "disk",
-    "cpu"
+    "memory",
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/rpa-core/src/action.rs",
-        "to": "crates/rpa-core/src/error.rs",
-        "relation": "shared_dir:crates/rpa-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-plugin/src/sandbox.rs",
-        "to": "crates/rpa-plugin/src/host.rs",
-        "relation": "shared_dir:crates/rpa-plugin/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-plugin/src/host.rs",
-        "to": "crates/rpa-plugin/src/error.rs",
-        "relation": "shared_dir:crates/rpa-plugin/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-plugin/src/error.rs",
-        "to": "crates/rpa-plugin/src/api.rs",
-        "relation": "shared_dir:crates/rpa-plugin/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-events/src/groove.rs",
-        "to": "crates/rpa-events/src/lib.rs",
-        "relation": "shared_dir:crates/rpa-events/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-fs-workflow/src/config.rs",
-        "to": "crates/rpa-fs-workflow/src/watcher.rs",
-        "relation": "shared_dir:crates/rpa-fs-workflow/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-fs-workflow/src/watcher.rs",
-        "to": "crates/rpa-fs-workflow/src/runner.rs",
-        "relation": "shared_dir:crates/rpa-fs-workflow/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-fs-workflow/src/runner.rs",
-        "to": "crates/rpa-fs-workflow/src/main.rs",
-        "relation": "shared_dir:crates/rpa-fs-workflow/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/rpa-state/src/store.rs",
-        "to": "crates/rpa-state/src/backend.rs",
-        "relation": "shared_dir:crates/rpa-state/src",
+        "from": "crates/rpa-config/src/loader.rs",
+        "to": "crates/rpa-config/src/types.rs",
+        "relation": "shared_dir:crates/rpa-config/src",
         "weight": 1.0
       },
       {
@@ -522,9 +465,57 @@
         "weight": 1.0
       },
       {
-        "from": "crates/rpa-config/src/loader.rs",
-        "to": "crates/rpa-config/src/types.rs",
-        "relation": "shared_dir:crates/rpa-config/src",
+        "from": "crates/rpa-fs-workflow/src/config.rs",
+        "to": "crates/rpa-fs-workflow/src/watcher.rs",
+        "relation": "shared_dir:crates/rpa-fs-workflow/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-fs-workflow/src/watcher.rs",
+        "to": "crates/rpa-fs-workflow/src/runner.rs",
+        "relation": "shared_dir:crates/rpa-fs-workflow/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-fs-workflow/src/runner.rs",
+        "to": "crates/rpa-fs-workflow/src/main.rs",
+        "relation": "shared_dir:crates/rpa-fs-workflow/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-core/src/action.rs",
+        "to": "crates/rpa-core/src/error.rs",
+        "relation": "shared_dir:crates/rpa-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-state/src/store.rs",
+        "to": "crates/rpa-state/src/backend.rs",
+        "relation": "shared_dir:crates/rpa-state/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-plugin/src/sandbox.rs",
+        "to": "crates/rpa-plugin/src/host.rs",
+        "relation": "shared_dir:crates/rpa-plugin/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-plugin/src/host.rs",
+        "to": "crates/rpa-plugin/src/error.rs",
+        "relation": "shared_dir:crates/rpa-plugin/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-plugin/src/error.rs",
+        "to": "crates/rpa-plugin/src/api.rs",
+        "relation": "shared_dir:crates/rpa-plugin/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/rpa-events/src/groove.rs",
+        "to": "crates/rpa-events/src/lib.rs",
+        "relation": "shared_dir:crates/rpa-events/src",
         "weight": 1.0
       },
       {
@@ -712,30 +703,20 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/rpa-config/src/loader.rs",
-          "crates/rpa-fs-workflow/src/actions/archive.rs"
+          "crates/rpa-plugin/src/sandbox.rs",
+          "crates/rpa-plugin/src/host.rs",
+          "crates/rpa-events/src/groove.rs",
+          "crates/rpa-fs-workflow/src/runner.rs",
+          "crates/rpa-fs-workflow/src/main.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/rpa-config/src/loader.rs",
-          "crates/rpa-fs-workflow/src/actions/archive.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -754,20 +735,30 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/rpa-plugin/src/sandbox.rs",
-          "crates/rpa-plugin/src/host.rs",
-          "crates/rpa-events/src/groove.rs",
-          "crates/rpa-fs-workflow/src/runner.rs",
-          "crates/rpa-fs-workflow/src/main.rs"
+          "crates/rpa-config/src/loader.rs",
+          "crates/rpa-fs-workflow/src/actions/archive.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/rpa-config/src/loader.rs",
+          "crates/rpa-fs-workflow/src/actions/archive.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

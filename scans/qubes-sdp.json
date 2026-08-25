@@ -5,6 +5,17 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "UnsafeFFI",
+      "location": "src/WikiMain.affine",
+      "file": "src/WikiMain.affine",
+      "severity": "Medium",
+      "description": "36 FFI/external bindings in src/WikiMain.affine",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "CommandInjection",
       "location": "tests/security-tests.sh",
       "file": "tests/security-tests.sh",
@@ -49,15 +60,6 @@
       "recommended_attack": [
         "disk"
       ],
-      "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
       "test_context": "production"
     },
     {
@@ -122,23 +124,23 @@
     }
   ],
   "statistics": {
-    "total_lines": 5365,
-    "unsafe_blocks": 29,
+    "total_lines": 5337,
+    "unsafe_blocks": 36,
     "panic_sites": 0,
     "unwrap_calls": 0,
-    "allocation_sites": 2,
-    "io_operations": 22,
+    "allocation_sites": 0,
+    "io_operations": 26,
     "threading_constructs": 0
   },
   "file_statistics": [
     {
-      "file_path": "src/WikiMain.res",
-      "lines": 206,
-      "unsafe_blocks": 29,
+      "file_path": "src/WikiMain.affine",
+      "lines": 212,
+      "unsafe_blocks": 36,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
       "threading_constructs": 0
     },
     {
@@ -233,11 +235,18 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "qubes-setup.sh",
+        "to": "qubes-setup-advanced.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "tools/qubes-backup-validator.sh",
         "to": "tools/qubes-restore.sh",
@@ -254,12 +263,6 @@
         "from": "tools/qubes-template-manager.sh",
         "to": "tools/qubes-policy-generator.sh",
         "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "qubes-setup.sh",
-        "to": "qubes-setup-advanced.sh",
-        "relation": "shared_dir:",
         "weight": 1.0
       }
     ]
@@ -307,6 +310,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/WikiMain.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

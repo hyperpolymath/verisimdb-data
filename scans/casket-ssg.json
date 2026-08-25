@@ -5,6 +5,18 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "UnsafeCode",
+      "location": "src/Gnosis/I18n.hs",
+      "file": "src/Gnosis/I18n.hs",
+      "severity": "Critical",
+      "description": "1 unsafePerformIO in src/Gnosis/I18n.hs",
+      "recommended_attack": [
+        "concurrency",
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "InsecureProtocol",
       "location": "src/CasketGnosis.hs",
       "file": "src/CasketGnosis.hs",
@@ -14,20 +26,11 @@
         "network"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 3518,
-    "unsafe_blocks": 0,
+    "total_lines": 3586,
+    "unsafe_blocks": 1,
     "panic_sites": 0,
     "unwrap_calls": 6,
     "allocation_sites": 1,
@@ -53,6 +56,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/Gnosis/I18n.hs",
+      "lines": 102,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -107,9 +120,11 @@
     }
   ],
   "recommended_attacks": [
+    "network",
     "cpu",
+    "concurrency",
     "disk",
-    "network"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -127,6 +142,12 @@
       },
       {
         "from": "src/Gnosis/SixSCM.hs",
+        "to": "src/Gnosis/I18n.hs",
+        "relation": "shared_dir:src/Gnosis",
+        "weight": 1.0
+      },
+      {
+        "from": "src/Gnosis/I18n.hs",
         "to": "src/Gnosis/Paxos.hs",
         "relation": "shared_dir:src/Gnosis",
         "weight": 1.0
@@ -136,6 +157,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "src/Gnosis/I18n.hs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -144,6 +175,16 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 5.0,
+        "files": [
+          "src/Gnosis/I18n.hs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

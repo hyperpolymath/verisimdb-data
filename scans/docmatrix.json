@@ -56,8 +56,8 @@
     }
   ],
   "statistics": {
-    "total_lines": 12921,
-    "unsafe_blocks": 4,
+    "total_lines": 12344,
+    "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 2,
     "allocation_sites": 135,
@@ -93,16 +93,6 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ui/src/RuntimeBridge.res",
-      "lines": 216,
-      "unsafe_blocks": 4,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -298,18 +288,12 @@
   ],
   "recommended_attacks": [
     "concurrency",
-    "disk",
+    "memory",
     "cpu",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "tui/src/formatrix_tui-app.adb",
-        "to": "tui/src/formatrix_tui.adb",
-        "relation": "shared_dir:tui/src",
-        "weight": 1.0
-      },
       {
         "from": "crates/formatrix-core/src/traits.rs",
         "to": "crates/formatrix-core/src/ffi.rs",
@@ -365,6 +349,12 @@
         "weight": 1.0
       },
       {
+        "from": "tui/src/formatrix_tui-app.adb",
+        "to": "tui/src/formatrix_tui.adb",
+        "relation": "shared_dir:tui/src",
+        "weight": 1.0
+      },
+      {
         "from": "src/formatrix.zig",
         "to": "Networking",
         "relation": "framework",
@@ -381,12 +371,6 @@
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
-      },
-      {
-        "from": "ui/src/RuntimeBridge.res",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 12.0
       },
       {
         "from": "ffi/zig/src/main.zig",
@@ -501,6 +485,30 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/formatrix-core/src/formats/djot.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "crates/formatrix-core/src/ffi.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -514,28 +522,16 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "crates/formatrix-core/src/formats/djot.rs"
+          "crates/formatrix-core/src/ffi.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/formatrix-core/src/formats/djot.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -551,28 +547,16 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "crates/formatrix-core/src/ffi.rs"
+          "crates/formatrix-core/src/formats/djot.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "crates/formatrix-core/src/ffi.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

@@ -16,15 +16,6 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
-    },
-    {
       "category": "CommandInjection",
       "location": "scripts/verify-same-cube.sh",
       "file": "scripts/verify-same-cube.sh",
@@ -85,7 +76,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 2850,
+    "total_lines": 3040,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 9,
@@ -194,7 +185,7 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "crates/invariant-path-cli/src/main.rs",
@@ -202,7 +193,7 @@
           "crates/invariant-path-core/src/doc_claims.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PathTraversal",
@@ -213,6 +204,16 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/verify-same-cube.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -235,18 +236,8 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/verify-same-cube.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "crates/invariant-path-cli/src/main.rs",
@@ -254,7 +245,7 @@
           "crates/invariant-path-core/src/doc_claims.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

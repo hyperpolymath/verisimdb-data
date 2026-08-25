@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "idrisiser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
     {
@@ -62,15 +62,25 @@
     }
   ],
   "statistics": {
-    "total_lines": 7282,
+    "total_lines": 7411,
     "unsafe_blocks": 17,
     "panic_sites": 0,
     "unwrap_calls": 1,
     "allocation_sites": 11,
-    "io_operations": 9,
+    "io_operations": 17,
     "threading_constructs": 0
   },
   "file_statistics": [
+    {
+      "file_path": "examples/SafeDOMExample.affine",
+      "lines": 129,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
     {
       "file_path": "setup.sh",
       "lines": 287,
@@ -161,21 +171,32 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/mod.rs",
         "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -187,15 +208,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -217,16 +237,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

@@ -28,19 +28,10 @@
       ],
       "suppressed": true,
       "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
-      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 1723,
+    "total_lines": 1689,
     "unsafe_blocks": 1,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -93,8 +84,8 @@
   ],
   "recommended_attacks": [
     "memory",
-    "concurrency",
-    "cpu"
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -114,6 +105,16 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "host-rust/src/ffi.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -143,16 +144,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "host-rust/src/ffi.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
       }
     ]
   }
