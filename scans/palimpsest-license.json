@@ -111,8 +111,8 @@
     }
   ],
   "statistics": {
-    "total_lines": 12862,
-    "unsafe_blocks": 1,
+    "total_lines": 12843,
+    "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 1,
     "allocation_sites": 12,
@@ -273,16 +273,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "v1.0/examples/multi-language/src/Utils.res",
-      "lines": 26,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "scripts/generate-structure.sh",
       "lines": 127,
       "unsafe_blocks": 0,
@@ -305,12 +295,24 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
     "disk",
-    "network"
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bof-meetings/presentations/demo-dns-discovery.sh",
+        "to": "bof-meetings/presentations/demo-http-headers.sh",
+        "relation": "shared_dir:bof-meetings/presentations",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/generate-structure.sh",
+        "to": "scripts/migrate-version.jl",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/License.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/Bilingual.hs",
@@ -333,18 +335,6 @@
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/Reference.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/Metadata.hs",
         "relation": "shared_dir:TOOLS/validation/haskell/src/Palimpsest/Validator",
-        "weight": 1.0
-      },
-      {
-        "from": "bof-meetings/presentations/demo-dns-discovery.sh",
-        "to": "bof-meetings/presentations/demo-http-headers.sh",
-        "relation": "shared_dir:bof-meetings/presentations",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/generate-structure.sh",
-        "to": "scripts/migrate-version.jl",
-        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -438,12 +428,6 @@
         "weight": 1.0
       },
       {
-        "from": "v1.0/examples/multi-language/src/Utils.res",
-        "to": "Ecto",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
         "from": "scripts/generate-structure.sh",
         "to": "Ecto",
         "relation": "framework",
@@ -459,6 +443,18 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/pmpl-audit/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "PanicPath->Disk"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -489,20 +485,8 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-audit/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tools/pmpl-verify/src/main.rs"
@@ -510,19 +494,7 @@
         "frameworks": [
           "Ecto"
         ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-audit/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -539,7 +511,7 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "tools/pmpl-verify/src/main.rs"
@@ -547,7 +519,19 @@
         "frameworks": [
           "Ecto"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tools/pmpl-audit/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

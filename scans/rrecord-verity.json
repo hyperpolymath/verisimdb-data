@@ -119,12 +119,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 60144,
+    "total_lines": 60264,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 1,
     "allocation_sites": 2,
-    "io_operations": 34,
+    "io_operations": 72,
     "threading_constructs": 2
   },
   "file_statistics": [
@@ -179,6 +179,46 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "experiments/mozilla.d.affine",
+      "lines": 405,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 11,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "experiments/mozillaDom.d.affine",
+      "lines": 16,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "experiments/libunbound.d.affine",
+      "lines": 113,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "experiments/ctypes.d.affine",
+      "lines": 157,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 10,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "experiments/libunbound.js",
       "lines": 421,
       "unsafe_blocks": 0,
@@ -187,6 +227,16 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 2
+    },
+    {
+      "file_path": "RuntimeMessage.d.affine",
+      "lines": 139,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 10,
+      "threading_constructs": 0
     },
     {
       "file_path": "wasm/parser/src/lib.rs",
@@ -252,18 +302,12 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
     "network",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "modules/virusTotalIntegration.mjs.js",
-        "to": "modules/extensionUtils.mjs.js",
-        "relation": "shared_dir:modules",
-        "weight": 1.0
-      },
       {
         "from": "scripts/pack.js",
         "to": "scripts/atnChangelog.js",
@@ -275,51 +319,47 @@
         "to": "scripts/update-thirdparty.js",
         "relation": "shared_dir:scripts",
         "weight": 1.0
+      },
+      {
+        "from": "modules/virusTotalIntegration.mjs.js",
+        "to": "modules/extensionUtils.mjs.js",
+        "relation": "shared_dir:modules",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "RuntimeMessage.d.affine",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "experiments/mozilla.d.affine",
+        "to": "experiments/mozillaDom.d.affine",
+        "relation": "shared_dir:experiments",
+        "weight": 1.0
+      },
+      {
+        "from": "experiments/mozillaDom.d.affine",
+        "to": "experiments/libunbound.d.affine",
+        "relation": "shared_dir:experiments",
+        "weight": 1.0
+      },
+      {
+        "from": "experiments/libunbound.d.affine",
+        "to": "experiments/ctypes.d.affine",
+        "relation": "shared_dir:experiments",
+        "weight": 1.0
+      },
+      {
+        "from": "experiments/ctypes.d.affine",
+        "to": "experiments/libunbound.js",
+        "relation": "shared_dir:experiments",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "modules/dnsbl.mjs.js"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "wasm/parser/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "wasm/parser/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
@@ -347,6 +387,26 @@
       },
       {
         "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "wasm/parser/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 5.0,
         "files": [
@@ -355,6 +415,26 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "wasm/parser/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "modules/dnsbl.mjs.js"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

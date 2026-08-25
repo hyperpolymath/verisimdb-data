@@ -113,11 +113,11 @@
     }
   ],
   "statistics": {
-    "total_lines": 29112,
+    "total_lines": 26953,
     "unsafe_blocks": 19,
     "panic_sites": 1,
     "unwrap_calls": 0,
-    "allocation_sites": 160,
+    "allocation_sites": 150,
     "io_operations": 23,
     "threading_constructs": 5
   },
@@ -346,16 +346,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/bridges/VclTotalParser.res",
-      "lines": 1426,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 10,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "src/abi/Foreign.idr",
       "lines": 75,
       "unsafe_blocks": 3,
@@ -477,31 +467,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu",
     "disk",
-    "concurrency"
+    "concurrency",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/interface/parse/tests/conformance_emit.rs",
-        "to": "src/interface/parse/tests/wire.rs",
-        "relation": "shared_dir:src/interface/parse/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/parse/tests/wire.rs",
-        "to": "src/interface/parse/tests/parse.rs",
-        "relation": "shared_dir:src/interface/parse/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/lsp/src/lib.rs",
-        "to": "src/interface/lsp/src/main.rs",
-        "relation": "shared_dir:src/interface/lsp/src",
-        "weight": 1.0
-      },
       {
         "from": "tests/e2e_test.rs",
         "to": "tests/integration_test.rs",
@@ -533,9 +505,27 @@
         "weight": 1.0
       },
       {
+        "from": "src/interface/lsp/src/lib.rs",
+        "to": "src/interface/lsp/src/main.rs",
+        "relation": "shared_dir:src/interface/lsp/src",
+        "weight": 1.0
+      },
+      {
         "from": "src/interface/lint/src/lib.rs",
         "to": "src/interface/lint/src/main.rs",
         "relation": "shared_dir:src/interface/lint/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/parse/tests/conformance_emit.rs",
+        "to": "src/interface/parse/tests/wire.rs",
+        "relation": "shared_dir:src/interface/parse/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/parse/tests/wire.rs",
+        "to": "src/interface/parse/tests/parse.rs",
+        "relation": "shared_dir:src/interface/parse/tests",
         "weight": 1.0
       }
     ]
@@ -543,19 +533,8 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/recompute-wasm/src/lib.rs",
-          "src/interface/attest/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "src/interface/lint/src/main.rs",
@@ -563,27 +542,7 @@
           "src/interface/fmt/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/interface/lsp/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/interface/lsp/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -598,6 +557,39 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/recompute-wasm/src/lib.rs",
+          "src/interface/attest/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/interface/lsp/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/interface/lint/src/main.rs",
+          "src/interface/parse/src/bin/vclt-gate.rs",
+          "src/interface/fmt/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "ResourceLeak",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -608,16 +600,14 @@
         "relation": "ResourceLeak->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/interface/lint/src/main.rs",
-          "src/interface/parse/src/bin/vclt-gate.rs",
-          "src/interface/fmt/src/main.rs"
+          "src/interface/lsp/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

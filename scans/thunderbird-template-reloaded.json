@@ -14,29 +14,28 @@
         "network"
       ],
       "test_context": "test_only"
-    },
-    {
-      "category": "InputBoundary",
-      "location": "tests/bench_test.ts",
-      "file": "tests/bench_test.ts",
-      "severity": "Medium",
-      "description": "1 JSON.parse call(s) with 0 try block(s) in tests/bench_test.ts — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
     }
   ],
   "statistics": {
-    "total_lines": 3994,
-    "unsafe_blocks": 0,
+    "total_lines": 4175,
+    "unsafe_blocks": 1,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 1,
-    "io_operations": 4,
+    "io_operations": 79,
     "threading_constructs": 2
   },
   "file_statistics": [
+    {
+      "file_path": "examples/SafeDOMExample.affine",
+      "lines": 129,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
     {
       "file_path": "setup.sh",
       "lines": 278,
@@ -55,6 +54,76 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/contract_test.affine",
+      "lines": 152,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 10,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/bench_test.affine",
+      "lines": 138,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 10,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e_test.affine",
+      "lines": 144,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/aspect_test.affine",
+      "lines": 169,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 10,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/property_test.affine",
+      "lines": 178,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 10,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/smoke_test.affine",
+      "lines": 169,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 10,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/unit_test.affine",
+      "lines": 145,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 10,
       "threading_constructs": 0
     },
     {
@@ -79,11 +148,49 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu"
+    "disk",
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
-    "edges": []
+    "edges": [
+      {
+        "from": "tests/contract_test.affine",
+        "to": "tests/bench_test.affine",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/bench_test.affine",
+        "to": "tests/e2e_test.affine",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e_test.affine",
+        "to": "tests/aspect_test.affine",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/aspect_test.affine",
+        "to": "tests/property_test.affine",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property_test.affine",
+        "to": "tests/smoke_test.affine",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/smoke_test.affine",
+        "to": "tests/unit_test.affine",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      }
+    ]
   },
   "taint_matrix": {
     "rows": [
@@ -96,16 +203,6 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/bench_test.ts"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   }

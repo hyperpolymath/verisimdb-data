@@ -45,7 +45,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 7392,
+    "total_lines": 7402,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 50,
@@ -216,10 +216,10 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "concurrency",
-    "memory",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -227,12 +227,6 @@
         "from": "rust-parser/src/ast/visitor.rs",
         "to": "rust-parser/src/ast/pretty_print.rs",
         "relation": "shared_dir:rust-parser/src/ast",
-        "weight": 1.0
-      },
-      {
-        "from": "rust-parser/src/analyzer/call_graph.rs",
-        "to": "rust-parser/src/analyzer/termination.rs",
-        "relation": "shared_dir:rust-parser/src/analyzer",
         "weight": 1.0
       },
       {
@@ -257,6 +251,12 @@
         "from": "elixir-coordinator/lib/coordinator/work_generator.ex",
         "to": "elixir-coordinator/lib/coordinator/proof_tracker.ex",
         "relation": "shared_dir:elixir-coordinator/lib/coordinator",
+        "weight": 1.0
+      },
+      {
+        "from": "rust-parser/src/analyzer/call_graph.rs",
+        "to": "rust-parser/src/analyzer/termination.rs",
+        "relation": "shared_dir:rust-parser/src/analyzer",
         "weight": 1.0
       },
       {
@@ -361,7 +361,7 @@
     "rows": [
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "rust-parser/src/parser/parser.rs"
@@ -369,7 +369,31 @@
         "frameworks": [
           "OTP"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "deployment/arangodb/init-db.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "rust-parser/src/bin/oblibeny-cli.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -385,7 +409,7 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "rust-parser/src/parser/parser.rs"
@@ -393,7 +417,7 @@
         "frameworks": [
           "OTP"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -406,30 +430,6 @@
           "OTP"
         ],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "rust-parser/src/bin/oblibeny-cli.rs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "deployment/arangodb/init-db.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }
