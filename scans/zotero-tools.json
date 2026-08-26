@@ -869,11 +869,11 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
     "network",
     "concurrency",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -893,6 +893,30 @@
         "from": "formbd/migration/bin/publisher.jl",
         "to": "formbd/migration/bin/score.jl",
         "relation": "shared_dir:formbd/migration/bin",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/init-raczotbuild.rkt",
+        "to": "rescript-templater/init-zotero-plugin.sh",
+        "relation": "shared_dir:rescript-templater",
+        "weight": 1.0
+      },
+      {
+        "from": "zoterho-template/ZoteRhoTemplate.affine",
+        "to": "zoterho-template/Preferences.affine",
+        "relation": "shared_dir:zoterho-template",
+        "weight": 1.0
+      },
+      {
+        "from": "zoterho-template/Preferences.affine",
+        "to": "zoterho-template/RhodiumLinter.affine",
+        "relation": "shared_dir:zoterho-template",
+        "weight": 1.0
+      },
+      {
+        "from": "zoterho-template/RhodiumLinter.affine",
+        "to": "zoterho-template/bootstrap.affine",
+        "relation": "shared_dir:zoterho-template",
         "weight": 1.0
       },
       {
@@ -944,45 +968,15 @@
         "weight": 1.0
       },
       {
-        "from": "zotpress/scripts/build.affine",
-        "to": "zotpress/scripts/build-js.affine",
-        "relation": "shared_dir:zotpress/scripts",
+        "from": "formbd/migration/src/sync.jl",
+        "to": "formbd/migration/src/server.jl",
+        "relation": "shared_dir:formbd/migration/src",
         "weight": 1.0
       },
       {
-        "from": "zotpress/scripts/build-js.affine",
-        "to": "zotpress/scripts/build-css.affine",
-        "relation": "shared_dir:zotpress/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/scripts/sign-release.sh",
-        "to": "rescript-templater/scripts/generate-sbom.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/scripts/generate-sbom.sh",
-        "to": "rescript-templater/scripts/verify-release.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "zoterho-template/ZoteRhoTemplate.affine",
-        "to": "zoterho-template/Preferences.affine",
-        "relation": "shared_dir:zoterho-template",
-        "weight": 1.0
-      },
-      {
-        "from": "zoterho-template/Preferences.affine",
-        "to": "zoterho-template/RhodiumLinter.affine",
-        "relation": "shared_dir:zoterho-template",
-        "weight": 1.0
-      },
-      {
-        "from": "zoterho-template/RhodiumLinter.affine",
-        "to": "zoterho-template/bootstrap.affine",
-        "relation": "shared_dir:zoterho-template",
+        "from": "formbd/migration/src/server.jl",
+        "to": "formbd/migration/src/migrate.jl",
+        "relation": "shared_dir:formbd/migration/src",
         "weight": 1.0
       },
       {
@@ -1004,21 +998,27 @@
         "weight": 1.0
       },
       {
-        "from": "rescript-templater/init-raczotbuild.rkt",
-        "to": "rescript-templater/init-zotero-plugin.sh",
-        "relation": "shared_dir:rescript-templater",
+        "from": "zotpress/scripts/build.affine",
+        "to": "zotpress/scripts/build-js.affine",
+        "relation": "shared_dir:zotpress/scripts",
         "weight": 1.0
       },
       {
-        "from": "formbd/migration/src/sync.jl",
-        "to": "formbd/migration/src/server.jl",
-        "relation": "shared_dir:formbd/migration/src",
+        "from": "zotpress/scripts/build-js.affine",
+        "to": "zotpress/scripts/build-css.affine",
+        "relation": "shared_dir:zotpress/scripts",
         "weight": 1.0
       },
       {
-        "from": "formbd/migration/src/server.jl",
-        "to": "formbd/migration/src/migrate.jl",
-        "relation": "shared_dir:formbd/migration/src",
+        "from": "rescript-templater/scripts/sign-release.sh",
+        "to": "rescript-templater/scripts/generate-sbom.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/generate-sbom.sh",
+        "to": "rescript-templater/scripts/verify-release.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
         "weight": 1.0
       },
       {
@@ -1422,6 +1422,43 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/wasm/crypto/src/lib.rs"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/wasm/crypto/src/lib.rs"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -1435,16 +1472,17 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "fogbinder/src/wasm/crypto/src/lib.rs"
+          "formbd/migration/bin/doi.jl",
+          "formbd/migration/bin/score.jl"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -1479,44 +1517,6 @@
           "WebServer"
         ],
         "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "formbd/migration/bin/doi.jl",
-          "formbd/migration/bin/score.jl"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "fogbinder/src/wasm/crypto/src/lib.rs"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

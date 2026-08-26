@@ -281,38 +281,14 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "disk",
-    "network",
-    "concurrency",
     "memory",
-    "cpu"
+    "network",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "tests/validate.test.affine",
-        "to": "tests/validate.test.deno.js",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/verisimdb.zig",
-        "to": "src/interface/ffi/src/dbus.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/dbus.zig",
-        "to": "src/interface/ffi/src/main.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
-      },
       {
         "from": "src/core/health.affine",
         "to": "src/core/config.affine",
@@ -390,20 +366,44 @@
         "to": "src/core/scanner.eph",
         "relation": "shared_dir:src/core",
         "weight": 1.0
+      },
+      {
+        "from": "tests/validate.test.affine",
+        "to": "tests/validate.test.deno.js",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/verisimdb.zig",
+        "to": "src/interface/ffi/src/dbus.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/dbus.zig",
+        "to": "src/interface/ffi/src/main.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/core/monitor.eph"
+          "systemd/install.sh"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "InsecureProtocol",
@@ -416,6 +416,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/core/monitor.eph"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -424,16 +434,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "systemd/install.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }

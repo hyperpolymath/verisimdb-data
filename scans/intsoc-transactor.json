@@ -456,31 +456,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
+    "memory",
     "network",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/intsoc-cli/src/commands/submit.rs",
-        "to": "crates/intsoc-cli/src/commands/check.rs",
-        "relation": "shared_dir:crates/intsoc-cli/src/commands",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-cli/src/commands/check.rs",
-        "to": "crates/intsoc-cli/src/commands/init.rs",
-        "relation": "shared_dir:crates/intsoc-cli/src/commands",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-cli/src/commands/init.rs",
-        "to": "crates/intsoc-cli/src/commands/fix.rs",
-        "relation": "shared_dir:crates/intsoc-cli/src/commands",
-        "weight": 1.0
-      },
       {
         "from": "crates/intsoc-api/src/datatracker.rs",
         "to": "crates/intsoc-api/src/iana.rs",
@@ -488,27 +470,21 @@
         "weight": 1.0
       },
       {
-        "from": "nickel/policies/stream-rules.ncl",
-        "to": "nickel/policies/ipr-check.ncl",
-        "relation": "shared_dir:nickel/policies",
+        "from": "crates/intsoc-fixer/src/diff.rs",
+        "to": "crates/intsoc-fixer/src/engine.rs",
+        "relation": "shared_dir:crates/intsoc-fixer/src",
         "weight": 1.0
       },
       {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "crates/intsoc-fixer/src/engine.rs",
+        "to": "crates/intsoc-fixer/src/generators.rs",
+        "relation": "shared_dir:crates/intsoc-fixer/src",
         "weight": 1.0
       },
       {
-        "from": "crates/intsoc-parser/src/idnits.rs",
-        "to": "crates/intsoc-parser/src/plain_text.rs",
-        "relation": "shared_dir:crates/intsoc-parser/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/intsoc-parser/src/plain_text.rs",
-        "to": "crates/intsoc-parser/src/xml.rs",
-        "relation": "shared_dir:crates/intsoc-parser/src",
+        "from": "crates/intsoc-fixer/src/generators.rs",
+        "to": "crates/intsoc-fixer/src/lib.rs",
+        "relation": "shared_dir:crates/intsoc-fixer/src",
         "weight": 1.0
       },
       {
@@ -530,21 +506,33 @@
         "weight": 1.0
       },
       {
-        "from": "crates/intsoc-fixer/src/diff.rs",
-        "to": "crates/intsoc-fixer/src/engine.rs",
-        "relation": "shared_dir:crates/intsoc-fixer/src",
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
-        "from": "crates/intsoc-fixer/src/engine.rs",
-        "to": "crates/intsoc-fixer/src/generators.rs",
-        "relation": "shared_dir:crates/intsoc-fixer/src",
+        "from": "crates/intsoc-cli/src/commands/submit.rs",
+        "to": "crates/intsoc-cli/src/commands/check.rs",
+        "relation": "shared_dir:crates/intsoc-cli/src/commands",
         "weight": 1.0
       },
       {
-        "from": "crates/intsoc-fixer/src/generators.rs",
-        "to": "crates/intsoc-fixer/src/lib.rs",
-        "relation": "shared_dir:crates/intsoc-fixer/src",
+        "from": "crates/intsoc-cli/src/commands/check.rs",
+        "to": "crates/intsoc-cli/src/commands/init.rs",
+        "relation": "shared_dir:crates/intsoc-cli/src/commands",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-cli/src/commands/init.rs",
+        "to": "crates/intsoc-cli/src/commands/fix.rs",
+        "relation": "shared_dir:crates/intsoc-cli/src/commands",
+        "weight": 1.0
+      },
+      {
+        "from": "nickel/policies/stream-rules.ncl",
+        "to": "nickel/policies/ipr-check.ncl",
+        "relation": "shared_dir:nickel/policies",
         "weight": 1.0
       },
       {
@@ -569,6 +557,18 @@
         "from": "crates/intsoc-nickel/src/lib.rs",
         "to": "crates/intsoc-nickel/src/policy.rs",
         "relation": "shared_dir:crates/intsoc-nickel/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-parser/src/idnits.rs",
+        "to": "crates/intsoc-parser/src/plain_text.rs",
+        "relation": "shared_dir:crates/intsoc-parser/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/intsoc-parser/src/plain_text.rs",
+        "to": "crates/intsoc-parser/src/xml.rs",
+        "relation": "shared_dir:crates/intsoc-parser/src",
         "weight": 1.0
       },
       {
@@ -780,6 +780,18 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "crates/intsoc-cli/src/commands/init.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -795,32 +807,6 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/intsoc-cli/src/commands/submit.rs",
-          "crates/intsoc-cli/src/commands/check.rs",
-          "crates/intsoc-cli/src/commands/fix.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "crates/intsoc-cli/src/commands/init.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
@@ -832,6 +818,20 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/intsoc-cli/src/commands/submit.rs",
+          "crates/intsoc-cli/src/commands/check.rs",
+          "crates/intsoc-cli/src/commands/fix.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",

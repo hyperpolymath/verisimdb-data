@@ -323,31 +323,13 @@
   ],
   "recommended_attacks": [
     "memory",
-    "network",
-    "cpu",
     "concurrency",
-    "disk"
+    "cpu",
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "dipstick/tools/cli/migrate.sh",
-        "to": "dipstick/tools/cli/rollback.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/tests/reflexive_tests.rs",
-        "to": "dipstick/services/collector/tests/contract_tests.rs",
-        "relation": "shared_dir:dipstick/services/collector/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/tests/contract_tests.rs",
-        "to": "dipstick/services/collector/tests/aspect_tests.rs",
-        "relation": "shared_dir:dipstick/services/collector/tests",
-        "weight": 1.0
-      },
       {
         "from": "dipstick/services/collector/src/platforms.rs",
         "to": "dipstick/services/collector/src/lib.rs",
@@ -364,6 +346,24 @@
         "from": "dipstick/services/collector/src/scheduler.rs",
         "to": "dipstick/services/collector/src/main.rs",
         "relation": "shared_dir:dipstick/services/collector/src",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/tests/reflexive_tests.rs",
+        "to": "dipstick/services/collector/tests/contract_tests.rs",
+        "relation": "shared_dir:dipstick/services/collector/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/tests/contract_tests.rs",
+        "to": "dipstick/services/collector/tests/aspect_tests.rs",
+        "relation": "shared_dir:dipstick/services/collector/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/tools/cli/migrate.sh",
+        "to": "dipstick/tools/cli/rollback.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
         "weight": 1.0
       },
       {
@@ -635,22 +635,21 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "dipstick/services/pestle-observatory/src/observatory.affine",
-          "dipstick/services/analyzer-rescript/src/Main.affine"
+          "dipstick/tools/autoconfig/smtp_autoconfig.py"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "dipstick/services/collector/src/main.rs",
@@ -660,7 +659,7 @@
           "OTP",
           "Phoenix"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "InsecureProtocol",
@@ -678,7 +677,7 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "dipstick/services/collector/src/main.rs",
@@ -688,20 +687,21 @@
           "OTP",
           "Phoenix"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+          "dipstick/services/pestle-observatory/src/observatory.affine",
+          "dipstick/services/analyzer-rescript/src/Main.affine"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

@@ -420,8 +420,8 @@
   "recommended_attacks": [
     "memory",
     "disk",
-    "cpu",
-    "network"
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -456,6 +456,24 @@
         "weight": 1.0
       },
       {
+        "from": "src/bindings/DomBindings.affine",
+        "to": "src/bindings/Chrome.affine",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/affine/driver.affine",
+        "to": "tests/affine/extension_lifecycle_test.affine",
+        "relation": "shared_dir:tests/affine",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/build.affine",
+        "to": "scripts/build.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
         "from": "lib/ocaml/Background.affine",
         "to": "lib/ocaml/Storage.affine",
         "relation": "shared_dir:lib/ocaml",
@@ -478,24 +496,6 @@
         "to": "lib/ocaml/Chrome.affine",
         "relation": "shared_dir:lib/ocaml",
         "weight": 1.0
-      },
-      {
-        "from": "tests/affine/driver.affine",
-        "to": "tests/affine/extension_lifecycle_test.affine",
-        "relation": "shared_dir:tests/affine",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/build.affine",
-        "to": "scripts/build.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "src/bindings/DomBindings.affine",
-        "to": "src/bindings/Chrome.affine",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
       }
     ]
   },
@@ -514,6 +514,31 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/content/Content.affine",
+          "src/bindings/DomBindings.affine",
+          "src/bindings/Chrome.affine",
+          "lib/ocaml/Content.affine",
+          "lib/ocaml/DomBindings.affine",
+          "lib/ocaml/Chrome.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/dashboard/Dashboard.res.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -537,21 +562,6 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/content/Content.affine",
-          "src/bindings/DomBindings.affine",
-          "src/bindings/Chrome.affine",
-          "lib/ocaml/Content.affine",
-          "lib/ocaml/DomBindings.affine",
-          "lib/ocaml/Chrome.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -564,16 +574,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }
