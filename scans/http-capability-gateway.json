@@ -494,13 +494,25 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "concurrency",
     "disk",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bench/compare.exs",
+        "to": "bench/rebaseline.exs",
+        "relation": "shared_dir:bench",
+        "weight": 1.0
+      },
+      {
+        "from": "bench/rebaseline.exs",
+        "to": "bench/gateway_latency.exs",
+        "relation": "shared_dir:bench",
+        "weight": 1.0
+      },
       {
         "from": "test/e2e_boj_integration_test.exs",
         "to": "test/concurrency_test.exs",
@@ -529,18 +541,6 @@
         "from": "test/performance_test.exs",
         "to": "test/test_helper.exs",
         "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "bench/compare.exs",
-        "to": "bench/rebaseline.exs",
-        "relation": "shared_dir:bench",
-        "weight": 1.0
-      },
-      {
-        "from": "bench/rebaseline.exs",
-        "to": "bench/gateway_latency.exs",
-        "relation": "shared_dir:bench",
         "weight": 1.0
       },
       {
@@ -920,6 +920,19 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "lib/http_capability_gateway/policy_compiler.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "AtomExhaustion->Memory"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -948,19 +961,6 @@
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "lib/http_capability_gateway/policy_compiler.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "AtomExhaustion->Memory"
       }
     ]
   }

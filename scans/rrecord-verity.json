@@ -302,8 +302,8 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "network",
     "disk",
+    "network",
     "memory"
   ],
   "dependency_graph": {
@@ -361,6 +361,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "wasm/parser/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
         "severity_value": 5.0,
@@ -369,6 +379,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "InputBoundary",
@@ -386,24 +406,14 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "InsecureProtocol",
         "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "wasm/parser/src/lib.rs"
+          "modules/dnsbl.mjs.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -425,16 +435,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "modules/dnsbl.mjs.js"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       }
     ]
   }

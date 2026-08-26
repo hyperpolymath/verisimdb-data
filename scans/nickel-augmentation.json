@@ -222,24 +222,12 @@
     }
   ],
   "recommended_attacks": [
-    "network",
+    "disk",
     "cpu",
-    "disk"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "augmented/examples/nickel/infra.ncl",
-        "to": "augmented/examples/nickel/ci.ncl",
-        "relation": "shared_dir:augmented/examples/nickel",
-        "weight": 1.0
-      },
-      {
-        "from": "augmented/examples/nickel/ci.ncl",
-        "to": "augmented/examples/nickel/build.ncl",
-        "relation": "shared_dir:augmented/examples/nickel",
-        "weight": 1.0
-      },
       {
         "from": "augmented/lib/proven-bridge.ncl",
         "to": "augmented/lib/infra.ncl",
@@ -263,23 +251,23 @@
         "to": "augmented/lib/ci.ncl",
         "relation": "shared_dir:augmented/lib",
         "weight": 1.0
+      },
+      {
+        "from": "augmented/examples/nickel/infra.ncl",
+        "to": "augmented/examples/nickel/ci.ncl",
+        "relation": "shared_dir:augmented/examples/nickel",
+        "weight": 1.0
+      },
+      {
+        "from": "augmented/examples/nickel/ci.ncl",
+        "to": "augmented/examples/nickel/build.ncl",
+        "relation": "shared_dir:augmented/examples/nickel",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "tests/unit/test_basic.sh",
-          "tests/property/test_invariants.sh",
-          "tests/e2e/test_pipeline.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -304,6 +292,18 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "tests/unit/test_basic.sh",
+          "tests/property/test_invariants.sh",
+          "tests/e2e/test_pipeline.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "HardcodedSecret",
