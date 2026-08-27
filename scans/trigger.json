@@ -428,8 +428,8 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -452,21 +452,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/trigger/platforms/twitter/twitter-platform.adb",
-        "to": "src/trigger/platforms/twitter/twitter-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/twitter",
-        "weight": 1.0
-      },
-      {
-        "from": "src/trigger/diagnostics/system_check.adb",
-        "to": "src/trigger/diagnostics/self_healing.adb",
-        "relation": "shared_dir:src/trigger/diagnostics",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/unit/test_cryptography-body.adb",
-        "to": "tests/unit/test_cryptography.adb",
-        "relation": "shared_dir:tests/unit",
+        "from": "src/trigger/platforms/discord/discord-platform.ads",
+        "to": "src/trigger/platforms/discord/discord-platform.adb",
+        "relation": "shared_dir:src/trigger/platforms/discord",
         "weight": 1.0
       },
       {
@@ -476,15 +464,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/trigger/platforms/discord/discord-platform.ads",
-        "to": "src/trigger/platforms/discord/discord-platform.adb",
-        "relation": "shared_dir:src/trigger/platforms/discord",
-        "weight": 1.0
-      },
-      {
-        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
-        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/telegram",
+        "from": "src/trigger/diagnostics/system_check.adb",
+        "to": "src/trigger/diagnostics/self_healing.adb",
+        "relation": "shared_dir:src/trigger/diagnostics",
         "weight": 1.0
       },
       {
@@ -504,6 +486,24 @@
         "to": "src/trigger/cli/argument_parser.adb",
         "relation": "shared_dir:src/trigger/cli",
         "weight": 1.0
+      },
+      {
+        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
+        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/telegram",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/unit/test_cryptography-body.adb",
+        "to": "tests/unit/test_cryptography.adb",
+        "relation": "shared_dir:tests/unit",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trigger/platforms/twitter/twitter-platform.adb",
+        "to": "src/trigger/platforms/twitter/twitter-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/twitter",
+        "weight": 1.0
       }
     ]
   },
@@ -519,6 +519,38 @@
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "ffi/zig/twitter/twitter.zig"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/trigger-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/twitter/twitter.zig",
+          "ffi/zig/telegram/telegram.zig",
+          "ffi/zig/discord/discord.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -540,38 +572,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/twitter/twitter.zig",
-          "ffi/zig/telegram/telegram.zig",
-          "ffi/zig/discord/discord.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "ffi/zig/twitter/twitter.zig"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/trigger-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       }
     ]
   }

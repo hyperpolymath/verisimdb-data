@@ -187,8 +187,8 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "concurrency",
+    "disk",
     "memory",
     "cpu"
   ],
@@ -211,14 +211,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "scripts/maintenance/run-maintenance.sh"
+          "src/api/mod.rs",
+          "src/main.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -232,26 +233,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/api/mod.rs",
-          "src/main.rs"
+          "scripts/maintenance/run-maintenance.sh"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/mod.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -263,6 +252,17 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/mod.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

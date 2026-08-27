@@ -383,16 +383,46 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
+        "from": "ui/src/store/Persist.affine",
+        "to": "ui/src/store/Exchange.affine",
+        "relation": "shared_dir:ui/src/store",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/store/Exchange.affine",
+        "to": "ui/src/store/WasmStore.affine",
+        "relation": "shared_dir:ui/src/store",
+        "weight": 1.0
+      },
+      {
         "from": "ui/tests/UpdateTests.affine",
         "to": "ui/tests/WasmStoreTests.affine",
         "relation": "shared_dir:ui/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/reader.rs",
+        "to": "core/src/lambdadelta/builtins.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/builtins.rs",
+        "to": "core/src/lambdadelta/mod.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/mod.rs",
+        "to": "core/src/lambdadelta/eval.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
         "weight": 1.0
       },
       {
@@ -442,52 +472,20 @@
         "to": "core/src/wikilink.rs",
         "relation": "shared_dir:core/src",
         "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/reader.rs",
-        "to": "core/src/lambdadelta/builtins.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/builtins.rs",
-        "to": "core/src/lambdadelta/mod.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/mod.rs",
-        "to": "core/src/lambdadelta/eval.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/store/Persist.affine",
-        "to": "ui/src/store/Exchange.affine",
-        "relation": "shared_dir:ui/src/store",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/store/Exchange.affine",
-        "to": "ui/src/store/WasmStore.affine",
-        "relation": "shared_dir:ui/src/store",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "ui/src/store/Persist.affine",
-          "ui/src/store/WasmStore.affine",
-          "ui/src/bindings/DomBindings.affine"
+          "core/src/storage.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "InputBoundary",
@@ -522,14 +520,16 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "core/src/storage.rs"
+          "ui/src/store/Persist.affine",
+          "ui/src/store/WasmStore.affine",
+          "ui/src/bindings/DomBindings.affine"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "UnboundedAllocation",

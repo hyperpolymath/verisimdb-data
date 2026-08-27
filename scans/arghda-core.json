@@ -695,10 +695,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "memory",
     "cpu",
-    "network",
-    "memory"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -799,6 +799,48 @@
         "weight": 1.0
       },
       {
+        "from": "tests/mizar.rs",
+        "to": "tests/coq.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/coq.rs",
+        "to": "tests/lean.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/lean.rs",
+        "to": "tests/isabelle.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/isabelle.rs",
+        "to": "tests/smt.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/smt.rs",
+        "to": "tests/smoke.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/smoke.rs",
+        "to": "tests/idris2.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/provision-provers.sh",
+        "to": "scripts/check-spdx.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
         "from": "src/lint/coq.rs",
         "to": "src/lint/tab_mix.rs",
         "relation": "shared_dir:src/lint",
@@ -851,89 +893,11 @@
         "to": "src/lint/idris2.rs",
         "relation": "shared_dir:src/lint",
         "weight": 1.0
-      },
-      {
-        "from": "tests/mizar.rs",
-        "to": "tests/coq.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/coq.rs",
-        "to": "tests/lean.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/lean.rs",
-        "to": "tests/isabelle.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/isabelle.rs",
-        "to": "tests/smt.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/smt.rs",
-        "to": "tests/smoke.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/smoke.rs",
-        "to": "tests/idris2.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/provision-provers.sh",
-        "to": "scripts/check-spdx.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/provision-provers.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/dag.rs",
-          "src/event.rs",
-          "src/graph.rs",
-          "src/prover/mizar.rs",
-          "src/prover/lean.rs",
-          "src/prover/isabelle.rs",
-          "src/prover/idris2.rs",
-          "src/proven.rs",
-          "src/config.rs",
-          "src/lint/coq.rs",
-          "src/lint/tab_mix.rs",
-          "src/lint/lean.rs",
-          "src/lint/isabelle.rs",
-          "src/lint/postulate.rs",
-          "src/lint/escape_hatch.rs",
-          "src/lint/unpinned_headline.rs",
-          "src/lint/idris2.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -944,16 +908,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/provision-provers.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -982,14 +936,30 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "scripts/provision-provers.sh"
+          "src/dag.rs",
+          "src/event.rs",
+          "src/graph.rs",
+          "src/prover/mizar.rs",
+          "src/prover/lean.rs",
+          "src/prover/isabelle.rs",
+          "src/prover/idris2.rs",
+          "src/proven.rs",
+          "src/config.rs",
+          "src/lint/coq.rs",
+          "src/lint/tab_mix.rs",
+          "src/lint/lean.rs",
+          "src/lint/isabelle.rs",
+          "src/lint/postulate.rs",
+          "src/lint/escape_hatch.rs",
+          "src/lint/unpinned_headline.rs",
+          "src/lint/idris2.rs"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -1003,6 +973,16 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/provision-provers.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -1012,6 +992,26 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/provision-provers.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/provision-provers.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }
