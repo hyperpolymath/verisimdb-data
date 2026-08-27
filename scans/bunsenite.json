@@ -220,13 +220,19 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "disk",
     "concurrency",
-    "memory",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bindings/deno/example.affine",
+        "to": "bindings/deno/bunsenite.affine",
+        "relation": "shared_dir:bindings/deno",
+        "weight": 1.0
+      },
       {
         "from": "src/loader.rs",
         "to": "src/schema.rs",
@@ -244,26 +250,42 @@
         "to": "src/main.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
-      },
-      {
-        "from": "bindings/deno/example.affine",
-        "to": "bindings/deno/bunsenite.affine",
-        "relation": "shared_dir:bindings/deno",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "src/ffi.rs"
+          "src/loader.rs",
+          "src/schema.rs",
+          "src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnsafeFFI",
@@ -298,36 +320,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "src/main.rs"
+          "src/ffi.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/loader.rs",
-          "src/schema.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

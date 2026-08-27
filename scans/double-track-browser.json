@@ -418,49 +418,13 @@
     }
   ],
   "recommended_attacks": [
+    "network",
     "memory",
     "disk",
-    "network",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "rust_core/src/profile.rs",
-        "to": "rust_core/src/form_data.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/form_data.rs",
-        "to": "rust_core/src/activity.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/activity.rs",
-        "to": "rust_core/src/lib.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/lib.rs",
-        "to": "rust_core/src/schedule.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rust_core/src/schedule.rs",
-        "to": "rust_core/src/interests.rs",
-        "relation": "shared_dir:rust_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/bindings/DomBindings.affine",
-        "to": "src/bindings/Chrome.affine",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
       {
         "from": "tests/affine/driver.affine",
         "to": "tests/affine/extension_lifecycle_test.affine",
@@ -496,24 +460,66 @@
         "to": "lib/ocaml/Chrome.affine",
         "relation": "shared_dir:lib/ocaml",
         "weight": 1.0
+      },
+      {
+        "from": "src/bindings/DomBindings.affine",
+        "to": "src/bindings/Chrome.affine",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/profile.rs",
+        "to": "rust_core/src/form_data.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/form_data.rs",
+        "to": "rust_core/src/activity.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/activity.rs",
+        "to": "rust_core/src/lib.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/lib.rs",
+        "to": "rust_core/src/schedule.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rust_core/src/schedule.rs",
+        "to": "rust_core/src/interests.rs",
+        "relation": "shared_dir:rust_core/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "rust_core/src/profile.rs",
-          "rust_core/src/form_data.rs",
-          "rust_core/src/lib.rs",
-          "rust_core/src/schedule.rs",
-          "rust_core/src/interests.rs"
+          "src/dashboard/Dashboard.res.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/dashboard/Dashboard.res.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "UnsafeFFI",
@@ -529,26 +535,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -574,6 +560,20 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rust_core/src/profile.rs",
+          "rust_core/src/form_data.rs",
+          "rust_core/src/lib.rs",
+          "rust_core/src/schedule.rs",
+          "rust_core/src/interests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

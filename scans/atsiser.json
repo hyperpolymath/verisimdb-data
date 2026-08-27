@@ -199,18 +199,12 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.py",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/ats_gen.rs",
         "to": "src/codegen/parser.rs",
@@ -228,20 +222,37 @@
         "to": "src/codegen/compiler.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.py",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/parser.rs"
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UncheckedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "examples/safe-malloc/include/stdlib_subset.h"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -255,17 +266,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -276,14 +276,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UncheckedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "examples/safe-malloc/include/stdlib_subset.h"
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

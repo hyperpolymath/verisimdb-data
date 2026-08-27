@@ -1299,12 +1299,12 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "time",
-    "memory",
     "cpu",
+    "network",
+    "concurrency",
     "disk",
-    "network"
+    "time",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -1312,12 +1312,6 @@
         "from": "ssg-fixes/poly-ssg/scripts/validate-output.sh",
         "to": "ssg-fixes/poly-ssg/scripts/test-all.sh",
         "relation": "shared_dir:ssg-fixes/poly-ssg/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "implementations/wokelang/src/abi/Foreign.idr",
-        "to": "implementations/wokelang/src/abi/Types.idr",
-        "relation": "shared_dir:implementations/wokelang/src/abi",
         "weight": 1.0
       },
       {
@@ -1345,15 +1339,21 @@
         "weight": 1.0
       },
       {
-        "from": "stubs/prodigy/engine/src/prodigy_template.pl",
-        "to": "stubs/prodigy/engine/src/prodigy_core.pl",
-        "relation": "shared_dir:stubs/prodigy/engine/src",
-        "weight": 1.0
-      },
-      {
         "from": "ssg-fixes/noteg-ssg/engine/src/noteg_engine.ads",
         "to": "ssg-fixes/noteg-ssg/engine/src/noteg_engine.adb",
         "relation": "shared_dir:ssg-fixes/noteg-ssg/engine/src",
+        "weight": 1.0
+      },
+      {
+        "from": "implementations/wokelang/src/abi/Foreign.idr",
+        "to": "implementations/wokelang/src/abi/Types.idr",
+        "relation": "shared_dir:implementations/wokelang/src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "stubs/cloudanvil/engine/src/standard/anvil_standard.adb",
+        "to": "stubs/cloudanvil/engine/src/standard/anvil_standard.ads",
+        "relation": "shared_dir:stubs/cloudanvil/engine/src/standard",
         "weight": 1.0
       },
       {
@@ -1363,69 +1363,15 @@
         "weight": 1.0
       },
       {
-        "from": "stubs/cloudanvil/engine/src/standard/anvil_standard.adb",
-        "to": "stubs/cloudanvil/engine/src/standard/anvil_standard.ads",
-        "relation": "shared_dir:stubs/cloudanvil/engine/src/standard",
+        "from": "stubs/prodigy/engine/src/prodigy_template.pl",
+        "to": "stubs/prodigy/engine/src/prodigy_core.pl",
+        "relation": "shared_dir:stubs/prodigy/engine/src",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CryptoMisuse",
-        "sink_axis": "time",
-        "severity_value": 5.0,
-        "files": [
-          "ssg-fixes/poly-ssg/engines/terrapin-ssg/terrapin-ssg.py",
-          "ssg-fixes/poly-ssg/engines/milk-ssg/milk-ssg.py"
-        ],
-        "frameworks": [],
-        "relation": "CryptoMisuse->Time"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "implementations/wokelang/src/builder.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "ssg-fixes/poly-ssg/engines/terrapin-ssg/terrapin-ssg.py",
-          "implementations/wokelang/src/sitemap.rs"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CryptoMisuse",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "ssg-fixes/poly-ssg/engines/terrapin-ssg/terrapin-ssg.py",
-          "ssg-fixes/poly-ssg/engines/milk-ssg/milk-ssg.py"
-        ],
-        "frameworks": [],
-        "relation": "CryptoMisuse->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "implementations/wokelang/src/content.rs",
-          "implementations/wokelang/src/config.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -1437,15 +1383,15 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "CryptoMisuse",
+        "sink_axis": "time",
+        "severity_value": 5.0,
         "files": [
-          "implementations/wokelang/src/content.rs",
-          "implementations/wokelang/src/config.rs"
+          "ssg-fixes/poly-ssg/engines/terrapin-ssg/terrapin-ssg.py",
+          "ssg-fixes/poly-ssg/engines/milk-ssg/milk-ssg.py"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "CryptoMisuse->Time"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -1460,6 +1406,17 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "implementations/wokelang/src/content.rs",
+          "implementations/wokelang/src/config.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
         "severity_value": 5.0,
@@ -1472,6 +1429,27 @@
         "relation": "DynamicCodeExecution->Cpu"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "implementations/wokelang/src/content.rs",
+          "implementations/wokelang/src/config.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "implementations/wokelang/src/builder.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -1480,6 +1458,28 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "CryptoMisuse",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "ssg-fixes/poly-ssg/engines/terrapin-ssg/terrapin-ssg.py",
+          "ssg-fixes/poly-ssg/engines/milk-ssg/milk-ssg.py"
+        ],
+        "frameworks": [],
+        "relation": "CryptoMisuse->Network"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "ssg-fixes/poly-ssg/engines/terrapin-ssg/terrapin-ssg.py",
+          "implementations/wokelang/src/sitemap.rs"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }
