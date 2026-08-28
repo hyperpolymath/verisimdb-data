@@ -132,7 +132,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 24725,
+    "total_lines": 24724,
     "unsafe_blocks": 22,
     "panic_sites": 7,
     "unwrap_calls": 0,
@@ -393,7 +393,7 @@
     },
     {
       "file_path": "game-server-admin-launcher.sh",
-      "lines": 430,
+      "lines": 429,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -515,12 +515,18 @@
   "recommended_attacks": [
     "disk",
     "network",
-    "cpu",
     "memory",
+    "cpu",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/interface/ffi/test/mock_servers.zig",
+        "to": "src/interface/ffi/test/property_test.zig",
+        "relation": "shared_dir:src/interface/ffi/test",
+        "weight": 1.0
+      },
       {
         "from": "src/ui/tea/gsa_ffi.affine",
         "to": "src/ui/tea/gsa_gui.affine",
@@ -528,9 +534,45 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/ffi/test/mock_servers.zig",
-        "to": "src/interface/ffi/test/property_test.zig",
-        "relation": "shared_dir:src/interface/ffi/test",
+        "from": "play.sh",
+        "to": "game-server-admin-launcher.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/game_profiles.zig",
+        "to": "src/interface/ffi/src/server_actions.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/server_actions.zig",
+        "to": "src/interface/ffi/src/http_capability.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/http_capability.zig",
+        "to": "src/interface/ffi/src/groove_client.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/groove_client.zig",
+        "to": "src/interface/ffi/src/cli.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/cli.zig",
+        "to": "src/interface/ffi/src/config_extract.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/config_extract.zig",
+        "to": "src/interface/ffi/src/main.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
         "weight": 1.0
       },
       {
@@ -573,48 +615,6 @@
         "from": "src/core/Types.eph",
         "to": "src/core/GrooveClient.eph",
         "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/game_profiles.zig",
-        "to": "src/interface/ffi/src/server_actions.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/server_actions.zig",
-        "to": "src/interface/ffi/src/http_capability.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/http_capability.zig",
-        "to": "src/interface/ffi/src/groove_client.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/groove_client.zig",
-        "to": "src/interface/ffi/src/cli.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/cli.zig",
-        "to": "src/interface/ffi/src/config_extract.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/config_extract.zig",
-        "to": "src/interface/ffi/src/main.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "play.sh",
-        "to": "game-server-admin-launcher.sh",
-        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -682,15 +682,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "scripts/wizard.sh",
-          "scripts/steam-stage.sh"
+          "src/gui/fli/fli-terminal.js",
+          "src/gui/fli/fli-editable.js",
+          "src/gui/fli/fli-tooltip.js",
+          "src/gui/fli/fli-gauge.js"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "PathTraversal",
@@ -705,18 +707,8 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "game-server-admin-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
+        "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
           "src/gui/fli/fli-terminal.js",
@@ -725,7 +717,17 @@
           "src/gui/fli/fli-gauge.js"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "game-server-admin-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -738,17 +740,15 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "HardcodedSecret",
         "sink_axis": "network",
-        "severity_value": 3.5,
+        "severity_value": 5.0,
         "files": [
-          "src/gui/fli/fli-terminal.js",
-          "src/gui/fli/fli-editable.js",
-          "src/gui/fli/fli-tooltip.js",
-          "src/gui/fli/fli-gauge.js"
+          "scripts/wizard.sh",
+          "scripts/steam-stage.sh"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

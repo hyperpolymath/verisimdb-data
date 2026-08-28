@@ -301,35 +301,17 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
     "network",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/pack.js",
-        "to": "scripts/atnChangelog.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/atnChangelog.js",
-        "to": "scripts/update-thirdparty.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "modules/virusTotalIntegration.mjs.js",
         "to": "modules/extensionUtils.mjs.js",
         "relation": "shared_dir:modules",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "RuntimeMessage.d.affine",
-        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -355,21 +337,29 @@
         "to": "experiments/libunbound.js",
         "relation": "shared_dir:experiments",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/pack.js",
+        "to": "scripts/atnChangelog.js",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/atnChangelog.js",
+        "to": "scripts/update-thirdparty.js",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
+        "to": "RuntimeMessage.d.affine",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "wasm/parser/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
@@ -379,16 +369,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "InputBoundary",
@@ -417,6 +397,26 @@
       },
       {
         "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "wasm/parser/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 5.0,
         "files": [
@@ -428,13 +428,13 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "wasm/parser/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

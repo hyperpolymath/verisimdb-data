@@ -323,9 +323,9 @@
   ],
   "recommended_attacks": [
     "memory",
-    "concurrency",
     "cpu",
     "disk",
+    "concurrency",
     "network"
   ],
   "dependency_graph": {
@@ -349,6 +349,12 @@
         "weight": 1.0
       },
       {
+        "from": "dipstick/tools/cli/migrate.sh",
+        "to": "dipstick/tools/cli/rollback.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
+        "weight": 1.0
+      },
+      {
         "from": "dipstick/services/collector/tests/reflexive_tests.rs",
         "to": "dipstick/services/collector/tests/contract_tests.rs",
         "relation": "shared_dir:dipstick/services/collector/tests",
@@ -358,12 +364,6 @@
         "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "dipstick/services/collector/tests/aspect_tests.rs",
         "relation": "shared_dir:dipstick/services/collector/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/tools/cli/migrate.sh",
-        "to": "dipstick/tools/cli/rollback.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
         "weight": 1.0
       },
       {
@@ -635,47 +635,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "dipstick/tools/autoconfig/smtp_autoconfig.py"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "dipstick/services/collector/src/main.rs",
-          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "dipstick/services/gateway-rescript/src/Gateway.res",
-          "dipstick/services/gateway-rescript/src/Gateway.affine"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -702,6 +661,47 @@
           "Phoenix"
         ],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "dipstick/services/gateway-rescript/src/Gateway.res",
+          "dipstick/services/gateway-rescript/src/Gateway.affine"
+        ],
+        "frameworks": [
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "dipstick/services/collector/src/main.rs",
+          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+        ],
+        "frameworks": [
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

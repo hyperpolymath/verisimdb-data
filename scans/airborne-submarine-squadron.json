@@ -386,11 +386,11 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "concurrency",
+    "network",
     "disk",
+    "memory",
     "cpu",
-    "network"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -483,6 +483,17 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/compatibility_test.js",
+          "test/bench.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -494,23 +505,13 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -547,36 +548,24 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "test/compatibility_test.js",
-          "test/bench.js"
+          "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "run.js",
-          "launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "ExcessivePermissions",
@@ -588,6 +577,17 @@
         ],
         "frameworks": [],
         "relation": "ExcessivePermissions->Network"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "disk",
+        "severity_value": 3.5,
+        "files": [
+          "run.js",
+          "launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Disk"
       }
     ]
   }

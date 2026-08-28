@@ -729,11 +729,11 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu",
-    "network",
     "concurrency",
-    "memory"
+    "memory",
+    "network",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -894,6 +894,12 @@
         "weight": 1.0
       },
       {
+        "from": "vexometer/tests/test_runner.adb",
+        "to": "vexometer/tests/benchmark_runner.adb",
+        "relation": "shared_dir:vexometer/tests",
+        "weight": 1.0
+      },
+      {
         "from": "lazy-eliminator/src/trace.rs",
         "to": "lazy-eliminator/src/config.rs",
         "relation": "shared_dir:lazy-eliminator/src",
@@ -922,12 +928,6 @@
         "to": "lazy-eliminator/src/analyzer.rs",
         "relation": "shared_dir:lazy-eliminator/src",
         "weight": 1.0
-      },
-      {
-        "from": "vexometer/tests/test_runner.adb",
-        "to": "vexometer/tests/benchmark_runner.adb",
-        "relation": "shared_dir:vexometer/tests",
-        "weight": 1.0
       }
     ]
   },
@@ -935,7 +935,7 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "vext/vext-core/src/config.rs",
@@ -943,7 +943,17 @@
           "lazy-eliminator/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "vexometer/src/vexometer-reports.adb"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "HardcodedSecret",
@@ -957,7 +967,7 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "vext/vext-core/src/config.rs",
@@ -965,7 +975,7 @@
           "lazy-eliminator/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -990,16 +1000,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "vexometer/src/vexometer-reports.adb"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       }
     ]
   }
