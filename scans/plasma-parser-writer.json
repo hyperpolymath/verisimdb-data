@@ -339,12 +339,18 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "disk",
-    "cpu",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "plasma-parser/src/spdx/mod.rs",
+        "to": "plasma-parser/src/spdx/lexer.rs",
+        "relation": "shared_dir:plasma-parser/src/spdx",
+        "weight": 1.0
+      },
       {
         "from": "plasma-engine/src/diff.rs",
         "to": "plasma-engine/src/facts.rs",
@@ -376,12 +382,6 @@
         "weight": 1.0
       },
       {
-        "from": "plasma-parser/src/spdx/mod.rs",
-        "to": "plasma-parser/src/spdx/lexer.rs",
-        "relation": "shared_dir:plasma-parser/src/spdx",
-        "weight": 1.0
-      },
-      {
         "from": "src/audit.rs",
         "to": "src/diff_cmd.rs",
         "relation": "shared_dir:src",
@@ -398,25 +398,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/audit.rs",
-          "src/init.rs",
-          "src/migrate.rs",
-          "src/diff_cmd.rs",
-          "plasma-engine/src/facts.rs",
-          "plasma-engine/src/apply.rs",
-          "plasma-engine/src/schema.rs",
-          "plasma-parser/src/audit/scan.rs",
-          "plasma-parser/src/family/fallback.rs",
-          "plasma-parser/src/zone/boundary.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -425,6 +406,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "plasma-engine/src/schema.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -446,14 +437,23 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "plasma-engine/src/schema.rs"
+          "src/audit.rs",
+          "src/init.rs",
+          "src/migrate.rs",
+          "src/diff_cmd.rs",
+          "plasma-engine/src/facts.rs",
+          "plasma-engine/src/apply.rs",
+          "plasma-engine/src/schema.rs",
+          "plasma-parser/src/audit/scan.rs",
+          "plasma-parser/src/family/fallback.rs",
+          "plasma-parser/src/zone/boundary.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

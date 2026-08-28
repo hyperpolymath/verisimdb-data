@@ -339,19 +339,13 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu",
+    "concurrency",
     "memory",
-    "concurrency"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "bench/bench_lexer.rs",
-        "to": "bench/bench_sigma_ops.rs",
-        "relation": "shared_dir:bench",
-        "weight": 1.0
-      },
       {
         "from": "src/rust/src/sexpr.rs",
         "to": "src/rust/src/parser_jtv.rs",
@@ -389,6 +383,12 @@
         "weight": 1.0
       },
       {
+        "from": "bench/bench_lexer.rs",
+        "to": "bench/bench_sigma_ops.rs",
+        "relation": "shared_dir:bench",
+        "weight": 1.0
+      },
+      {
         "from": "verification/benchmarks/bench_lexer.rs",
         "to": "verification/benchmarks/bench_sigma_ops.rs",
         "relation": "shared_dir:verification/benchmarks",
@@ -409,6 +409,18 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rust/src/parser_jtv.rs",
+          "src/rust/src/parser.rs",
+          "src/rust/src/lexer.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -455,18 +467,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rust/src/parser_jtv.rs",
-          "src/rust/src/parser.rs",
-          "src/rust/src/lexer.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

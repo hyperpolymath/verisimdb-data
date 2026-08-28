@@ -466,65 +466,17 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "concurrency",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/observability.rs",
-        "to": "src/shutdown.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/shutdown.rs",
-        "to": "src/result_formatter.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/result_formatter.rs",
-        "to": "src/error.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/error.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/smoke.rs",
-        "to": "tests/lifecycle.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/lifecycle.rs",
-        "to": "tests/integration_tests.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/integration_tests.rs",
-        "to": "tests/seam_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "src/feedback/reranker.rs",
         "to": "src/feedback/corpus_delta.rs",
         "relation": "shared_dir:src/feedback",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -558,6 +510,30 @@
         "weight": 1.0
       },
       {
+        "from": "src/observability.rs",
+        "to": "src/shutdown.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/shutdown.rs",
+        "to": "src/result_formatter.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/result_formatter.rs",
+        "to": "src/error.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/error.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
         "from": "src/scheduler/retry.rs",
         "to": "src/scheduler/job_queue.rs",
         "relation": "shared_dir:src/scheduler",
@@ -567,6 +543,30 @@
         "from": "src/scheduler/job_queue.rs",
         "to": "src/scheduler/limiter.rs",
         "relation": "shared_dir:src/scheduler",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/smoke.rs",
+        "to": "tests/lifecycle.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/lifecycle.rs",
+        "to": "tests/integration_tests.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration_tests.rs",
+        "to": "tests/seam_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -1186,6 +1186,24 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/scheduler/job_queue.rs",
+          "src/scheduler/limiter.rs",
+          "src/api/rate_limit.rs",
+          "src/dispatcher/echidna_client.rs",
+          "fuzz/fuzz_targets/fuzz_hmac.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Database",
+          "WebServer"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
         "severity_value": 5.0,
@@ -1217,24 +1235,6 @@
           "WebServer"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/scheduler/job_queue.rs",
-          "src/scheduler/limiter.rs",
-          "src/api/rate_limit.rs",
-          "src/dispatcher/echidna_client.rs",
-          "fuzz/fuzz_targets/fuzz_hmac.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "Database",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

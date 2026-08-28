@@ -259,7 +259,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 9621,
+    "total_lines": 9620,
     "unsafe_blocks": 46,
     "panic_sites": 7,
     "unwrap_calls": 1,
@@ -644,7 +644,7 @@
     },
     {
       "file_path": "aerie-launcher.sh",
-      "lines": 430,
+      "lines": 429,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -655,31 +655,13 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
     "network",
-    "concurrency",
-    "disk"
+    "disk",
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/api/rust/src/resolvers.rs",
-        "to": "src/api/rust/src/redis_client.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/redis_client.rs",
-        "to": "src/api/rust/src/proof.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/proof.rs",
-        "to": "src/api/rust/src/main.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
       {
         "from": "src/api/zig/verb_governance.zig",
         "to": "src/api/zig/librespeed_client.zig",
@@ -805,25 +787,29 @@
         "to": "specs/components/subscription-auth-flow.k9.ncl",
         "relation": "shared_dir:specs/components",
         "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/resolvers.rs",
+        "to": "src/api/rust/src/redis_client.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/redis_client.rs",
+        "to": "src/api/rust/src/proof.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/proof.rs",
+        "to": "src/api/rust/src/main.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/rust/src/backends.rs",
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -834,6 +820,17 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/stale/hyperglass/.tests/ga-backend-app.sh",
+          "aerie-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -847,14 +844,18 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "aerie-launcher.sh"
+          "src/api/rust/src/backends.rs",
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/smokeping_client.zig"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "UnsafeCode",
@@ -895,15 +896,14 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/stale/hyperglass/.tests/ga-backend-app.sh",
           "aerie-launcher.sh"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }
