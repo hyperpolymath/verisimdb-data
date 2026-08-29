@@ -502,13 +502,19 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
     "disk",
-    "concurrency"
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/presswerk-document/src/pdf/reader.rs",
+        "to": "crates/presswerk-document/src/pdf/writer.rs",
+        "relation": "shared_dir:crates/presswerk-document/src/pdf",
+        "weight": 1.0
+      },
       {
         "from": "crates/presswerk-security/src/storage.rs",
         "to": "crates/presswerk-security/src/audit.rs",
@@ -540,6 +546,12 @@
         "weight": 1.0
       },
       {
+        "from": "crates/presswerk-app/src/services/data_dir.rs",
+        "to": "crates/presswerk-app/src/services/app_services.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/services",
+        "weight": 1.0
+      },
+      {
         "from": "crates/presswerk-core/src/types.rs",
         "to": "crates/presswerk-core/src/human_errors.rs",
         "relation": "shared_dir:crates/presswerk-core/src",
@@ -549,18 +561,6 @@
         "from": "crates/presswerk-core/src/human_errors.rs",
         "to": "crates/presswerk-core/src/error.rs",
         "relation": "shared_dir:crates/presswerk-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/services/data_dir.rs",
-        "to": "crates/presswerk-app/src/services/app_services.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/services",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-document/src/pdf/reader.rs",
-        "to": "crates/presswerk-document/src/pdf/writer.rs",
-        "relation": "shared_dir:crates/presswerk-document/src/pdf",
         "weight": 1.0
       },
       {
@@ -838,33 +838,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/presswerk-document/src/scan/enhance.rs",
-          "crates/presswerk-print/src/diagnostics.rs",
-          "crates/presswerk-print/src/discovery.rs",
-          "crates/presswerk-app/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/presswerk-security/src/storage.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -877,18 +850,6 @@
           "Networking"
         ],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/presswerk-security/src/storage.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -905,6 +866,18 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/presswerk-security/src/storage.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -918,6 +891,33 @@
           "Networking"
         ],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/presswerk-security/src/storage.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/presswerk-document/src/scan/enhance.rs",
+          "crates/presswerk-print/src/diagnostics.rs",
+          "crates/presswerk-print/src/discovery.rs",
+          "crates/presswerk-app/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

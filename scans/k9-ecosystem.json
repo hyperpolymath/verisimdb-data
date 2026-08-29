@@ -691,43 +691,13 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "disk",
+    "network",
     "concurrency",
     "memory",
-    "network"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "deno/src/K9_Renderer.affine",
-        "to": "deno/src/K9_Parser.affine",
-        "relation": "shared_dir:deno/src",
-        "weight": 1.0
-      },
-      {
-        "from": "deno/src/K9_Parser.affine",
-        "to": "deno/src/K9_Types.affine",
-        "relation": "shared_dir:deno/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rs/src/renderer.rs",
-        "to": "rs/src/parser.rs",
-        "relation": "shared_dir:rs/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rs/src/parser.rs",
-        "to": "rs/src/types.rs",
-        "relation": "shared_dir:rs/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rs/src/types.rs",
-        "to": "rs/src/error.rs",
-        "relation": "shared_dir:rs/src",
-        "weight": 1.0
-      },
       {
         "from": "rs/generated/idrisiser/idris2/K9/Verified/component_parser.idr",
         "to": "rs/generated/idrisiser/idris2/K9/Verified/round_trip.idr",
@@ -759,6 +729,24 @@
         "weight": 1.0
       },
       {
+        "from": "rs/src/renderer.rs",
+        "to": "rs/src/parser.rs",
+        "relation": "shared_dir:rs/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rs/src/parser.rs",
+        "to": "rs/src/types.rs",
+        "relation": "shared_dir:rs/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rs/src/types.rs",
+        "to": "rs/src/error.rs",
+        "relation": "shared_dir:rs/src",
+        "weight": 1.0
+      },
+      {
         "from": "lsp/src/completions.rs",
         "to": "lsp/src/diagnostics.rs",
         "relation": "shared_dir:lsp/src",
@@ -769,21 +757,23 @@
         "to": "lsp/src/main.rs",
         "relation": "shared_dir:lsp/src",
         "weight": 1.0
+      },
+      {
+        "from": "deno/src/K9_Renderer.affine",
+        "to": "deno/src/K9_Parser.affine",
+        "relation": "shared_dir:deno/src",
+        "weight": 1.0
+      },
+      {
+        "from": "deno/src/K9_Parser.affine",
+        "to": "deno/src/K9_Types.affine",
+        "relation": "shared_dir:deno/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "benchmarks/quick-bench.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -798,14 +788,15 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
         "files": [
-          "scripts/deploy-site.sh"
+          "benchmarks/quick-bench.sh",
+          "benchmarks/k9-bench.sh"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -820,16 +811,15 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "lsp/src/diagnostics.rs",
-          "tools/src/k9-init/src/main.rs",
-          "tools/src/k9-sign/src/main.rs"
+          "benchmarks/quick-bench.sh",
+          "benchmarks/k9-bench.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "ExcessivePermissions",
@@ -855,26 +845,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "benchmarks/quick-bench.sh",
-          "benchmarks/k9-bench.sh"
+          "scripts/deploy-site.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "benchmarks/quick-bench.sh",
-          "benchmarks/k9-bench.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "ExcessivePermissions->Network"
       },
       {
         "source_category": "MutationGap",
@@ -889,6 +867,28 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "benchmarks/quick-bench.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "lsp/src/diagnostics.rs",
+          "tools/src/k9-init/src/main.rs",
+          "tools/src/k9-sign/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

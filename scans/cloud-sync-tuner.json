@@ -152,39 +152,29 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/test_runner.adb",
-        "to": "tests/verify_formal.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/config-import.sh",
         "to": "scripts/config-sync.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/test_runner.adb",
+        "to": "tests/verify_formal.adb",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tray-daemon/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -197,13 +187,13 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "tray-daemon/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -214,6 +204,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tray-daemon/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

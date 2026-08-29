@@ -654,56 +654,14 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "network",
-    "disk",
     "cpu",
+    "disk",
+    "memory",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/api/zig/verb_governance.zig",
-        "to": "src/api/zig/librespeed_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/librespeed_client.zig",
-        "to": "src/api/zig/verisim_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/verisim_client.zig",
-        "to": "src/api/zig/redis_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/redis_client.zig",
-        "to": "src/api/zig/proof.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/proof.zig",
-        "to": "src/api/zig/hyperglass_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/hyperglass_client.zig",
-        "to": "src/api/zig/smokeping_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/smokeping_client.zig",
-        "to": "src/api/zig/main.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
       {
         "from": "specs/components/subscription-transport.k9.ncl",
         "to": "specs/components/policy-entitlements.k9.ncl",
@@ -805,11 +763,67 @@
         "to": "src/api/rust/src/main.rs",
         "relation": "shared_dir:src/api/rust/src",
         "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/verb_governance.zig",
+        "to": "src/api/zig/librespeed_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/librespeed_client.zig",
+        "to": "src/api/zig/verisim_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/verisim_client.zig",
+        "to": "src/api/zig/redis_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/redis_client.zig",
+        "to": "src/api/zig/proof.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/proof.zig",
+        "to": "src/api/zig/hyperglass_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/hyperglass_client.zig",
+        "to": "src/api/zig/smokeping_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/smokeping_client.zig",
+        "to": "src/api/zig/main.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -822,17 +836,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/stale/hyperglass/.tests/ga-backend-app.sh",
-          "aerie-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -842,6 +845,17 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/stale/hyperglass/.tests/ga-backend-app.sh",
+          "aerie-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "InsecureProtocol",
@@ -856,34 +870,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig",
-          "src/api/zig/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/smokeping_client.zig",
-          "src/api/zig/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "HardcodedSecret",
@@ -904,6 +890,20 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

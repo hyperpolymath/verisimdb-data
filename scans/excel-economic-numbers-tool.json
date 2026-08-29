@@ -515,25 +515,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu",
     "network",
-    "disk"
+    "disk",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/plugins/webhooks.jl",
-        "to": "src/plugins/plugin_system.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
-      },
-      {
-        "from": "src/plugins/plugin_system.jl",
-        "to": "src/plugins/marketplace.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
-      },
       {
         "from": "src/visualization/report_generator.jl",
         "to": "src/visualization/charts.rs",
@@ -544,6 +532,18 @@
         "from": "src/julia/server/authentication.jl",
         "to": "src/julia/server/rate_limiting.jl",
         "relation": "shared_dir:src/julia/server",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/webhooks.jl",
+        "to": "src/plugins/plugin_system.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/plugin_system.jl",
+        "to": "src/plugins/marketplace.jl",
+        "relation": "shared_dir:src/plugins",
         "weight": 1.0
       },
       {
@@ -605,14 +605,27 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
+          "src/julia/data_sources/IMF.jl",
+          "src/enterprise/saml_auth.jl"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "src/julia/data_sources/BEA.jl",
+          "src/julia/data_sources/Census.jl",
           "tests/julia/test_client.jl"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "MutationGap",
@@ -625,15 +638,24 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/julia/data_sources/IMF.jl",
-          "src/enterprise/saml_auth.jl"
+          "tests/julia/test_client.jl"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/visualization/charts.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "InputBoundary",
@@ -651,28 +673,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/visualization/charts.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "src/julia/data_sources/BEA.jl",
-          "src/julia/data_sources/Census.jl",
-          "tests/julia/test_client.jl"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "PanicPath",

@@ -220,10 +220,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "concurrency",
     "cpu",
-    "memory",
-    "concurrency"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -256,6 +256,28 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/loader.rs",
+          "src/schema.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src/ffi.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -267,13 +289,13 @@
       },
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
           "src/ffi.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -288,26 +310,6 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "bindings/rescript/Bunsenite.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/ffi.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -318,16 +320,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/loader.rs",
-          "src/schema.rs",
-          "src/main.rs"
+          "bindings/rescript/Bunsenite.affine"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

@@ -301,19 +301,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
+    "disk",
     "network",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "modules/virusTotalIntegration.mjs.js",
-        "to": "modules/extensionUtils.mjs.js",
-        "relation": "shared_dir:modules",
-        "weight": 1.0
-      },
       {
         "from": "experiments/mozilla.d.affine",
         "to": "experiments/mozillaDom.d.affine",
@@ -339,6 +333,18 @@
         "weight": 1.0
       },
       {
+        "from": "setup.sh",
+        "to": "RuntimeMessage.d.affine",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "modules/virusTotalIntegration.mjs.js",
+        "to": "modules/extensionUtils.mjs.js",
+        "relation": "shared_dir:modules",
+        "weight": 1.0
+      },
+      {
         "from": "scripts/pack.js",
         "to": "scripts/atnChangelog.js",
         "relation": "shared_dir:scripts",
@@ -349,62 +355,11 @@
         "to": "scripts/update-thirdparty.js",
         "relation": "shared_dir:scripts",
         "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "RuntimeMessage.d.affine",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/verify-rsr.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "modules/resultStorage.mjs.js",
-          "modules/dkim/favicon.mjs.js",
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
-          "test/helpers/initWebExtensions.mjs.js",
-          "test/unittest/authVerifierSpec.mjs.js",
-          "scripts/update-thirdparty.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "modules/dnsbl.mjs.js"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -425,6 +380,51 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "modules/dnsbl.mjs.js"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "modules/resultStorage.mjs.js",
+          "modules/dkim/favicon.mjs.js",
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
+          "test/helpers/initWebExtensions.mjs.js",
+          "test/unittest/authVerifierSpec.mjs.js",
+          "scripts/update-thirdparty.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/verify-rsr.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "PanicPath",
