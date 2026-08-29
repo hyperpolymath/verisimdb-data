@@ -120,7 +120,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 36128,
+    "total_lines": 36129,
     "unsafe_blocks": 13,
     "panic_sites": 1,
     "unwrap_calls": 16,
@@ -408,12 +408,36 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/typed-wasm-verify/src/cross.rs",
+        "to": "crates/typed-wasm-verify/src/verify.rs",
+        "relation": "shared_dir:crates/typed-wasm-verify/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/typed-wasm-verify/src/verify.rs",
+        "to": "crates/typed-wasm-verify/src/section.rs",
+        "relation": "shared_dir:crates/typed-wasm-verify/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/twasm_producer.zig",
+        "to": "ffi/zig/src/main.zig",
+        "relation": "shared_dir:ffi/zig/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/typed-wasm-verify/tests/cross_compat_real.rs",
+        "to": "crates/typed-wasm-verify/tests/cross_compat.rs",
+        "relation": "shared_dir:crates/typed-wasm-verify/tests",
+        "weight": 1.0
+      },
       {
         "from": "src/parser/Parser.affine",
         "to": "src/parser/Checker.affine",
@@ -461,35 +485,21 @@
         "to": "crates/typed-wasm-codegen/tests/corpus.rs",
         "relation": "shared_dir:crates/typed-wasm-codegen/tests",
         "weight": 1.0
-      },
-      {
-        "from": "crates/typed-wasm-verify/src/cross.rs",
-        "to": "crates/typed-wasm-verify/src/verify.rs",
-        "relation": "shared_dir:crates/typed-wasm-verify/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/typed-wasm-verify/src/verify.rs",
-        "to": "crates/typed-wasm-verify/src/section.rs",
-        "relation": "shared_dir:crates/typed-wasm-verify/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/twasm_producer.zig",
-        "to": "ffi/zig/src/main.zig",
-        "relation": "shared_dir:ffi/zig/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/typed-wasm-verify/tests/cross_compat_real.rs",
-        "to": "crates/typed-wasm-verify/tests/cross_compat.rs",
-        "relation": "shared_dir:crates/typed-wasm-verify/tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/parser/ParserTests.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -502,46 +512,6 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/typed-wasm-codegen/src/bin/tw.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tools/provision.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "tools/provision.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/parser/ParserTests.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -549,6 +519,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "tools/provision.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -563,14 +543,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "tools/provision.sh"
+          "crates/typed-wasm-codegen/src/bin/tw.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -593,6 +573,26 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/provision.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "tools/provision.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

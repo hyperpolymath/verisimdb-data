@@ -384,11 +384,29 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "core/src/lambdadelta/reader.rs",
+        "to": "core/src/lambdadelta/builtins.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/builtins.rs",
+        "to": "core/src/lambdadelta/mod.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/mod.rs",
+        "to": "core/src/lambdadelta/eval.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
       {
         "from": "ui/src/Update.affine",
         "to": "ui/src/Main.affine",
@@ -426,24 +444,6 @@
         "weight": 1.0
       },
       {
-        "from": "core/src/lambdadelta/reader.rs",
-        "to": "core/src/lambdadelta/builtins.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/builtins.rs",
-        "to": "core/src/lambdadelta/mod.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/mod.rs",
-        "to": "core/src/lambdadelta/eval.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
         "from": "core/src/exchange.rs",
         "to": "core/src/note.rs",
         "relation": "shared_dir:core/src",
@@ -478,6 +478,38 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "ui/src/store/Persist.affine",
+          "ui/src/store/WasmStore.affine",
+          "ui/src/bindings/DomBindings.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "ui/tests/contract.test.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "core/src/storage.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -500,18 +532,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "ui/src/store/Persist.affine",
-          "ui/src/store/WasmStore.affine",
-          "ui/src/bindings/DomBindings.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -520,26 +540,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "core/src/storage.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "ui/tests/contract.test.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   }

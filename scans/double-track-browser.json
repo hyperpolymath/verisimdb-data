@@ -419,18 +419,12 @@
   ],
   "recommended_attacks": [
     "memory",
+    "network",
     "cpu",
-    "disk",
-    "network"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/bindings/DomBindings.affine",
-        "to": "src/bindings/Chrome.affine",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
       {
         "from": "rust_core/src/profile.rs",
         "to": "rust_core/src/form_data.rs",
@@ -486,15 +480,21 @@
         "weight": 1.0
       },
       {
-        "from": "tests/affine/driver.affine",
-        "to": "tests/affine/extension_lifecycle_test.affine",
-        "relation": "shared_dir:tests/affine",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/build.affine",
         "to": "scripts/build.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/bindings/DomBindings.affine",
+        "to": "src/bindings/Chrome.affine",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/affine/driver.affine",
+        "to": "tests/affine/extension_lifecycle_test.affine",
+        "relation": "shared_dir:tests/affine",
         "weight": 1.0
       }
     ]
@@ -532,16 +532,6 @@
       },
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
@@ -549,6 +539,17 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "tests/property/extension_properties_test.affine",
+          "tests/aspect/security_test.affine"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "PanicPath",
@@ -565,15 +566,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "tests/property/extension_properties_test.affine",
-          "tests/aspect/security_test.affine"
+          "src/dashboard/Dashboard.res.js"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

@@ -186,9 +186,9 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "concurrency",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
@@ -324,16 +324,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "vext-core/src/config.rs"
+          "vext-tools/src/bindings/Std.affine",
+          "vext-tools/src/bindings/Deno.affine"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -348,17 +349,16 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "vext-tools/src/bindings/Std.affine",
-          "vext-tools/src/bindings/Deno.affine"
+          "vext-core/src/config.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

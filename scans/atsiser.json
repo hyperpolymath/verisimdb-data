@@ -199,9 +199,9 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -234,14 +234,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/parser.rs"
+          "src/codegen/parser.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -254,15 +255,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UncheckedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
         "files": [
-          "src/codegen/parser.rs",
-          "src/manifest/mod.rs"
+          "examples/safe-malloc/include/stdlib_subset.h"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UncheckedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -276,14 +276,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UncheckedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "examples/safe-malloc/include/stdlib_subset.h"
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

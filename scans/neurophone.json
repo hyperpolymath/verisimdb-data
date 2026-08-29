@@ -281,11 +281,11 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "network",
-    "concurrency",
+    "cpu",
     "memory",
-    "cpu"
+    "network",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -588,22 +588,8 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/uninstall.sh",
-          "scripts/install-on-phone.sh"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "crates/bt-presence/build.rs"
@@ -612,7 +598,7 @@
           "Concurrent",
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "HardcodedSecret",
@@ -629,7 +615,7 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "crates/bt-presence/build.rs"
@@ -638,7 +624,21 @@
           "Concurrent",
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/uninstall.sh",
+          "scripts/install-on-phone.sh"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

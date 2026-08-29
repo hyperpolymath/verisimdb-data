@@ -355,13 +355,31 @@
   ],
   "recommended_attacks": [
     "disk",
-    "network",
-    "cpu",
     "memory",
-    "concurrency"
+    "cpu",
+    "concurrency",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "indieweb2-bastion/policy/curps/policy.ncl",
+        "to": "indieweb2-bastion/policy/curps/webmention.ncl",
+        "relation": "shared_dir:indieweb2-bastion/policy/curps",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
+        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
+        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
+        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/main.rs",
+        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
+        "weight": 1.0
+      },
       {
         "from": "indieweb2-bastion/graphql-dns-api/src/resolvers.rs",
         "to": "indieweb2-bastion/graphql-dns-api/src/blockchain.rs",
@@ -381,27 +399,9 @@
         "weight": 1.0
       },
       {
-        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
-        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
-        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
-        "weight": 1.0
-      },
-      {
-        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
-        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/main.rs",
-        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
-        "weight": 1.0
-      },
-      {
         "from": "backend/ada-core/src/civicconnect-accounts.ads",
         "to": "backend/ada-core/src/civicconnect.ads",
         "relation": "shared_dir:backend/ada-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "indieweb2-bastion/policy/curps/policy.ncl",
-        "to": "indieweb2-bastion/policy/curps/webmention.ncl",
-        "relation": "shared_dir:indieweb2-bastion/policy/curps",
         "weight": 1.0
       },
       {
@@ -877,18 +877,19 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "UncheckedError",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 1.0,
         "files": [
-          "backend/elixir-phoenix/lib/civic_web.ex"
+          "backend/rust-api/src/api/verify.rs",
+          "backend/ada-core/src/civicconnect-verification.adb"
         ],
         "frameworks": [
           "Phoenix",
           "WebServer",
           "Ecto"
         ],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "InputBoundary",
@@ -906,6 +907,20 @@
         "relation": "InputBoundary->Cpu"
       },
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "backend/elixir-phoenix/lib/civic_web.ex"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "WebServer",
+          "Ecto"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -918,21 +933,6 @@
           "Ecto"
         ],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "backend/rust-api/src/api/verify.rs",
-          "backend/ada-core/src/civicconnect-verification.adb"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "WebServer",
-          "Ecto"
-        ],
-        "relation": "UncheckedError->Cpu"
       }
     ]
   }

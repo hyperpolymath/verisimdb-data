@@ -427,22 +427,34 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "memory",
     "disk",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
-        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/telegram",
+        "from": "tests/test_runner.adb",
+        "to": "tests/test_trigger.adb",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
-        "from": "src/trigger/diagnostics/system_check.adb",
-        "to": "src/trigger/diagnostics/self_healing.adb",
-        "relation": "shared_dir:src/trigger/diagnostics",
+        "from": "tests/test_trigger.adb",
+        "to": "tests/test_harness.adb",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/test_harness.adb",
+        "to": "tests/test_harness-body.adb",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/unit/test_cryptography-body.adb",
+        "to": "tests/unit/test_cryptography.adb",
+        "relation": "shared_dir:tests/unit",
         "weight": 1.0
       },
       {
@@ -476,27 +488,15 @@
         "weight": 1.0
       },
       {
-        "from": "tests/test_runner.adb",
-        "to": "tests/test_trigger.adb",
-        "relation": "shared_dir:tests",
+        "from": "src/trigger/diagnostics/system_check.adb",
+        "to": "src/trigger/diagnostics/self_healing.adb",
+        "relation": "shared_dir:src/trigger/diagnostics",
         "weight": 1.0
       },
       {
-        "from": "tests/test_trigger.adb",
-        "to": "tests/test_harness.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_harness.adb",
-        "to": "tests/test_harness-body.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/unit/test_cryptography-body.adb",
-        "to": "tests/unit/test_cryptography.adb",
-        "relation": "shared_dir:tests/unit",
+        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
+        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/telegram",
         "weight": 1.0
       },
       {
@@ -509,18 +509,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/twitter/twitter.zig",
-          "ffi/zig/telegram/telegram.zig",
-          "ffi/zig/discord/discord.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
@@ -544,14 +532,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "scripts/trigger-launcher.sh"
+          "ffi/zig/twitter/twitter.zig"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "UnsafeFFI",
@@ -564,14 +552,26 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "ffi/zig/twitter/twitter.zig"
+          "ffi/zig/twitter/twitter.zig",
+          "ffi/zig/telegram/telegram.zig",
+          "ffi/zig/discord/discord.zig"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/trigger-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

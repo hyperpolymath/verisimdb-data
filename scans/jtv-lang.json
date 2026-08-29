@@ -427,24 +427,12 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
-    "memory",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/jtv-core/tests/contract_tests.rs",
-        "to": "crates/jtv-core/tests/mutation_killers.rs",
-        "relation": "shared_dir:crates/jtv-core/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/jtv-core/tests/mutation_killers.rs",
-        "to": "crates/jtv-core/tests/conformance_tests.rs",
-        "relation": "shared_dir:crates/jtv-core/tests",
-        "weight": 1.0
-      },
       {
         "from": "viper-pkg/src/registry.jl",
         "to": "viper-pkg/src/install.jl",
@@ -455,6 +443,30 @@
         "from": "viper-pkg/src/install.jl",
         "to": "viper-pkg/src/ViperPkg.jl",
         "relation": "shared_dir:viper-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/jtv-cli/src/rsr_check.rs",
+        "to": "crates/jtv-cli/src/repl.rs",
+        "relation": "shared_dir:crates/jtv-cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/jtv-cli/src/repl.rs",
+        "to": "crates/jtv-cli/src/main.rs",
+        "relation": "shared_dir:crates/jtv-cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/jtv-core/tests/contract_tests.rs",
+        "to": "crates/jtv-core/tests/mutation_killers.rs",
+        "relation": "shared_dir:crates/jtv-core/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/jtv-core/tests/mutation_killers.rs",
+        "to": "crates/jtv-core/tests/conformance_tests.rs",
+        "relation": "shared_dir:crates/jtv-core/tests",
         "weight": 1.0
       },
       {
@@ -527,18 +539,6 @@
         "from": "crates/jtv-core/src/ast.rs",
         "to": "crates/jtv-core/src/error.rs",
         "relation": "shared_dir:crates/jtv-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/jtv-cli/src/rsr_check.rs",
-        "to": "crates/jtv-cli/src/repl.rs",
-        "relation": "shared_dir:crates/jtv-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/jtv-cli/src/repl.rs",
-        "to": "crates/jtv-cli/src/main.rs",
-        "relation": "shared_dir:crates/jtv-cli/src",
         "weight": 1.0
       },
       {
@@ -738,30 +738,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "UncheckedError",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/jtv-cli/src/rsr_check.rs",
-          "crates/jtv-cli/src/repl.rs",
-          "crates/jtv-cli/src/main.rs"
+          "packages/jtv-analyzer/src/Main.res"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/jtv-core/src/purity.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
+        "relation": "UncheckedError->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -776,30 +762,6 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "packages/jtv-analyzer/src/Main.res"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UncheckedError->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "setup.sh"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -824,6 +786,44 @@
           "Networking"
         ],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/jtv-core/src/purity.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "setup.sh"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/jtv-cli/src/rsr_check.rs",
+          "crates/jtv-cli/src/repl.rs",
+          "crates/jtv-cli/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
