@@ -216,13 +216,25 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
     "concurrency",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "rust-parser/src/analyzer/call_graph.rs",
+        "to": "rust-parser/src/analyzer/termination.rs",
+        "relation": "shared_dir:rust-parser/src/analyzer",
+        "weight": 1.0
+      },
+      {
+        "from": "rust-parser/src/ast/visitor.rs",
+        "to": "rust-parser/src/ast/pretty_print.rs",
+        "relation": "shared_dir:rust-parser/src/ast",
+        "weight": 1.0
+      },
       {
         "from": "elixir-coordinator/lib/coordinator/database.ex",
         "to": "elixir-coordinator/lib/coordinator/property_manager.ex",
@@ -245,18 +257,6 @@
         "from": "elixir-coordinator/lib/coordinator/work_generator.ex",
         "to": "elixir-coordinator/lib/coordinator/proof_tracker.ex",
         "relation": "shared_dir:elixir-coordinator/lib/coordinator",
-        "weight": 1.0
-      },
-      {
-        "from": "rust-parser/src/ast/visitor.rs",
-        "to": "rust-parser/src/ast/pretty_print.rs",
-        "relation": "shared_dir:rust-parser/src/ast",
-        "weight": 1.0
-      },
-      {
-        "from": "rust-parser/src/analyzer/call_graph.rs",
-        "to": "rust-parser/src/analyzer/termination.rs",
-        "relation": "shared_dir:rust-parser/src/analyzer",
         "weight": 1.0
       },
       {
@@ -360,6 +360,18 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "deployment/arangodb/init-db.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -394,18 +406,6 @@
           "OTP"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "deployment/arangodb/init-db.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",

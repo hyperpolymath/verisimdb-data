@@ -983,36 +983,12 @@
   "recommended_attacks": [
     "cpu",
     "disk",
+    "concurrency",
     "memory",
-    "network",
-    "concurrency"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "project-wharf/deploy/setup.sh",
-        "to": "project-wharf/deploy/verify-sqli.sh",
-        "relation": "shared_dir:project-wharf/deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "project-wharf/deploy/verify-sqli.sh",
-        "to": "project-wharf/deploy/local-test.sh",
-        "relation": "shared_dir:project-wharf/deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "project-wharf/bin/yacht-agent/src/ebpf.rs",
-        "to": "project-wharf/bin/yacht-agent/src/main.rs",
-        "relation": "shared_dir:project-wharf/bin/yacht-agent/src",
-        "weight": 1.0
-      },
-      {
-        "from": "praxis/wp_praxis_core/src/parser/toml.rs",
-        "to": "praxis/wp_praxis_core/src/parser/yaml.rs",
-        "relation": "shared_dir:praxis/wp_praxis_core/src/parser",
-        "weight": 1.0
-      },
       {
         "from": "project-wharf/crates/wharf-core/src/sync.rs",
         "to": "project-wharf/crates/wharf-core/src/mooring_client.rs",
@@ -1068,6 +1044,12 @@
         "weight": 1.0
       },
       {
+        "from": "project-wharf/bin/yacht-agent/src/ebpf.rs",
+        "to": "project-wharf/bin/yacht-agent/src/main.rs",
+        "relation": "shared_dir:project-wharf/bin/yacht-agent/src",
+        "weight": 1.0
+      },
+      {
         "from": "resurrect/src/socp-tui/src/config.rs",
         "to": "resurrect/src/socp-tui/src/events.rs",
         "relation": "shared_dir:resurrect/src/socp-tui/src",
@@ -1113,6 +1095,24 @@
         "from": "praxis/wp_praxis_core/src/verification.rs",
         "to": "praxis/wp_praxis_core/src/symbol.rs",
         "relation": "shared_dir:praxis/wp_praxis_core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "praxis/wp_praxis_core/src/parser/toml.rs",
+        "to": "praxis/wp_praxis_core/src/parser/yaml.rs",
+        "relation": "shared_dir:praxis/wp_praxis_core/src/parser",
+        "weight": 1.0
+      },
+      {
+        "from": "project-wharf/deploy/setup.sh",
+        "to": "project-wharf/deploy/verify-sqli.sh",
+        "relation": "shared_dir:project-wharf/deploy",
+        "weight": 1.0
+      },
+      {
+        "from": "project-wharf/deploy/verify-sqli.sh",
+        "to": "project-wharf/deploy/local-test.sh",
+        "relation": "shared_dir:project-wharf/deploy",
         "weight": 1.0
       },
       {
@@ -1792,56 +1792,23 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "project-wharf/crates/wharf-ebpf/src/main.rs",
-          "project-wharf/crates/wharf-ebpf/src/main.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Ecto"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
+          "praxis/wp_praxis_core/src/verification.rs",
           "praxis/wp_injector/src/main.rs",
-          "project-wharf/bin/yacht-agent/src/ebpf.rs",
-          "project-wharf/crates/wharf-core/src/integrity.rs",
-          "project-wharf/crates/wharf-core/src/config.rs",
-          "project-wharf/crates/wharf-core/src/nebula.rs",
-          "project-wharf/crates/wharf-core/src/fleet.rs",
-          "resurrect/src/socp-tui/src/config.rs"
+          "project-wharf/bin/yacht-agent/src/main.rs",
+          "project-wharf/xtask/src/main.rs",
+          "project-wharf/crates/wharf-core/src/crypto.rs",
+          "resurrect/src/socp-tui/src/events.rs",
+          "sinople-theme/wasm/semantic_processor/src/lib.rs"
         ],
         "frameworks": [
           "WebServer",
           "Ecto"
         ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "praxis/wp_injector/src/main.rs",
-          "project-wharf/bin/yacht-agent/src/ebpf.rs",
-          "project-wharf/crates/wharf-core/src/integrity.rs",
-          "project-wharf/crates/wharf-core/src/config.rs",
-          "project-wharf/crates/wharf-core/src/nebula.rs",
-          "project-wharf/crates/wharf-core/src/fleet.rs",
-          "resurrect/src/socp-tui/src/config.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Ecto"
-        ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -1863,33 +1830,37 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "MutationGap",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "severity_value": 2.5,
         "files": [
-          "praxis/Core/db-schema/test/schema_test.exs",
-          "praxis/Core/db-schema/test/schema/symbol_test.exs",
-          "praxis/Core/db-schema/test/support/data_case.ex",
-          "praxis/Core/db-schema/test/query_test.exs"
+          "praxis/wp_injector/src/main.rs",
+          "project-wharf/bin/yacht-agent/src/ebpf.rs",
+          "project-wharf/crates/wharf-core/src/integrity.rs",
+          "project-wharf/crates/wharf-core/src/config.rs",
+          "project-wharf/crates/wharf-core/src/nebula.rs",
+          "project-wharf/crates/wharf-core/src/fleet.rs",
+          "resurrect/src/socp-tui/src/config.rs"
         ],
         "frameworks": [
           "WebServer",
           "Ecto"
         ],
-        "relation": "MutationGap->Cpu"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "resurrect/state/lib/state-utils.scm"
+          "project-wharf/crates/wharf-ebpf/src/main.rs",
+          "project-wharf/crates/wharf-ebpf/src/main.rs"
         ],
         "frameworks": [
           "WebServer",
           "Ecto"
         ],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -1906,23 +1877,92 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "praxis/wp_praxis_core/src/verification.rs",
-          "praxis/wp_injector/src/main.rs",
-          "project-wharf/bin/yacht-agent/src/main.rs",
-          "project-wharf/xtask/src/main.rs",
-          "project-wharf/crates/wharf-core/src/crypto.rs",
-          "resurrect/src/socp-tui/src/events.rs",
-          "sinople-theme/wasm/semantic_processor/src/lib.rs"
+          "project-wharf/crates/wharf-core/tests/integration.rs"
         ],
         "frameworks": [
           "WebServer",
           "Ecto"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "resurrect/state/lib/state-utils.scm"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Ecto"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "journal-theme/tests/accessibility_test.js"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Ecto"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "journal-theme/tests/accessibility_test.js",
+          "resurrect/state/lib/state-utils.scm"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Ecto"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "praxis/Core/db-schema/test/schema_test.exs",
+          "praxis/Core/db-schema/test/schema/symbol_test.exs",
+          "praxis/Core/db-schema/test/support/data_case.ex",
+          "praxis/Core/db-schema/test/query_test.exs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Ecto"
+        ],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "praxis/wp_injector/src/main.rs",
+          "project-wharf/bin/yacht-agent/src/ebpf.rs",
+          "project-wharf/crates/wharf-core/src/integrity.rs",
+          "project-wharf/crates/wharf-core/src/config.rs",
+          "project-wharf/crates/wharf-core/src/nebula.rs",
+          "project-wharf/crates/wharf-core/src/fleet.rs",
+          "resurrect/src/socp-tui/src/config.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Ecto"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -1938,46 +1978,6 @@
           "Ecto"
         ],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "project-wharf/deploy/setup.sh",
-          "project-wharf/deploy/local-test.sh"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Ecto"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "project-wharf/crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Ecto"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "journal-theme/tests/accessibility_test.js"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Ecto"
-        ],
-        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "HardcodedSecret",
@@ -2010,18 +2010,18 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "journal-theme/tests/accessibility_test.js",
-          "resurrect/state/lib/state-utils.scm"
+          "project-wharf/deploy/setup.sh",
+          "project-wharf/deploy/local-test.sh"
         ],
         "frameworks": [
           "WebServer",
           "Ecto"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

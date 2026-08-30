@@ -363,12 +363,18 @@
   ],
   "recommended_attacks": [
     "disk",
+    "cpu",
     "concurrency",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "zig/src/safe_nif.zig",
+        "to": "zig/src/buffer_abi.zig",
+        "relation": "shared_dir:zig/src",
+        "weight": 1.0
+      },
       {
         "from": "demo/lib/snif_demo/worker.ex",
         "to": "demo/lib/snif_demo/safe_nif.ex",
@@ -391,12 +397,6 @@
         "from": "demo/lib/snif_demo/rust_guest.ex",
         "to": "demo/lib/snif_demo/pool.ex",
         "relation": "shared_dir:demo/lib/snif_demo",
-        "weight": 1.0
-      },
-      {
-        "from": "zig/src/safe_nif.zig",
-        "to": "zig/src/buffer_abi.zig",
-        "relation": "shared_dir:zig/src",
         "weight": 1.0
       },
       {
@@ -559,15 +559,16 @@
       },
       {
         "source_category": "CommandInjection",
-        "sink_axis": "disk",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
+          "benches/snif_eval.sh",
           "demo/bench/snif_bench.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -583,18 +584,16 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "demo/test/snif_pool_test.exs",
-          "demo/test/burble_fft_test.exs",
-          "demo/test/snif_demo_test.exs"
+          "demo/bench/snif_bench.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "MutationGap->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -610,17 +609,18 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "MutationGap",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 1.0,
         "files": [
-          "benches/snif_eval.sh",
-          "demo/bench/snif_bench.exs"
+          "demo/test/snif_pool_test.exs",
+          "demo/test/burble_fft_test.exs",
+          "demo/test/snif_demo_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "MutationGap->Cpu"
       }
     ]
   }

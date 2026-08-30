@@ -196,10 +196,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
     "cpu",
-    "concurrency"
+    "memory",
+    "concurrency",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -220,14 +220,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/rust-routing/src/main.rs"
+          "src/julia-viz/src/components/RealTimeTracker.jl",
+          "test/integration/test_dragonfly.jl"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -240,15 +241,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/julia-viz/src/components/RealTimeTracker.jl",
-          "test/integration/test_dragonfly.jl"
+          "src/rust-routing/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

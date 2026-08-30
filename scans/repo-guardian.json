@@ -251,12 +251,24 @@
   ],
   "recommended_attacks": [
     "cpu",
+    "memory",
     "concurrency",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "repo-guardian-fs/src/session_manager.rs",
+        "to": "repo-guardian-fs/src/manifest.rs",
+        "relation": "shared_dir:repo-guardian-fs/src",
+        "weight": 1.0
+      },
+      {
+        "from": "repo-guardian-fs/src/manifest.rs",
+        "to": "repo-guardian-fs/src/filesystem.rs",
+        "relation": "shared_dir:repo-guardian-fs/src",
+        "weight": 1.0
+      },
       {
         "from": "mcp-repo-guardian/src/Index.affine",
         "to": "mcp-repo-guardian/src/Guards.affine",
@@ -273,18 +285,6 @@
         "from": "mcp-repo-guardian/src/Manifest.affine",
         "to": "mcp-repo-guardian/src/Session.affine",
         "relation": "shared_dir:mcp-repo-guardian/src",
-        "weight": 1.0
-      },
-      {
-        "from": "repo-guardian-fs/src/session_manager.rs",
-        "to": "repo-guardian-fs/src/manifest.rs",
-        "relation": "shared_dir:repo-guardian-fs/src",
-        "weight": 1.0
-      },
-      {
-        "from": "repo-guardian-fs/src/manifest.rs",
-        "to": "repo-guardian-fs/src/filesystem.rs",
-        "relation": "shared_dir:repo-guardian-fs/src",
         "weight": 1.0
       },
       {
@@ -310,19 +310,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "mcp-repo-guardian/src/Index.affine",
-          "mcp-repo-guardian/src/Manifest.affine",
-          "mcp-repo-guardian/lib/ocaml/Index.affine",
-          "mcp-repo-guardian/lib/ocaml/Manifest.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -343,6 +330,19 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "mcp-repo-guardian/src/Index.affine",
+          "mcp-repo-guardian/src/Manifest.affine",
+          "mcp-repo-guardian/lib/ocaml/Index.affine",
+          "mcp-repo-guardian/lib/ocaml/Manifest.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

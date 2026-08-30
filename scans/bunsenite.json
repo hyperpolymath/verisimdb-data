@@ -221,18 +221,12 @@
   ],
   "recommended_attacks": [
     "concurrency",
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "bindings/deno/example.affine",
-        "to": "bindings/deno/bunsenite.affine",
-        "relation": "shared_dir:bindings/deno",
-        "weight": 1.0
-      },
       {
         "from": "src/loader.rs",
         "to": "src/schema.rs",
@@ -250,11 +244,39 @@
         "to": "src/main.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
+      },
+      {
+        "from": "bindings/deno/example.affine",
+        "to": "bindings/deno/bunsenite.affine",
+        "relation": "shared_dir:bindings/deno",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/loader.rs",
+          "src/schema.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/ffi.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -286,28 +308,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/ffi.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/loader.rs",
-          "src/schema.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
