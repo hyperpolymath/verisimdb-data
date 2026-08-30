@@ -215,10 +215,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk",
     "memory",
-    "network"
+    "disk",
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -238,6 +238,28 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "mvt/src/engine/gameState.js",
+          "mvt/src/engine/utils.js",
+          "mvt/src/kernel/index.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "src/interface/abi/Layout.idr"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Memory"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -259,28 +281,6 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "mvt/src/engine/gameState.js",
-          "mvt/src/engine/utils.js",
-          "mvt/src/kernel/index.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tests/e2e.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -291,14 +291,14 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/interface/abi/Layout.idr"
+          "tests/e2e.sh"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Memory"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

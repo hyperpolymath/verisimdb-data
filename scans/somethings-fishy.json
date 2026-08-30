@@ -74,7 +74,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 7493,
+    "total_lines": 7495,
     "unsafe_blocks": 9,
     "panic_sites": 0,
     "unwrap_calls": 2,
@@ -271,11 +271,23 @@
   "recommended_attacks": [
     "disk",
     "concurrency",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "safety_kernel/src/robofishy_write_guard.adb",
+        "to": "safety_kernel/src/robofishy_c_api.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
+      {
+        "from": "safety_kernel/src/robofishy_c_api.adb",
+        "to": "safety_kernel/src/robofishy_io.adb",
+        "relation": "shared_dir:safety_kernel/src",
+        "weight": 1.0
+      },
       {
         "from": "src/scanners/commit_trailers.rs",
         "to": "src/scanners/agent_files.rs",
@@ -298,18 +310,6 @@
         "from": "setup.sh",
         "to": "build.rs",
         "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "safety_kernel/src/robofishy_write_guard.adb",
-        "to": "safety_kernel/src/robofishy_c_api.adb",
-        "relation": "shared_dir:safety_kernel/src",
-        "weight": 1.0
-      },
-      {
-        "from": "safety_kernel/src/robofishy_c_api.adb",
-        "to": "safety_kernel/src/robofishy_io.adb",
-        "relation": "shared_dir:safety_kernel/src",
         "weight": 1.0
       },
       {
@@ -340,16 +340,15 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/safe_io.rs",
-          "src/safe_io.rs",
-          "safety_kernel/src/robofishy_c_api.adb"
+          "src/scanners/commit_trailers.rs",
+          "src/scanners/banned_patterns.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -363,15 +362,16 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "src/scanners/commit_trailers.rs",
-          "src/scanners/banned_patterns.rs"
+          "src/safe_io.rs",
+          "src/safe_io.rs",
+          "safety_kernel/src/robofishy_c_api.adb"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

@@ -323,13 +323,19 @@
   ],
   "recommended_attacks": [
     "memory",
-    "concurrency",
-    "cpu",
     "disk",
-    "network"
+    "network",
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "dipstick/tools/cli/migrate.sh",
+        "to": "dipstick/tools/cli/rollback.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
+        "weight": 1.0
+      },
       {
         "from": "dipstick/services/collector/src/platforms.rs",
         "to": "dipstick/services/collector/src/lib.rs",
@@ -358,12 +364,6 @@
         "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "dipstick/services/collector/tests/aspect_tests.rs",
         "relation": "shared_dir:dipstick/services/collector/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/tools/cli/migrate.sh",
-        "to": "dipstick/tools/cli/rollback.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
         "weight": 1.0
       },
       {
@@ -635,17 +635,18 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+          "dipstick/services/pestle-observatory/src/observatory.affine",
+          "dipstick/services/analyzer-rescript/src/Main.affine"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -676,6 +677,19 @@
         "relation": "InsecureProtocol->Network"
       },
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "dipstick/tools/autoconfig/smtp_autoconfig.py"
+        ],
+        "frameworks": [
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -688,20 +702,6 @@
           "Phoenix"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "dipstick/services/pestle-observatory/src/observatory.affine",
-          "dipstick/services/analyzer-rescript/src/Main.affine"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

@@ -516,9 +516,9 @@
   ],
   "recommended_attacks": [
     "network",
-    "memory",
     "disk",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -532,6 +532,18 @@
         "from": "src/julia/server/authentication.jl",
         "to": "src/julia/server/rate_limiting.jl",
         "relation": "shared_dir:src/julia/server",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/webhooks.jl",
+        "to": "src/plugins/plugin_system.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/plugin_system.jl",
+        "to": "src/plugins/marketplace.jl",
+        "relation": "shared_dir:src/plugins",
         "weight": 1.0
       },
       {
@@ -587,39 +599,21 @@
         "to": "src/julia/data_sources/IMF.jl",
         "relation": "shared_dir:src/julia/data_sources",
         "weight": 1.0
-      },
-      {
-        "from": "src/plugins/webhooks.jl",
-        "to": "src/plugins/plugin_system.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
-      },
-      {
-        "from": "src/plugins/plugin_system.jl",
-        "to": "src/plugins/marketplace.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/julia/data_sources/OECD.jl",
-          "src/julia/data_sources/WorldBank.jl",
-          "src/julia/data_sources/FRED.jl",
-          "src/julia/data_sources/BIS.jl",
-          "src/julia/data_sources/DBnomics.jl",
-          "src/julia/client.jl",
-          "src/ai/insights.jl",
-          "tests/integration/test_e2e.jl"
+          "src/julia/data_sources/IMF.jl",
+          "src/enterprise/saml_auth.jl"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "HardcodedSecret",
@@ -632,16 +626,6 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/visualization/charts.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "MutationGap",
@@ -674,15 +658,31 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/julia/data_sources/IMF.jl",
-          "src/enterprise/saml_auth.jl"
+          "src/julia/data_sources/OECD.jl",
+          "src/julia/data_sources/WorldBank.jl",
+          "src/julia/data_sources/FRED.jl",
+          "src/julia/data_sources/BIS.jl",
+          "src/julia/data_sources/DBnomics.jl",
+          "src/julia/client.jl",
+          "src/ai/insights.jl",
+          "tests/integration/test_e2e.jl"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/visualization/charts.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

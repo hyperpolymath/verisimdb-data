@@ -428,19 +428,13 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "network",
     "disk",
-    "concurrency",
-    "cpu"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "config/nickel/default.ncl",
-        "to": "config/nickel/profiles.ncl",
-        "relation": "shared_dir:config/nickel",
-        "weight": 1.0
-      },
       {
         "from": "apps/laminar_web/lib/laminar/block_transfer.ex",
         "to": "apps/laminar_web/lib/laminar/pipeline.ex",
@@ -511,6 +505,12 @@
         "from": "apps/laminar_web/lib/laminar/live_transfer.ex",
         "to": "apps/laminar_web/lib/laminar/parallel_transfer.ex",
         "relation": "shared_dir:apps/laminar_web/lib/laminar",
+        "weight": 1.0
+      },
+      {
+        "from": "config/nickel/default.ncl",
+        "to": "config/nickel/profiles.ncl",
+        "relation": "shared_dir:config/nickel",
         "weight": 1.0
       },
       {
@@ -998,17 +998,19 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "apps/laminar_web/lib/laminar/pipeline.ex",
-          "apps/laminar_web/lib/laminar/network_tuning.ex",
-          "apps/laminar_web/lib/laminar/filesystem_optimizer.ex",
-          "apps/laminar_web/lib/laminar/rclone_client.ex",
-          "apps/laminar_web/lib/laminar/transfer_metrics.ex",
-          "apps/laminar_web/lib/laminar/refinery.ex",
-          "apps/laminar_web/lib/laminar/live_transfer.ex"
+          "apps/laminar_web/test/laminar_web/schema_test.exs",
+          "apps/laminar_web/test/integration/transfer_test.exs",
+          "apps/laminar_web/test/laminar/cli_test.exs",
+          "apps/laminar_web/test/laminar/intelligence_test.exs",
+          "apps/laminar_web/test/laminar/ghost_linker_test.exs",
+          "apps/laminar_web/test/laminar/pipeline_test.exs",
+          "apps/laminar_web/test/laminar/refinery_test.exs",
+          "apps/laminar_web/test/laminar/rclone_client_test.exs",
+          "apps/laminar_web/test/e2e/pipeline_e2e_test.exs"
         ],
         "frameworks": [
           "MessageQueue",
@@ -1016,7 +1018,22 @@
           "WebServer",
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "CryptoMisuse",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "apps/laminar_web/lib/laminar/block_transfer.ex"
+        ],
+        "frameworks": [
+          "MessageQueue",
+          "Phoenix",
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "CryptoMisuse->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -1055,19 +1072,17 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "apps/laminar_web/test/laminar_web/schema_test.exs",
-          "apps/laminar_web/test/integration/transfer_test.exs",
-          "apps/laminar_web/test/laminar/cli_test.exs",
-          "apps/laminar_web/test/laminar/intelligence_test.exs",
-          "apps/laminar_web/test/laminar/ghost_linker_test.exs",
-          "apps/laminar_web/test/laminar/pipeline_test.exs",
-          "apps/laminar_web/test/laminar/refinery_test.exs",
-          "apps/laminar_web/test/laminar/rclone_client_test.exs",
-          "apps/laminar_web/test/e2e/pipeline_e2e_test.exs"
+          "apps/laminar_web/lib/laminar/pipeline.ex",
+          "apps/laminar_web/lib/laminar/network_tuning.ex",
+          "apps/laminar_web/lib/laminar/filesystem_optimizer.ex",
+          "apps/laminar_web/lib/laminar/rclone_client.ex",
+          "apps/laminar_web/lib/laminar/transfer_metrics.ex",
+          "apps/laminar_web/lib/laminar/refinery.ex",
+          "apps/laminar_web/lib/laminar/live_transfer.ex"
         ],
         "frameworks": [
           "MessageQueue",
@@ -1075,22 +1090,7 @@
           "WebServer",
           "OTP"
         ],
-        "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "CryptoMisuse",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "apps/laminar_web/lib/laminar/block_transfer.ex"
-        ],
-        "frameworks": [
-          "MessageQueue",
-          "Phoenix",
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "CryptoMisuse->Network"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

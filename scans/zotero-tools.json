@@ -869,14 +869,62 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "network",
-    "concurrency",
+    "disk",
+    "cpu",
     "memory",
-    "disk"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "rescript-templater/init-raczotbuild.rkt",
+        "to": "rescript-templater/init-zotero-plugin.sh",
+        "relation": "shared_dir:rescript-templater",
+        "weight": 1.0
+      },
+      {
+        "from": "zotpress/src/rescript/Utils.affine",
+        "to": "zotpress/src/rescript/Zotpress.affine",
+        "relation": "shared_dir:zotpress/src/rescript",
+        "weight": 1.0
+      },
+      {
+        "from": "formbd/migration/src/sync.jl",
+        "to": "formbd/migration/src/server.jl",
+        "relation": "shared_dir:formbd/migration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "formbd/migration/src/server.jl",
+        "to": "formbd/migration/src/migrate.jl",
+        "relation": "shared_dir:formbd/migration/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/sign-release.sh",
+        "to": "rescript-templater/scripts/generate-sbom.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/generate-sbom.sh",
+        "to": "rescript-templater/scripts/verify-release.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "zotpress/scripts/build.affine",
+        "to": "zotpress/scripts/build-js.affine",
+        "relation": "shared_dir:zotpress/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "zotpress/scripts/build-js.affine",
+        "to": "zotpress/scripts/build-css.affine",
+        "relation": "shared_dir:zotpress/scripts",
+        "weight": 1.0
+      },
       {
         "from": "formbd/migration/bin/doi.jl",
         "to": "formbd/migration/bin/blindspot.jl",
@@ -896,12 +944,6 @@
         "weight": 1.0
       },
       {
-        "from": "rescript-templater/init-raczotbuild.rkt",
-        "to": "rescript-templater/init-zotero-plugin.sh",
-        "relation": "shared_dir:rescript-templater",
-        "weight": 1.0
-      },
-      {
         "from": "zoterho-template/ZoteRhoTemplate.affine",
         "to": "zoterho-template/Preferences.affine",
         "relation": "shared_dir:zoterho-template",
@@ -917,12 +959,6 @@
         "from": "zoterho-template/RhodiumLinter.affine",
         "to": "zoterho-template/bootstrap.affine",
         "relation": "shared_dir:zoterho-template",
-        "weight": 1.0
-      },
-      {
-        "from": "zotpress/src/rescript/Utils.affine",
-        "to": "zotpress/src/rescript/Zotpress.affine",
-        "relation": "shared_dir:zotpress/src/rescript",
         "weight": 1.0
       },
       {
@@ -968,18 +1004,6 @@
         "weight": 1.0
       },
       {
-        "from": "formbd/migration/src/sync.jl",
-        "to": "formbd/migration/src/server.jl",
-        "relation": "shared_dir:formbd/migration/src",
-        "weight": 1.0
-      },
-      {
-        "from": "formbd/migration/src/server.jl",
-        "to": "formbd/migration/src/migrate.jl",
-        "relation": "shared_dir:formbd/migration/src",
-        "weight": 1.0
-      },
-      {
         "from": "fogbinder/lib/ocaml/FamilyResemblance.affine",
         "to": "fogbinder/lib/ocaml/Fogbinder.affine",
         "relation": "shared_dir:fogbinder/lib/ocaml",
@@ -995,30 +1019,6 @@
         "from": "fogbinder/lib/ocaml/ZoteroBindings.affine",
         "to": "fogbinder/lib/ocaml/MysteryClustering.affine",
         "relation": "shared_dir:fogbinder/lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "zotpress/scripts/build.affine",
-        "to": "zotpress/scripts/build-js.affine",
-        "relation": "shared_dir:zotpress/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "zotpress/scripts/build-js.affine",
-        "to": "zotpress/scripts/build-css.affine",
-        "relation": "shared_dir:zotpress/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/scripts/sign-release.sh",
-        "to": "rescript-templater/scripts/generate-sbom.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/scripts/generate-sbom.sh",
-        "to": "rescript-templater/scripts/verify-release.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
         "weight": 1.0
       },
       {
@@ -1422,54 +1422,21 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "fogbinder/src/wasm/crypto/src/lib.rs"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "fogbinder/src/wasm/crypto/src/lib.rs"
+          "voyant-export/src/Firefox.affine",
+          "voyant-export/src/Zotero.affine",
+          "fogbinder/src/zotero/ZoteroBindings.affine",
+          "fogbinder/lib/ocaml/ZoteroBindings.affine",
+          "zoterho-template/ZoteRhoTemplate.affine",
+          "zotpress/src/rescript/Zotpress.affine"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "InputBoundary",
@@ -1502,21 +1469,54 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "UnsafeFFI",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "voyant-export/src/Firefox.affine",
-          "voyant-export/src/Zotero.affine",
-          "fogbinder/src/zotero/ZoteroBindings.affine",
-          "fogbinder/lib/ocaml/ZoteroBindings.affine",
-          "zoterho-template/ZoteRhoTemplate.affine",
-          "zotpress/src/rescript/Zotpress.affine"
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/wasm/crypto/src/lib.rs"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/wasm/crypto/src/lib.rs"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

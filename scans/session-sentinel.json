@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "session-sentinel",
-  "language": "zig",
+  "language": "affinescript",
   "frameworks": [],
   "weak_points": [
     {
@@ -281,14 +281,32 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk",
     "memory",
+    "disk",
+    "cpu",
     "network",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "tests/validate.test.affine",
+        "to": "tests/validate.test.deno.js",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/verisimdb.zig",
+        "to": "src/interface/ffi/src/dbus.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/dbus.zig",
+        "to": "src/interface/ffi/src/main.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
       {
         "from": "src/core/health.affine",
         "to": "src/core/config.affine",
@@ -368,24 +386,6 @@
         "weight": 1.0
       },
       {
-        "from": "tests/validate.test.affine",
-        "to": "tests/validate.test.deno.js",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/verisimdb.zig",
-        "to": "src/interface/ffi/src/dbus.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/dbus.zig",
-        "to": "src/interface/ffi/src/main.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/abi/Foreign.idr",
         "to": "src/interface/abi/Types.idr",
         "relation": "shared_dir:src/interface/abi",
@@ -396,24 +396,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "systemd/install.sh"
+          "src/interface/ffi/src/dbus.zig"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/interface/ffi/src/icons.zig"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -426,14 +416,24 @@
         "relation": "UncheckedError->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "src/interface/ffi/src/dbus.zig"
+          "src/interface/ffi/src/icons.zig"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "systemd/install.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

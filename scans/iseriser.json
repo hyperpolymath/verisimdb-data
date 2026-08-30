@@ -5,17 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "InsecureProtocol",
-      "location": "src/codegen/scaffold.rs",
-      "file": "src/codegen/scaffold.rs",
-      "severity": "Medium",
-      "description": "1 HTTP (non-HTTPS) URLs in src/codegen/scaffold.rs",
-      "recommended_attack": [
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "UnboundedAllocation",
       "location": "src/abi/idris_emitter.rs",
       "file": "src/abi/idris_emitter.rs",
@@ -109,13 +98,13 @@
     }
   ],
   "statistics": {
-    "total_lines": 17642,
+    "total_lines": 18419,
     "unsafe_blocks": 36,
     "panic_sites": 0,
     "unwrap_calls": 1,
     "allocation_sites": 46,
-    "io_operations": 41,
-    "threading_constructs": 0
+    "io_operations": 46,
+    "threading_constructs": 3
   },
   "file_statistics": [
     {
@@ -170,13 +159,23 @@
     },
     {
       "file_path": "src/codegen/cartridge.rs",
-      "lines": 1311,
+      "lines": 1481,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 2,
-      "io_operations": 4,
+      "io_operations": 6,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "src/codegen/templates/cartridge_shim.zig",
+      "lines": 256,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 3
     },
     {
       "file_path": "src/codegen/parser.rs",
@@ -190,7 +189,7 @@
     },
     {
       "file_path": "src/codegen/scaffold.rs",
-      "lines": 1728,
+      "lines": 1925,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -253,7 +252,7 @@
     },
     {
       "file_path": "src/main.rs",
-      "lines": 202,
+      "lines": 216,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -264,12 +263,12 @@
     },
     {
       "file_path": "tests/integration_test.rs",
-      "lines": 349,
+      "lines": 442,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 5,
       "threading_constructs": 0
     },
     {
@@ -355,12 +354,23 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "network",
     "disk",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "satellites/a2mliser/scripts/install-zig.sh",
+        "to": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:satellites/a2mliser/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/customizer.rs",
         "to": "src/codegen/cartridge.rs",
@@ -380,12 +390,6 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "src/abi/idris_emitter.rs",
         "to": "src/abi/zig_ffi_parser.rs",
         "relation": "shared_dir:src/abi",
@@ -396,37 +400,11 @@
         "to": "src/abi/verify.rs",
         "relation": "shared_dir:src/abi",
         "weight": 1.0
-      },
-      {
-        "from": "satellites/a2mliser/scripts/install-zig.sh",
-        "to": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:satellites/a2mliser/scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/abi/idris_emitter.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/abi/idris_emitter.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -442,24 +420,14 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "satellites/a2mliser/src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/scaffold.rs"
+          "src/abi/idris_emitter.rs"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -474,6 +442,26 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "satellites/a2mliser/src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/abi/idris_emitter.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }
