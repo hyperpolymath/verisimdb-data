@@ -431,36 +431,30 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
+    "memory",
     "network",
-    "disk",
+    "concurrency",
     "cpu",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "bindings/deno/src/A2ML_Parser.affine",
-        "to": "bindings/deno/src/A2ML_Types.affine",
-        "relation": "shared_dir:bindings/deno/src",
+        "from": "prototype/affinescript/src/VectorRunner.affine",
+        "to": "prototype/affinescript/src/Cli.affine",
+        "relation": "shared_dir:prototype/affinescript/src",
         "weight": 1.0
       },
       {
-        "from": "lsp/src/completions.rs",
-        "to": "lsp/src/diagnostics.rs",
-        "relation": "shared_dir:lsp/src",
+        "from": "prototype/affinescript/src/Cli.affine",
+        "to": "prototype/affinescript/src/DumpAst.affine",
+        "relation": "shared_dir:prototype/affinescript/src",
         "weight": 1.0
       },
       {
-        "from": "lsp/src/diagnostics.rs",
-        "to": "lsp/src/hover.rs",
-        "relation": "shared_dir:lsp/src",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/deploy-site.sh",
-        "to": "scripts/add-arxiv-badge.sh",
-        "relation": "shared_dir:scripts",
+        "from": "prototype/affinescript/src/DumpAst.affine",
+        "to": "prototype/affinescript/src/VectorReport.affine",
+        "relation": "shared_dir:prototype/affinescript/src",
         "weight": 1.0
       },
       {
@@ -482,27 +476,74 @@
         "weight": 1.0
       },
       {
-        "from": "prototype/affinescript/src/VectorRunner.affine",
-        "to": "prototype/affinescript/src/Cli.affine",
-        "relation": "shared_dir:prototype/affinescript/src",
+        "from": "lsp/src/completions.rs",
+        "to": "lsp/src/diagnostics.rs",
+        "relation": "shared_dir:lsp/src",
         "weight": 1.0
       },
       {
-        "from": "prototype/affinescript/src/Cli.affine",
-        "to": "prototype/affinescript/src/DumpAst.affine",
-        "relation": "shared_dir:prototype/affinescript/src",
+        "from": "lsp/src/diagnostics.rs",
+        "to": "lsp/src/hover.rs",
+        "relation": "shared_dir:lsp/src",
         "weight": 1.0
       },
       {
-        "from": "prototype/affinescript/src/DumpAst.affine",
-        "to": "prototype/affinescript/src/VectorReport.affine",
-        "relation": "shared_dir:prototype/affinescript/src",
+        "from": "bindings/deno/src/A2ML_Parser.affine",
+        "to": "bindings/deno/src/A2ML_Types.affine",
+        "relation": "shared_dir:bindings/deno/src",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/deploy-site.sh",
+        "to": "scripts/add-arxiv-badge.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "scripts/deploy-site.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Network"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "bindings/elixir/test/a2_ml_test.exs"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "disk",
+        "severity_value": 3.5,
+        "files": [
+          "scripts/deploy-site.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "benchmarks/parser-bench.sh",
+          "pandoc/a2ml-filter.lua"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -527,37 +568,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "benchmarks/parser-bench.sh",
-          "pandoc/a2ml-filter.lua"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "scripts/deploy-site.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "scripts/deploy-site.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -568,16 +578,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "bindings/elixir/test/a2_ml_test.exs"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
       }
     ]
   }
