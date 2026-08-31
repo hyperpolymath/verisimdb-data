@@ -530,23 +530,35 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
     "memory",
-    "disk"
+    "disk",
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "examples/multi-env/environments/prod.ncl",
-        "to": "examples/multi-env/environments/staging.ncl",
-        "relation": "shared_dir:examples/multi-env/environments",
+        "from": "src/pipeline/definition.rs",
+        "to": "src/pipeline/dag.rs",
+        "relation": "shared_dir:src/pipeline",
         "weight": 1.0
       },
       {
-        "from": "examples/multi-env/environments/staging.ncl",
-        "to": "examples/multi-env/environments/dev.ncl",
-        "relation": "shared_dir:examples/multi-env/environments",
+        "from": "src/pipeline/dag.rs",
+        "to": "src/pipeline/validation.rs",
+        "relation": "shared_dir:src/pipeline",
+        "weight": 1.0
+      },
+      {
+        "from": "src/pipeline/validation.rs",
+        "to": "src/pipeline/executor.rs",
+        "relation": "shared_dir:src/pipeline",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/e2e_test.rs",
+        "to": "tests/property_test.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -592,21 +604,9 @@
         "weight": 1.0
       },
       {
-        "from": "tests/e2e_test.rs",
-        "to": "tests/property_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "src/cache/hash.rs",
         "to": "src/cache/filesystem.rs",
         "relation": "shared_dir:src/cache",
-        "weight": 1.0
-      },
-      {
-        "from": "src/analyzer/recommender.rs",
-        "to": "src/analyzer/patterns.rs",
-        "relation": "shared_dir:src/analyzer",
         "weight": 1.0
       },
       {
@@ -640,27 +640,27 @@
         "weight": 1.0
       },
       {
+        "from": "src/analyzer/recommender.rs",
+        "to": "src/analyzer/patterns.rs",
+        "relation": "shared_dir:src/analyzer",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/multi-env/environments/prod.ncl",
+        "to": "examples/multi-env/environments/staging.ncl",
+        "relation": "shared_dir:examples/multi-env/environments",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/multi-env/environments/staging.ncl",
+        "to": "examples/multi-env/environments/dev.ncl",
+        "relation": "shared_dir:examples/multi-env/environments",
+        "weight": 1.0
+      },
+      {
         "from": "src/errors/mod.rs",
         "to": "src/errors/recovery.rs",
         "relation": "shared_dir:src/errors",
-        "weight": 1.0
-      },
-      {
-        "from": "src/pipeline/definition.rs",
-        "to": "src/pipeline/dag.rs",
-        "relation": "shared_dir:src/pipeline",
-        "weight": 1.0
-      },
-      {
-        "from": "src/pipeline/dag.rs",
-        "to": "src/pipeline/validation.rs",
-        "relation": "shared_dir:src/pipeline",
-        "weight": 1.0
-      },
-      {
-        "from": "src/pipeline/validation.rs",
-        "to": "src/pipeline/executor.rs",
-        "relation": "shared_dir:src/pipeline",
         "weight": 1.0
       },
       {

@@ -194,28 +194,39 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "server/src/lithoglyph/client.gleam",
-        "to": "server/src/lithoglyph/nif_ffi.gleam",
-        "relation": "shared_dir:server/src/lithoglyph",
-        "weight": 1.0
-      },
-      {
         "from": "server/src/glyphbase_server.gleam",
         "to": "server/src/router.gleam",
         "relation": "shared_dir:server/src",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/lithoglyph/client.gleam",
+        "to": "server/src/lithoglyph/nif_ffi.gleam",
+        "relation": "shared_dir:server/src/lithoglyph",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "server/native/src/lithoglyph_nif.zig",
+          "server/ffi/zig/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
       {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
@@ -238,17 +249,6 @@
         ],
         "frameworks": [],
         "relation": "UncheckedError->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "server/native/src/lithoglyph_nif.zig",
-          "server/ffi/zig/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
       }
     ]
   }

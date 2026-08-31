@@ -281,20 +281,14 @@
     }
   ],
   "recommended_attacks": [
+    "concurrency",
     "cpu",
-    "memory",
     "network",
-    "disk",
-    "concurrency"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
-        "to": "crates/neurophone-core/tests/lifecycle.rs",
-        "relation": "shared_dir:crates/neurophone-core/tests",
-        "weight": 1.0
-      },
       {
         "from": "scripts/install-on-phone.sh",
         "to": "scripts/setup.sh",
@@ -329,6 +323,12 @@
         "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
         "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
         "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
+        "to": "crates/neurophone-core/tests/lifecycle.rs",
+        "relation": "shared_dir:crates/neurophone-core/tests",
         "weight": 1.0
       },
       {
@@ -589,32 +589,6 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/bt-presence/build.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "crates/claude-client/src/egress_gate.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -639,6 +613,32 @@
           "Networking"
         ],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/bt-presence/build.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "crates/claude-client/src/egress_gate.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

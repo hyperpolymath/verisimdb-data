@@ -322,20 +322,14 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
     "network",
-    "cpu",
-    "concurrency"
+    "disk",
+    "memory",
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "dipstick/tools/cli/migrate.sh",
-        "to": "dipstick/tools/cli/rollback.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
-        "weight": 1.0
-      },
       {
         "from": "dipstick/services/collector/src/platforms.rs",
         "to": "dipstick/services/collector/src/lib.rs",
@@ -364,6 +358,12 @@
         "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "dipstick/services/collector/tests/aspect_tests.rs",
         "relation": "shared_dir:dipstick/services/collector/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/tools/cli/migrate.sh",
+        "to": "dipstick/tools/cli/rollback.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
         "weight": 1.0
       },
       {
@@ -635,18 +635,18 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "dipstick/services/pestle-observatory/src/observatory.affine",
-          "dipstick/services/analyzer-rescript/src/Main.affine"
+          "dipstick/services/collector/src/main.rs",
+          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -690,18 +690,18 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "dipstick/services/collector/src/main.rs",
-          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
+          "dipstick/services/pestle-observatory/src/observatory.affine",
+          "dipstick/services/analyzer-rescript/src/Main.affine"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }
