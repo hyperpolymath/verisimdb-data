@@ -277,10 +277,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu",
     "network",
-    "memory"
+    "memory",
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -451,6 +451,19 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "templates/rsr-metadata.ncl"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -462,20 +475,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/contract/src/lib.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -491,34 +490,18 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "templates/rsr-metadata.ncl"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "benches/oracle_bench.rs",
           "src/contract/src/lib.rs",
-          "src/oracle/src/lib.rs",
-          "tests/security_aspect_test.rs",
-          "tests/gating_pipeline_test.rs"
+          "src/main.rs"
         ],
         "frameworks": [
           "OTP",
           "Networking"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -560,6 +543,23 @@
           "Networking"
         ],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "benches/oracle_bench.rs",
+          "src/contract/src/lib.rs",
+          "src/oracle/src/lib.rs",
+          "tests/security_aspect_test.rs",
+          "tests/gating_pipeline_test.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

@@ -493,13 +493,37 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "network",
+    "cpu",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "tools/locale-validator.js",
+        "to": "tools/sync-locales.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sync-locales.js",
+        "to": "tools/extract-strings.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/extract-strings.js",
+        "to": "tools/missing-translations.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/missing-translations.js",
+        "to": "tools/rsr-verify.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
       {
         "from": "src/core/DocumentExtract.affine",
         "to": "src/core/FuzzyMatch.affine",
@@ -531,27 +555,21 @@
         "weight": 1.0
       },
       {
-        "from": "tools/locale-validator.js",
-        "to": "tools/sync-locales.js",
-        "relation": "shared_dir:tools",
+        "from": "src/lib/bs/core/DocumentExtract.affine",
+        "to": "src/lib/bs/core/FuzzyMatch.affine",
+        "relation": "shared_dir:src/lib/bs/core",
         "weight": 1.0
       },
       {
-        "from": "tools/sync-locales.js",
-        "to": "tools/extract-strings.js",
-        "relation": "shared_dir:tools",
+        "from": "src/lib/bs/core/FuzzyMatch.affine",
+        "to": "src/lib/bs/core/I18n.affine",
+        "relation": "shared_dir:src/lib/bs/core",
         "weight": 1.0
       },
       {
-        "from": "tools/extract-strings.js",
-        "to": "tools/missing-translations.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/missing-translations.js",
-        "to": "tools/rsr-verify.js",
-        "relation": "shared_dir:tools",
+        "from": "src/lib/bs/core/I18n.affine",
+        "to": "src/lib/bs/core/Plural.affine",
+        "relation": "shared_dir:src/lib/bs/core",
         "weight": 1.0
       },
       {
@@ -582,24 +600,6 @@
         "from": "test/i18n.configureAutoreload.js",
         "to": "test/i18n.noTraversal.js",
         "relation": "shared_dir:test",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/bs/core/DocumentExtract.affine",
-        "to": "src/lib/bs/core/FuzzyMatch.affine",
-        "relation": "shared_dir:src/lib/bs/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/bs/core/FuzzyMatch.affine",
-        "to": "src/lib/bs/core/I18n.affine",
-        "relation": "shared_dir:src/lib/bs/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/lib/bs/core/I18n.affine",
-        "to": "src/lib/bs/core/Plural.affine",
-        "relation": "shared_dir:src/lib/bs/core",
         "weight": 1.0
       },
       {
@@ -829,18 +829,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "adapters/crm/salesforce.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -872,6 +860,18 @@
           "WebServer"
         ],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "adapters/crm/salesforce.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

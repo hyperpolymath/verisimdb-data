@@ -281,14 +281,20 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "disk",
+    "network",
     "cpu",
-    "memory",
-    "network"
+    "disk",
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
       {
         "from": "src/interface/ffi/src/verisimdb.zig",
         "to": "src/interface/ffi/src/dbus.zig",
@@ -302,9 +308,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
+        "from": "tests/validate.test.affine",
+        "to": "tests/validate.test.deno.js",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -384,27 +390,11 @@
         "to": "src/core/scanner.eph",
         "relation": "shared_dir:src/core",
         "weight": 1.0
-      },
-      {
-        "from": "tests/validate.test.affine",
-        "to": "tests/validate.test.deno.js",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "systemd/install.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -416,14 +406,14 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/core/monitor.eph"
+          "systemd/install.sh"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -434,6 +424,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/core/monitor.eph"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       }
     ]
   }
