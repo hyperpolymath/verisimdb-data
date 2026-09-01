@@ -80,7 +80,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 11574,
+    "total_lines": 11501,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 20,
@@ -287,19 +287,13 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
     "concurrency",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/har-meta/src/graph.rs",
-        "to": "crates/har-meta/src/a2ml.rs",
-        "relation": "shared_dir:crates/har-meta/src",
-        "weight": 1.0
-      },
       {
         "from": "crates/har-core/src/route.rs",
         "to": "crates/har-core/src/event.rs",
@@ -316,6 +310,12 @@
         "from": "crates/har-core/src/target.rs",
         "to": "crates/har-core/src/error.rs",
         "relation": "shared_dir:crates/har-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/har-meta/src/graph.rs",
+        "to": "crates/har-meta/src/a2ml.rs",
+        "relation": "shared_dir:crates/har-meta/src",
         "weight": 1.0
       },
       {
@@ -456,19 +456,17 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/har-dispatch/src/lib.rs",
-          "crates/har-meta/src/graph.rs",
-          "crates/har-metrics/src/lib.rs",
-          "crates/har-router/src/lib.rs"
+          "crates/har-config/src/loader.rs",
+          "crates/har-dispatch/src/lib.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -486,17 +484,19 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/har-config/src/loader.rs",
-          "crates/har-dispatch/src/lib.rs"
+          "crates/har-dispatch/src/lib.rs",
+          "crates/har-meta/src/graph.rs",
+          "crates/har-metrics/src/lib.rs",
+          "crates/har-router/src/lib.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

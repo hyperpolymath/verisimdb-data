@@ -730,24 +730,60 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "concurrency",
     "cpu",
     "memory",
-    "disk"
+    "network",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "conformance/valid/v23_nested_consent.woke",
-        "to": "conformance/valid/v05_consent.woke",
-        "relation": "shared_dir:conformance/valid",
-        "weight": 1.0
-      },
-      {
         "from": "verification/conformance/valid/v23_nested_consent.woke",
         "to": "verification/conformance/valid/v05_consent.woke",
         "relation": "shared_dir:verification/conformance/valid",
+        "weight": 1.0
+      },
+      {
+        "from": "src/security/consent.rs",
+        "to": "src/security/mod.rs",
+        "relation": "shared_dir:src/security",
+        "weight": 1.0
+      },
+      {
+        "from": "src/stdlib/io.rs",
+        "to": "src/stdlib/json.rs",
+        "relation": "shared_dir:src/stdlib",
+        "weight": 1.0
+      },
+      {
+        "from": "src/stdlib/json.rs",
+        "to": "src/stdlib/chan.rs",
+        "relation": "shared_dir:src/stdlib",
+        "weight": 1.0
+      },
+      {
+        "from": "src/stdlib/chan.rs",
+        "to": "src/stdlib/time.rs",
+        "relation": "shared_dir:src/stdlib",
+        "weight": 1.0
+      },
+      {
+        "from": "src/stdlib/time.rs",
+        "to": "src/stdlib/net.rs",
+        "relation": "shared_dir:src/stdlib",
+        "weight": 1.0
+      },
+      {
+        "from": "src/stdlib/net.rs",
+        "to": "src/stdlib/array.rs",
+        "relation": "shared_dir:src/stdlib",
+        "weight": 1.0
+      },
+      {
+        "from": "src/stdlib/array.rs",
+        "to": "src/stdlib/string.rs",
+        "relation": "shared_dir:src/stdlib",
         "weight": 1.0
       },
       {
@@ -763,9 +799,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/lexer/mod.rs",
-        "to": "src/lexer/token.rs",
-        "relation": "shared_dir:src/lexer",
+        "from": "src/interpreter/mod.rs",
+        "to": "src/interpreter/value.rs",
+        "relation": "shared_dir:src/interpreter",
         "weight": 1.0
       },
       {
@@ -835,45 +871,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/stdlib/io.rs",
-        "to": "src/stdlib/json.rs",
-        "relation": "shared_dir:src/stdlib",
+        "from": "src/lsp/handlers/diagnostics.rs",
+        "to": "src/lsp/handlers/completion.rs",
+        "relation": "shared_dir:src/lsp/handlers",
         "weight": 1.0
       },
       {
-        "from": "src/stdlib/json.rs",
-        "to": "src/stdlib/chan.rs",
-        "relation": "shared_dir:src/stdlib",
-        "weight": 1.0
-      },
-      {
-        "from": "src/stdlib/chan.rs",
-        "to": "src/stdlib/time.rs",
-        "relation": "shared_dir:src/stdlib",
-        "weight": 1.0
-      },
-      {
-        "from": "src/stdlib/time.rs",
-        "to": "src/stdlib/net.rs",
-        "relation": "shared_dir:src/stdlib",
-        "weight": 1.0
-      },
-      {
-        "from": "src/stdlib/net.rs",
-        "to": "src/stdlib/array.rs",
-        "relation": "shared_dir:src/stdlib",
-        "weight": 1.0
-      },
-      {
-        "from": "src/stdlib/array.rs",
-        "to": "src/stdlib/string.rs",
-        "relation": "shared_dir:src/stdlib",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interpreter/mod.rs",
-        "to": "src/interpreter/value.rs",
-        "relation": "shared_dir:src/interpreter",
+        "from": "conformance/valid/v23_nested_consent.woke",
+        "to": "conformance/valid/v05_consent.woke",
+        "relation": "shared_dir:conformance/valid",
         "weight": 1.0
       },
       {
@@ -901,15 +907,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/lsp/handlers/diagnostics.rs",
-        "to": "src/lsp/handlers/completion.rs",
-        "relation": "shared_dir:src/lsp/handlers",
-        "weight": 1.0
-      },
-      {
-        "from": "src/security/consent.rs",
-        "to": "src/security/mod.rs",
-        "relation": "shared_dir:src/security",
+        "from": "src/lexer/mod.rs",
+        "to": "src/lexer/token.rs",
+        "relation": "shared_dir:src/lexer",
         "weight": 1.0
       },
       {
@@ -1253,24 +1253,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/parser/mod.rs",
-          "src/stdlib/array.rs",
-          "src/dap/mod.rs",
-          "src/interpreter/mod.rs",
-          "src/interpreter/value.rs",
-          "src/vm/bytecode.rs",
-          "src/vm/compiler.rs",
-          "src/worker/mod.rs",
-          "src/main.rs"
+          "src/stdlib/net.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "UnsafeCode",
@@ -1297,16 +1289,24 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/stdlib/net.rs"
+          "src/parser/mod.rs",
+          "src/stdlib/array.rs",
+          "src/dap/mod.rs",
+          "src/interpreter/mod.rs",
+          "src/interpreter/value.rs",
+          "src/vm/bytecode.rs",
+          "src/vm/compiler.rs",
+          "src/worker/mod.rs",
+          "src/main.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",

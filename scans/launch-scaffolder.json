@@ -213,12 +213,36 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "memory",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/launcher-common/src/template.rs",
+        "to": "crates/launcher-common/src/metadata_block.rs",
+        "relation": "shared_dir:crates/launcher-common/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher-common/src/metadata_block.rs",
+        "to": "crates/launcher-common/src/config.rs",
+        "relation": "shared_dir:crates/launcher-common/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher-common/src/config.rs",
+        "to": "crates/launcher-common/src/discovery.rs",
+        "relation": "shared_dir:crates/launcher-common/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher-common/src/discovery.rs",
+        "to": "crates/launcher-common/src/standard.rs",
+        "relation": "shared_dir:crates/launcher-common/src",
+        "weight": 1.0
+      },
       {
         "from": "docs/ruleset-audit-2026-04-10/audit.sh",
         "to": "docs/ruleset-audit-2026-04-10/wave1-apply.sh",
@@ -248,45 +272,11 @@
         "to": "crates/launcher/src/cmd_config.rs",
         "relation": "shared_dir:crates/launcher/src",
         "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/src/template.rs",
-        "to": "crates/launcher-common/src/metadata_block.rs",
-        "relation": "shared_dir:crates/launcher-common/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/src/metadata_block.rs",
-        "to": "crates/launcher-common/src/config.rs",
-        "relation": "shared_dir:crates/launcher-common/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/src/config.rs",
-        "to": "crates/launcher-common/src/discovery.rs",
-        "relation": "shared_dir:crates/launcher-common/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/src/discovery.rs",
-        "to": "crates/launcher-common/src/standard.rs",
-        "relation": "shared_dir:crates/launcher-common/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/launcher-common/src/template.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -301,14 +291,27 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "docs/ruleset-audit-2026-04-10/wave2-apply.sh"
+          "crates/launcher-common/src/config.rs",
+          "crates/launcher-common/src/standard.rs",
+          "crates/launcher/src/cmd_realign.rs",
+          "crates/launcher/src/cmd_config.rs"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/launcher-common/src/template.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -321,17 +324,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/launcher-common/src/config.rs",
-          "crates/launcher-common/src/standard.rs",
-          "crates/launcher/src/cmd_realign.rs",
-          "crates/launcher/src/cmd_config.rs"
+          "docs/ruleset-audit-2026-04-10/wave2-apply.sh"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

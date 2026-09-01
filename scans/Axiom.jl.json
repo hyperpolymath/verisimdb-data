@@ -924,10 +924,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "memory",
     "cpu",
-    "concurrency"
+    "memory",
+    "concurrency",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -992,36 +992,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/layers/normalization.jl",
-        "to": "src/layers/abstract.jl",
-        "relation": "shared_dir:src/layers",
-        "weight": 1.0
-      },
-      {
-        "from": "src/layers/abstract.jl",
-        "to": "src/layers/dense.jl",
-        "relation": "shared_dir:src/layers",
-        "weight": 1.0
-      },
-      {
-        "from": "src/layers/dense.jl",
-        "to": "src/layers/conv.jl",
-        "relation": "shared_dir:src/layers",
-        "weight": 1.0
-      },
-      {
-        "from": "src/model_metadata.jl",
-        "to": "src/proof_export.jl",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/proof_export.jl",
-        "to": "src/model_packaging.jl",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
         "from": "src/backends/abstract.jl",
         "to": "src/backends/julia_backend.jl",
         "relation": "shared_dir:src/backends",
@@ -1082,9 +1052,51 @@
         "weight": 1.0
       },
       {
-        "from": "packages/SMTLib.jl/src/abi/Foreign.idr",
-        "to": "packages/SMTLib.jl/src/abi/Types.idr",
-        "relation": "shared_dir:packages/SMTLib.jl/src/abi",
+        "from": "zig/src/bench.zig",
+        "to": "zig/src/threading.zig",
+        "relation": "shared_dir:zig/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/layers/normalization.jl",
+        "to": "src/layers/abstract.jl",
+        "relation": "shared_dir:src/layers",
+        "weight": 1.0
+      },
+      {
+        "from": "src/layers/abstract.jl",
+        "to": "src/layers/dense.jl",
+        "relation": "shared_dir:src/layers",
+        "weight": 1.0
+      },
+      {
+        "from": "src/layers/dense.jl",
+        "to": "src/layers/conv.jl",
+        "relation": "shared_dir:src/layers",
+        "weight": 1.0
+      },
+      {
+        "from": "ext/AxiomCUDAExt.jl",
+        "to": "ext/AxiomMetalExt.jl",
+        "relation": "shared_dir:ext",
+        "weight": 1.0
+      },
+      {
+        "from": "ext/AxiomMetalExt.jl",
+        "to": "ext/AxiomAMDGPUExt.jl",
+        "relation": "shared_dir:ext",
+        "weight": 1.0
+      },
+      {
+        "from": "test/verification/soundness_tests.jl",
+        "to": "test/verification/proof_export_tests.jl",
+        "relation": "shared_dir:test/verification",
+        "weight": 1.0
+      },
+      {
+        "from": "src/integrations/huggingface.jl",
+        "to": "src/integrations/interop.jl",
+        "relation": "shared_dir:src/integrations",
         "weight": 1.0
       },
       {
@@ -1148,18 +1160,6 @@
         "weight": 1.0
       },
       {
-        "from": "ext/AxiomCUDAExt.jl",
-        "to": "ext/AxiomMetalExt.jl",
-        "relation": "shared_dir:ext",
-        "weight": 1.0
-      },
-      {
-        "from": "ext/AxiomMetalExt.jl",
-        "to": "ext/AxiomAMDGPUExt.jl",
-        "relation": "shared_dir:ext",
-        "weight": 1.0
-      },
-      {
         "from": "src/verification/certificates.jl",
         "to": "src/verification/signing.jl",
         "relation": "shared_dir:src/verification",
@@ -1172,21 +1172,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/integrations/huggingface.jl",
-        "to": "src/integrations/interop.jl",
-        "relation": "shared_dir:src/integrations",
+        "from": "packages/SMTLib.jl/src/abi/Foreign.idr",
+        "to": "packages/SMTLib.jl/src/abi/Types.idr",
+        "relation": "shared_dir:packages/SMTLib.jl/src/abi",
         "weight": 1.0
       },
       {
-        "from": "zig/src/bench.zig",
-        "to": "zig/src/threading.zig",
-        "relation": "shared_dir:zig/src",
+        "from": "src/model_metadata.jl",
+        "to": "src/proof_export.jl",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
-        "from": "test/verification/soundness_tests.jl",
-        "to": "test/verification/proof_export_tests.jl",
-        "relation": "shared_dir:test/verification",
+        "from": "src/proof_export.jl",
+        "to": "src/model_packaging.jl",
+        "relation": "shared_dir:src",
         "weight": 1.0
       }
     ]
@@ -1195,24 +1195,13 @@
     "rows": [
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "memory",
+        "sink_axis": "concurrency",
         "severity_value": 3.5,
         "files": [
           "crypto/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/verification/signing.jl",
-          "src/backends/zig_ffi.jl"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "ProofDrift",
@@ -1237,16 +1226,25 @@
         "relation": "ProofDrift->Cpu"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "src/verification/serialization.jl",
-          "src/integrations/interop.jl",
-          "test/verification/serialization_tests.jl"
+          "crypto/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/verification/signing.jl",
+          "src/backends/zig_ffi.jl"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "MutationGap",
@@ -1259,14 +1257,16 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "crypto/src/lib.rs"
+          "src/verification/serialization.jl",
+          "src/integrations/interop.jl",
+          "test/verification/serialization_tests.jl"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }
