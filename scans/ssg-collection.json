@@ -1299,19 +1299,19 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
-    "network",
-    "concurrency",
     "cpu",
+    "concurrency",
+    "network",
+    "memory",
     "time"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "ssg-fixes/noteg-ssg/engine/src/noteg_engine.ads",
-        "to": "ssg-fixes/noteg-ssg/engine/src/noteg_engine.adb",
-        "relation": "shared_dir:ssg-fixes/noteg-ssg/engine/src",
+        "from": "stubs/parallax/src/parallax.chpl",
+        "to": "stubs/parallax/src/parallel-press.chpl",
+        "relation": "shared_dir:stubs/parallax/src",
         "weight": 1.0
       },
       {
@@ -1321,21 +1321,15 @@
         "weight": 1.0
       },
       {
-        "from": "stubs/parallax/src/parallax.chpl",
-        "to": "stubs/parallax/src/parallel-press.chpl",
-        "relation": "shared_dir:stubs/parallax/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ssg-fixes/poly-ssg/scripts/validate-output.sh",
-        "to": "ssg-fixes/poly-ssg/scripts/test-all.sh",
-        "relation": "shared_dir:ssg-fixes/poly-ssg/scripts",
-        "weight": 1.0
-      },
-      {
         "from": "ssg-fixes/poly-ssg/engines/rescript-wasm/lib/wasm_binary.ml",
         "to": "ssg-fixes/poly-ssg/engines/rescript-wasm/lib/wasm_sourcemap.ml",
         "relation": "shared_dir:ssg-fixes/poly-ssg/engines/rescript-wasm/lib",
+        "weight": 1.0
+      },
+      {
+        "from": "stubs/prodigy/engine/src/prodigy_template.pl",
+        "to": "stubs/prodigy/engine/src/prodigy_core.pl",
+        "relation": "shared_dir:stubs/prodigy/engine/src",
         "weight": 1.0
       },
       {
@@ -1363,9 +1357,15 @@
         "weight": 1.0
       },
       {
-        "from": "stubs/prodigy/engine/src/prodigy_template.pl",
-        "to": "stubs/prodigy/engine/src/prodigy_core.pl",
-        "relation": "shared_dir:stubs/prodigy/engine/src",
+        "from": "ssg-fixes/poly-ssg/scripts/validate-output.sh",
+        "to": "ssg-fixes/poly-ssg/scripts/test-all.sh",
+        "relation": "shared_dir:ssg-fixes/poly-ssg/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "ssg-fixes/noteg-ssg/engine/src/noteg_engine.ads",
+        "to": "ssg-fixes/noteg-ssg/engine/src/noteg_engine.adb",
+        "relation": "shared_dir:ssg-fixes/noteg-ssg/engine/src",
         "weight": 1.0
       }
     ]
@@ -1373,26 +1373,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "variants/saur/tests/security_test.js",
-          "variants/macrauchenia/tests/security/validation_test.js",
-          "variants/labnote/tests/adapter_test.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "implementations/wokelang/src/builder.rs"
+          "implementations/wokelang/src/content.rs",
+          "implementations/wokelang/src/config.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "CryptoMisuse",
@@ -1406,15 +1395,39 @@
         "relation": "CryptoMisuse->Network"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "implementations/wokelang/src/content.rs",
-          "implementations/wokelang/src/config.rs"
+          "variants/saur/tests/security_test.js",
+          "variants/macrauchenia/tests/security/validation_test.js",
+          "variants/labnote/tests/adapter_test.js"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "ssg-fixes/poly-ssg/engines/terrapin-ssg/terrapin-ssg.py",
+          "implementations/wokelang/src/sitemap.rs"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "variants/saur/tests/security_test.js",
+          "variants/macrauchenia/tests/security/validation_test.js",
+          "variants/labnote/tests/adapter_test.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -1438,26 +1451,25 @@
         "relation": "CryptoMisuse->Time"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "implementations/wokelang/src/builder.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "implementations/wokelang/src/content.rs",
           "implementations/wokelang/src/config.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "ssg-fixes/poly-ssg/engines/terrapin-ssg/terrapin-ssg.py",
-          "implementations/wokelang/src/sitemap.rs"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -1468,18 +1480,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "variants/saur/tests/security_test.js",
-          "variants/macrauchenia/tests/security/validation_test.js",
-          "variants/labnote/tests/adapter_test.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

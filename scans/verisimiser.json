@@ -359,10 +359,10 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
     "concurrency",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -379,15 +379,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/sidecar/json.rs",
-        "to": "src/sidecar/lock.rs",
-        "relation": "shared_dir:src/sidecar",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/install-zig.sh",
         "to": "scripts/abi-ffi-gate.jl",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/doctor.rs",
+        "to": "src/gc.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/gc.rs",
+        "to": "src/main.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -409,21 +415,15 @@
         "weight": 1.0
       },
       {
+        "from": "src/sidecar/json.rs",
+        "to": "src/sidecar/lock.rs",
+        "relation": "shared_dir:src/sidecar",
+        "weight": 1.0
+      },
+      {
         "from": "src/tier1/provenance.rs",
         "to": "src/tier1/temporal.rs",
         "relation": "shared_dir:src/tier1",
-        "weight": 1.0
-      },
-      {
-        "from": "src/doctor.rs",
-        "to": "src/gc.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/gc.rs",
-        "to": "src/main.rs",
-        "relation": "shared_dir:src",
         "weight": 1.0
       }
     ]
@@ -431,17 +431,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/codegen/parser.rs",
-          "src/codegen/overlay.rs",
-          "src/codegen/ident.rs",
-          "src/main.rs"
+          "src/sidecar/json.rs",
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -469,16 +468,17 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "src/codegen/parser.rs",
-          "src/sidecar/json.rs",
-          "src/manifest/mod.rs"
+          "src/codegen/overlay.rs",
+          "src/codegen/ident.rs",
+          "src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }
