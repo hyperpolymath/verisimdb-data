@@ -235,9 +235,9 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
-    "memory",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -270,26 +270,19 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "tools/qubes-policy-generator.sh",
+          "tests/security-tests.sh",
+          "tests/integration-tests.sh",
+          "tests/unit-tests.sh",
           "qubes-setup.sh",
+          "scripts/rsr-verify.sh",
           "qubes-setup-advanced.sh"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/WikiMain.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -307,19 +300,26 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "tests/security-tests.sh",
-          "tests/integration-tests.sh",
-          "tests/unit-tests.sh",
+          "src/WikiMain.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/qubes-policy-generator.sh",
           "qubes-setup.sh",
-          "scripts/rsr-verify.sh",
           "qubes-setup-advanced.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

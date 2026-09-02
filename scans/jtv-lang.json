@@ -427,12 +427,24 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "viper-pkg/src/registry.jl",
+        "to": "viper-pkg/src/install.jl",
+        "relation": "shared_dir:viper-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "viper-pkg/src/install.jl",
+        "to": "viper-pkg/src/ViperPkg.jl",
+        "relation": "shared_dir:viper-pkg/src",
+        "weight": 1.0
+      },
       {
         "from": "crates/jtv-cli/src/rsr_check.rs",
         "to": "crates/jtv-cli/src/repl.rs",
@@ -515,18 +527,6 @@
         "from": "crates/jtv-core/src/ast.rs",
         "to": "crates/jtv-core/src/error.rs",
         "relation": "shared_dir:crates/jtv-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "viper-pkg/src/registry.jl",
-        "to": "viper-pkg/src/install.jl",
-        "relation": "shared_dir:viper-pkg/src",
-        "weight": 1.0
-      },
-      {
-        "from": "viper-pkg/src/install.jl",
-        "to": "viper-pkg/src/ViperPkg.jl",
-        "relation": "shared_dir:viper-pkg/src",
         "weight": 1.0
       },
       {
@@ -738,30 +738,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "setup.sh"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/jtv-core/src/purity.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -772,32 +748,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/jtv-cli/src/rsr_check.rs",
-          "crates/jtv-cli/src/repl.rs",
-          "crates/jtv-cli/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "packages/jtv-analyzer/src/Main.res"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UncheckedError->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -814,6 +764,18 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/jtv-core/src/purity.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -824,6 +786,44 @@
           "Networking"
         ],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "setup.sh"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "packages/jtv-analyzer/src/Main.res"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UncheckedError->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/jtv-cli/src/rsr_check.rs",
+          "crates/jtv-cli/src/repl.rs",
+          "crates/jtv-cli/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

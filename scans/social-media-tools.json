@@ -322,32 +322,14 @@
     }
   ],
   "recommended_attacks": [
-    "network",
+    "concurrency",
     "disk",
     "memory",
-    "concurrency",
+    "network",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "dipstick/services/collector/src/platforms.rs",
-        "to": "dipstick/services/collector/src/lib.rs",
-        "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/src/lib.rs",
-        "to": "dipstick/services/collector/src/scheduler.rs",
-        "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/src/scheduler.rs",
-        "to": "dipstick/services/collector/src/main.rs",
-        "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
       {
         "from": "dipstick/services/collector/tests/reflexive_tests.rs",
         "to": "dipstick/services/collector/tests/contract_tests.rs",
@@ -364,6 +346,24 @@
         "from": "dipstick/tools/cli/migrate.sh",
         "to": "dipstick/tools/cli/rollback.sh",
         "relation": "shared_dir:dipstick/tools/cli",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/src/platforms.rs",
+        "to": "dipstick/services/collector/src/lib.rs",
+        "relation": "shared_dir:dipstick/services/collector/src",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/src/lib.rs",
+        "to": "dipstick/services/collector/src/scheduler.rs",
+        "relation": "shared_dir:dipstick/services/collector/src",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/src/scheduler.rs",
+        "to": "dipstick/services/collector/src/main.rs",
+        "relation": "shared_dir:dipstick/services/collector/src",
         "weight": 1.0
       },
       {
@@ -635,32 +635,18 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "dipstick/services/collector/src/main.rs",
-          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
+          "dipstick/services/pestle-observatory/src/observatory.affine",
+          "dipstick/services/analyzer-rescript/src/Main.affine"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "dipstick/services/collector/src/main.rs",
-          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "PanicPath->Disk"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -677,6 +663,34 @@
         "relation": "InsecureProtocol->Network"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "dipstick/services/collector/src/main.rs",
+          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "dipstick/services/collector/src/main.rs",
+          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Phoenix"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -688,20 +702,6 @@
           "Phoenix"
         ],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "dipstick/services/pestle-observatory/src/observatory.affine",
-          "dipstick/services/analyzer-rescript/src/Main.affine"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   }
