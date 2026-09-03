@@ -211,14 +211,26 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
     "memory",
+    "network",
+    "cpu",
     "disk",
-    "network"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "server/src/formats/toml.rs",
+        "to": "server/src/formats/yaml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/formats/yaml.rs",
+        "to": "server/src/formats/xml.rs",
+        "relation": "shared_dir:server/src/formats",
+        "weight": 1.0
+      },
       {
         "from": "server/tests/contract_tests.rs",
         "to": "server/tests/aspect_tests.rs",
@@ -272,33 +284,11 @@
         "to": "server/src/main.rs",
         "relation": "shared_dir:server/src",
         "weight": 1.0
-      },
-      {
-        "from": "server/src/formats/toml.rs",
-        "to": "server/src/formats/yaml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
-      },
-      {
-        "from": "server/src/formats/yaml.rs",
-        "to": "server/src/formats/xml.rs",
-        "relation": "shared_dir:server/src/formats",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "web/app.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
@@ -308,6 +298,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "web/app.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

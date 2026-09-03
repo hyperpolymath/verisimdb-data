@@ -319,11 +319,17 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "ui/src/App.affine",
+        "to": "ui/src/HarApi.affine",
+        "relation": "shared_dir:ui/src",
+        "weight": 1.0
+      },
       {
         "from": "scripts/wiki-audit.sh",
         "to": "scripts/standardize_readmes.sh",
@@ -371,17 +377,40 @@
         "to": "lib/script_manager/health_dashboard.ex",
         "relation": "shared_dir:lib/script_manager",
         "weight": 1.0
-      },
-      {
-        "from": "ui/src/App.affine",
-        "to": "ui/src/HarApi.affine",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/lib/common.sh",
+          "lib/script_manager/media_finder.ex",
+          "lib/script_manager/tui.ex",
+          "lib/script_manager/estate_deployer.ex",
+          "lib/script_manager/toolchain_linker.ex",
+          "lib/script_manager/git_syncer.ex",
+          "lib/script_manager/dependency_fixer.ex",
+          "lib/script_manager/script_runner.ex",
+          "lib/script_manager/ownership_guard.ex",
+          "lib/script_manager/repo_cleanup.ex"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "launchers/git-scripts-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -402,16 +431,6 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "launchers/git-scripts-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -420,25 +439,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/lib/common.sh",
-          "lib/script_manager/media_finder.ex",
-          "lib/script_manager/tui.ex",
-          "lib/script_manager/estate_deployer.ex",
-          "lib/script_manager/toolchain_linker.ex",
-          "lib/script_manager/git_syncer.ex",
-          "lib/script_manager/dependency_fixer.ex",
-          "lib/script_manager/script_runner.ex",
-          "lib/script_manager/ownership_guard.ex",
-          "lib/script_manager/repo_cleanup.ex"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       }
     ]
   }

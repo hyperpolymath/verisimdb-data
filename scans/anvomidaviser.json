@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "anvomidaviser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -139,38 +139,28 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.py",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "src/codegen/mod.rs",
         "to": "src/codegen/validator.rs",
         "relation": "shared_dir:src/codegen",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.py",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -180,6 +170,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

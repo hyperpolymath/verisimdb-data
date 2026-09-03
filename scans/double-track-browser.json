@@ -166,7 +166,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 12263,
+    "total_lines": 12285,
     "unsafe_blocks": 106,
     "panic_sites": 1,
     "unwrap_calls": 46,
@@ -287,7 +287,7 @@
     },
     {
       "file_path": "rust_core/src/form_data.rs",
-      "lines": 245,
+      "lines": 244,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 3,
@@ -308,7 +308,7 @@
     },
     {
       "file_path": "rust_core/src/lib.rs",
-      "lines": 100,
+      "lines": 107,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 7,
@@ -328,7 +328,7 @@
     },
     {
       "file_path": "rust_core/src/interests.rs",
-      "lines": 1041,
+      "lines": 1072,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 31,
@@ -418,13 +418,25 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu",
     "disk",
-    "memory"
+    "memory",
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "tests/affine/driver.affine",
+        "to": "tests/affine/extension_lifecycle_test.affine",
+        "relation": "shared_dir:tests/affine",
+        "weight": 1.0
+      },
+      {
+        "from": "src/bindings/DomBindings.affine",
+        "to": "src/bindings/Chrome.affine",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
       {
         "from": "rust_core/src/profile.rs",
         "to": "rust_core/src/form_data.rs",
@@ -456,12 +468,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/bindings/DomBindings.affine",
-        "to": "src/bindings/Chrome.affine",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/build.affine",
         "to": "scripts/build.sh",
         "relation": "shared_dir:scripts",
@@ -490,31 +496,30 @@
         "to": "lib/ocaml/Chrome.affine",
         "relation": "shared_dir:lib/ocaml",
         "weight": 1.0
-      },
-      {
-        "from": "tests/affine/driver.affine",
-        "to": "tests/affine/extension_lifecycle_test.affine",
-        "relation": "shared_dir:tests/affine",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "src/content/Content.affine",
-          "src/bindings/DomBindings.affine",
-          "src/bindings/Chrome.affine",
-          "lib/ocaml/Content.affine",
-          "lib/ocaml/DomBindings.affine",
-          "lib/ocaml/Chrome.affine"
+          "src/dashboard/Dashboard.res.js"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/dashboard/Dashboard.res.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -542,6 +547,21 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/content/Content.affine",
+          "src/bindings/DomBindings.affine",
+          "src/bindings/Chrome.affine",
+          "lib/ocaml/Content.affine",
+          "lib/ocaml/DomBindings.affine",
+          "lib/ocaml/Chrome.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -554,26 +574,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }
