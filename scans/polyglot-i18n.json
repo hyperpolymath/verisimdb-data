@@ -494,66 +494,12 @@
   ],
   "recommended_attacks": [
     "memory",
+    "cpu",
     "network",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/core/DocumentExtract.affine",
-        "to": "src/core/FuzzyMatch.affine",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/FuzzyMatch.affine",
-        "to": "src/core/I18n.affine",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/I18n.affine",
-        "to": "src/core/Plural.affine",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/Plural.affine",
-        "to": "src/core/RelativeTime.affine",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "tui/src/polyglot_tui-main.adb",
-        "to": "tui/src/polyglot_tui-terminal.adb",
-        "relation": "shared_dir:tui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/locale-validator.js",
-        "to": "tools/sync-locales.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/sync-locales.js",
-        "to": "tools/extract-strings.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/extract-strings.js",
-        "to": "tools/missing-translations.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/missing-translations.js",
-        "to": "tools/rsr-verify.js",
-        "relation": "shared_dir:tools",
-        "weight": 1.0
-      },
       {
         "from": "test/i18n.makePlurals.js",
         "to": "test/i18n.writenewPhrase.js",
@@ -582,6 +528,12 @@
         "from": "test/i18n.configureAutoreload.js",
         "to": "test/i18n.noTraversal.js",
         "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "tui/src/polyglot_tui-main.adb",
+        "to": "tui/src/polyglot_tui-terminal.adb",
+        "relation": "shared_dir:tui/src",
         "weight": 1.0
       },
       {
@@ -618,6 +570,54 @@
         "from": "src/lib/ocaml/I18n.affine",
         "to": "src/lib/ocaml/Plural.affine",
         "relation": "shared_dir:src/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/locale-validator.js",
+        "to": "tools/sync-locales.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/sync-locales.js",
+        "to": "tools/extract-strings.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/extract-strings.js",
+        "to": "tools/missing-translations.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/missing-translations.js",
+        "to": "tools/rsr-verify.js",
+        "relation": "shared_dir:tools",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/DocumentExtract.affine",
+        "to": "src/core/FuzzyMatch.affine",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/FuzzyMatch.affine",
+        "to": "src/core/I18n.affine",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/I18n.affine",
+        "to": "src/core/Plural.affine",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/Plural.affine",
+        "to": "src/core/RelativeTime.affine",
+        "relation": "shared_dir:src/core",
         "weight": 1.0
       },
       {
@@ -829,16 +829,19 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "adapters/crm/salesforce.js"
+          "src/core/DocumentExtract.affine",
+          "src/lib/ocaml/DocumentExtract.affine",
+          "src/lib/bs/core/DocumentExtract.affine",
+          "bindings/rescript/I18n.affine"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "InputBoundary",
@@ -859,19 +862,16 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/core/DocumentExtract.affine",
-          "src/lib/ocaml/DocumentExtract.affine",
-          "src/lib/bs/core/DocumentExtract.affine",
-          "bindings/rescript/I18n.affine"
+          "adapters/crm/salesforce.js"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

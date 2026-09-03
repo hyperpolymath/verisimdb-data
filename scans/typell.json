@@ -459,8 +459,8 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -486,12 +486,6 @@
         "from": "scripts/maintenance/perms-state.sh",
         "to": "scripts/maintenance/run-maintenance.sh",
         "relation": "shared_dir:scripts/maintenance",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/typell-eclexia/src/resource.rs",
-        "to": "crates/typell-eclexia/src/bridge.rs",
-        "relation": "shared_dir:crates/typell-eclexia/src",
         "weight": 1.0
       },
       {
@@ -552,6 +546,12 @@
         "from": "src/abi/Foreign.idr",
         "to": "src/abi/Types.idr",
         "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/typell-eclexia/src/resource.rs",
+        "to": "crates/typell-eclexia/src/bridge.rs",
+        "relation": "shared_dir:crates/typell-eclexia/src",
         "weight": 1.0
       },
       {
@@ -799,6 +799,19 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/typell-core/src/proof.rs",
+          "crates/typell-server/src/main.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -822,19 +835,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/typell-core/src/proof.rs",
-          "crates/typell-server/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

@@ -399,35 +399,17 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
-    "concurrency",
-    "memory"
+    "memory",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/verisimdb/CorpusAnalyzer.affine",
-        "to": "src/verisimdb/VeriSimDB.affine",
-        "relation": "shared_dir:src/verisimdb",
-        "weight": 1.0
-      },
-      {
-        "from": "src/verisimdb/VeriSimDB.affine",
-        "to": "src/verisimdb/Export.affine",
-        "relation": "shared_dir:src/verisimdb",
-        "weight": 1.0
-      },
-      {
         "from": "api/zig-gateway/src/lol_ffi.zig",
         "to": "api/zig-gateway/src/main.zig",
         "relation": "shared_dir:api/zig-gateway/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/store.zig",
-        "to": "ffi/zig/src/main.zig",
-        "relation": "shared_dir:ffi/zig/src",
         "weight": 1.0
       },
       {
@@ -458,6 +440,24 @@
         "from": "orchestrator/lib/lol/rate_limiter.ex",
         "to": "orchestrator/lib/lol/julia_bridge.ex",
         "relation": "shared_dir:orchestrator/lib/lol",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/store.zig",
+        "to": "ffi/zig/src/main.zig",
+        "relation": "shared_dir:ffi/zig/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/verisimdb/CorpusAnalyzer.affine",
+        "to": "src/verisimdb/VeriSimDB.affine",
+        "relation": "shared_dir:src/verisimdb",
+        "weight": 1.0
+      },
+      {
+        "from": "src/verisimdb/VeriSimDB.affine",
+        "to": "src/verisimdb/Export.affine",
+        "relation": "shared_dir:src/verisimdb",
         "weight": 1.0
       },
       {
@@ -585,19 +585,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "orchestrator/test/rate_limiter_test.exs",
-          "orchestrator/test/crawler_worker_test.exs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "MutationGap->Cpu"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -610,33 +597,17 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UnsafeDeserialization",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/utils/Http.affine",
-          "src/crawlers/BibleCloud.affine",
-          "src/crawlers/FindBible.affine",
-          "src/crawlers/BibleCom.affine",
-          "src/api/DigitalBiblePlatform.affine"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeDeserialization->Memory"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/utils/Http.affine",
-          "test/Vitest.affine"
+          "analysis/test/runtests.jl",
+          "proofs/theories/information_theory.agda"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -653,17 +624,17 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "analysis/test/runtests.jl",
-          "proofs/theories/information_theory.agda"
+          "src/utils/Http.affine",
+          "test/Vitest.affine"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "ProofDrift->Cpu"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "PathTraversal",
@@ -690,6 +661,35 @@
           "OTP"
         ],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "orchestrator/test/rate_limiter_test.exs",
+          "orchestrator/test/crawler_worker_test.exs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/utils/Http.affine",
+          "src/crawlers/BibleCloud.affine",
+          "src/crawlers/FindBible.affine",
+          "src/crawlers/BibleCom.affine",
+          "src/api/DigitalBiblePlatform.affine"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeDeserialization->Memory"
       }
     ]
   }

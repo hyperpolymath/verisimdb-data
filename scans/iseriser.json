@@ -98,7 +98,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 18419,
+    "total_lines": 18785,
     "unsafe_blocks": 36,
     "panic_sites": 0,
     "unwrap_calls": 1,
@@ -189,7 +189,7 @@
     },
     {
       "file_path": "src/codegen/scaffold.rs",
-      "lines": 1925,
+      "lines": 2287,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -353,36 +353,12 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
+    "disk",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/abi/idris_emitter.rs",
-        "to": "src/abi/zig_ffi_parser.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/zig_ffi_parser.rs",
-        "to": "src/abi/verify.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "satellites/a2mliser/scripts/install-zig.sh",
-        "to": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:satellites/a2mliser/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.jl",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/customizer.rs",
         "to": "src/codegen/cartridge.rs",
@@ -400,6 +376,30 @@
         "to": "src/codegen/scaffold.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "satellites/a2mliser/scripts/install-zig.sh",
+        "to": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:satellites/a2mliser/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/idris_emitter.rs",
+        "to": "src/abi/zig_ffi_parser.rs",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/zig_ffi_parser.rs",
+        "to": "src/abi/verify.rs",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/abi-ffi-gate.jl",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
@@ -407,13 +407,23 @@
     "rows": [
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "src/abi/idris_emitter.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "satellites/a2mliser/src/interface/ffi/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -445,23 +455,13 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/abi/idris_emitter.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "satellites/a2mliser/src/interface/ffi/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

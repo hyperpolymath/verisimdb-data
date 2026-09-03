@@ -281,32 +281,14 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
-    "network",
+    "disk",
     "memory",
-    "disk"
+    "concurrency",
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/install-on-phone.sh",
-        "to": "scripts/setup.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/setup.sh",
-        "to": "scripts/install-termux.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-termux.sh",
-        "to": "scripts/build-android.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
         "to": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
@@ -329,6 +311,24 @@
         "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
         "to": "crates/neurophone-core/tests/lifecycle.rs",
         "relation": "shared_dir:crates/neurophone-core/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-on-phone.sh",
+        "to": "scripts/setup.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/setup.sh",
+        "to": "scripts/install-termux.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-termux.sh",
+        "to": "scripts/build-android.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -588,19 +588,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/bt-presence/build.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -613,6 +600,19 @@
           "Networking"
         ],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/bt-presence/build.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",

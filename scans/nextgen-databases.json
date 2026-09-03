@@ -429,13 +429,25 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
+    "disk",
     "network",
-    "disk"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "nqc/verification/tests/nqc/cache_test.gleam",
+        "to": "nqc/verification/tests/nqc/formatter_test.gleam",
+        "relation": "shared_dir:nqc/verification/tests/nqc",
+        "weight": 1.0
+      },
+      {
+        "from": "nqc/test/nqc/cache_test.gleam",
+        "to": "nqc/test/nqc/formatter_test.gleam",
+        "relation": "shared_dir:nqc/test/nqc",
+        "weight": 1.0
+      },
       {
         "from": "nqc/nqc-enhanced-launcher.sh",
         "to": "nqc/nqc-launcher.sh",
@@ -465,43 +477,11 @@
         "to": "nqc/src/nqc/history.gleam",
         "relation": "shared_dir:nqc/src/nqc",
         "weight": 1.0
-      },
-      {
-        "from": "nqc/verification/tests/nqc/cache_test.gleam",
-        "to": "nqc/verification/tests/nqc/formatter_test.gleam",
-        "relation": "shared_dir:nqc/verification/tests/nqc",
-        "weight": 1.0
-      },
-      {
-        "from": "nqc/test/nqc/cache_test.gleam",
-        "to": "nqc/test/nqc/formatter_test.gleam",
-        "relation": "shared_dir:nqc/test/nqc",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "nqc/nqc-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "nqc/nqc-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -524,16 +504,6 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "nqc/src/nqc/profiles.gleam"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -548,6 +518,26 @@
         "relation": "ProofDrift->Cpu"
       },
       {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "nqc/src/nqc/profiles.gleam"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "nqc/nqc-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -556,6 +546,16 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "nqc/nqc-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }
