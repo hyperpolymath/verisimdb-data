@@ -5,15 +5,15 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "ProofDrift",
-      "location": "test/runtests.jl",
-      "file": "test/runtests.jl",
+      "category": "InputBoundary",
+      "location": "gnome-extension/extension.js",
+      "file": "gnome-extension/extension.js",
       "severity": "Medium",
-      "description": "8 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
+      "description": "1 JSON.parse call(s) with 0 try block(s) in gnome-extension/extension.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
       "recommended_attack": [
         "cpu"
       ],
-      "test_context": "test_only"
+      "test_context": "production"
     },
     {
       "category": "ProofDrift",
@@ -27,15 +27,15 @@
       "test_context": "test_only"
     },
     {
-      "category": "InputBoundary",
-      "location": "gnome-extension/extension.js",
-      "file": "gnome-extension/extension.js",
+      "category": "ProofDrift",
+      "location": "test/runtests.jl",
+      "file": "test/runtests.jl",
       "severity": "Medium",
-      "description": "1 JSON.parse call(s) with 0 try block(s) in gnome-extension/extension.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "description": "8 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
       "recommended_attack": [
         "cpu"
       ],
-      "test_context": "production"
+      "test_context": "test_only"
     }
   ],
   "statistics": {
@@ -68,6 +68,17 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/e2e_test.jl",
+          "test/runtests.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -76,17 +87,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/runtests.jl",
-          "test/e2e_test.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
       }
     ]
   }
