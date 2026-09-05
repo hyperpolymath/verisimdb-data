@@ -45,6 +45,18 @@
     },
     {
       "category": "MutationGap",
+      "location": "test/integration/memory_isolation_test.exs",
+      "file": "test/integration/memory_isolation_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file test/integration/memory_isolation_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "suppressed": true,
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
       "location": "test/integration/crash_capture_test.exs",
       "file": "test/integration/crash_capture_test.exs",
       "severity": "Low",
@@ -63,18 +75,6 @@
       "recommended_attack": [
         "cpu"
       ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "MutationGap",
-      "location": "test/integration/memory_isolation_test.exs",
-      "file": "test/integration/memory_isolation_test.exs",
-      "severity": "Low",
-      "description": "Elixir test file test/integration/memory_isolation_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "suppressed": true,
       "test_context": "test_only"
     }
   ],
@@ -99,22 +99,22 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "lib/munition/fuel/meter.ex",
+      "lines": 46,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "test_wasm/src/lib.rs",
       "lines": 286,
       "unsafe_blocks": 10,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -129,23 +129,13 @@
       "threading_constructs": 2
     },
     {
-      "file_path": "bench/boundary_bench.exs",
-      "lines": 110,
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 274,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "bench/startup_bench.exs",
-      "lines": 116,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
+      "allocation_sites": 1,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -169,20 +159,30 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "lib/munition/fuel/meter.ex",
-      "lines": 46,
+      "file_path": "bench/boundary_bench.exs",
+      "lines": 110,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "bench/startup_bench.exs",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -199,16 +199,16 @@
         "weight": 1.0
       },
       {
+        "from": "lib/munition/fuel/meter.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "test_wasm/src/lib.rs",
         "to": "OTP",
         "relation": "framework",
         "weight": 30.0
-      },
-      {
-        "from": "ffi/zig/src/main.zig",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
@@ -217,13 +217,7 @@
         "weight": 4.0
       },
       {
-        "from": "bench/boundary_bench.exs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "bench/startup_bench.exs",
+        "from": "ffi/zig/src/main.zig",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -241,7 +235,13 @@
         "weight": 1.0
       },
       {
-        "from": "lib/munition/fuel/meter.ex",
+        "from": "bench/boundary_bench.exs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "bench/startup_bench.exs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -251,27 +251,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "test_wasm/src/lib.rs",
-          "test_wasm/src/lib.rs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
         "files": [
           "test/munition_test.exs",
+          "test/integration/memory_isolation_test.exs",
           "test/integration/crash_capture_test.exs",
-          "test/integration/fuel_exhaustion_test.exs",
-          "test/integration/memory_isolation_test.exs"
+          "test/integration/fuel_exhaustion_test.exs"
         ],
         "frameworks": [
           "OTP"
@@ -290,6 +277,19 @@
           "OTP"
         ],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "test_wasm/src/lib.rs",
+          "test_wasm/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

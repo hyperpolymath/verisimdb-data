@@ -16,11 +16,11 @@
       "test_context": "production"
     },
     {
-      "category": "MutationGap",
-      "location": "test/property_test.jl",
-      "file": "test/property_test.jl",
+      "category": "ProofDrift",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
       "severity": "Medium",
-      "description": "6 @test assertion(s) in test/property_test.jl are all type-only (no value/equality checks) — mutation tests will pass trivially; add @test x == expected assertions",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
       "recommended_attack": [
         "cpu"
       ],
@@ -38,11 +38,11 @@
       "test_context": "test_only"
     },
     {
-      "category": "ProofDrift",
-      "location": "test/e2e_test.jl",
-      "file": "test/e2e_test.jl",
+      "category": "MutationGap",
+      "location": "test/property_test.jl",
+      "file": "test/property_test.jl",
       "severity": "Medium",
-      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
+      "description": "6 @test assertion(s) in test/property_test.jl are all type-only (no value/equality checks) — mutation tests will pass trivially; add @test x == expected assertions",
       "recommended_attack": [
         "cpu"
       ],
@@ -79,6 +79,17 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/e2e_test.jl",
+          "test/runtests.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -97,17 +108,6 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/runtests.jl",
-          "test/e2e_test.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
       }
     ]
   }

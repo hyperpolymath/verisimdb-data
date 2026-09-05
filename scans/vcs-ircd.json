@@ -20,10 +20,10 @@
     },
     {
       "category": "UnsafeFFI",
-      "location": "vext-tools/src/bindings/Std.affine",
-      "file": "vext-tools/src/bindings/Std.affine",
+      "location": "vext-tools/src/bindings/Deno.affine",
+      "file": "vext-tools/src/bindings/Deno.affine",
       "severity": "Medium",
-      "description": "5 FFI/external bindings in vext-tools/src/bindings/Std.affine",
+      "description": "19 FFI/external bindings in vext-tools/src/bindings/Deno.affine",
       "recommended_attack": [
         "memory"
       ],
@@ -31,10 +31,10 @@
     },
     {
       "category": "UnsafeFFI",
-      "location": "vext-tools/src/bindings/Deno.affine",
-      "file": "vext-tools/src/bindings/Deno.affine",
+      "location": "vext-tools/src/bindings/Std.affine",
+      "file": "vext-tools/src/bindings/Std.affine",
       "severity": "Medium",
-      "description": "19 FFI/external bindings in vext-tools/src/bindings/Deno.affine",
+      "description": "5 FFI/external bindings in vext-tools/src/bindings/Std.affine",
       "recommended_attack": [
         "memory"
       ],
@@ -62,6 +62,16 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "vext-core/src/main.rs",
+      "lines": 116,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
       "file_path": "vext-core/src/irc_client.rs",
       "lines": 294,
       "unsafe_blocks": 0,
@@ -80,17 +90,6 @@
       "allocation_sites": 2,
       "io_operations": 0,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "vext-core/src/pool.rs",
-      "lines": 226,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 6,
-      "io_operations": 0,
-      "threading_constructs": 1
     },
     {
       "file_path": "vext-core/src/config.rs",
@@ -115,6 +114,17 @@
       "threading_constructs": 1
     },
     {
+      "file_path": "vext-core/src/pool.rs",
+      "lines": 226,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
       "file_path": "vext-core/src/bin/send.rs",
       "lines": 100,
       "unsafe_blocks": 0,
@@ -135,14 +145,14 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "vext-core/src/main.rs",
-      "lines": 116,
+      "file_path": "vext-tools/src/hooks/Git.affine",
+      "lines": 400,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
+      "io_operations": 5,
+      "threading_constructs": 0
     },
     {
       "file_path": "vext-tools/src/hooks/Install.affine",
@@ -155,13 +165,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "vext-tools/src/hooks/Git.affine",
-      "lines": 400,
-      "unsafe_blocks": 0,
+      "file_path": "vext-tools/src/bindings/Deno.affine",
+      "lines": 87,
+      "unsafe_blocks": 19,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 5,
+      "io_operations": 6,
       "threading_constructs": 0
     },
     {
@@ -173,30 +183,26 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "vext-tools/src/bindings/Deno.affine",
-      "lines": 87,
-      "unsafe_blocks": 19,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "memory",
     "disk",
     "concurrency",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "vext-tools/src/bindings/Std.affine",
-        "to": "vext-tools/src/bindings/Deno.affine",
-        "relation": "shared_dir:vext-tools/src/bindings",
+        "from": "vext-tools/src/hooks/Git.affine",
+        "to": "vext-tools/src/hooks/Install.affine",
+        "relation": "shared_dir:vext-tools/src/hooks",
+        "weight": 1.0
+      },
+      {
+        "from": "vext-core/src/main.rs",
+        "to": "vext-core/src/irc_client.rs",
+        "relation": "shared_dir:vext-core/src",
         "weight": 1.0
       },
       {
@@ -207,12 +213,6 @@
       },
       {
         "from": "vext-core/src/protocol.rs",
-        "to": "vext-core/src/pool.rs",
-        "relation": "shared_dir:vext-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "vext-core/src/pool.rs",
         "to": "vext-core/src/config.rs",
         "relation": "shared_dir:vext-core/src",
         "weight": 1.0
@@ -225,20 +225,20 @@
       },
       {
         "from": "vext-core/src/listener.rs",
+        "to": "vext-core/src/pool.rs",
+        "relation": "shared_dir:vext-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "vext-core/src/pool.rs",
         "to": "vext-core/src/error.rs",
         "relation": "shared_dir:vext-core/src",
         "weight": 1.0
       },
       {
-        "from": "vext-core/src/error.rs",
-        "to": "vext-core/src/main.rs",
-        "relation": "shared_dir:vext-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "vext-tools/src/hooks/Install.affine",
-        "to": "vext-tools/src/hooks/Git.affine",
-        "relation": "shared_dir:vext-tools/src/hooks",
+        "from": "vext-tools/src/bindings/Deno.affine",
+        "to": "vext-tools/src/bindings/Std.affine",
+        "relation": "shared_dir:vext-tools/src/bindings",
         "weight": 1.0
       },
       {
@@ -246,6 +246,12 @@
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
+      },
+      {
+        "from": "vext-core/src/main.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
       },
       {
         "from": "vext-core/src/irc_client.rs",
@@ -260,12 +266,6 @@
         "weight": 1.0
       },
       {
-        "from": "vext-core/src/pool.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
         "from": "vext-core/src/config.rs",
         "to": "Networking",
         "relation": "framework",
@@ -273,6 +273,12 @@
       },
       {
         "from": "vext-core/src/listener.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "vext-core/src/pool.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 2.0
@@ -290,10 +296,10 @@
         "weight": 1.0
       },
       {
-        "from": "vext-core/src/main.rs",
+        "from": "vext-tools/src/hooks/Git.affine",
         "to": "Networking",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
         "from": "vext-tools/src/hooks/Install.affine",
@@ -302,39 +308,21 @@
         "weight": 1.0
       },
       {
-        "from": "vext-tools/src/hooks/Git.affine",
+        "from": "vext-tools/src/bindings/Deno.affine",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 57.0
       },
       {
         "from": "vext-tools/src/bindings/Std.affine",
         "to": "Networking",
         "relation": "framework",
         "weight": 15.0
-      },
-      {
-        "from": "vext-tools/src/bindings/Deno.affine",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 57.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "vext-core/src/config.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -352,13 +340,25 @@
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "vext-tools/src/bindings/Std.affine",
-          "vext-tools/src/bindings/Deno.affine"
+          "vext-tools/src/bindings/Deno.affine",
+          "vext-tools/src/bindings/Std.affine"
         ],
         "frameworks": [
           "Networking"
         ],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "vext-core/src/config.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
