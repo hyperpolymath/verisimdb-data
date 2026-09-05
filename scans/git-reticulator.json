@@ -52,6 +52,17 @@
   },
   "file_statistics": [
     {
+      "file_path": "tests/property_tests.rs",
+      "lines": 199,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 4,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "benches/git_reticulator_bench.rs",
       "lines": 116,
       "unsafe_blocks": 0,
@@ -73,13 +84,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/query.rs",
-      "lines": 327,
+      "file_path": "src/api/app.rs",
+      "lines": 68,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 8,
-      "io_operations": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -90,6 +101,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 7,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/query.rs",
+      "lines": 327,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 8,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -104,16 +125,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/api/app.rs",
-      "lines": 68,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "src/cli/main.rs",
       "lines": 196,
       "unsafe_blocks": 0,
@@ -123,39 +134,40 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/property_tests.rs",
-      "lines": 199,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
         "from": "src/ingest.rs",
-        "to": "src/query.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/query.rs",
         "to": "src/store.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
+        "from": "src/store.rs",
+        "to": "src/query.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property_tests.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property_tests.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "benches/git_reticulator_bench.rs",
         "to": "Networking",
         "relation": "framework",
@@ -180,13 +192,13 @@
         "weight": 1.0
       },
       {
-        "from": "src/query.rs",
+        "from": "src/api/app.rs",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "src/query.rs",
+        "from": "src/api/app.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -204,6 +216,18 @@
         "weight": 1.0
       },
       {
+        "from": "src/query.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/query.rs",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "src/lattice/mod.rs",
         "to": "Networking",
         "relation": "framework",
@@ -216,18 +240,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/api/app.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/app.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "src/cli/main.rs",
         "to": "Networking",
         "relation": "framework",
@@ -235,18 +247,6 @@
       },
       {
         "from": "src/cli/main.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/property_tests.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/property_tests.rs",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -255,19 +255,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/cli/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -293,6 +280,19 @@
           "WebServer"
         ],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/cli/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",

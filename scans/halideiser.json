@@ -1,21 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "halideiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "PanicPath",
-      "location": "src/codegen/parser.rs",
-      "file": "src/codegen/parser.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
     {
       "category": "UnboundedAllocation",
       "location": "src/manifest/mod.rs",
@@ -25,6 +13,18 @@
       "recommended_attack": [
         "memory",
         "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/codegen/parser.rs",
+      "file": "src/codegen/parser.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/codegen/parser.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
       ],
       "test_context": "production"
     },
@@ -49,6 +49,16 @@
   },
   "file_statistics": [
     {
+      "file_path": "tests/integration_tests.rs",
+      "lines": 424,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "examples/SafeDOMExample.affine",
       "lines": 129,
       "unsafe_blocks": 0,
@@ -59,33 +69,33 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "setup.sh",
-      "lines": 287,
+      "file_path": "scripts/abi-ffi-gate.py",
+      "lines": 103,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 3,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 610,
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/abi/Halideiser/ABI/Foreign.idr",
-      "lines": 350,
-      "unsafe_blocks": 16,
+      "file_path": "src/manifest/mod.rs",
+      "lines": 378,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -120,56 +130,46 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/manifest/mod.rs",
-      "lines": 378,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/abi/Halideiser/ABI/Foreign.idr",
+      "lines": 350,
+      "unsafe_blocks": 16,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "tests/integration_tests.rs",
-      "lines": 424,
+      "file_path": "src/interface/ffi/src/main.zig",
+      "lines": 610,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "setup.sh",
+      "lines": 287,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/install-zig.sh",
-      "lines": 59,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/abi-ffi-gate.py",
-      "lines": 103,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "memory",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/install-zig.sh",
-        "to": "scripts/abi-ffi-gate.py",
+        "from": "scripts/abi-ffi-gate.py",
+        "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
       },
@@ -190,16 +190,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -208,6 +198,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
