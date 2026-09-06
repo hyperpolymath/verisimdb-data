@@ -5,18 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "CommandInjection",
-      "location": "ipv6-only/src/scripts/ipv6-config.sh",
-      "file": "ipv6-only/src/scripts/ipv6-config.sh",
-      "severity": "Critical",
-      "description": "eval usage in ipv6-only/src/scripts/ipv6-config.sh",
-      "recommended_attack": [
-        "cpu",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "InsecureProtocol",
       "location": "ipv6-only/scripts/he-cert-check.sh",
       "file": "ipv6-only/scripts/he-cert-check.sh",
@@ -37,6 +25,18 @@
         "network"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "ipv6-only/src/scripts/ipv6-config.sh",
+      "file": "ipv6-only/src/scripts/ipv6-config.sh",
+      "severity": "Critical",
+      "description": "eval usage in ipv6-only/src/scripts/ipv6-config.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
@@ -50,16 +50,6 @@
   },
   "file_statistics": [
     {
-      "file_path": "setup.sh",
-      "lines": 278,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
       "file_path": ".machine_readable/contractiles/bust/bust.ncl",
       "lines": 66,
       "unsafe_blocks": 0,
@@ -70,18 +60,28 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ipv6-only/src/scripts/ipv6-config.sh",
-      "lines": 314,
+      "file_path": "ipv6-only/scripts/he-check-status.sh",
+      "lines": 153,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 5,
       "threading_constructs": 0
     },
     {
       "file_path": "ipv6-only/scripts/he-cert-check.sh",
       "lines": 99,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ipv6-only/scripts/he-update-endpoint.sh",
+      "lines": 130,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -100,18 +100,18 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ipv6-only/scripts/he-check-status.sh",
-      "lines": 153,
+      "file_path": "ipv6-only/src/scripts/ipv6-config.sh",
+      "lines": 314,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 5,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
-      "file_path": "ipv6-only/scripts/he-update-endpoint.sh",
-      "lines": 130,
+      "file_path": "setup.sh",
+      "lines": 278,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -121,27 +121,27 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "cpu",
-    "disk"
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "ipv6-only/scripts/he-cert-check.sh",
-        "to": "ipv6-only/scripts/he-tunnel-setup.sh",
-        "relation": "shared_dir:ipv6-only/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "ipv6-only/scripts/he-tunnel-setup.sh",
-        "to": "ipv6-only/scripts/he-check-status.sh",
-        "relation": "shared_dir:ipv6-only/scripts",
-        "weight": 1.0
-      },
-      {
         "from": "ipv6-only/scripts/he-check-status.sh",
+        "to": "ipv6-only/scripts/he-cert-check.sh",
+        "relation": "shared_dir:ipv6-only/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "ipv6-only/scripts/he-cert-check.sh",
         "to": "ipv6-only/scripts/he-update-endpoint.sh",
+        "relation": "shared_dir:ipv6-only/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "ipv6-only/scripts/he-update-endpoint.sh",
+        "to": "ipv6-only/scripts/he-tunnel-setup.sh",
         "relation": "shared_dir:ipv6-only/scripts",
         "weight": 1.0
       }
@@ -151,13 +151,13 @@
     "rows": [
       {
         "source_category": "CommandInjection",
-        "sink_axis": "disk",
+        "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
           "ipv6-only/src/scripts/ipv6-config.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -170,16 +170,6 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "ipv6-only/src/scripts/ipv6-config.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -188,6 +178,16 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "ipv6-only/src/scripts/ipv6-config.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }
