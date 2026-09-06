@@ -1,20 +1,9 @@
 {
   "schema_version": "2.5",
   "program_path": "oblibeniser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
-    {
-      "category": "UnsafeCode",
-      "location": "src/interface/ffi/src/main.zig",
-      "file": "src/interface/ffi/src/main.zig",
-      "severity": "High",
-      "description": "3 unsafe pointer casts in src/interface/ffi/src/main.zig",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
     {
       "category": "PanicPath",
       "location": "src/abi/mod.rs",
@@ -40,6 +29,17 @@
       "test_context": "production"
     },
     {
+      "category": "UnsafeCode",
+      "location": "src/interface/ffi/src/main.zig",
+      "file": "src/interface/ffi/src/main.zig",
+      "severity": "High",
+      "description": "3 unsafe pointer casts in src/interface/ffi/src/main.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -60,6 +60,16 @@
   },
   "file_statistics": [
     {
+      "file_path": "tests/integration_tests.rs",
+      "lines": 499,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "examples/SafeDOMExample.affine",
       "lines": 129,
       "unsafe_blocks": 0,
@@ -70,33 +80,34 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "setup.sh",
-      "lines": 287,
+      "file_path": "scripts/install-zig.sh",
+      "lines": 59,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 3,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/ffi/src/main.zig",
-      "lines": 661,
-      "unsafe_blocks": 3,
+      "file_path": "src/abi/mod.rs",
+      "lines": 644,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
+      "unwrap_calls": 1,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 10,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/interface/abi/Oblibeniser/ABI/Foreign.idr",
-      "lines": 350,
-      "unsafe_blocks": 21,
+      "file_path": "src/manifest/mod.rs",
+      "lines": 366,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -130,51 +141,40 @@
       "threading_constructs": 1
     },
     {
-      "file_path": "src/abi/mod.rs",
-      "lines": 644,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/abi/Oblibeniser/ABI/Foreign.idr",
+      "lines": 350,
+      "unsafe_blocks": 21,
       "panic_sites": 0,
-      "unwrap_calls": 1,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 10,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "src/manifest/mod.rs",
-      "lines": 366,
-      "unsafe_blocks": 0,
+      "file_path": "src/interface/ffi/src/main.zig",
+      "lines": 661,
+      "unsafe_blocks": 3,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
+      "allocation_sites": 2,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
-      "file_path": "tests/integration_tests.rs",
-      "lines": 499,
+      "file_path": "setup.sh",
+      "lines": 287,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/install-zig.sh",
-      "lines": 59,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 3,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -215,6 +215,16 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -233,16 +243,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

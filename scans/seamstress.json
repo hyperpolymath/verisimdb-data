@@ -6,15 +6,26 @@
   "weak_points": [
     {
       "category": "CommandInjection",
-      "location": "services/seamstressd/bench/runner_bench.exs",
-      "file": "services/seamstressd/bench/runner_bench.exs",
+      "location": "services/seamstressd/lib/seamstressd/runner.ex",
+      "file": "services/seamstressd/lib/seamstressd/runner.ex",
       "severity": "Medium",
-      "description": "System command execution in services/seamstressd/bench/runner_bench.exs",
+      "description": "System command execution in services/seamstressd/lib/seamstressd/runner.ex",
       "recommended_attack": [
         "cpu",
         "disk"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "MutationGap",
+      "location": "services/seamstressd/test/seamstressd_test.exs",
+      "file": "services/seamstressd/test/seamstressd_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file services/seamstressd/test/seamstressd_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
     },
     {
       "category": "CommandInjection",
@@ -78,22 +89,11 @@
       "test_context": "test_only"
     },
     {
-      "category": "MutationGap",
-      "location": "services/seamstressd/test/seamstressd_test.exs",
-      "file": "services/seamstressd/test/seamstressd_test.exs",
-      "severity": "Low",
-      "description": "Elixir test file services/seamstressd/test/seamstressd_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
       "category": "CommandInjection",
-      "location": "services/seamstressd/lib/seamstressd/runner.ex",
-      "file": "services/seamstressd/lib/seamstressd/runner.ex",
+      "location": "services/seamstressd/bench/runner_bench.exs",
+      "file": "services/seamstressd/bench/runner_bench.exs",
       "severity": "Medium",
-      "description": "System command execution in services/seamstressd/lib/seamstressd/runner.ex",
+      "description": "System command execution in services/seamstressd/bench/runner_bench.exs",
       "recommended_attack": [
         "cpu",
         "disk"
@@ -102,10 +102,10 @@
     },
     {
       "category": "UnboundedAllocation",
-      "location": "tools/seamctl/src/report.rs",
-      "file": "tools/seamctl/src/report.rs",
+      "location": "tools/seamctl/src/validate.rs",
+      "file": "tools/seamctl/src/validate.rs",
       "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in tools/seamctl/src/report.rs",
+      "description": "Potential unbounded allocation pattern detected in tools/seamctl/src/validate.rs",
       "recommended_attack": [
         "memory",
         "cpu"
@@ -138,10 +138,10 @@
     },
     {
       "category": "UnboundedAllocation",
-      "location": "tools/seamctl/src/validate.rs",
-      "file": "tools/seamctl/src/validate.rs",
+      "location": "tools/seamctl/src/report.rs",
+      "file": "tools/seamctl/src/report.rs",
       "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in tools/seamctl/src/validate.rs",
+      "description": "Potential unbounded allocation pattern detected in tools/seamctl/src/report.rs",
       "recommended_attack": [
         "memory",
         "cpu"
@@ -159,16 +159,6 @@
     "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "setup.sh",
-      "lines": 278,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
     {
       "file_path": "services/seamstressd/test/runner_test.exs",
       "lines": 209,
@@ -200,14 +190,14 @@
       "threading_constructs": 1
     },
     {
-      "file_path": "tools/seamctl/src/report.rs",
-      "lines": 94,
+      "file_path": "tools/seamctl/src/validate.rs",
+      "lines": 142,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "safe_unwrap_calls": 2,
-      "allocation_sites": 2,
-      "io_operations": 3,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -222,22 +212,32 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/seamctl/src/validate.rs",
-      "lines": 142,
+      "file_path": "tools/seamctl/src/report.rs",
+      "lines": 94,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "safe_unwrap_calls": 2,
+      "allocation_sites": 2,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "setup.sh",
+      "lines": 278,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 3,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "network",
     "cpu",
-    "memory"
+    "network",
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -254,14 +254,14 @@
         "weight": 1.0
       },
       {
-        "from": "tools/seamctl/src/report.rs",
+        "from": "tools/seamctl/src/validate.rs",
         "to": "tools/seamctl/src/graph.rs",
         "relation": "shared_dir:tools/seamctl/src",
         "weight": 1.0
       },
       {
         "from": "tools/seamctl/src/graph.rs",
-        "to": "tools/seamctl/src/validate.rs",
+        "to": "tools/seamctl/src/report.rs",
         "relation": "shared_dir:tools/seamctl/src",
         "weight": 1.0
       }
@@ -270,62 +270,39 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "services/seamstressd/bench/runner_bench.exs",
-          "services/seamstressd/test/runner_test.exs",
-          "services/seamstressd/lib/seamstressd/runner.ex"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
         "files": [
+          "services/seamstressd/test/seamstressd_test.exs",
           "services/seamstressd/test/runner_test.exs",
-          "services/seamstressd/test/e2e_test.exs",
-          "services/seamstressd/test/seamstressd_test.exs"
+          "services/seamstressd/test/e2e_test.exs"
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "tools/seamctl/src/report.rs",
-          "tools/seamctl/src/graph.rs",
-          "tools/seamctl/src/validate.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "services/seamstressd/bench/runner_bench.exs",
           "services/seamstressd/test/runner_test.exs",
-          "services/seamstressd/lib/seamstressd/runner.ex"
+          "services/seamstressd/test/e2e_test.exs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tools/seamctl/src/graph.rs"
+          "tools/seamctl/src/validate.rs",
+          "tools/seamctl/src/graph.rs",
+          "tools/seamctl/src/report.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -338,27 +315,50 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "services/seamstressd/lib/seamstressd/runner.ex",
+          "services/seamstressd/test/runner_test.exs",
+          "services/seamstressd/bench/runner_bench.exs"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tools/seamctl/src/report.rs",
-          "tools/seamctl/src/graph.rs",
-          "tools/seamctl/src/validate.rs"
+          "tools/seamctl/src/graph.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
+          "services/seamstressd/lib/seamstressd/runner.ex",
           "services/seamstressd/test/runner_test.exs",
-          "services/seamstressd/test/e2e_test.exs"
+          "services/seamstressd/bench/runner_bench.exs"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tools/seamctl/src/validate.rs",
+          "tools/seamctl/src/graph.rs",
+          "tools/seamctl/src/report.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

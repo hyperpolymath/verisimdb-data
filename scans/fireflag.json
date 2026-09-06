@@ -27,6 +27,18 @@
       "test_context": "test_only"
     },
     {
+      "category": "DynamicCodeExecution",
+      "location": "extension/lib/dom-utils.js",
+      "file": "extension/lib/dom-utils.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in extension/lib/dom-utils.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "InsecureProtocol",
       "location": ".screenshots/generate-mockups.sh",
       "file": ".screenshots/generate-mockups.sh",
@@ -44,18 +56,6 @@
       "severity": "Critical",
       "description": "Possible hardcoded secret in scripts/sign-extension.sh",
       "recommended_attack": [
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "extension/lib/dom-utils.js",
-      "file": "extension/lib/dom-utils.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in extension/lib/dom-utils.js",
-      "recommended_attack": [
-        "memory",
         "network"
       ],
       "test_context": "production"
@@ -82,18 +82,18 @@
       "threading_constructs": 0
     },
     {
-      "file_path": ".screenshots/generate-mockups.sh",
-      "lines": 410,
+      "file_path": "extension/lib/rescript/DatabaseUpdater.res.js",
+      "lines": 355,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 4,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
-      "file_path": "scripts/sign-extension.sh",
-      "lines": 185,
+      "file_path": "extension/devtools/panel.js",
+      "lines": 323,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -112,16 +112,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "extension/devtools/panel.js",
-      "lines": 323,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "extension/sidebar/sidebar.js",
       "lines": 378,
       "unsafe_blocks": 0,
@@ -132,20 +122,30 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "extension/lib/rescript/DatabaseUpdater.res.js",
-      "lines": 355,
+      "file_path": ".screenshots/generate-mockups.sh",
+      "lines": 410,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/sign-extension.sh",
+      "lines": 185,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "memory",
     "disk",
     "network",
-    "memory",
     "cpu"
   ],
   "dependency_graph": {
@@ -153,16 +153,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "extension/lib/dom-utils.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -185,14 +175,14 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
-        "severity_value": 5.0,
+        "severity_value": 3.5,
         "files": [
-          "scripts/sign-extension.sh"
+          "extension/lib/dom-utils.js"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "InsecureProtocol",
@@ -203,6 +193,16 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/sign-extension.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }
