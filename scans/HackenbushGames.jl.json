@@ -5,16 +5,15 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "src/HackenbushGames.jl",
-      "file": "src/HackenbushGames.jl",
-      "severity": "High",
-      "description": "eval/Meta.parse in src/HackenbushGames.jl",
+      "category": "ProofDrift",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
+      "severity": "Medium",
+      "description": "2 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
       "recommended_attack": [
-        "cpu",
-        "memory"
+        "cpu"
       ],
-      "test_context": "production"
+      "test_context": "test_only"
     },
     {
       "category": "DynamicCodeExecution",
@@ -29,15 +28,16 @@
       "test_context": "production"
     },
     {
-      "category": "ProofDrift",
-      "location": "test/e2e_test.jl",
-      "file": "test/e2e_test.jl",
-      "severity": "Medium",
-      "description": "2 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
+      "category": "DynamicCodeExecution",
+      "location": "src/HackenbushGames.jl",
+      "file": "src/HackenbushGames.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/HackenbushGames.jl",
       "recommended_attack": [
-        "cpu"
+        "cpu",
+        "memory"
       ],
-      "test_context": "test_only"
+      "test_context": "production"
     }
   ],
   "statistics": {
@@ -62,14 +62,36 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/backends/abstract.jl",
+          "src/HackenbushGames.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/backends/abstract.jl",
+          "src/HackenbushGames.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      },
       {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
@@ -79,28 +101,6 @@
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/HackenbushGames.jl",
-          "src/backends/abstract.jl"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "src/HackenbushGames.jl",
-          "src/backends/abstract.jl"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }
