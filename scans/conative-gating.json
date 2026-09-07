@@ -3,10 +3,32 @@
   "program_path": "conative-gating",
   "language": "shell",
   "frameworks": [
-    "OTP",
-    "Networking"
+    "Networking",
+    "OTP"
   ],
   "weak_points": [
+    {
+      "category": "HardcodedSecret",
+      "location": "tests/security_aspect_test.rs",
+      "file": "tests/security_aspect_test.rs",
+      "severity": "Critical",
+      "description": "Possible hardcoded secret in tests/security_aspect_test.rs",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "HardcodedSecret",
+      "location": "tests/gating_pipeline_test.rs",
+      "file": "tests/gating_pipeline_test.rs",
+      "severity": "Critical",
+      "description": "Possible hardcoded secret in tests/gating_pipeline_test.rs",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "test_only"
+    },
     {
       "category": "HardcodedSecret",
       "location": "benches/oracle_bench.rs",
@@ -26,6 +48,29 @@
       "description": "3 HTTP (non-HTTPS) URLs in templates/rsr-metadata.ncl",
       "recommended_attack": [
         "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "scripts/mass-apply-templates.sh",
+      "file": "scripts/mass-apply-templates.sh",
+      "severity": "Critical",
+      "description": "eval usage in scripts/mass-apply-templates.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
+      "location": "scripts/mass-apply-templates.sh",
+      "file": "scripts/mass-apply-templates.sh",
+      "severity": "Medium",
+      "description": "22 potentially unquoted variable expansions in scripts/mass-apply-templates.sh",
+      "recommended_attack": [
+        "cpu"
       ],
       "test_context": "production"
     },
@@ -88,51 +133,6 @@
       "test_context": "production"
     },
     {
-      "category": "HardcodedSecret",
-      "location": "tests/security_aspect_test.rs",
-      "file": "tests/security_aspect_test.rs",
-      "severity": "Critical",
-      "description": "Possible hardcoded secret in tests/security_aspect_test.rs",
-      "recommended_attack": [
-        "network"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "HardcodedSecret",
-      "location": "tests/gating_pipeline_test.rs",
-      "file": "tests/gating_pipeline_test.rs",
-      "severity": "Critical",
-      "description": "Possible hardcoded secret in tests/gating_pipeline_test.rs",
-      "recommended_attack": [
-        "network"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "CommandInjection",
-      "location": "scripts/mass-apply-templates.sh",
-      "file": "scripts/mass-apply-templates.sh",
-      "severity": "Critical",
-      "description": "eval usage in scripts/mass-apply-templates.sh",
-      "recommended_attack": [
-        "cpu",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "CommandInjection",
-      "location": "scripts/mass-apply-templates.sh",
-      "file": "scripts/mass-apply-templates.sh",
-      "severity": "Medium",
-      "description": "22 potentially unquoted variable expansions in scripts/mass-apply-templates.sh",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -153,12 +153,82 @@
   },
   "file_statistics": [
     {
+      "file_path": "config/policy.ncl",
+      "lines": 121,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "Src/Abi/Foreign.idr",
       "lines": 28,
       "unsafe_blocks": 2,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/apply-justfiles.sh",
+      "lines": 404,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/apply-common-files.sh",
+      "lines": 227,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/reconcile-wharf-repos.sh",
+      "lines": 134,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/mass-apply-templates.sh",
+      "lines": 491,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 8,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 183,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 275,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
       "io_operations": 0,
       "threading_constructs": 0
     },
@@ -185,16 +255,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
-      "lines": 80,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
       "file_path": "src/main.rs",
       "lines": 1861,
       "unsafe_blocks": 0,
@@ -206,86 +266,26 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 275,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 183,
+      "file_path": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
+      "lines": 80,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "config/policy.ncl",
-      "lines": 121,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/mass-apply-templates.sh",
-      "lines": 491,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 8,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/apply-common-files.sh",
-      "lines": 227,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/reconcile-wharf-repos.sh",
-      "lines": 134,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/apply-justfiles.sh",
-      "lines": 404,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
+      "threading_constructs": 1
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu",
+    "disk",
     "network",
-    "disk"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/mass-apply-templates.sh",
+        "from": "scripts/apply-justfiles.sh",
         "to": "scripts/apply-common-files.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
@@ -298,93 +298,15 @@
       },
       {
         "from": "scripts/reconcile-wharf-repos.sh",
-        "to": "scripts/apply-justfiles.sh",
+        "to": "scripts/mass-apply-templates.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "Src/Abi/Foreign.idr",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "Src/Abi/Foreign.idr",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/contract/src/lib.rs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/contract/src/lib.rs",
+        "from": "config/policy.ncl",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
-      },
-      {
-        "from": "src/oracle/src/lib.rs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/oracle/src/lib.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "src/main.rs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 11.0
-      },
-      {
-        "from": "src/main.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 11.0
-      },
-      {
-        "from": "ffi/zig/src/main.zig",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/main.zig",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/test/integration_test.zig",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "ffi/zig/test/integration_test.zig",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 4.0
       },
       {
         "from": "config/policy.ncl",
@@ -393,43 +315,19 @@
         "weight": 1.0
       },
       {
-        "from": "config/policy.ncl",
+        "from": "Src/Abi/Foreign.idr",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 6.0
       },
       {
-        "from": "scripts/mass-apply-templates.sh",
+        "from": "Src/Abi/Foreign.idr",
         "to": "OTP",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 6.0
       },
       {
-        "from": "scripts/mass-apply-templates.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/apply-common-files.sh",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/apply-common-files.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/reconcile-wharf-repos.sh",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/reconcile-wharf-repos.sh",
+        "from": "scripts/apply-justfiles.sh",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -441,99 +339,117 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/apply-justfiles.sh",
+        "from": "scripts/apply-common-files.sh",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/apply-common-files.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/reconcile-wharf-repos.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/reconcile-wharf-repos.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/mass-apply-templates.sh",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/mass-apply-templates.sh",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/contract/src/lib.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/contract/src/lib.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/oracle/src/lib.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/oracle/src/lib.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "src/main.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 11.0
+      },
+      {
+        "from": "src/main.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 11.0
+      },
+      {
+        "from": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "benches/oracle_bench.rs",
-          "src/contract/src/lib.rs",
-          "src/oracle/src/lib.rs",
-          "tests/security_aspect_test.rs",
-          "tests/gating_pipeline_test.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/contract/src/lib.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/contract/src/lib.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -543,8 +459,8 @@
           "scripts/mass-apply-templates.sh"
         ],
         "frameworks": [
-          "OTP",
-          "Networking"
+          "Networking",
+          "OTP"
         ],
         "relation": "CommandInjection->Cpu"
       },
@@ -556,10 +472,94 @@
           "templates/rsr-metadata.ncl"
         ],
         "frameworks": [
-          "OTP",
-          "Networking"
+          "Networking",
+          "OTP"
         ],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/contract/src/lib.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/contract/src/lib.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "tests/security_aspect_test.rs",
+          "tests/gating_pipeline_test.rs",
+          "benches/oracle_bench.rs",
+          "src/contract/src/lib.rs",
+          "src/oracle/src/lib.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }
