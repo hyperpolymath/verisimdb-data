@@ -5,16 +5,15 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "src/backends/abstract.jl",
-      "file": "src/backends/abstract.jl",
-      "severity": "High",
-      "description": "eval/Meta.parse in src/backends/abstract.jl",
+      "category": "ProofDrift",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
+      "severity": "Medium",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
       "recommended_attack": [
-        "cpu",
-        "memory"
+        "cpu"
       ],
-      "test_context": "production"
+      "test_context": "test_only"
     },
     {
       "category": "ProofDrift",
@@ -28,15 +27,16 @@
       "test_context": "test_only"
     },
     {
-      "category": "ProofDrift",
-      "location": "test/e2e_test.jl",
-      "file": "test/e2e_test.jl",
-      "severity": "Medium",
-      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
+      "category": "DynamicCodeExecution",
+      "location": "src/backends/abstract.jl",
+      "file": "src/backends/abstract.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/backends/abstract.jl",
       "recommended_attack": [
-        "cpu"
+        "cpu",
+        "memory"
       ],
-      "test_context": "test_only"
+      "test_context": "production"
     }
   ],
   "statistics": {
@@ -50,6 +50,16 @@
   },
   "file_statistics": [
     {
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "examples/SafeDOMExample.affine",
       "lines": 128,
       "unsafe_blocks": 0,
@@ -60,8 +70,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ext/KnotTheoryCUDAExt.jl",
-      "lines": 644,
+      "file_path": "ext/KnotTheoryMetalExt.jl",
+      "lines": 447,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -70,8 +80,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ext/KnotTheoryMetalExt.jl",
-      "lines": 447,
+      "file_path": "ext/KnotTheoryCUDAExt.jl",
+      "lines": 644,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -90,24 +100,14 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/KnotTheory.jl",
-      "lines": 2645,
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 184,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
+      "io_operations": 0,
+      "threading_constructs": 2
     },
     {
       "file_path": "ffi/zig/src/main.zig",
@@ -120,31 +120,31 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 184,
+      "file_path": "src/KnotTheory.jl",
+      "lines": 2645,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
+      "io_operations": 4,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "ext/KnotTheoryCUDAExt.jl",
-        "to": "ext/KnotTheoryMetalExt.jl",
+        "from": "ext/KnotTheoryMetalExt.jl",
+        "to": "ext/KnotTheoryCUDAExt.jl",
         "relation": "shared_dir:ext",
         "weight": 1.0
       },
       {
-        "from": "ext/KnotTheoryMetalExt.jl",
+        "from": "ext/KnotTheoryCUDAExt.jl",
         "to": "ext/KnotTheoryROCmExt.jl",
         "relation": "shared_dir:ext",
         "weight": 1.0
@@ -168,8 +168,8 @@
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "test/runtests.jl",
-          "test/e2e_test.jl"
+          "test/e2e_test.jl",
+          "test/runtests.jl"
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"

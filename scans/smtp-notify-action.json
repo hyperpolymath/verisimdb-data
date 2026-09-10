@@ -3,17 +3,60 @@
   "program_path": "smtp-notify-action",
   "language": "zig",
   "frameworks": [],
-  "weak_points": [],
+  "weak_points": [
+    {
+      "category": "UnsafeCode",
+      "location": "src/main.zig",
+      "file": "src/main.zig",
+      "severity": "High",
+      "description": "1 unsafe pointer casts in src/main.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "src/smtp.zig",
+      "file": "src/smtp.zig",
+      "severity": "High",
+      "description": "1 unsafe pointer casts in src/smtp.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    }
+  ],
   "statistics": {
-    "total_lines": 3216,
-    "unsafe_blocks": 0,
-    "panic_sites": 17,
+    "total_lines": 4243,
+    "unsafe_blocks": 2,
+    "panic_sites": 18,
     "unwrap_calls": 0,
     "allocation_sites": 0,
     "io_operations": 1,
     "threading_constructs": 1
   },
   "file_statistics": [
+    {
+      "file_path": "scripts/check-fsm-drift.sh",
+      "lines": 34,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/main.zig",
+      "lines": 459,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
     {
       "file_path": "src/tls/Client.zig",
       "lines": 1761,
@@ -26,49 +69,42 @@
     },
     {
       "file_path": "src/smtp.zig",
-      "lines": 493,
-      "unsafe_blocks": 0,
-      "panic_sites": 1,
+      "lines": 1230,
+      "unsafe_blocks": 1,
+      "panic_sites": 2,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/main.zig",
-      "lines": 333,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "scripts/check-fsm-drift.sh",
-      "lines": 34,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/smtp.zig",
-        "to": "src/main.zig",
+        "from": "src/main.zig",
+        "to": "src/smtp.zig",
         "relation": "shared_dir:src",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
-    "rows": []
+    "rows": [
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/main.zig",
+          "src/smtp.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      }
+    ]
   }
 }
