@@ -214,8 +214,8 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -291,19 +291,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/launcher-common/src/standard.rs",
-          "crates/launcher-common/src/config.rs",
-          "crates/launcher/src/cmd_config.rs",
-          "crates/launcher/src/cmd_realign.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -312,6 +299,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "docs/ruleset-audit-2026-04-10/wave2-apply.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -324,14 +321,17 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "docs/ruleset-audit-2026-04-10/wave2-apply.sh"
+          "crates/launcher-common/src/standard.rs",
+          "crates/launcher-common/src/config.rs",
+          "crates/launcher/src/cmd_config.rs",
+          "crates/launcher/src/cmd_realign.rs"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
