@@ -339,8 +339,8 @@ zig build test-integration
 -- Runtime checks
 main : IO ()
 main = do
-  verifyLayoutsCorrect
-  verifyAlignmentsCorrect
+  verifyLayouorrect
+  verifyAlignmenorrect
   putStrLn "ABI verification passed"
 ```
 
