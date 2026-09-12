@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "eclexiaiser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
     {
@@ -153,38 +153,28 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/codegen/parser.rs",
-        "to": "src/codegen/reporter.rs",
-        "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/abi/Eclexiaiser/ABI/Foreign.idr",
         "to": "src/interface/abi/Eclexiaiser/ABI/Types.idr",
         "relation": "shared_dir:src/interface/abi/Eclexiaiser/ABI",
+        "weight": 1.0
+      },
+      {
+        "from": "src/codegen/parser.rs",
+        "to": "src/codegen/reporter.rs",
+        "relation": "shared_dir:src/codegen",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -214,6 +204,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnsafeCode",

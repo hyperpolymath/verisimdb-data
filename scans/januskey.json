@@ -422,13 +422,49 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk",
+    "concurrency",
     "memory",
-    "concurrency"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/januskey-cli/tests/aspect_test.rs",
+        "to": "crates/januskey-cli/tests/p2p_test.rs",
+        "relation": "shared_dir:crates/januskey-cli/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/januskey-cli/tests/p2p_test.rs",
+        "to": "crates/januskey-cli/tests/e2e_test.rs",
+        "relation": "shared_dir:crates/januskey-cli/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/januskey-cli/tests/e2e_test.rs",
+        "to": "crates/januskey-cli/tests/property_tests.rs",
+        "relation": "shared_dir:crates/januskey-cli/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/januskey-cli/tests/property_tests.rs",
+        "to": "crates/januskey-cli/tests/concurrency_test.rs",
+        "relation": "shared_dir:crates/januskey-cli/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "generated/idrisiser/idris2/Januskey/Verified/key_generation.idr",
+        "to": "generated/idrisiser/idris2/Januskey/Verified/wrap_unwrap_round_trip.idr",
+        "relation": "shared_dir:generated/idrisiser/idris2/Januskey/Verified",
+        "weight": 1.0
+      },
+      {
+        "from": "generated/idrisiser/idris2/Januskey/Verified/wrap_unwrap_round_trip.idr",
+        "to": "generated/idrisiser/idris2/Januskey/Verified/key_derivation.idr",
+        "relation": "shared_dir:generated/idrisiser/idris2/Januskey/Verified",
+        "weight": 1.0
+      },
       {
         "from": "crates/reversible-core/src/content_store.rs",
         "to": "crates/reversible-core/src/manifest.rs",
@@ -451,18 +487,6 @@
         "from": "crates/reversible-core/src/metadata.rs",
         "to": "crates/reversible-core/src/error.rs",
         "relation": "shared_dir:crates/reversible-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "generated/idrisiser/idris2/Januskey/Verified/key_generation.idr",
-        "to": "generated/idrisiser/idris2/Januskey/Verified/wrap_unwrap_round_trip.idr",
-        "relation": "shared_dir:generated/idrisiser/idris2/Januskey/Verified",
-        "weight": 1.0
-      },
-      {
-        "from": "generated/idrisiser/idris2/Januskey/Verified/wrap_unwrap_round_trip.idr",
-        "to": "generated/idrisiser/idris2/Januskey/Verified/key_derivation.idr",
-        "relation": "shared_dir:generated/idrisiser/idris2/Januskey/Verified",
         "weight": 1.0
       },
       {
@@ -506,59 +530,11 @@
         "to": "crates/januskey-cli/src/keys.rs",
         "relation": "shared_dir:crates/januskey-cli/src",
         "weight": 1.0
-      },
-      {
-        "from": "crates/januskey-cli/tests/aspect_test.rs",
-        "to": "crates/januskey-cli/tests/p2p_test.rs",
-        "relation": "shared_dir:crates/januskey-cli/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/januskey-cli/tests/p2p_test.rs",
-        "to": "crates/januskey-cli/tests/e2e_test.rs",
-        "relation": "shared_dir:crates/januskey-cli/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/januskey-cli/tests/e2e_test.rs",
-        "to": "crates/januskey-cli/tests/property_tests.rs",
-        "relation": "shared_dir:crates/januskey-cli/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/januskey-cli/tests/property_tests.rs",
-        "to": "crates/januskey-cli/tests/concurrency_test.rs",
-        "relation": "shared_dir:crates/januskey-cli/tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/reversible-core/src/transaction.rs",
-          "crates/januskey-cli/src/attestation.rs",
-          "crates/januskey-cli/src/main.rs",
-          "crates/januskey-cli/src/keys_cli.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/reversible-core/src/content_store.rs",
-          "crates/dashboard-check/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -569,6 +545,17 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "tests/e2e/lifecycle_e2e.sh",
+          "tests/aspect/cross_cutting_test.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -584,25 +571,26 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "ffi/zig/src/main.zig"
+          "crates/reversible-core/src/content_store.rs",
+          "crates/dashboard-check/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "tests/e2e/lifecycle_e2e.sh",
-          "tests/aspect/cross_cutting_test.sh"
+          "crates/reversible-core/src/content_store.rs",
+          "crates/dashboard-check/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -615,15 +603,27 @@
         "relation": "UncheckedError->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "crates/reversible-core/src/content_store.rs",
-          "crates/dashboard-check/src/main.rs"
+          "crates/reversible-core/src/transaction.rs",
+          "crates/januskey-cli/src/attestation.rs",
+          "crates/januskey-cli/src/main.rs",
+          "crates/januskey-cli/src/keys_cli.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

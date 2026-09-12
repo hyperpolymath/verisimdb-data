@@ -399,13 +399,19 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "concurrency",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "ffi/zig/src/store.zig",
+        "relation": "shared_dir:ffi/zig/src",
+        "weight": 1.0
+      },
       {
         "from": "orchestrator/lib/lol/source_registry.ex",
         "to": "orchestrator/lib/lol/crawler_worker.ex",
@@ -434,12 +440,6 @@
         "from": "orchestrator/lib/lol/julia_bridge.ex",
         "to": "orchestrator/lib/lol/verisimdb_reporter.ex",
         "relation": "shared_dir:orchestrator/lib/lol",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/main.zig",
-        "to": "ffi/zig/src/store.zig",
-        "relation": "shared_dir:ffi/zig/src",
         "weight": 1.0
       },
       {
@@ -585,17 +585,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "ProofDrift",
+        "source_category": "MutationGap",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 1.0,
         "files": [
-          "analysis/test/runtests.jl",
-          "proofs/theories/information_theory.agda"
+          "orchestrator/test/crawler_worker_test.exs",
+          "orchestrator/test/rate_limiter_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "ProofDrift->Cpu"
+        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "UnsafeFFI",
@@ -609,6 +609,31 @@
           "OTP"
         ],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "analysis/test/runtests.jl",
+          "proofs/theories/information_theory.agda"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/verisimdb-ingest.sh"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -637,6 +662,20 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "orchestrator/lib/lol/crawler_worker.ex",
+          "orchestrator/lib/lol/julia_bridge.ex",
+          "orchestrator/lib/lol/verisimdb_reporter.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "UnsafeDeserialization",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -651,45 +690,6 @@
           "OTP"
         ],
         "relation": "UnsafeDeserialization->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/verisimdb-ingest.sh"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "orchestrator/test/crawler_worker_test.exs",
-          "orchestrator/test/rate_limiter_test.exs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "orchestrator/lib/lol/crawler_worker.ex",
-          "orchestrator/lib/lol/julia_bridge.ex",
-          "orchestrator/lib/lol/verisimdb_reporter.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "CommandInjection->Cpu"
       }
     ]
   }

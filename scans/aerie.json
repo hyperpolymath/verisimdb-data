@@ -654,14 +654,74 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
+    "disk",
     "network",
     "memory",
-    "disk"
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/api/zig/librespeed_client.zig",
+        "to": "src/api/zig/proof.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/proof.zig",
+        "to": "src/api/zig/verb_governance.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/verb_governance.zig",
+        "to": "src/api/zig/smokeping_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/smokeping_client.zig",
+        "to": "src/api/zig/redis_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/redis_client.zig",
+        "to": "src/api/zig/main.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/main.zig",
+        "to": "src/api/zig/hyperglass_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/zig/hyperglass_client.zig",
+        "to": "src/api/zig/verisim_client.zig",
+        "relation": "shared_dir:src/api/zig",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/resolvers.rs",
+        "to": "src/api/rust/src/main.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/main.rs",
+        "to": "src/api/rust/src/redis_client.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/redis_client.rs",
+        "to": "src/api/rust/src/proof.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
       {
         "from": "specs/components/hud-module-mapping.k9.ncl",
         "to": "specs/components/subscription-auth-flow.k9.ncl",
@@ -745,66 +805,6 @@
         "to": "specs/components/graphql-schema.k9.ncl",
         "relation": "shared_dir:specs/components",
         "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/librespeed_client.zig",
-        "to": "src/api/zig/proof.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/proof.zig",
-        "to": "src/api/zig/verb_governance.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/verb_governance.zig",
-        "to": "src/api/zig/smokeping_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/smokeping_client.zig",
-        "to": "src/api/zig/redis_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/redis_client.zig",
-        "to": "src/api/zig/main.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/main.zig",
-        "to": "src/api/zig/hyperglass_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/zig/hyperglass_client.zig",
-        "to": "src/api/zig/verisim_client.zig",
-        "relation": "shared_dir:src/api/zig",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/resolvers.rs",
-        "to": "src/api/rust/src/main.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/main.rs",
-        "to": "src/api/rust/src/redis_client.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/redis_client.rs",
-        "to": "src/api/rust/src/proof.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
       }
     ]
   },
@@ -823,42 +823,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "aerie-launcher.sh",
-          "src/stale/hyperglass/.tests/ga-backend-app.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/rust/src/main.rs",
-          "src/api/rust/src/redis_client.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/smokeping_client.zig",
-          "src/api/zig/hyperglass_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/rust/src/backends.rs"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -885,6 +849,20 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/hyperglass_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/rust/src/backends.rs"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -904,6 +882,28 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "aerie-launcher.sh",
+          "src/stale/hyperglass/.tests/ga-backend-app.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/main.rs",
+          "src/api/rust/src/redis_client.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

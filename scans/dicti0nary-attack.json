@@ -196,31 +196,13 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "memory",
     "cpu",
+    "memory",
+    "network",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/generators/src/pattern.rs",
-        "to": "crates/generators/src/lib.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/generators/src/lib.rs",
-        "to": "crates/generators/src/phonetic.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/generators/src/phonetic.rs",
-        "to": "crates/generators/src/leetspeak.rs",
-        "relation": "shared_dir:crates/generators/src",
-        "weight": 1.0
-      },
       {
         "from": "src/generators/Random.chpl",
         "to": "src/generators/Markov.chpl",
@@ -237,6 +219,24 @@
         "from": "src/main.rs",
         "to": "src/dicti0nary.chpl",
         "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/pattern.rs",
+        "to": "crates/generators/src/lib.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/lib.rs",
+        "to": "crates/generators/src/phonetic.rs",
+        "relation": "shared_dir:crates/generators/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/generators/src/phonetic.rs",
+        "to": "crates/generators/src/leetspeak.rs",
+        "relation": "shared_dir:crates/generators/src",
         "weight": 1.0
       },
       {
@@ -388,19 +388,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "lib/es6/web/src/App.res.js"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -415,18 +402,30 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "crates/generators/src/leetspeak.rs",
-          "src/main.rs"
+          "tests/test_random.chpl"
         ],
         "frameworks": [
           "Networking",
           "Concurrent"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "lib/es6/web/src/App.res.js"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -442,17 +441,18 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "tests/test_random.chpl"
+          "crates/generators/src/leetspeak.rs",
+          "src/main.rs"
         ],
         "frameworks": [
           "Networking",
           "Concurrent"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
