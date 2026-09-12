@@ -427,46 +427,22 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/trigger/platforms/twitter/twitter-platform.adb",
-        "to": "src/trigger/platforms/twitter/twitter-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/twitter",
+        "from": "src/trigger/core/cryptography.adb",
+        "to": "src/trigger/core/application.adb",
+        "relation": "shared_dir:src/trigger/core",
         "weight": 1.0
       },
       {
-        "from": "src/trigger/diagnostics/self_healing.adb",
-        "to": "src/trigger/diagnostics/system_check.adb",
-        "relation": "shared_dir:src/trigger/diagnostics",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/unit/test_cryptography.adb",
-        "to": "tests/unit/test_cryptography-body.adb",
-        "relation": "shared_dir:tests/unit",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_harness.adb",
-        "to": "tests/test_harness-body.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_harness-body.adb",
-        "to": "tests/test_runner.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_runner.adb",
-        "to": "tests/test_trigger.adb",
-        "relation": "shared_dir:tests",
+        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
+        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/telegram",
         "weight": 1.0
       },
       {
@@ -494,15 +470,39 @@
         "weight": 1.0
       },
       {
-        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
-        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/telegram",
+        "from": "src/trigger/platforms/twitter/twitter-platform.adb",
+        "to": "src/trigger/platforms/twitter/twitter-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/twitter",
         "weight": 1.0
       },
       {
-        "from": "src/trigger/core/cryptography.adb",
-        "to": "src/trigger/core/application.adb",
-        "relation": "shared_dir:src/trigger/core",
+        "from": "tests/unit/test_cryptography.adb",
+        "to": "tests/unit/test_cryptography-body.adb",
+        "relation": "shared_dir:tests/unit",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trigger/diagnostics/self_healing.adb",
+        "to": "src/trigger/diagnostics/system_check.adb",
+        "relation": "shared_dir:src/trigger/diagnostics",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/test_harness.adb",
+        "to": "tests/test_harness-body.adb",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/test_harness-body.adb",
+        "to": "tests/test_runner.adb",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/test_runner.adb",
+        "to": "tests/test_trigger.adb",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       }
     ]
@@ -510,24 +510,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "scripts/trigger-launcher.sh"
+          "proofs/agda/Trigger/API.agda",
+          "proofs/agda/Trigger/Epistemic.agda"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/crypto/crypto.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -543,14 +534,13 @@
       },
       {
         "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
-          "scripts/trigger-launcher.sh",
           "scripts/trigger-launcher.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "UncheckedError",
@@ -563,15 +553,25 @@
         "relation": "UncheckedError->Cpu"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "proofs/agda/Trigger/API.agda",
-          "proofs/agda/Trigger/Epistemic.agda"
+          "ffi/zig/crypto/crypto.zig"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/trigger-launcher.sh",
+          "scripts/trigger-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }

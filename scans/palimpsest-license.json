@@ -294,13 +294,19 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "memory",
     "cpu",
-    "network"
+    "network",
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bof-meetings/presentations/demo-dns-discovery.sh",
+        "to": "bof-meetings/presentations/demo-http-headers.sh",
+        "relation": "shared_dir:bof-meetings/presentations",
+        "weight": 1.0
+      },
       {
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/Utils.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/Bilingual.hs",
@@ -323,12 +329,6 @@
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/Reference.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/License.hs",
         "relation": "shared_dir:TOOLS/validation/haskell/src/Palimpsest/Validator",
-        "weight": 1.0
-      },
-      {
-        "from": "bof-meetings/presentations/demo-dns-discovery.sh",
-        "to": "bof-meetings/presentations/demo-http-headers.sh",
-        "relation": "shared_dir:bof-meetings/presentations",
         "weight": 1.0
       },
       {
@@ -444,18 +444,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-verify/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -466,6 +454,47 @@
           "Ecto"
         ],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "bof-meetings/presentations/demo-dns-discovery.sh",
+          "bof-meetings/presentations/demo-http-headers.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "TOOLS/validation/haskell/test/Palimpsest/Validator/MetadataSpec.hs",
+          "TOOLS/validation/haskell/test/Palimpsest/Validator/ReferenceSpec.hs",
+          "TOOLS/validation/haskell/test/Integration/PipelineSpec.hs",
+          "TOOLS/validation/haskell/test/Property/ValidatorPropertySpec.hs",
+          "integrations/server/ruby/lib/palimpsest/generator.rb"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tools/pmpl-verify/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -493,37 +522,8 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "TOOLS/validation/haskell/test/Palimpsest/Validator/MetadataSpec.hs",
-          "TOOLS/validation/haskell/test/Palimpsest/Validator/ReferenceSpec.hs",
-          "TOOLS/validation/haskell/test/Integration/PipelineSpec.hs",
-          "TOOLS/validation/haskell/test/Property/ValidatorPropertySpec.hs",
-          "integrations/server/ruby/lib/palimpsest/generator.rb"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "bof-meetings/presentations/demo-dns-discovery.sh",
-          "bof-meetings/presentations/demo-http-headers.sh"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tools/pmpl-verify/src/main.rs"
@@ -531,7 +531,7 @@
         "frameworks": [
           "Ecto"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

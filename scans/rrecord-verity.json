@@ -301,17 +301,35 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "network",
     "memory",
+    "network",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
+        "from": "RuntimeMessage.d.affine",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
         "from": "modules/extensionUtils.mjs.js",
         "to": "modules/virusTotalIntegration.mjs.js",
         "relation": "shared_dir:modules",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/atnChangelog.js",
+        "to": "scripts/update-thirdparty.js",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/update-thirdparty.js",
+        "to": "scripts/pack.js",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -337,53 +355,30 @@
         "to": "experiments/libunbound.d.affine",
         "relation": "shared_dir:experiments",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/atnChangelog.js",
-        "to": "scripts/update-thirdparty.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/update-thirdparty.js",
-        "to": "scripts/pack.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "RuntimeMessage.d.affine",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "wasm/parser/src/lib.rs"
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "InputBoundary",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
-          "scripts/update-thirdparty.js",
-          "modules/dkim/favicon.mjs.js",
-          "modules/resultStorage.mjs.js",
-          "test/unittest/authVerifierSpec.mjs.js",
-          "test/helpers/initWebExtensions.mjs.js"
+          "scripts/verify-rsr.js"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -406,14 +401,14 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
+          "wasm/parser/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -427,14 +422,19 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "InputBoundary",
         "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "scripts/verify-rsr.js"
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
+          "scripts/update-thirdparty.js",
+          "modules/dkim/favicon.mjs.js",
+          "modules/resultStorage.mjs.js",
+          "test/unittest/authVerifierSpec.mjs.js",
+          "test/helpers/initWebExtensions.mjs.js"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

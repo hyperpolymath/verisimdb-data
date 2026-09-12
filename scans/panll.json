@@ -1554,24 +1554,48 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "network",
+    "concurrency",
+    "disk",
     "memory",
-    "cpu",
-    "concurrency"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src-gossamer/src/coprocessor/mod.rs",
-        "to": "src-gossamer/src/coprocessor/commands.rs",
-        "relation": "shared_dir:src-gossamer/src/coprocessor",
+        "from": "src-gossamer/src/ai/context.rs",
+        "to": "src-gossamer/src/ai/providers.rs",
+        "relation": "shared_dir:src-gossamer/src/ai",
         "weight": 1.0
       },
       {
         "from": "panel-clades/scripts/maintenance/perms-state.sh",
         "to": "panel-clades/scripts/maintenance/run-maintenance.sh",
         "relation": "shared_dir:panel-clades/scripts/maintenance",
+        "weight": 1.0
+      },
+      {
+        "from": "src-gossamer/src/cloudguard/diff.rs",
+        "to": "src-gossamer/src/cloudguard/api.rs",
+        "relation": "shared_dir:src-gossamer/src/cloudguard",
+        "weight": 1.0
+      },
+      {
+        "from": "src-gossamer/src/cloudguard/api.rs",
+        "to": "src-gossamer/src/cloudguard/config.rs",
+        "relation": "shared_dir:src-gossamer/src/cloudguard",
+        "weight": 1.0
+      },
+      {
+        "from": "src-gossamer/src/cloudguard/config.rs",
+        "to": "src-gossamer/src/cloudguard/trustfile.rs",
+        "relation": "shared_dir:src-gossamer/src/cloudguard",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/safedom_conformance_test.js",
+        "to": "tests/test_utils.js",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -1584,24 +1608,6 @@
         "from": "src-gossamer/src/repoloader/scanner.rs",
         "to": "src-gossamer/src/repoloader/commands.rs",
         "relation": "shared_dir:src-gossamer/src/repoloader",
-        "weight": 1.0
-      },
-      {
-        "from": "panll-launcher.sh",
-        "to": "panll-desktop-launcher.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "panll-desktop-launcher.sh",
-        "to": "launch-panll.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src-gossamer/src/workspace/sysinfo.rs",
-        "to": "src-gossamer/src/workspace/commands.rs",
-        "relation": "shared_dir:src-gossamer/src/workspace",
         "weight": 1.0
       },
       {
@@ -1647,36 +1653,6 @@
         "weight": 1.0
       },
       {
-        "from": "tests/safedom_conformance_test.js",
-        "to": "tests/test_utils.js",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src-gossamer/src/cloudguard/diff.rs",
-        "to": "src-gossamer/src/cloudguard/api.rs",
-        "relation": "shared_dir:src-gossamer/src/cloudguard",
-        "weight": 1.0
-      },
-      {
-        "from": "src-gossamer/src/cloudguard/api.rs",
-        "to": "src-gossamer/src/cloudguard/config.rs",
-        "relation": "shared_dir:src-gossamer/src/cloudguard",
-        "weight": 1.0
-      },
-      {
-        "from": "src-gossamer/src/cloudguard/config.rs",
-        "to": "src-gossamer/src/cloudguard/trustfile.rs",
-        "relation": "shared_dir:src-gossamer/src/cloudguard",
-        "weight": 1.0
-      },
-      {
-        "from": "src-gossamer/src/ai/context.rs",
-        "to": "src-gossamer/src/ai/providers.rs",
-        "relation": "shared_dir:src-gossamer/src/ai",
-        "weight": 1.0
-      },
-      {
         "from": "layouts/protocol-design.k9.ncl",
         "to": "layouts/logic-and-proofs.k9.ncl",
         "relation": "shared_dir:layouts",
@@ -1713,6 +1689,24 @@
         "weight": 1.0
       },
       {
+        "from": "panll-launcher.sh",
+        "to": "panll-desktop-launcher.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "panll-desktop-launcher.sh",
+        "to": "launch-panll.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "src-gossamer/src/workspace/sysinfo.rs",
+        "to": "src-gossamer/src/workspace/commands.rs",
+        "relation": "shared_dir:src-gossamer/src/workspace",
+        "weight": 1.0
+      },
+      {
         "from": "src-gossamer/src/groove.rs",
         "to": "src-gossamer/src/service_registry.rs",
         "relation": "shared_dir:src-gossamer/src",
@@ -1740,6 +1734,12 @@
         "from": "src-gossamer/src/error.rs",
         "to": "src-gossamer/src/compat.rs",
         "relation": "shared_dir:src-gossamer/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src-gossamer/src/coprocessor/mod.rs",
+        "to": "src-gossamer/src/coprocessor/commands.rs",
+        "relation": "shared_dir:src-gossamer/src/coprocessor",
         "weight": 1.0
       },
       {
@@ -2161,6 +2161,93 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src-gossamer/src/system_tray/mod.rs",
+          "src-gossamer/src/llm_coding/commands.rs",
+          "src-gossamer/src/workspace/sysinfo.rs",
+          "src-gossamer/src/coprocessor/commands.rs",
+          "src-gossamer/src/coprocessor/commands.rs",
+          "ffi/zig/src/coprocessor.zig"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "panll-launcher.sh",
+          "launch-panll.sh",
+          "scripts/install-desktop.sh"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/level_architect_engine_test.js",
+          "tests/p2p/tea_properties_test.mjs",
+          "tests/identity_integration_test.js",
+          "tests/typell_crosscutting_test.js",
+          "tests/script_gist_engine_test.js",
+          "benches/panll_bench.js"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src-gossamer/src/release_manager/commands.rs",
+          "src-gossamer/src/repoloader/scanner.rs",
+          "src-gossamer/src/repoloader/commands.rs",
+          "src-gossamer/src/minter/commands.rs",
+          "src-gossamer/src/dlc_workshop/commands.rs",
+          "src-gossamer/src/ai/context.rs",
+          "src-gossamer/src/ai/commands.rs",
+          "src-gossamer/src/a2ml/commands.rs",
+          "src-gossamer/src/vm_inspector/commands.rs",
+          "src-gossamer/src/clade_scanner/commands.rs",
+          "src-gossamer/src/ums_cartridge/commands.rs",
+          "src-gossamer/src/provenance/commands.rs",
+          "src-gossamer/src/workspace/sysinfo.rs",
+          "src-gossamer/src/workspace/commands.rs",
+          "src-gossamer/src/capture/commands.rs",
+          "src-gossamer/src/level_architect/commands.rs",
+          "src-gossamer/src/voicetag/commands.rs",
+          "src-gossamer/src/k9/commands.rs",
+          "src-gossamer/src/identity.rs",
+          "src-gossamer/src/settings.rs",
+          "src-gossamer/src/cloudguard/config.rs",
+          "src-gossamer/src/coprocessor/mod.rs",
+          "src-gossamer/src/ums/commands.rs",
+          "src-gossamer/src/farm/commands.rs",
+          "src-gossamer/src/security/commands.rs",
+          "tools/pcc/src/repairer.rs",
+          "tools/pcc/src/scanner.rs",
+          "tools/pcc/src/contract.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
         "severity_value": 5.0,
@@ -2204,23 +2291,6 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src-gossamer/src/system_tray/mod.rs",
-          "src-gossamer/src/llm_coding/commands.rs",
-          "src-gossamer/src/workspace/sysinfo.rs",
-          "src-gossamer/src/coprocessor/commands.rs",
-          "src-gossamer/src/coprocessor/commands.rs",
-          "ffi/zig/src/coprocessor.zig"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -2231,94 +2301,6 @@
           "Networking"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "panll-launcher.sh",
-          "launch-panll.sh",
-          "scripts/install-desktop.sh"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src-gossamer/src/release_manager/commands.rs",
-          "src-gossamer/src/repoloader/scanner.rs",
-          "src-gossamer/src/repoloader/commands.rs",
-          "src-gossamer/src/minter/commands.rs",
-          "src-gossamer/src/dlc_workshop/commands.rs",
-          "src-gossamer/src/ai/context.rs",
-          "src-gossamer/src/ai/commands.rs",
-          "src-gossamer/src/a2ml/commands.rs",
-          "src-gossamer/src/vm_inspector/commands.rs",
-          "src-gossamer/src/clade_scanner/commands.rs",
-          "src-gossamer/src/ums_cartridge/commands.rs",
-          "src-gossamer/src/provenance/commands.rs",
-          "src-gossamer/src/workspace/sysinfo.rs",
-          "src-gossamer/src/workspace/commands.rs",
-          "src-gossamer/src/capture/commands.rs",
-          "src-gossamer/src/level_architect/commands.rs",
-          "src-gossamer/src/voicetag/commands.rs",
-          "src-gossamer/src/k9/commands.rs",
-          "src-gossamer/src/identity.rs",
-          "src-gossamer/src/settings.rs",
-          "src-gossamer/src/cloudguard/config.rs",
-          "src-gossamer/src/coprocessor/mod.rs",
-          "src-gossamer/src/ums/commands.rs",
-          "src-gossamer/src/farm/commands.rs",
-          "src-gossamer/src/security/commands.rs",
-          "tools/pcc/src/repairer.rs",
-          "tools/pcc/src/scanner.rs",
-          "tools/pcc/src/contract.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src-gossamer/src/release_manager/commands.rs",
-          "src-gossamer/src/system_tray/mod.rs",
-          "src-gossamer/src/vm_inspector/commands.rs",
-          "src-gossamer/src/groove.rs",
-          "src-gossamer/src/provenance/commands.rs",
-          "tools/pcc/src/scanner.rs",
-          "tools/pcc/src/reporter.rs",
-          "tools/pcc/src/propagator.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "src-gossamer/src/system_tray/mod.rs",
-          "src-gossamer/src/llm_coding/commands.rs",
-          "src-gossamer/src/workspace/sysinfo.rs",
-          "src-gossamer/src/coprocessor/commands.rs",
-          "src-gossamer/src/coprocessor/commands.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "PanicPath",
@@ -2340,6 +2322,22 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "src-gossamer/src/system_tray/mod.rs",
+          "src-gossamer/src/llm_coding/commands.rs",
+          "src-gossamer/src/workspace/sysinfo.rs",
+          "src-gossamer/src/coprocessor/commands.rs",
+          "src-gossamer/src/coprocessor/commands.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Concurrency"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -2359,23 +2357,6 @@
           "Networking"
         ],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/level_architect_engine_test.js",
-          "tests/p2p/tea_properties_test.mjs",
-          "tests/identity_integration_test.js",
-          "tests/typell_crosscutting_test.js",
-          "tests/script_gist_engine_test.js",
-          "benches/panll_bench.js"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -2415,6 +2396,25 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src-gossamer/src/release_manager/commands.rs",
+          "src-gossamer/src/system_tray/mod.rs",
+          "src-gossamer/src/vm_inspector/commands.rs",
+          "src-gossamer/src/groove.rs",
+          "src-gossamer/src/provenance/commands.rs",
+          "tools/pcc/src/scanner.rs",
+          "tools/pcc/src/reporter.rs",
+          "tools/pcc/src/propagator.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
       }
     ]
   }
