@@ -281,14 +281,20 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "concurrency",
+    "cpu",
     "disk",
     "network",
-    "cpu"
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
       {
         "from": "src/core/healer.eph",
         "to": "src/core/health.eph",
@@ -374,12 +380,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
-      },
-      {
         "from": "src/interface/ffi/src/verisimdb.zig",
         "to": "src/interface/ffi/src/main.zig",
         "relation": "shared_dir:src/interface/ffi/src",
@@ -396,14 +396,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/core/monitor.eph"
+          "systemd/install.sh"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -416,14 +416,14 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "systemd/install.sh"
+          "src/core/monitor.eph"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "InsecureProtocol",

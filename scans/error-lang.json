@@ -404,11 +404,29 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "examples/05-web-server-stable.err",
+        "to": "examples/03-mutable-ripple.err",
+        "relation": "shared_dir:examples",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/03-mutable-ripple.err",
+        "to": "examples/09-null-cascade.err",
+        "relation": "shared_dir:examples",
+        "weight": 1.0
+      },
+      {
+        "from": "error-pkg/src/install.rs",
+        "to": "error-pkg/src/resolve.rs",
+        "relation": "shared_dir:error-pkg/src",
+        "weight": 1.0
+      },
       {
         "from": "compiler/src/LayerNavigator.affine",
         "to": "compiler/src/Bytecode.affine",
@@ -506,27 +524,9 @@
         "weight": 1.0
       },
       {
-        "from": "examples/05-web-server-stable.err",
-        "to": "examples/03-mutable-ripple.err",
-        "relation": "shared_dir:examples",
-        "weight": 1.0
-      },
-      {
-        "from": "examples/03-mutable-ripple.err",
-        "to": "examples/09-null-cascade.err",
-        "relation": "shared_dir:examples",
-        "weight": 1.0
-      },
-      {
         "from": "levels/09-operators.err",
         "to": "levels/03-unterminated-string.err",
         "relation": "shared_dir:levels",
-        "weight": 1.0
-      },
-      {
-        "from": "error-pkg/src/install.rs",
-        "to": "error-pkg/src/resolve.rs",
-        "relation": "shared_dir:error-pkg/src",
         "weight": 1.0
       },
       {
@@ -558,16 +558,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "compiler/error-wasm/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -578,14 +568,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "error-pkg/src/types.rs"
+          "compiler/error-wasm/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -596,6 +586,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "error-pkg/src/types.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PathTraversal",

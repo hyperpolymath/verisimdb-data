@@ -399,13 +399,25 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "memory",
-    "disk",
-    "cpu"
+    "cpu",
+    "concurrency",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/verisimdb/CorpusAnalyzer.affine",
+        "to": "src/verisimdb/VeriSimDB.affine",
+        "relation": "shared_dir:src/verisimdb",
+        "weight": 1.0
+      },
+      {
+        "from": "src/verisimdb/VeriSimDB.affine",
+        "to": "src/verisimdb/Export.affine",
+        "relation": "shared_dir:src/verisimdb",
+        "weight": 1.0
+      },
       {
         "from": "orchestrator/lib/lol/source_registry.ex",
         "to": "orchestrator/lib/lol/crawler_worker.ex",
@@ -437,27 +449,15 @@
         "weight": 1.0
       },
       {
-        "from": "ffi/zig/src/main.zig",
-        "to": "ffi/zig/src/store.zig",
-        "relation": "shared_dir:ffi/zig/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/verisimdb/CorpusAnalyzer.affine",
-        "to": "src/verisimdb/VeriSimDB.affine",
-        "relation": "shared_dir:src/verisimdb",
-        "weight": 1.0
-      },
-      {
-        "from": "src/verisimdb/VeriSimDB.affine",
-        "to": "src/verisimdb/Export.affine",
-        "relation": "shared_dir:src/verisimdb",
-        "weight": 1.0
-      },
-      {
         "from": "api/zig-gateway/src/lol_ffi.zig",
         "to": "api/zig-gateway/src/main.zig",
         "relation": "shared_dir:api/zig-gateway/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "ffi/zig/src/store.zig",
+        "relation": "shared_dir:ffi/zig/src",
         "weight": 1.0
       },
       {
@@ -585,58 +585,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "analysis/test/runtests.jl",
-          "proofs/theories/information_theory.agda"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "test/Vitest.affine",
-          "src/utils/Http.affine"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "orchestrator/lib/lol/crawler_worker.ex",
-          "orchestrator/lib/lol/julia_bridge.ex",
-          "orchestrator/lib/lol/verisimdb_reporter.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/src/main.zig"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "UnsafeDeserialization",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -653,16 +601,58 @@
         "relation": "UnsafeDeserialization->Memory"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "scripts/verisimdb-ingest.sh"
+          "analysis/test/runtests.jl",
+          "proofs/theories/information_theory.agda"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "PathTraversal->Disk"
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "orchestrator/lib/lol/crawler_worker.ex",
+          "orchestrator/lib/lol/julia_bridge.ex",
+          "orchestrator/lib/lol/verisimdb_reporter.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "orchestrator/lib/lol/crawler_worker.ex",
+          "orchestrator/lib/lol/julia_bridge.ex",
+          "orchestrator/lib/lol/verisimdb_reporter.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "test/Vitest.affine",
+          "src/utils/Http.affine"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "MutationGap",
@@ -678,18 +668,28 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "orchestrator/lib/lol/crawler_worker.ex",
-          "orchestrator/lib/lol/julia_bridge.ex",
-          "orchestrator/lib/lol/verisimdb_reporter.ex"
+          "scripts/verisimdb-ingest.sh"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/src/main.zig"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }
