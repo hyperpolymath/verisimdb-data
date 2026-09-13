@@ -639,54 +639,12 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
     "network",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ada/document_model.adb",
-        "to": "src/ada/docudactyl_tui.adb",
-        "relation": "shared_dir:src/ada",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ada/docudactyl_tui.adb",
-        "to": "src/ada/document_model.ads",
-        "relation": "shared_dir:src/ada",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ada/document_model.ads",
-        "to": "src/ada/terminal_utils.adb",
-        "relation": "shared_dir:src/ada",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ocaml/pdf_parser.ml",
-        "to": "src/ocaml/docudactyl_scm.ml",
-        "relation": "shared_dir:src/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ocaml/docudactyl_scm.ml",
-        "to": "src/ocaml/scheme_emit.ml",
-        "relation": "shared_dir:src/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "src/julia/extract.jl",
-        "to": "src/julia/export.jl",
-        "relation": "shared_dir:src/julia",
-        "weight": 1.0
-      },
       {
         "from": "ffi/zig/src/lith_adapter.zig",
         "to": "ffi/zig/src/conduit.zig",
@@ -778,6 +736,48 @@
         "weight": 1.0
       },
       {
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ocaml/pdf_parser.ml",
+        "to": "src/ocaml/docudactyl_scm.ml",
+        "relation": "shared_dir:src/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ocaml/docudactyl_scm.ml",
+        "to": "src/ocaml/scheme_emit.ml",
+        "relation": "shared_dir:src/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ada/document_model.adb",
+        "to": "src/ada/docudactyl_tui.adb",
+        "relation": "shared_dir:src/ada",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ada/docudactyl_tui.adb",
+        "to": "src/ada/document_model.ads",
+        "relation": "shared_dir:src/ada",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ada/document_model.ads",
+        "to": "src/ada/terminal_utils.adb",
+        "relation": "shared_dir:src/ada",
+        "weight": 1.0
+      },
+      {
+        "from": "src/julia/extract.jl",
+        "to": "src/julia/export.jl",
+        "relation": "shared_dir:src/julia",
+        "weight": 1.0
+      },
+      {
         "from": "src/chapel/DocudactylHPC.chpl",
         "to": "src/chapel/ProgressReporter.chpl",
         "relation": "shared_dir:src/chapel",
@@ -848,17 +848,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "ffi/zig/src/docudactyl_ffi.zig",
-          "ffi/zig/src/stages.zig",
-          "ffi/zig/src/cache.zig",
-          "ffi/zig/src/redaction_recovery.zig"
+          "ffi/zig/src/entity_graph.zig"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "UnsafeCode",
@@ -881,14 +878,17 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "ffi/zig/src/entity_graph.zig"
+          "ffi/zig/src/docudactyl_ffi.zig",
+          "ffi/zig/src/stages.zig",
+          "ffi/zig/src/cache.zig",
+          "ffi/zig/src/redaction_recovery.zig"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

@@ -418,47 +418,17 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "network",
     "disk",
-    "cpu"
+    "cpu",
+    "network",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/bindings/DomBindings.affine",
-        "to": "src/bindings/Chrome.affine",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/build.sh",
         "to": "scripts/build.affine",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Background.affine",
-        "to": "lib/ocaml/DomBindings.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/DomBindings.affine",
-        "to": "lib/ocaml/Chrome.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Chrome.affine",
-        "to": "lib/ocaml/Storage.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Storage.affine",
-        "to": "lib/ocaml/Content.affine",
-        "relation": "shared_dir:lib/ocaml",
         "weight": 1.0
       },
       {
@@ -496,6 +466,36 @@
         "to": "rust_core/src/profile.rs",
         "relation": "shared_dir:rust_core/src",
         "weight": 1.0
+      },
+      {
+        "from": "src/bindings/DomBindings.affine",
+        "to": "src/bindings/Chrome.affine",
+        "relation": "shared_dir:src/bindings",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Background.affine",
+        "to": "lib/ocaml/DomBindings.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/DomBindings.affine",
+        "to": "lib/ocaml/Chrome.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Chrome.affine",
+        "to": "lib/ocaml/Storage.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Storage.affine",
+        "to": "lib/ocaml/Content.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
       }
     ]
   },
@@ -514,6 +514,35 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rust_core/src/schedule.rs",
+          "rust_core/src/lib.rs",
+          "rust_core/src/interests.rs",
+          "rust_core/src/form_data.rs",
+          "rust_core/src/profile.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "lib/ocaml/DomBindings.affine",
+          "lib/ocaml/Chrome.affine",
+          "lib/ocaml/Content.affine",
+          "src/content/Content.affine",
+          "src/bindings/DomBindings.affine",
+          "src/bindings/Chrome.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -545,35 +574,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "rust_core/src/schedule.rs",
-          "rust_core/src/lib.rs",
-          "rust_core/src/interests.rs",
-          "rust_core/src/form_data.rs",
-          "rust_core/src/profile.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "lib/ocaml/DomBindings.affine",
-          "lib/ocaml/Chrome.affine",
-          "lib/ocaml/Content.affine",
-          "src/content/Content.affine",
-          "src/bindings/DomBindings.affine",
-          "src/bindings/Chrome.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

@@ -387,10 +387,10 @@
   ],
   "recommended_attacks": [
     "network",
-    "cpu",
     "memory",
     "disk",
-    "concurrency"
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -398,6 +398,18 @@
         "from": "launcher.sh",
         "to": "test_verisimdb_simple.js",
         "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "gossamer/verisimdb.js",
+        "to": "gossamer/launch.sh",
+        "relation": "shared_dir:gossamer",
+        "weight": 1.0
+      },
+      {
+        "from": "gossamer/launch.sh",
+        "to": "gossamer/app_gossamer.js",
+        "relation": "shared_dir:gossamer",
         "weight": 1.0
       },
       {
@@ -465,44 +477,11 @@
         "to": "archive/src/main_enhanced.affine",
         "relation": "shared_dir:archive/src",
         "weight": 1.0
-      },
-      {
-        "from": "gossamer/verisimdb.js",
-        "to": "gossamer/launch.sh",
-        "relation": "shared_dir:gossamer",
-        "weight": 1.0
-      },
-      {
-        "from": "gossamer/launch.sh",
-        "to": "gossamer/app_gossamer.js",
-        "relation": "shared_dir:gossamer",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "run.js",
-          "launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -518,24 +497,15 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "ExcessivePermissions",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "tray/src/main.rs"
+          "run.js",
+          "launcher.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "ExcessivePermissions->Disk"
       },
       {
         "source_category": "InputBoundary",
@@ -559,15 +529,14 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
         "severity_value": 3.5,
         "files": [
-          "run.js",
-          "launcher.sh"
+          "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -580,14 +549,45 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
         "severity_value": 3.5,
+        "files": [
+          "run.js",
+          "launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
           "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

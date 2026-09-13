@@ -384,15 +384,27 @@
   ],
   "recommended_attacks": [
     "memory",
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "ui/tests/WasmStoreTests.affine",
-        "to": "ui/tests/UpdateTests.affine",
-        "relation": "shared_dir:ui/tests",
+        "from": "ui/src/View.affine",
+        "to": "ui/src/Msg.affine",
+        "relation": "shared_dir:ui/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/Msg.affine",
+        "to": "ui/src/Update.affine",
+        "relation": "shared_dir:ui/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/Update.affine",
+        "to": "ui/src/Main.affine",
+        "relation": "shared_dir:ui/src",
         "weight": 1.0
       },
       {
@@ -411,24 +423,6 @@
         "from": "core/src/lambdadelta/reader.rs",
         "to": "core/src/lambdadelta/eval.rs",
         "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/View.affine",
-        "to": "ui/src/Msg.affine",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/Msg.affine",
-        "to": "ui/src/Update.affine",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/Update.affine",
-        "to": "ui/src/Main.affine",
-        "relation": "shared_dir:ui/src",
         "weight": 1.0
       },
       {
@@ -472,22 +466,17 @@
         "to": "core/src/exchange.rs",
         "relation": "shared_dir:core/src",
         "weight": 1.0
+      },
+      {
+        "from": "ui/tests/WasmStoreTests.affine",
+        "to": "ui/tests/UpdateTests.affine",
+        "relation": "shared_dir:ui/tests",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "core/src/lambdadelta_host/tests.rs",
-          "desktop/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -497,26 +486,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "ui/tests/contract.test.js"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "core/src/storage.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -530,6 +499,16 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "core/src/storage.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -540,6 +519,27 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "ui/tests/contract.test.js"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "core/src/lambdadelta_host/tests.rs",
+          "desktop/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }
