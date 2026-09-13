@@ -187,7 +187,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 17874,
+    "total_lines": 17886,
     "unsafe_blocks": 29,
     "panic_sites": 6,
     "unwrap_calls": 8,
@@ -319,7 +319,7 @@
     },
     {
       "file_path": "src/abi/AbsoluteZero/ABI/Layout.idr",
-      "lines": 302,
+      "lines": 303,
       "unsafe_blocks": 1,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -329,7 +329,7 @@
     },
     {
       "file_path": "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
-      "lines": 120,
+      "lines": 124,
       "unsafe_blocks": 4,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -351,12 +351,18 @@
   ],
   "recommended_attacks": [
     "concurrency",
-    "disk",
     "cpu",
+    "disk",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "verification/setup-and-verify.sh",
+        "to": "verification/verify-proofs.sh",
+        "relation": "shared_dir:verification",
+        "weight": 1.0
+      },
       {
         "from": "examples/special-ops/os/ioctl_nop.c",
         "to": "examples/special-ops/os/sched_yield.c",
@@ -368,69 +374,11 @@
         "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
         "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
         "weight": 1.0
-      },
-      {
-        "from": "verification/setup-and-verify.sh",
-        "to": "verification/verify-proofs.sh",
-        "relation": "shared_dir:verification",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "verification/run-local-verification.sh",
-          "verification/verify-proofs.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "examples/ada/balanced_ops.adb"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "examples/scheme/nop.scm"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "verification/run-local-verification.sh",
-          "verification/verify-proofs.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/whitespace/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -441,16 +389,6 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/whitespace/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "ProofDrift",
@@ -465,23 +403,44 @@
       },
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
           "examples/ada/balanced_ops.adb"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Cpu"
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "examples/haskell/Nop.hs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "ResourceLeak",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "examples/scheme/nop.scm"
         ],
         "frameworks": [],
-        "relation": "ResourceLeak->Cpu"
+        "relation": "ResourceLeak->Memory"
       },
       {
         "source_category": "ProofDrift",
@@ -498,14 +457,55 @@
         "relation": "ProofDrift->Cpu"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "ResourceLeak",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "examples/scheme/nop.scm"
+        ],
+        "frameworks": [],
+        "relation": "ResourceLeak->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
         "sink_axis": "cpu",
         "severity_value": 3.5,
         "files": [
-          "examples/haskell/Nop.hs"
+          "examples/ada/balanced_ops.adb"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Cpu"
+        "relation": "UnsafeCode->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/whitespace/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/whitespace/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

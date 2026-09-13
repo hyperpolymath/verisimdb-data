@@ -201,21 +201,31 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "server/src/lithoglyph/client.gleam",
-        "to": "server/src/lithoglyph/nif_ffi.gleam",
-        "relation": "shared_dir:server/src/lithoglyph",
-        "weight": 1.0
-      },
-      {
         "from": "server/src/router.gleam",
         "to": "server/src/glyphbase_server.gleam",
         "relation": "shared_dir:server/src",
+        "weight": 1.0
+      },
+      {
+        "from": "server/src/lithoglyph/client.gleam",
+        "to": "server/src/lithoglyph/nif_ffi.gleam",
+        "relation": "shared_dir:server/src/lithoglyph",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "server/ffi/zig/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
+      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -239,16 +249,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "server/ffi/zig/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
       }
     ]
   }

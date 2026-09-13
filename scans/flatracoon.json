@@ -336,12 +336,30 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
+    "cpu",
     "disk",
-    "cpu"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "netstack/orchestrator/lib/flatracoon_orchestrator/health_monitor.ex",
+        "to": "netstack/orchestrator/lib/flatracoon_orchestrator/module_registry.ex",
+        "relation": "shared_dir:netstack/orchestrator/lib/flatracoon_orchestrator",
+        "weight": 1.0
+      },
+      {
+        "from": "netstack/configs/install.sh",
+        "to": "netstack/configs/modules.ncl",
+        "relation": "shared_dir:netstack/configs",
+        "weight": 1.0
+      },
+      {
+        "from": "netstack/configs/modules.ncl",
+        "to": "netstack/configs/environments.ncl",
+        "relation": "shared_dir:netstack/configs",
+        "weight": 1.0
+      },
       {
         "from": "netstack/tui/src/flatracoon_tui.adb",
         "to": "netstack/tui/src/flatracoon-api_client.ads",
@@ -370,24 +388,6 @@
         "from": "netstack/tui/src/flatracoon-display.adb",
         "to": "netstack/tui/src/flatracoon-commands.ads",
         "relation": "shared_dir:netstack/tui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "netstack/orchestrator/lib/flatracoon_orchestrator/health_monitor.ex",
-        "to": "netstack/orchestrator/lib/flatracoon_orchestrator/module_registry.ex",
-        "relation": "shared_dir:netstack/orchestrator/lib/flatracoon_orchestrator",
-        "weight": 1.0
-      },
-      {
-        "from": "netstack/configs/install.sh",
-        "to": "netstack/configs/modules.ncl",
-        "relation": "shared_dir:netstack/configs",
-        "weight": 1.0
-      },
-      {
-        "from": "netstack/configs/modules.ncl",
-        "to": "netstack/configs/environments.ncl",
-        "relation": "shared_dir:netstack/configs",
         "weight": 1.0
       },
       {
@@ -719,25 +719,20 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "netstack/orchestrator/test/support/conn_case.ex",
-          "netstack/orchestrator/test/integration/orchestrator_api_test.exs",
-          "netstack/orchestrator/test/integration/end_to_end_test.exs",
-          "netstack/orchestrator/test/flatracoon_orchestrator/module_discovery_test.exs",
-          "netstack/orchestrator/test/flatracoon_orchestrator/module_registry_test.exs",
-          "netstack/orchestrator/test/flatracoon_orchestrator_web/controllers/error_json_test.exs",
-          "netstack/orchestrator/test/flatracoon_orchestrator_web/controllers/error_html_test.exs",
-          "netstack/orchestrator/test/flatracoon_orchestrator_web/controllers/page_controller_test.exs"
+          "netstack/orchestrator/lib/flatracoon_orchestrator/health_monitor.ex",
+          "netstack/orchestrator/lib/flatracoon_orchestrator/module_discovery.ex",
+          "netstack/orchestrator/lib/flatracoon_orchestrator/module_registry.ex"
         ],
         "frameworks": [
           "Phoenix",
           "OTP",
           "WebServer"
         ],
-        "relation": "MutationGap->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -770,20 +765,25 @@
         "relation": "DynamicCodeExecution->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "netstack/orchestrator/lib/flatracoon_orchestrator/health_monitor.ex",
-          "netstack/orchestrator/lib/flatracoon_orchestrator/module_discovery.ex",
-          "netstack/orchestrator/lib/flatracoon_orchestrator/module_registry.ex"
+          "netstack/orchestrator/test/support/conn_case.ex",
+          "netstack/orchestrator/test/integration/orchestrator_api_test.exs",
+          "netstack/orchestrator/test/integration/end_to_end_test.exs",
+          "netstack/orchestrator/test/flatracoon_orchestrator/module_discovery_test.exs",
+          "netstack/orchestrator/test/flatracoon_orchestrator/module_registry_test.exs",
+          "netstack/orchestrator/test/flatracoon_orchestrator_web/controllers/error_json_test.exs",
+          "netstack/orchestrator/test/flatracoon_orchestrator_web/controllers/error_html_test.exs",
+          "netstack/orchestrator/test/flatracoon_orchestrator_web/controllers/page_controller_test.exs"
         ],
         "frameworks": [
           "Phoenix",
           "OTP",
           "WebServer"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "MutationGap->Cpu"
       }
     ]
   }

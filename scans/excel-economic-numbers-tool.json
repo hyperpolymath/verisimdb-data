@@ -515,8 +515,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "cpu",
     "network",
     "memory"
   ],
@@ -526,6 +526,24 @@
         "from": "src/julia/server/authentication.jl",
         "to": "src/julia/server/rate_limiting.jl",
         "relation": "shared_dir:src/julia/server",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/marketplace.jl",
+        "to": "src/plugins/plugin_system.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/plugin_system.jl",
+        "to": "src/plugins/webhooks.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/visualization/report_generator.jl",
+        "to": "src/visualization/charts.rs",
+        "relation": "shared_dir:src/visualization",
         "weight": 1.0
       },
       {
@@ -581,68 +599,11 @@
         "to": "src/julia/data_sources/BEA.jl",
         "relation": "shared_dir:src/julia/data_sources",
         "weight": 1.0
-      },
-      {
-        "from": "src/plugins/marketplace.jl",
-        "to": "src/plugins/plugin_system.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
-      },
-      {
-        "from": "src/plugins/plugin_system.jl",
-        "to": "src/plugins/webhooks.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
-      },
-      {
-        "from": "src/visualization/report_generator.jl",
-        "to": "src/visualization/charts.rs",
-        "relation": "shared_dir:src/visualization",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "tests/julia/test_client.jl",
-          "src/julia/data_sources/Census.jl",
-          "src/julia/data_sources/BEA.jl"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/integration/test_e2e.jl",
-          "src/ai/insights.jl",
-          "src/julia/data_sources/OECD.jl",
-          "src/julia/data_sources/BIS.jl",
-          "src/julia/data_sources/FRED.jl",
-          "src/julia/data_sources/WorldBank.jl",
-          "src/julia/data_sources/DBnomics.jl",
-          "src/julia/client.jl"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/julia/test_client.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -675,6 +636,23 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/integration/test_e2e.jl",
+          "src/ai/insights.jl",
+          "src/julia/data_sources/OECD.jl",
+          "src/julia/data_sources/BIS.jl",
+          "src/julia/data_sources/FRED.jl",
+          "src/julia/data_sources/WorldBank.jl",
+          "src/julia/data_sources/DBnomics.jl",
+          "src/julia/client.jl"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -683,6 +661,28 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/julia/test_client.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "tests/julia/test_client.jl",
+          "src/julia/data_sources/Census.jl",
+          "src/julia/data_sources/BEA.jl"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

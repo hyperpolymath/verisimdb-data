@@ -217,9 +217,9 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu",
     "disk",
+    "cpu",
+    "network",
     "memory"
   ],
   "dependency_graph": {
@@ -307,6 +307,31 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "firefox-lsp/test/claude_firefox/lsp_test.exs",
+          "firefox-lsp/test/adapters/firefox_test.exs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "gecko-browser-extension/src/content/content.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -317,6 +342,18 @@
           "OTP"
         ],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "firefox-lsp/lib/adapters/firefox.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -341,43 +378,6 @@
           "OTP"
         ],
         "relation": "AtomExhaustion->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "gecko-browser-extension/src/content/content.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "firefox-lsp/lib/adapters/firefox.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "firefox-lsp/test/claude_firefox/lsp_test.exs",
-          "firefox-lsp/test/adapters/firefox_test.exs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "HardcodedSecret",
