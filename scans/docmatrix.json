@@ -56,11 +56,11 @@
     }
   ],
   "statistics": {
-    "total_lines": 12344,
+    "total_lines": 12491,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 2,
-    "allocation_sites": 135,
+    "allocation_sites": 139,
     "io_operations": 24,
     "threading_constructs": 8
   },
@@ -87,7 +87,7 @@
     },
     {
       "file_path": "crates/formatrix-gui/src/commands.rs",
-      "lines": 483,
+      "lines": 507,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -98,7 +98,7 @@
     },
     {
       "file_path": "crates/formatrix-core/tests/aspect_test.rs",
-      "lines": 260,
+      "lines": 276,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -119,11 +119,11 @@
     },
     {
       "file_path": "crates/formatrix-core/src/traits.rs",
-      "lines": 185,
+      "lines": 265,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 2,
+      "allocation_sites": 6,
       "io_operations": 2,
       "threading_constructs": 0
     },
@@ -162,7 +162,7 @@
     },
     {
       "file_path": "crates/formatrix-core/src/formats/markdown.rs",
-      "lines": 598,
+      "lines": 595,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -173,7 +173,7 @@
     },
     {
       "file_path": "crates/formatrix-core/src/formats/rst.rs",
-      "lines": 679,
+      "lines": 676,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -205,7 +205,7 @@
     },
     {
       "file_path": "crates/formatrix-core/src/ast.rs",
-      "lines": 788,
+      "lines": 790,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -287,31 +287,13 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "memory",
+    "concurrency",
     "cpu",
-    "concurrency"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/formatrix-core/src/file_ops.rs",
-        "to": "crates/formatrix-core/src/traits.rs",
-        "relation": "shared_dir:crates/formatrix-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/formatrix-core/src/traits.rs",
-        "to": "crates/formatrix-core/src/ast.rs",
-        "relation": "shared_dir:crates/formatrix-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/formatrix-core/src/ast.rs",
-        "to": "crates/formatrix-core/src/ffi.rs",
-        "relation": "shared_dir:crates/formatrix-core/src",
-        "weight": 1.0
-      },
       {
         "from": "crates/formatrix-core/src/formats/asciidoc.rs",
         "to": "crates/formatrix-core/src/formats/orgmode.rs",
@@ -346,6 +328,24 @@
         "from": "crates/formatrix-core/src/formats/plaintext.rs",
         "to": "crates/formatrix-core/src/formats/typst.rs",
         "relation": "shared_dir:crates/formatrix-core/src/formats",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/formatrix-core/src/file_ops.rs",
+        "to": "crates/formatrix-core/src/traits.rs",
+        "relation": "shared_dir:crates/formatrix-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/formatrix-core/src/traits.rs",
+        "to": "crates/formatrix-core/src/ast.rs",
+        "relation": "shared_dir:crates/formatrix-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/formatrix-core/src/ast.rs",
+        "to": "crates/formatrix-core/src/ffi.rs",
+        "relation": "shared_dir:crates/formatrix-core/src",
         "weight": 1.0
       },
       {
@@ -485,19 +485,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/formatrix-core/src/file_ops.rs",
-          "crates/formatrix-core/src/traits.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -508,6 +495,18 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "crates/formatrix-core/src/ffi.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -523,18 +522,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/formatrix-core/src/formats/djot.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -547,16 +534,29 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "crates/formatrix-core/src/ffi.rs"
+          "crates/formatrix-core/src/formats/djot.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/formatrix-core/src/file_ops.rs",
+          "crates/formatrix-core/src/traits.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

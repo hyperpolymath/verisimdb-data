@@ -3,8 +3,8 @@
   "program_path": "dicti0nary-attack",
   "language": "affinescript",
   "frameworks": [
-    "Networking",
-    "Concurrent"
+    "Concurrent",
+    "Networking"
   ],
   "weak_points": [
     {
@@ -197,9 +197,9 @@
   ],
   "recommended_attacks": [
     "network",
-    "cpu",
+    "disk",
     "memory",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -213,12 +213,6 @@
         "from": "src/generators/Markov.chpl",
         "to": "src/generators/Phonetic.chpl",
         "relation": "shared_dir:src/generators",
-        "weight": 1.0
-      },
-      {
-        "from": "src/main.rs",
-        "to": "src/dicti0nary.chpl",
-        "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
@@ -240,13 +234,25 @@
         "weight": 1.0
       },
       {
+        "from": "src/main.rs",
+        "to": "src/dicti0nary.chpl",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/es6/web/src/WasmLoader.res.js",
+        "to": "Concurrent",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "lib/es6/web/src/WasmLoader.res.js",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "lib/es6/web/src/WasmLoader.res.js",
+        "from": "crates/generators/src/pattern.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -258,7 +264,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/generators/src/pattern.rs",
+        "from": "crates/generators/src/lib.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -270,7 +276,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/generators/src/lib.rs",
+        "from": "crates/generators/src/phonetic.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -282,7 +288,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/generators/src/phonetic.rs",
+        "from": "crates/generators/src/leetspeak.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -294,7 +300,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/generators/src/leetspeak.rs",
+        "from": "crates/core/src/lib.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -306,7 +312,7 @@
         "weight": 1.0
       },
       {
-        "from": "crates/core/src/lib.rs",
+        "from": "ffi/zig/src/main.zig",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -318,7 +324,7 @@
         "weight": 1.0
       },
       {
-        "from": "ffi/zig/src/main.zig",
+        "from": "src/generators/Random.chpl",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -330,7 +336,7 @@
         "weight": 1.0
       },
       {
-        "from": "src/generators/Random.chpl",
+        "from": "src/generators/Markov.chpl",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -342,7 +348,7 @@
         "weight": 1.0
       },
       {
-        "from": "src/generators/Markov.chpl",
+        "from": "src/generators/Phonetic.chpl",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -354,7 +360,7 @@
         "weight": 1.0
       },
       {
-        "from": "src/generators/Phonetic.chpl",
+        "from": "src/main.rs",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -366,7 +372,7 @@
         "weight": 1.0
       },
       {
-        "from": "src/main.rs",
+        "from": "src/dicti0nary.chpl",
         "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
@@ -374,12 +380,6 @@
       {
         "from": "src/dicti0nary.chpl",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/dicti0nary.chpl",
-        "to": "Concurrent",
         "relation": "framework",
         "weight": 1.0
       }
@@ -389,6 +389,20 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/generators/src/leetspeak.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -396,10 +410,23 @@
           "src/main.rs"
         ],
         "frameworks": [
-          "Networking",
-          "Concurrent"
+          "Concurrent",
+          "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "lib/es6/web/src/App.res.js"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -409,8 +436,8 @@
           "lib/es6/web/src/App.res.js"
         ],
         "frameworks": [
-          "Networking",
-          "Concurrent"
+          "Concurrent",
+          "Networking"
         ],
         "relation": "DynamicCodeExecution->Network"
       },
@@ -422,37 +449,10 @@
           "tests/test_random.chpl"
         ],
         "frameworks": [
-          "Networking",
-          "Concurrent"
+          "Concurrent",
+          "Networking"
         ],
         "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/generators/src/leetspeak.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "lib/es6/web/src/App.res.js"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

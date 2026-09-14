@@ -431,14 +431,32 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory",
     "concurrency",
-    "disk",
-    "network"
+    "cpu",
+    "network",
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bindings/deno/src/A2ML_Parser.affine",
+        "to": "bindings/deno/src/A2ML_Types.affine",
+        "relation": "shared_dir:bindings/deno/src",
+        "weight": 1.0
+      },
+      {
+        "from": "lsp/src/completions.rs",
+        "to": "lsp/src/hover.rs",
+        "relation": "shared_dir:lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "lsp/src/hover.rs",
+        "to": "lsp/src/diagnostics.rs",
+        "relation": "shared_dir:lsp/src",
+        "weight": 1.0
+      },
       {
         "from": "prototype/affinescript/src/VectorRunner.affine",
         "to": "prototype/affinescript/src/Cli.affine",
@@ -458,15 +476,9 @@
         "weight": 1.0
       },
       {
-        "from": "lsp/src/completions.rs",
-        "to": "lsp/src/hover.rs",
-        "relation": "shared_dir:lsp/src",
-        "weight": 1.0
-      },
-      {
-        "from": "lsp/src/hover.rs",
-        "to": "lsp/src/diagnostics.rs",
-        "relation": "shared_dir:lsp/src",
+        "from": "scripts/deploy-site.sh",
+        "to": "scripts/add-arxiv-badge.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -485,18 +497,6 @@
         "from": "bindings/rust/src/error.rs",
         "to": "bindings/rust/src/types.rs",
         "relation": "shared_dir:bindings/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/deploy-site.sh",
-        "to": "scripts/add-arxiv-badge.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "bindings/deno/src/A2ML_Parser.affine",
-        "to": "bindings/deno/src/A2ML_Types.affine",
-        "relation": "shared_dir:bindings/deno/src",
         "weight": 1.0
       }
     ]
@@ -525,16 +525,14 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "ExcessivePermissions",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "lsp/src/completions.rs",
-          "lsp/src/hover.rs",
-          "lsp/src/diagnostics.rs"
+          "scripts/deploy-site.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "ExcessivePermissions->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -549,14 +547,16 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "bindings/elixir/test/a2_ml_test.exs"
+          "lsp/src/completions.rs",
+          "lsp/src/hover.rs",
+          "lsp/src/diagnostics.rs"
         ],
         "frameworks": [],
-        "relation": "MutationGap->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -570,14 +570,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "scripts/deploy-site.sh"
+          "bindings/elixir/test/a2_ml_test.exs"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
+        "relation": "MutationGap->Cpu"
       }
     ]
   }
