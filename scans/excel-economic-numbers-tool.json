@@ -515,13 +515,25 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "network",
     "disk",
     "cpu",
-    "network"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/plugins/marketplace.jl",
+        "to": "src/plugins/plugin_system.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/plugin_system.jl",
+        "to": "src/plugins/webhooks.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
       {
         "from": "src/visualization/report_generator.jl",
         "to": "src/visualization/charts.rs",
@@ -587,23 +599,31 @@
         "to": "src/julia/server/rate_limiting.jl",
         "relation": "shared_dir:src/julia/server",
         "weight": 1.0
-      },
-      {
-        "from": "src/plugins/marketplace.jl",
-        "to": "src/plugins/plugin_system.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
-      },
-      {
-        "from": "src/plugins/plugin_system.jl",
-        "to": "src/plugins/webhooks.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/julia/test_elasticity.jl"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/julia/test_client.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -616,14 +636,24 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tests/julia/test_client.jl"
+          "src/visualization/charts.rs"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/visualization/charts.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "HardcodedSecret",
@@ -653,36 +683,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/julia/test_elasticity.jl"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/visualization/charts.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/visualization/charts.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

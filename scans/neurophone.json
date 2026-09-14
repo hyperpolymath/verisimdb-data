@@ -56,7 +56,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 10735,
+    "total_lines": 10511,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -281,14 +281,20 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "memory",
-    "disk",
+    "concurrency",
     "cpu",
-    "concurrency"
+    "disk",
+    "memory",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
+        "to": "crates/neurophone-core/tests/lifecycle.rs",
+        "relation": "shared_dir:crates/neurophone-core/tests",
+        "weight": 1.0
+      },
       {
         "from": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
         "to": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
@@ -305,12 +311,6 @@
         "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
         "to": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
         "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
-        "to": "crates/neurophone-core/tests/lifecycle.rs",
-        "relation": "shared_dir:crates/neurophone-core/tests",
         "weight": 1.0
       },
       {
@@ -588,6 +588,33 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "crates/claude-client/src/egress_gate.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/uninstall.sh",
+          "scripts/install-on-phone.sh"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -612,33 +639,6 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/uninstall.sh",
-          "scripts/install-on-phone.sh"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "crates/claude-client/src/egress_gate.rs"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "HardcodedSecret->Network"
       }
     ]
   }

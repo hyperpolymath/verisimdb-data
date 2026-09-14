@@ -654,11 +654,11 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "memory",
-    "disk",
     "cpu",
-    "concurrency"
+    "disk",
+    "memory",
+    "concurrency",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -747,6 +747,24 @@
         "weight": 1.0
       },
       {
+        "from": "src/api/rust/src/resolvers.rs",
+        "to": "src/api/rust/src/main.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/main.rs",
+        "to": "src/api/rust/src/redis_client.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/api/rust/src/redis_client.rs",
+        "to": "src/api/rust/src/proof.rs",
+        "relation": "shared_dir:src/api/rust/src",
+        "weight": 1.0
+      },
+      {
         "from": "src/api/zig/librespeed_client.zig",
         "to": "src/api/zig/proof.zig",
         "relation": "shared_dir:src/api/zig",
@@ -787,24 +805,6 @@
         "to": "src/api/zig/verisim_client.zig",
         "relation": "shared_dir:src/api/zig",
         "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/resolvers.rs",
-        "to": "src/api/rust/src/main.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/main.rs",
-        "to": "src/api/rust/src/redis_client.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rust/src/redis_client.rs",
-        "to": "src/api/rust/src/proof.rs",
-        "relation": "shared_dir:src/api/rust/src",
-        "weight": 1.0
       }
     ]
   },
@@ -822,16 +822,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "aerie-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -844,6 +834,17 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/api/rust/src/main.rs",
+          "src/api/rust/src/redis_client.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "HardcodedSecret",
@@ -895,15 +896,14 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/api/rust/src/main.rs",
-          "src/api/rust/src/redis_client.rs"
+          "aerie-launcher.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }
