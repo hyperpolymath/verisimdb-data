@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "phronesiser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
     {
@@ -191,12 +191,6 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/audit.rs",
         "relation": "shared_dir:src/codegen",
@@ -213,30 +207,26 @@
         "to": "src/codegen/engine.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/codegen/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -250,13 +240,23 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "src/codegen/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnsafeCode",

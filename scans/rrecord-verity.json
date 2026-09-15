@@ -303,23 +303,11 @@
   "recommended_attacks": [
     "cpu",
     "disk",
-    "network",
-    "memory"
+    "memory",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/atnChangelog.js",
-        "to": "scripts/update-thirdparty.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/update-thirdparty.js",
-        "to": "scripts/pack.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "experiments/mozilla.d.affine",
         "to": "experiments/ctypes.d.affine",
@@ -345,9 +333,15 @@
         "weight": 1.0
       },
       {
-        "from": "modules/extensionUtils.mjs.js",
-        "to": "modules/virusTotalIntegration.mjs.js",
-        "relation": "shared_dir:modules",
+        "from": "scripts/atnChangelog.js",
+        "to": "scripts/update-thirdparty.js",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/update-thirdparty.js",
+        "to": "scripts/pack.js",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -355,21 +349,17 @@
         "to": "setup.sh",
         "relation": "shared_dir:",
         "weight": 1.0
+      },
+      {
+        "from": "modules/extensionUtils.mjs.js",
+        "to": "modules/virusTotalIntegration.mjs.js",
+        "relation": "shared_dir:modules",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "wasm/parser/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -379,17 +369,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
-          "scripts/verify-rsr.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "InputBoundary",
@@ -408,13 +387,34 @@
       },
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
+        "sink_axis": "memory",
+        "severity_value": 5.0,
         "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
+          "scripts/verify-rsr.js"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "wasm/parser/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "wasm/parser/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -427,14 +427,14 @@
         "relation": "DynamicCodeExecution->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "wasm/parser/src/lib.rs"
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

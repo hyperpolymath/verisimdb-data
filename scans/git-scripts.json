@@ -319,8 +319,8 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -328,6 +328,12 @@
         "from": "scripts/wiki-audit.sh",
         "to": "scripts/standardize_readmes.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/App.affine",
+        "to": "ui/src/HarApi.affine",
+        "relation": "shared_dir:ui/src",
         "weight": 1.0
       },
       {
@@ -365,12 +371,6 @@
         "to": "lib/script_manager/git_syncer.ex",
         "relation": "shared_dir:lib/script_manager",
         "weight": 1.0
-      },
-      {
-        "from": "ui/src/App.affine",
-        "to": "ui/src/HarApi.affine",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
       }
     ]
   },
@@ -396,14 +396,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "launchers/git-scripts-launcher.sh"
+          "lib/script_manager/tui.ex"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -425,14 +425,14 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "lib/script_manager/tui.ex"
+          "launchers/git-scripts-launcher.sh"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

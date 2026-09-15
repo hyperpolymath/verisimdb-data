@@ -322,11 +322,11 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "network",
-    "concurrency",
     "disk",
-    "cpu"
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -635,18 +635,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "dipstick/services/collector/src/main.rs",
-          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
+          "dipstick/tools/autoconfig/smtp_autoconfig.py"
         ],
         "frameworks": [
           "Phoenix",
           "OTP"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "UnsafeFFI",
@@ -663,31 +662,18 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "dipstick/tools/autoconfig/smtp_autoconfig.py"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "OTP"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "dipstick/services/gateway-rescript/src/Gateway.res",
-          "dipstick/services/gateway-rescript/src/Gateway.affine"
+          "dipstick/services/collector/src/main.rs",
+          "dipstick/services/analyzer-rescript/wasm/src/lib.rs"
         ],
         "frameworks": [
           "Phoenix",
           "OTP"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -702,6 +688,20 @@
           "OTP"
         ],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "dipstick/services/gateway-rescript/src/Gateway.res",
+          "dipstick/services/gateway-rescript/src/Gateway.affine"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "OTP"
+        ],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }
