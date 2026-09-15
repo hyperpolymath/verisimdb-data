@@ -217,10 +217,10 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu",
+    "memory",
     "disk",
-    "memory"
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -307,16 +307,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "mozilla-extension/src/core/storage.js"
+          "firefox-lsp/lib/lsp/server.ex"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "AtomExhaustion->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -329,6 +329,18 @@
           "OTP"
         ],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "gecko-browser-extension/src/content/content.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "MutationGap",
@@ -344,40 +356,16 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "HardcodedSecret",
         "sink_axis": "network",
-        "severity_value": 3.5,
+        "severity_value": 5.0,
         "files": [
-          "gecko-browser-extension/src/content/content.js"
+          "mozilla-extension/src/core/storage.js"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "firefox-lsp/lib/lsp/server.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "AtomExhaustion->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "firefox-lsp/lib/adapters/firefox.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "CommandInjection->Disk"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -390,6 +378,18 @@
           "OTP"
         ],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "firefox-lsp/lib/adapters/firefox.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

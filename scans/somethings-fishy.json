@@ -271,8 +271,8 @@
   "recommended_attacks": [
     "disk",
     "cpu",
-    "memory",
-    "concurrency"
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -295,15 +295,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/safe_io.rs",
-        "to": "src/report.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/report.rs",
-        "to": "src/scene.rs",
-        "relation": "shared_dir:src",
+        "from": "build.rs",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -319,9 +313,15 @@
         "weight": 1.0
       },
       {
-        "from": "build.rs",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
+        "from": "src/safe_io.rs",
+        "to": "src/report.rs",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/report.rs",
+        "to": "src/scene.rs",
+        "relation": "shared_dir:src",
         "weight": 1.0
       }
     ]
@@ -329,15 +329,15 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
         "files": [
-          "src/scanners/commit_trailers.rs",
-          "src/scanners/banned_patterns.rs"
+          "src/safe_io.rs",
+          "src/safe_io.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnsafeCode",
@@ -352,15 +352,15 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "src/safe_io.rs",
-          "src/safe_io.rs"
+          "src/scanners/commit_trailers.rs",
+          "src/scanners/banned_patterns.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Concurrency"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",

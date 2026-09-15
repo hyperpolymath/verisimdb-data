@@ -234,9 +234,9 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": []
@@ -252,6 +252,18 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "beam/test/aspect_test.exs",
+          "beam/test/quandle_db_nif_test.exs",
+          "beam/test/quandle_db_nif_live_integration_test.exs"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "ProofDrift",
@@ -271,14 +283,15 @@
         "relation": "ProofDrift->Cpu"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "beam/native/quandle_db_nif.zig"
+          "beam/mix.exs",
+          "beam/test/quandle_db_nif_live_integration_test.exs"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -292,27 +305,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "beam/mix.exs",
-          "beam/test/quandle_db_nif_live_integration_test.exs"
+          "beam/native/quandle_db_nif.zig"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "beam/test/aspect_test.exs",
-          "beam/test/quandle_db_nif_test.exs",
-          "beam/test/quandle_db_nif_live_integration_test.exs"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

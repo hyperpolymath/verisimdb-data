@@ -3,8 +3,8 @@
   "program_path": "conative-gating",
   "language": "shell",
   "frameworks": [
-    "Networking",
-    "OTP"
+    "OTP",
+    "Networking"
   ],
   "weak_points": [
     {
@@ -277,10 +277,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu",
     "network",
-    "disk"
+    "memory",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -304,21 +304,15 @@
       },
       {
         "from": "config/policy.ncl",
-        "to": "Networking",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "config/policy.ncl",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "Src/Abi/Foreign.idr",
         "to": "Networking",
         "relation": "framework",
-        "weight": 6.0
+        "weight": 1.0
       },
       {
         "from": "Src/Abi/Foreign.idr",
@@ -327,10 +321,10 @@
         "weight": 6.0
       },
       {
-        "from": "scripts/apply-justfiles.sh",
+        "from": "Src/Abi/Foreign.idr",
         "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 6.0
       },
       {
         "from": "scripts/apply-justfiles.sh",
@@ -339,7 +333,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/apply-common-files.sh",
+        "from": "scripts/apply-justfiles.sh",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -351,7 +345,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/reconcile-wharf-repos.sh",
+        "from": "scripts/apply-common-files.sh",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -363,7 +357,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/mass-apply-templates.sh",
+        "from": "scripts/reconcile-wharf-repos.sh",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
@@ -375,10 +369,10 @@
         "weight": 1.0
       },
       {
-        "from": "ffi/zig/test/integration_test.zig",
+        "from": "scripts/mass-apply-templates.sh",
         "to": "Networking",
         "relation": "framework",
-        "weight": 4.0
+        "weight": 1.0
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
@@ -387,13 +381,25 @@
         "weight": 4.0
       },
       {
+        "from": "ffi/zig/test/integration_test.zig",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "ffi/zig/src/main.zig",
         "to": "Networking",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "ffi/zig/src/main.zig",
+        "from": "src/contract/src/lib.rs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -405,7 +411,7 @@
         "weight": 1.0
       },
       {
-        "from": "src/contract/src/lib.rs",
+        "from": "src/oracle/src/lib.rs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -413,36 +419,30 @@
       {
         "from": "src/oracle/src/lib.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/oracle/src/lib.rs",
-        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "src/main.rs",
-        "to": "Networking",
+        "to": "OTP",
         "relation": "framework",
         "weight": 12.0
       },
       {
         "from": "src/main.rs",
-        "to": "OTP",
+        "to": "Networking",
         "relation": "framework",
         "weight": 12.0
       },
       {
         "from": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
-        "to": "Networking",
+        "to": "OTP",
         "relation": "framework",
         "weight": 2.0
       },
       {
         "from": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
-        "to": "OTP",
+        "to": "Networking",
         "relation": "framework",
         "weight": 2.0
       }
@@ -451,18 +451,17 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/contract/src/lib.rs",
           "src/main.rs"
         ],
         "frameworks": [
-          "Networking",
-          "OTP"
+          "OTP",
+          "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -472,10 +471,23 @@
           "templates/rsr-metadata.ncl"
         ],
         "frameworks": [
-          "Networking",
-          "OTP"
+          "OTP",
+          "Networking"
         ],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -485,8 +497,8 @@
           "src/main.rs"
         ],
         "frameworks": [
-          "Networking",
-          "OTP"
+          "OTP",
+          "Networking"
         ],
         "relation": "PanicPath->Disk"
       },
@@ -499,8 +511,8 @@
           "scripts/mass-apply-templates.sh"
         ],
         "frameworks": [
-          "Networking",
-          "OTP"
+          "OTP",
+          "Networking"
         ],
         "relation": "CommandInjection->Cpu"
       },
@@ -513,36 +525,10 @@
           "src/main.rs"
         ],
         "frameworks": [
-          "Networking",
-          "OTP"
+          "OTP",
+          "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "HardcodedSecret",
@@ -556,10 +542,24 @@
           "src/oracle/src/lib.rs"
         ],
         "frameworks": [
-          "Networking",
-          "OTP"
+          "OTP",
+          "Networking"
         ],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/contract/src/lib.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
