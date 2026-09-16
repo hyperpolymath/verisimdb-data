@@ -422,10 +422,10 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
     "disk",
-    "memory"
+    "memory",
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -451,6 +451,18 @@
         "from": "crates/januskey-cli/tests/property_tests.rs",
         "to": "crates/januskey-cli/tests/concurrency_test.rs",
         "relation": "shared_dir:crates/januskey-cli/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "generated/idrisiser/idris2/Januskey/Verified/key_generation.idr",
+        "to": "generated/idrisiser/idris2/Januskey/Verified/wrap_unwrap_round_trip.idr",
+        "relation": "shared_dir:generated/idrisiser/idris2/Januskey/Verified",
+        "weight": 1.0
+      },
+      {
+        "from": "generated/idrisiser/idris2/Januskey/Verified/wrap_unwrap_round_trip.idr",
+        "to": "generated/idrisiser/idris2/Januskey/Verified/key_derivation.idr",
+        "relation": "shared_dir:generated/idrisiser/idris2/Januskey/Verified",
         "weight": 1.0
       },
       {
@@ -518,34 +530,11 @@
         "to": "crates/reversible-core/src/error.rs",
         "relation": "shared_dir:crates/reversible-core/src",
         "weight": 1.0
-      },
-      {
-        "from": "generated/idrisiser/idris2/Januskey/Verified/key_generation.idr",
-        "to": "generated/idrisiser/idris2/Januskey/Verified/wrap_unwrap_round_trip.idr",
-        "relation": "shared_dir:generated/idrisiser/idris2/Januskey/Verified",
-        "weight": 1.0
-      },
-      {
-        "from": "generated/idrisiser/idris2/Januskey/Verified/wrap_unwrap_round_trip.idr",
-        "to": "generated/idrisiser/idris2/Januskey/Verified/key_derivation.idr",
-        "relation": "shared_dir:generated/idrisiser/idris2/Januskey/Verified",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/reversible-core/src/content_store.rs",
-          "crates/dashboard-check/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -558,6 +547,27 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/src/main.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/reversible-core/src/content_store.rs",
+          "crates/dashboard-check/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UncheckedError",
@@ -592,27 +602,6 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "tests/e2e/lifecycle_e2e.sh",
-          "tests/aspect/cross_cutting_test.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/src/main.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -624,6 +613,17 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "tests/e2e/lifecycle_e2e.sh",
+          "tests/aspect/cross_cutting_test.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

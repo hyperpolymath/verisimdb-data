@@ -289,13 +289,31 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu",
     "disk",
-    "network"
+    "network",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/forge-mesh.sh",
+        "to": "scripts/mirror-sweep.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/mirror-sweep.sh",
+        "to": "scripts/setup.fish",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/setup.fish",
+        "to": "scripts/setup.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/system_security.adb",
         "to": "src/bitbucket_api.adb",
@@ -397,39 +415,11 @@
         "to": "src/storage.adb",
         "relation": "shared_dir:src",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/forge-mesh.sh",
-        "to": "scripts/mirror-sweep.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/mirror-sweep.sh",
-        "to": "scripts/setup.fish",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/setup.fish",
-        "to": "scripts/setup.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/setup.fish"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
       {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
@@ -439,6 +429,16 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/setup.fish"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }

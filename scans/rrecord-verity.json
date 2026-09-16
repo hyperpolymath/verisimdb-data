@@ -301,13 +301,37 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
     "memory",
-    "network"
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "modules/extensionUtils.mjs.js",
+        "to": "modules/virusTotalIntegration.mjs.js",
+        "relation": "shared_dir:modules",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/atnChangelog.js",
+        "to": "scripts/update-thirdparty.js",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/update-thirdparty.js",
+        "to": "scripts/pack.js",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "RuntimeMessage.d.affine",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
       {
         "from": "experiments/mozilla.d.affine",
         "to": "experiments/ctypes.d.affine",
@@ -331,45 +355,11 @@
         "to": "experiments/libunbound.d.affine",
         "relation": "shared_dir:experiments",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/atnChangelog.js",
-        "to": "scripts/update-thirdparty.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/update-thirdparty.js",
-        "to": "scripts/pack.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "RuntimeMessage.d.affine",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "modules/extensionUtils.mjs.js",
-        "to": "modules/virusTotalIntegration.mjs.js",
-        "relation": "shared_dir:modules",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "modules/dnsbl.mjs.js"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -386,17 +376,6 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
-          "scripts/verify-rsr.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -405,6 +384,26 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "modules/dnsbl.mjs.js"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/verify-rsr.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -418,13 +417,14 @@
       },
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 5.0,
         "files": [
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js",
           "scripts/verify-rsr.js"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "DynamicCodeExecution",

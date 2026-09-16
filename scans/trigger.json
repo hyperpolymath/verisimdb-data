@@ -427,34 +427,16 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
-        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/telegram",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_harness.adb",
-        "to": "tests/test_harness-body.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_harness-body.adb",
-        "to": "tests/test_runner.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_runner.adb",
-        "to": "tests/test_trigger.adb",
-        "relation": "shared_dir:tests",
+        "from": "src/trigger/core/cryptography.adb",
+        "to": "src/trigger/core/application.adb",
+        "relation": "shared_dir:src/trigger/core",
         "weight": 1.0
       },
       {
@@ -464,9 +446,27 @@
         "weight": 1.0
       },
       {
+        "from": "src/trigger/diagnostics/self_healing.adb",
+        "to": "src/trigger/diagnostics/system_check.adb",
+        "relation": "shared_dir:src/trigger/diagnostics",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
+        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/telegram",
+        "weight": 1.0
+      },
+      {
         "from": "src/trigger/platforms/twitter/twitter-platform.adb",
         "to": "src/trigger/platforms/twitter/twitter-platform.ads",
         "relation": "shared_dir:src/trigger/platforms/twitter",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trigger/platforms/discord/discord-platform.adb",
+        "to": "src/trigger/platforms/discord/discord-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/discord",
         "weight": 1.0
       },
       {
@@ -488,27 +488,37 @@
         "weight": 1.0
       },
       {
-        "from": "src/trigger/platforms/discord/discord-platform.adb",
-        "to": "src/trigger/platforms/discord/discord-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/discord",
+        "from": "tests/test_harness.adb",
+        "to": "tests/test_harness-body.adb",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
-        "from": "src/trigger/core/cryptography.adb",
-        "to": "src/trigger/core/application.adb",
-        "relation": "shared_dir:src/trigger/core",
+        "from": "tests/test_harness-body.adb",
+        "to": "tests/test_runner.adb",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
-        "from": "src/trigger/diagnostics/self_healing.adb",
-        "to": "src/trigger/diagnostics/system_check.adb",
-        "relation": "shared_dir:src/trigger/diagnostics",
+        "from": "tests/test_runner.adb",
+        "to": "tests/test_trigger.adb",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/trigger-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
       {
         "source_category": "UncheckedError",
         "sink_axis": "cpu",
@@ -528,27 +538,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/trigger-launcher.sh",
-          "scripts/trigger-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/trigger-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "ProofDrift",
@@ -572,6 +561,17 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/trigger-launcher.sh",
+          "scripts/trigger-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }
