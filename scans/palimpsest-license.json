@@ -111,7 +111,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 12843,
+    "total_lines": 12906,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 1,
@@ -296,8 +296,8 @@
   "recommended_attacks": [
     "memory",
     "disk",
-    "cpu",
-    "network"
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -305,12 +305,6 @@
         "from": "bof-meetings/presentations/demo-dns-discovery.sh",
         "to": "bof-meetings/presentations/demo-http-headers.sh",
         "relation": "shared_dir:bof-meetings/presentations",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/generate-structure.sh",
-        "to": "scripts/migrate-version.jl",
-        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -335,6 +329,12 @@
         "from": "TOOLS/validation/haskell/src/Palimpsest/Validator/Reference.hs",
         "to": "TOOLS/validation/haskell/src/Palimpsest/Validator/License.hs",
         "relation": "shared_dir:TOOLS/validation/haskell/src/Palimpsest/Validator",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/generate-structure.sh",
+        "to": "scripts/migrate-version.jl",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -444,35 +444,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "bof-meetings/presentations/demo-dns-discovery.sh",
-          "bof-meetings/presentations/demo-http-headers.sh"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "TOOLS/validation/haskell/test/Palimpsest/Validator/MetadataSpec.hs",
-          "TOOLS/validation/haskell/test/Palimpsest/Validator/ReferenceSpec.hs",
-          "TOOLS/validation/haskell/test/Integration/PipelineSpec.hs",
-          "TOOLS/validation/haskell/test/Property/ValidatorPropertySpec.hs",
-          "integrations/server/ruby/lib/palimpsest/generator.rb"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -495,6 +466,18 @@
           "Ecto"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/pmpl-audit/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -522,16 +505,33 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "tools/pmpl-audit/src/main.rs"
+          "bof-meetings/presentations/demo-dns-discovery.sh",
+          "bof-meetings/presentations/demo-http-headers.sh"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "TOOLS/validation/haskell/test/Palimpsest/Validator/MetadataSpec.hs",
+          "TOOLS/validation/haskell/test/Palimpsest/Validator/ReferenceSpec.hs",
+          "TOOLS/validation/haskell/test/Integration/PipelineSpec.hs",
+          "TOOLS/validation/haskell/test/Property/ValidatorPropertySpec.hs",
+          "integrations/server/ruby/lib/palimpsest/generator.rb"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

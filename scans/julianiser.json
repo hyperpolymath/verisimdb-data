@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "julianiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -241,12 +241,18 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "disk",
-    "cpu",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/mod.rs",
@@ -263,12 +269,6 @@
         "from": "src/codegen/benchmark.rs",
         "to": "src/codegen/julia_gen.rs",
         "relation": "shared_dir:src/codegen",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
@@ -299,7 +299,7 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "src/codegen/parser.rs",
@@ -307,7 +307,7 @@
           "src/codegen/julia_gen.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UncheckedError",
@@ -320,18 +320,6 @@
         "relation": "UncheckedError->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/parser.rs",
-          "src/codegen/benchmark.rs",
-          "src/codegen/julia_gen.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -340,6 +328,18 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs",
+          "src/codegen/benchmark.rs",
+          "src/codegen/julia_gen.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

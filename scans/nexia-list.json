@@ -383,12 +383,24 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "disk",
     "memory",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "ui/src/store/WasmStore.affine",
+        "to": "ui/src/store/Exchange.affine",
+        "relation": "shared_dir:ui/src/store",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/store/Exchange.affine",
+        "to": "ui/src/store/Persist.affine",
+        "relation": "shared_dir:ui/src/store",
+        "weight": 1.0
+      },
       {
         "from": "ui/src/View.affine",
         "to": "ui/src/Msg.affine",
@@ -408,24 +420,6 @@
         "weight": 1.0
       },
       {
-        "from": "ui/tests/WasmStoreTests.affine",
-        "to": "ui/tests/UpdateTests.affine",
-        "relation": "shared_dir:ui/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/store/WasmStore.affine",
-        "to": "ui/src/store/Exchange.affine",
-        "relation": "shared_dir:ui/src/store",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/store/Exchange.affine",
-        "to": "ui/src/store/Persist.affine",
-        "relation": "shared_dir:ui/src/store",
-        "weight": 1.0
-      },
-      {
         "from": "core/src/lambdadelta/mod.rs",
         "to": "core/src/lambdadelta/builtins.rs",
         "relation": "shared_dir:core/src/lambdadelta",
@@ -441,6 +435,12 @@
         "from": "core/src/lambdadelta/reader.rs",
         "to": "core/src/lambdadelta/eval.rs",
         "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/tests/WasmStoreTests.affine",
+        "to": "ui/tests/UpdateTests.affine",
+        "relation": "shared_dir:ui/tests",
         "weight": 1.0
       },
       {
@@ -509,16 +509,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "core/src/storage.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -529,6 +519,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "core/src/storage.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",

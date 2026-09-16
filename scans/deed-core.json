@@ -431,26 +431,14 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "memory",
-    "disk",
     "network",
-    "cpu"
+    "cpu",
+    "concurrency",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "bindings/deno/src/A2ML_Parser.affine",
-        "to": "bindings/deno/src/A2ML_Types.affine",
-        "relation": "shared_dir:bindings/deno/src",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/deploy-site.sh",
-        "to": "scripts/add-arxiv-badge.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "lsp/src/completions.rs",
         "to": "lsp/src/hover.rs",
@@ -461,6 +449,12 @@
         "from": "lsp/src/hover.rs",
         "to": "lsp/src/diagnostics.rs",
         "relation": "shared_dir:lsp/src",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/deploy-site.sh",
+        "to": "scripts/add-arxiv-badge.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -498,11 +492,27 @@
         "to": "bindings/rust/src/types.rs",
         "relation": "shared_dir:bindings/rust/src",
         "weight": 1.0
+      },
+      {
+        "from": "bindings/deno/src/A2ML_Parser.affine",
+        "to": "bindings/deno/src/A2ML_Types.affine",
+        "relation": "shared_dir:bindings/deno/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "disk",
+        "severity_value": 3.5,
+        "files": [
+          "scripts/deploy-site.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Disk"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -513,16 +523,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "scripts/deploy-site.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
       },
       {
         "source_category": "MutationGap",
@@ -548,13 +548,13 @@
       },
       {
         "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
+        "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
           "scripts/deploy-site.sh"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
+        "relation": "ExcessivePermissions->Network"
       },
       {
         "source_category": "PanicPath",

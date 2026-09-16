@@ -494,23 +494,17 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
     "concurrency",
-    "cpu",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "bench/gateway_latency.exs",
-        "to": "bench/rebaseline.exs",
-        "relation": "shared_dir:bench",
-        "weight": 1.0
-      },
-      {
-        "from": "bench/rebaseline.exs",
-        "to": "bench/compare.exs",
-        "relation": "shared_dir:bench",
+        "from": "src/abi/HttpServer.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -568,12 +562,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/abi/HttpServer.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
         "from": "test/e2e_boj_integration_test.exs",
         "to": "test/mtls_test.exs",
         "relation": "shared_dir:test",
@@ -601,6 +589,18 @@
         "from": "test/policy_loader_test.exs",
         "to": "test/concurrency_test.exs",
         "relation": "shared_dir:test",
+        "weight": 1.0
+      },
+      {
+        "from": "bench/gateway_latency.exs",
+        "to": "bench/rebaseline.exs",
+        "relation": "shared_dir:bench",
+        "weight": 1.0
+      },
+      {
+        "from": "bench/rebaseline.exs",
+        "to": "bench/compare.exs",
+        "relation": "shared_dir:bench",
         "weight": 1.0
       },
       {
@@ -920,19 +920,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "lib/http_capability_gateway/policy_compiler.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "AtomExhaustion->Memory"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -961,6 +948,19 @@
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "lib/http_capability_gateway/policy_compiler.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "AtomExhaustion->Memory"
       }
     ]
   }

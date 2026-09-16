@@ -50,7 +50,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 13315,
+    "total_lines": 13378,
     "unsafe_blocks": 15,
     "panic_sites": 1,
     "unwrap_calls": 0,
@@ -281,36 +281,24 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "concurrency",
+    "network",
     "disk",
+    "cpu",
     "memory",
-    "network"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/verisimdb.zig",
-        "to": "src/interface/ffi/src/main.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/main.zig",
-        "to": "src/interface/ffi/src/dbus.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
         "from": "tests/validate.test.deno.js",
         "to": "tests/validate.test.affine",
         "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
         "weight": 1.0
       },
       {
@@ -390,21 +378,23 @@
         "to": "src/core/providers.affine",
         "relation": "shared_dir:src/core",
         "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/verisimdb.zig",
+        "to": "src/interface/ffi/src/main.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/main.zig",
+        "to": "src/interface/ffi/src/dbus.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/dbus.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -416,16 +406,6 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "systemd/install.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "UncheckedError",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -434,6 +414,26 @@
         ],
         "frameworks": [],
         "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/dbus.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "systemd/install.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }
