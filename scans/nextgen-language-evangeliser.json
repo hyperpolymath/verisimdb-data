@@ -18,18 +18,6 @@
     },
     {
       "category": "ExcessivePermissions",
-      "location": "scripts/launch-gui.sh",
-      "file": "scripts/launch-gui.sh",
-      "severity": "High",
-      "description": "Deno -A (all permissions) in scripts/launch-gui.sh",
-      "recommended_attack": [
-        "network",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "ExcessivePermissions",
       "location": "scripts/validate-cartridges.js",
       "file": "scripts/validate-cartridges.js",
       "severity": "High",
@@ -52,17 +40,20 @@
       "test_context": "production"
     },
     {
-      "category": "SupplyChain",
-      "location": "deno.json",
-      "file": "deno.json",
-      "severity": "Medium",
-      "description": "1 import map entry/ies in deno.json without a version pin — specifiers are not reproducibly resolved",
-      "recommended_attack": [],
+      "category": "ExcessivePermissions",
+      "location": "scripts/launch-gui.sh",
+      "file": "scripts/launch-gui.sh",
+      "severity": "High",
+      "description": "Deno -A (all permissions) in scripts/launch-gui.sh",
+      "recommended_attack": [
+        "network",
+        "disk"
+      ],
       "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 1551,
+    "total_lines": 1925,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -93,10 +84,10 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "disk",
     "cpu",
-    "memory"
+    "disk",
+    "memory",
+    "network"
   ],
   "dependency_graph": {
     "edges": []
@@ -108,11 +99,32 @@
         "sink_axis": "disk",
         "severity_value": 3.5,
         "files": [
-          "scripts/launch-gui.sh",
-          "scripts/validate-cartridges.js"
+          "scripts/validate-cartridges.js",
+          "scripts/launch-gui.sh"
         ],
         "frameworks": [],
         "relation": "ExcessivePermissions->Disk"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "gui/app.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "scripts/validate-cartridges.js",
+          "scripts/launch-gui.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Network"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -133,27 +145,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "gui/app.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "scripts/launch-gui.sh",
-          "scripts/validate-cartridges.js"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
       }
     ]
   }

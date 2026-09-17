@@ -32,7 +32,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 2878,
+    "total_lines": 2695,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -42,14 +42,15 @@
   },
   "file_statistics": [
     {
-      "file_path": "elixir/lib/polygraph/crdt/claim_store.ex",
-      "lines": 195,
+      "file_path": "backend/src/services/fact_check_apis.rs",
+      "lines": 172,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
       "io_operations": 0,
-      "threading_constructs": 1
+      "threading_constructs": 0
     },
     {
       "file_path": "elixir/lib/polygraph/verisimdb.ex",
@@ -62,6 +63,16 @@
       "threading_constructs": 1
     },
     {
+      "file_path": "elixir/lib/polygraph/crdt/claim_store.ex",
+      "lines": 195,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
       "file_path": "browser-extension/src/background.js",
       "lines": 130,
       "unsafe_blocks": 0,
@@ -70,35 +81,30 @@
       "allocation_sites": 0,
       "io_operations": 1,
       "threading_constructs": 0
-    },
-    {
-      "file_path": "backend/src/services/fact_check_apis.rs",
-      "lines": 172,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "disk",
     "network",
-    "cpu",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "elixir/lib/polygraph/crdt/claim_store.ex",
+        "from": "backend/src/services/fact_check_apis.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir/lib/polygraph/verisimdb.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "elixir/lib/polygraph/verisimdb.ex",
+        "from": "elixir/lib/polygraph/crdt/claim_store.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
@@ -108,30 +114,11 @@
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
-      },
-      {
-        "from": "backend/src/services/fact_check_apis.rs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "browser-extension/src/popup.js",
-          "browser-extension/src/content.js"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
@@ -144,6 +131,19 @@
           "OTP"
         ],
         "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "browser-extension/src/popup.js",
+          "browser-extension/src/content.js"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

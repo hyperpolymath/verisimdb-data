@@ -5,12 +5,38 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "SupplyChain",
-      "location": "flake.nix",
-      "file": "flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
+      "category": "UnsafeFFI",
+      "location": "bindings/rescript/Bunsenite.affine",
+      "file": "bindings/rescript/Bunsenite.affine",
+      "severity": "Medium",
+      "description": "6 FFI/external bindings in bindings/rescript/Bunsenite.affine",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "location": "src/main.rs",
+      "file": "src/main.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "location": "src/main.rs",
+      "file": "src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 3 unwrap/expect calls in src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
       "test_context": "production"
     },
     {
@@ -50,30 +76,6 @@
       "test_context": "production"
     },
     {
-      "category": "UnboundedAllocation",
-      "location": "src/main.rs",
-      "file": "src/main.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in src/main.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "src/main.rs",
-      "file": "src/main.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 3 unwrap/expect calls in src/main.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -84,101 +86,28 @@
     }
   ],
   "statistics": {
-    "total_lines": 6515,
-    "unsafe_blocks": 0,
+    "total_lines": 6356,
+    "unsafe_blocks": 6,
     "panic_sites": 0,
     "unwrap_calls": 3,
     "allocation_sites": 5,
-    "io_operations": 14,
+    "io_operations": 19,
     "threading_constructs": 3
   },
   "file_statistics": [
     {
-      "file_path": "tests/e2e_test.rs",
-      "lines": 273,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "flake.nix",
-      "lines": 201,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/error.rs",
-      "lines": 245,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/schema.rs",
-      "lines": 208,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/loader.rs",
-      "lines": 273,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 5,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/main.rs",
-      "lines": 445,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 3,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 4,
-      "io_operations": 1,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 275,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 183,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
       "file_path": ".machine_readable/contractiles/bust/bust.ncl",
       "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/e2e_test.rs",
+      "lines": 274,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -195,37 +124,130 @@
       "allocation_sites": 0,
       "io_operations": 2,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 183,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 275,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "bindings/rescript/Bunsenite.affine",
+      "lines": 176,
+      "unsafe_blocks": 6,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "bindings/deno/bunsenite.affine",
+      "lines": 302,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "bindings/deno/example.affine",
+      "lines": 117,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/main.rs",
+      "lines": 445,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 3,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 4,
+      "io_operations": 1,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "src/schema.rs",
+      "lines": 208,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/error.rs",
+      "lines": 245,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/loader.rs",
+      "lines": 264,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "cpu",
-    "concurrency",
     "memory",
+    "concurrency",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "flake.nix",
-        "to": "validate-nickel-configs.k9.ncl",
-        "relation": "shared_dir:",
+        "from": "bindings/deno/bunsenite.affine",
+        "to": "bindings/deno/example.affine",
+        "relation": "shared_dir:bindings/deno",
         "weight": 1.0
       },
       {
-        "from": "src/error.rs",
+        "from": "src/main.rs",
         "to": "src/schema.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
         "from": "src/schema.rs",
-        "to": "src/loader.rs",
+        "to": "src/error.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
-        "from": "src/loader.rs",
-        "to": "src/main.rs",
+        "from": "src/error.rs",
+        "to": "src/loader.rs",
         "relation": "shared_dir:src",
         "weight": 1.0
       }
@@ -233,28 +255,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/schema.rs",
-          "src/loader.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
@@ -267,6 +267,16 @@
       },
       {
         "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/ffi.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
         "files": [
@@ -276,26 +286,48 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "bindings/rescript/Bunsenite.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "src/schema.rs",
+          "src/loader.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
+          "src/main.rs",
           "src/schema.rs",
-          "src/loader.rs",
-          "src/main.rs"
+          "src/loader.rs"
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "src/ffi.rs"
+          "src/main.rs"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

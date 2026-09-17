@@ -5,23 +5,11 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "src/backends/abstract.jl",
-      "file": "src/backends/abstract.jl",
-      "severity": "High",
-      "description": "eval/Meta.parse in src/backends/abstract.jl",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "ProofDrift",
-      "location": "test/test_new_types.jl",
-      "file": "test/test_new_types.jl",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
       "severity": "Medium",
-      "description": "6 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/test_new_types.jl",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
       "recommended_attack": [
         "cpu"
       ],
@@ -40,18 +28,30 @@
     },
     {
       "category": "ProofDrift",
-      "location": "test/e2e_test.jl",
-      "file": "test/e2e_test.jl",
+      "location": "test/test_new_types.jl",
+      "file": "test/test_new_types.jl",
       "severity": "Medium",
-      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
+      "description": "6 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/test_new_types.jl",
       "recommended_attack": [
         "cpu"
       ],
       "test_context": "test_only"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "src/backends/abstract.jl",
+      "file": "src/backends/abstract.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/backends/abstract.jl",
+      "recommended_attack": [
+        "cpu",
+        "memory"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 10557,
+    "total_lines": 10567,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -60,26 +60,6 @@
     "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 275,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 183,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
     {
       "file_path": "ext/ZeroProbCryptoExt.jl",
       "lines": 380,
@@ -99,11 +79,31 @@
       "allocation_sites": 4,
       "io_operations": 0,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 183,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 275,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -118,6 +118,18 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "test/e2e_test.jl",
+          "test/test_coverage_gaps.jl",
+          "test/test_new_types.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -126,18 +138,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/test_new_types.jl",
-          "test/test_coverage_gaps.jl",
-          "test/e2e_test.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",

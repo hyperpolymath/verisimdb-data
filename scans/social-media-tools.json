@@ -8,36 +8,15 @@
   ],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "polygraph/browser-extension/src/popup.js",
-      "file": "polygraph/browser-extension/src/popup.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in polygraph/browser-extension/src/popup.js",
+      "category": "PanicPath",
+      "location": "dipstick/services/collector/src/main.rs",
+      "file": "dipstick/services/collector/src/main.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 2 unwrap/expect calls in dipstick/services/collector/src/main.rs",
       "recommended_attack": [
         "memory",
-        "network"
+        "disk"
       ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "polygraph/browser-extension/src/content.js",
-      "file": "polygraph/browser-extension/src/content.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in polygraph/browser-extension/src/content.js",
-      "recommended_attack": [
-        "memory",
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "SupplyChain",
-      "location": "dipstick/flake.nix",
-      "file": "dipstick/flake.nix",
-      "severity": "Low",
-      "description": "flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in dipstick/flake.nix. Suggested fix: run `nix flake update` to generate flake.lock.",
-      "recommended_attack": [],
       "test_context": "production"
     },
     {
@@ -52,14 +31,13 @@
       "test_context": "production"
     },
     {
-      "category": "PanicPath",
-      "location": "dipstick/services/collector/src/main.rs",
-      "file": "dipstick/services/collector/src/main.rs",
+      "category": "InsecureProtocol",
+      "location": "dipstick/services/gateway-rescript/src/Gateway.affine",
+      "file": "dipstick/services/gateway-rescript/src/Gateway.affine",
       "severity": "Medium",
-      "description": "0 panic sites and 2 unwrap/expect calls in dipstick/services/collector/src/main.rs",
+      "description": "5 HTTP (non-HTTPS) URLs in dipstick/services/gateway-rescript/src/Gateway.affine",
       "recommended_attack": [
-        "memory",
-        "disk"
+        "network"
       ],
       "test_context": "production"
     },
@@ -76,6 +54,28 @@
       "test_context": "production"
     },
     {
+      "category": "UnsafeFFI",
+      "location": "dipstick/services/analyzer-rescript/src/Main.affine",
+      "file": "dipstick/services/analyzer-rescript/src/Main.affine",
+      "severity": "Medium",
+      "description": "4 FFI/external bindings in dipstick/services/analyzer-rescript/src/Main.affine",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "dipstick/services/pestle-observatory/src/observatory.affine",
+      "file": "dipstick/services/pestle-observatory/src/observatory.affine",
+      "severity": "Medium",
+      "description": "4 FFI/external bindings in dipstick/services/pestle-observatory/src/observatory.affine",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "HardcodedSecret",
       "location": "dipstick/tools/autoconfig/smtp_autoconfig.py",
       "file": "dipstick/tools/autoconfig/smtp_autoconfig.py",
@@ -88,24 +88,25 @@
     }
   ],
   "statistics": {
-    "total_lines": 10417,
-    "unsafe_blocks": 0,
+    "total_lines": 13236,
+    "unsafe_blocks": 9,
     "panic_sites": 0,
     "unwrap_calls": 3,
     "allocation_sites": 20,
-    "io_operations": 18,
+    "io_operations": 24,
     "threading_constructs": 7
   },
   "file_statistics": [
     {
-      "file_path": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
-      "lines": 195,
+      "file_path": "polygraph/backend/src/services/fact_check_apis.rs",
+      "lines": 172,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
       "io_operations": 0,
-      "threading_constructs": 1
+      "threading_constructs": 0
     },
     {
       "file_path": "polygraph/elixir/lib/polygraph/verisimdb.ex",
@@ -115,6 +116,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 6,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
+      "lines": 195,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
       "threading_constructs": 1
     },
     {
@@ -128,34 +139,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "polygraph/backend/src/services/fact_check_apis.rs",
-      "lines": 172,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "dipstick/services/scraper-julia/src/NUJScraper.jl",
-      "lines": 322,
+      "file_path": "setup.sh",
+      "lines": 278,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "dipstick/services/collector/tests/contract_tests.rs",
-      "lines": 359,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 6,
-      "io_operations": 0,
+      "io_operations": 3,
       "threading_constructs": 0
     },
     {
@@ -166,6 +156,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 6,
       "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "dipstick/services/collector/tests/contract_tests.rs",
+      "lines": 359,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 6,
+      "io_operations": 0,
       "threading_constructs": 0
     },
     {
@@ -189,17 +189,6 @@
       "threading_constructs": 1
     },
     {
-      "file_path": "dipstick/services/collector/src/platforms.rs",
-      "lines": 135,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "dipstick/services/collector/src/scheduler.rs",
       "lines": 79,
       "unsafe_blocks": 0,
@@ -221,6 +210,17 @@
       "threading_constructs": 1
     },
     {
+      "file_path": "dipstick/services/collector/src/platforms.rs",
+      "lines": 135,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "dipstick/services/tui-ada/src/nuj_tui.adb",
       "lines": 329,
       "unsafe_blocks": 0,
@@ -228,6 +228,26 @@
       "unwrap_calls": 0,
       "allocation_sites": 2,
       "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "dipstick/services/scraper-julia/src/NUJScraper.jl",
+      "lines": 322,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "dipstick/services/gateway-rescript/src/Gateway.affine",
+      "lines": 215,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -241,13 +261,43 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "dipstick/tools/cli/rollback.sh",
-      "lines": 23,
+      "file_path": "dipstick/services/analyzer-rescript/src/Main.affine",
+      "lines": 174,
+      "unsafe_blocks": 4,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "dipstick/services/pestle-observatory/src/observatory.affine",
+      "lines": 405,
+      "unsafe_blocks": 4,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "dipstick/services/publisher-deno/src/publisher.affine",
+      "lines": 227,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "dipstick/services/agent-swarm/src/swarm.affine",
+      "lines": 229,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -261,33 +311,27 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "setup.sh",
-      "lines": 278,
+      "file_path": "dipstick/tools/cli/rollback.sh",
+      "lines": 23,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 3,
+      "io_operations": 1,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
     "disk",
-    "concurrency",
     "memory",
     "network",
-    "cpu"
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
         "from": "dipstick/services/collector/src/lib.rs",
-        "to": "dipstick/services/collector/src/platforms.rs",
-        "relation": "shared_dir:dipstick/services/collector/src",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/src/platforms.rs",
         "to": "dipstick/services/collector/src/scheduler.rs",
         "relation": "shared_dir:dipstick/services/collector/src",
         "weight": 1.0
@@ -299,43 +343,61 @@
         "weight": 1.0
       },
       {
-        "from": "dipstick/services/collector/tests/contract_tests.rs",
-        "to": "dipstick/services/collector/tests/reflexive_tests.rs",
-        "relation": "shared_dir:dipstick/services/collector/tests",
+        "from": "dipstick/services/collector/src/main.rs",
+        "to": "dipstick/services/collector/src/platforms.rs",
+        "relation": "shared_dir:dipstick/services/collector/src",
         "weight": 1.0
       },
       {
         "from": "dipstick/services/collector/tests/reflexive_tests.rs",
+        "to": "dipstick/services/collector/tests/contract_tests.rs",
+        "relation": "shared_dir:dipstick/services/collector/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "dipstick/services/collector/tests/aspect_tests.rs",
         "relation": "shared_dir:dipstick/services/collector/tests",
         "weight": 1.0
       },
       {
-        "from": "dipstick/tools/cli/rollback.sh",
-        "to": "dipstick/tools/cli/migrate.sh",
+        "from": "dipstick/tools/cli/migrate.sh",
+        "to": "dipstick/tools/cli/rollback.sh",
         "relation": "shared_dir:dipstick/tools/cli",
         "weight": 1.0
       },
       {
-        "from": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
+        "from": "polygraph/backend/src/services/fact_check_apis.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "polygraph/backend/src/services/fact_check_apis.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "polygraph/elixir/lib/polygraph/verisimdb.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
+        "from": "polygraph/elixir/lib/polygraph/verisimdb.ex",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "polygraph/elixir/lib/polygraph/verisimdb.ex",
+        "from": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
       },
       {
-        "from": "polygraph/elixir/lib/polygraph/verisimdb.ex",
+        "from": "polygraph/elixir/lib/polygraph/crdt/claim_store.ex",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
@@ -353,37 +415,13 @@
         "weight": 1.0
       },
       {
-        "from": "polygraph/backend/src/services/fact_check_apis.rs",
+        "from": "setup.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "polygraph/backend/src/services/fact_check_apis.rs",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/scraper-julia/src/NUJScraper.jl",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "dipstick/services/scraper-julia/src/NUJScraper.jl",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "dipstick/services/collector/tests/contract_tests.rs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/tests/contract_tests.rs",
+        "from": "setup.sh",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
@@ -396,6 +434,18 @@
       },
       {
         "from": "dipstick/services/collector/tests/reflexive_tests.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/tests/contract_tests.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
@@ -425,18 +475,6 @@
         "weight": 2.0
       },
       {
-        "from": "dipstick/services/collector/src/platforms.rs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "dipstick/services/collector/src/platforms.rs",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "dipstick/services/collector/src/scheduler.rs",
         "to": "OTP",
         "relation": "framework",
@@ -461,6 +499,18 @@
         "weight": 4.0
       },
       {
+        "from": "dipstick/services/collector/src/platforms.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/collector/src/platforms.rs",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "dipstick/services/tui-ada/src/nuj_tui.adb",
         "to": "OTP",
         "relation": "framework",
@@ -471,6 +521,30 @@
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/scraper-julia/src/NUJScraper.jl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "dipstick/services/scraper-julia/src/NUJScraper.jl",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 4.0
+      },
+      {
+        "from": "dipstick/services/gateway-rescript/src/Gateway.affine",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 3.0
+      },
+      {
+        "from": "dipstick/services/gateway-rescript/src/Gateway.affine",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 3.0
       },
       {
         "from": "dipstick/services/analyzer-rescript/wasm/src/lib.rs",
@@ -485,13 +559,49 @@
         "weight": 1.0
       },
       {
-        "from": "dipstick/tools/cli/rollback.sh",
+        "from": "dipstick/services/analyzer-rescript/src/Main.affine",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "dipstick/services/analyzer-rescript/src/Main.affine",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "dipstick/services/pestle-observatory/src/observatory.affine",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "dipstick/services/pestle-observatory/src/observatory.affine",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 12.0
+      },
+      {
+        "from": "dipstick/services/publisher-deno/src/publisher.affine",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "dipstick/tools/cli/rollback.sh",
+        "from": "dipstick/services/publisher-deno/src/publisher.affine",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/agent-swarm/src/swarm.affine",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/services/agent-swarm/src/swarm.affine",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
@@ -509,13 +619,13 @@
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
+        "from": "dipstick/tools/cli/rollback.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       },
       {
-        "from": "setup.sh",
+        "from": "dipstick/tools/cli/rollback.sh",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 1.0
@@ -525,21 +635,8 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "dipstick/services/gateway-rescript/src/Gateway.res"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "dipstick/services/collector/src/main.rs",
@@ -549,21 +646,21 @@
           "OTP",
           "Phoenix"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "InsecureProtocol",
         "sink_axis": "network",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "polygraph/browser-extension/src/popup.js",
-          "polygraph/browser-extension/src/content.js"
+          "dipstick/services/gateway-rescript/src/Gateway.res",
+          "dipstick/services/gateway-rescript/src/Gateway.affine"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "HardcodedSecret",
@@ -579,22 +676,22 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "UnsafeFFI",
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "polygraph/browser-extension/src/popup.js",
-          "polygraph/browser-extension/src/content.js"
+          "dipstick/services/analyzer-rescript/src/Main.affine",
+          "dipstick/services/pestle-observatory/src/observatory.affine"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "dipstick/services/collector/src/main.rs",
@@ -604,7 +701,7 @@
           "OTP",
           "Phoenix"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

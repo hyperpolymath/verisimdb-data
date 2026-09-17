@@ -5,6 +5,39 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "ProofDrift",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
+      "severity": "Medium",
+      "description": "10 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "test/runtests.jl",
+      "file": "test/runtests.jl",
+      "severity": "Medium",
+      "description": "45 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "test/property_test.jl",
+      "file": "test/property_test.jl",
+      "severity": "Medium",
+      "description": "3 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/property_test.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
       "category": "DynamicCodeExecution",
       "location": "src/AcceleratorGate.jl",
       "file": "src/AcceleratorGate.jl",
@@ -28,39 +61,6 @@
       "test_context": "production"
     },
     {
-      "category": "ProofDrift",
-      "location": "test/property_test.jl",
-      "file": "test/property_test.jl",
-      "severity": "Medium",
-      "description": "3 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/property_test.jl",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "ProofDrift",
-      "location": "test/runtests.jl",
-      "file": "test/runtests.jl",
-      "severity": "Medium",
-      "description": "45 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "ProofDrift",
-      "location": "test/e2e_test.jl",
-      "file": "test/e2e_test.jl",
-      "severity": "Medium",
-      "description": "10 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
       "category": "SupplyChain",
       "location": "Manifest.toml",
       "file": "Manifest.toml",
@@ -71,7 +71,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 1981,
+    "total_lines": 1963,
     "unsafe_blocks": 5,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -102,8 +102,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -118,14 +118,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "ProofDrift",
         "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "src/AcceleratorGate.jl"
+          "test/e2e_test.jl",
+          "test/runtests.jl",
+          "test/property_test.jl"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "UnsafeFFI",
@@ -139,6 +141,16 @@
       },
       {
         "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/AcceleratorGate.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
@@ -146,18 +158,6 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "test/property_test.jl",
-          "test/runtests.jl",
-          "test/e2e_test.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
       }
     ]
   }

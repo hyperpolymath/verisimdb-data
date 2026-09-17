@@ -67,17 +67,6 @@
     },
     {
       "category": "InsecureProtocol",
-      "location": "learning/src/rdf/schema.jl",
-      "file": "learning/src/rdf/schema.jl",
-      "severity": "Medium",
-      "description": "4 HTTP (non-HTTPS) URLs in learning/src/rdf/schema.jl",
-      "recommended_attack": [
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "InsecureProtocol",
       "location": "learning/test/runtests.jl",
       "file": "learning/test/runtests.jl",
       "severity": "Medium",
@@ -86,10 +75,21 @@
         "network"
       ],
       "test_context": "test_only"
+    },
+    {
+      "category": "InsecureProtocol",
+      "location": "learning/src/rdf/schema.jl",
+      "file": "learning/src/rdf/schema.jl",
+      "severity": "Medium",
+      "description": "4 HTTP (non-HTTPS) URLs in learning/src/rdf/schema.jl",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 4597,
+    "total_lines": 4666,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -98,6 +98,16 @@
     "threading_constructs": 2
   },
   "file_statistics": [
+    {
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
     {
       "file_path": "orchestrator/lib/anamnesis/pipelines/ingestion_pipeline.ex",
       "lines": 56,
@@ -119,16 +129,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 274,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "ffi/zig/test/integration_test.zig",
       "lines": 182,
       "unsafe_blocks": 0,
@@ -139,23 +139,29 @@
       "threading_constructs": 2
     },
     {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 274,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
+      "allocation_sites": 1,
+      "io_operations": 0,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "network",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
       {
         "from": "orchestrator/lib/anamnesis/pipelines/ingestion_pipeline.ex",
         "to": "OTP",
@@ -169,19 +175,13 @@
         "weight": 1.0
       },
       {
-        "from": "ffi/zig/src/main.zig",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
         "from": "ffi/zig/test/integration_test.zig",
         "to": "OTP",
         "relation": "framework",
         "weight": 4.0
       },
       {
-        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "from": "ffi/zig/src/main.zig",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -190,19 +190,6 @@
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "learning/src/rdf/schema.jl",
-          "learning/test/runtests.jl"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -218,20 +205,6 @@
       },
       {
         "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "orchestrator/lib/anamnesis/ports/julia_port.ex",
-          "orchestrator/lib/anamnesis/ports/parser_port.ex",
-          "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
@@ -243,6 +216,33 @@
           "OTP"
         ],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "learning/test/runtests.jl",
+          "learning/src/rdf/schema.jl"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "orchestrator/lib/anamnesis/ports/julia_port.ex",
+          "orchestrator/lib/anamnesis/ports/parser_port.ex",
+          "orchestrator/lib/anamnesis/ports/lambda_prolog_port.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

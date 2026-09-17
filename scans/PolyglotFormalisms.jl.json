@@ -5,11 +5,22 @@
   "frameworks": [],
   "weak_points": [
     {
+      "category": "ProofDrift",
+      "location": "test/conditional_tests.jl",
+      "file": "test/conditional_tests.jl",
+      "severity": "Medium",
+      "description": "2 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/conditional_tests.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
       "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/qpu.jl",
-      "file": "src/coprocessors/qpu.jl",
+      "location": "src/backends/abstract.jl",
+      "file": "src/backends/abstract.jl",
       "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/qpu.jl",
+      "description": "eval/Meta.parse in src/backends/abstract.jl",
       "recommended_attack": [
         "cpu",
         "memory"
@@ -18,22 +29,10 @@
     },
     {
       "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/tpu.jl",
-      "file": "src/coprocessors/tpu.jl",
+      "location": "src/coprocessors/npu.jl",
+      "file": "src/coprocessors/npu.jl",
       "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/tpu.jl",
-      "recommended_attack": [
-        "cpu",
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/crypto.jl",
-      "file": "src/coprocessors/crypto.jl",
-      "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/crypto.jl",
+      "description": "eval/Meta.parse in src/coprocessors/npu.jl",
       "recommended_attack": [
         "cpu",
         "memory"
@@ -66,10 +65,10 @@
     },
     {
       "category": "DynamicCodeExecution",
-      "location": "src/coprocessors/npu.jl",
-      "file": "src/coprocessors/npu.jl",
+      "location": "src/coprocessors/tpu.jl",
+      "file": "src/coprocessors/tpu.jl",
       "severity": "High",
-      "description": "eval/Meta.parse in src/coprocessors/npu.jl",
+      "description": "eval/Meta.parse in src/coprocessors/tpu.jl",
       "recommended_attack": [
         "cpu",
         "memory"
@@ -78,10 +77,10 @@
     },
     {
       "category": "DynamicCodeExecution",
-      "location": "src/backends/abstract.jl",
-      "file": "src/backends/abstract.jl",
+      "location": "src/coprocessors/crypto.jl",
+      "file": "src/coprocessors/crypto.jl",
       "severity": "High",
-      "description": "eval/Meta.parse in src/backends/abstract.jl",
+      "description": "eval/Meta.parse in src/coprocessors/crypto.jl",
       "recommended_attack": [
         "cpu",
         "memory"
@@ -89,15 +88,16 @@
       "test_context": "production"
     },
     {
-      "category": "ProofDrift",
-      "location": "test/conditional_tests.jl",
-      "file": "test/conditional_tests.jl",
-      "severity": "Medium",
-      "description": "2 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/conditional_tests.jl",
+      "category": "DynamicCodeExecution",
+      "location": "src/coprocessors/qpu.jl",
+      "file": "src/coprocessors/qpu.jl",
+      "severity": "High",
+      "description": "eval/Meta.parse in src/coprocessors/qpu.jl",
       "recommended_attack": [
-        "cpu"
+        "cpu",
+        "memory"
       ],
-      "test_context": "test_only"
+      "test_context": "production"
     },
     {
       "category": "SupplyChain",
@@ -110,7 +110,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 6995,
+    "total_lines": 6868,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -120,16 +120,6 @@
   },
   "file_statistics": [
     {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 275,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "ffi/zig/test/integration_test.zig",
       "lines": 183,
       "unsafe_blocks": 0,
@@ -138,17 +128,43 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 2
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 275,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": []
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "src/backends/abstract.jl",
+          "src/coprocessors/npu.jl",
+          "src/coprocessors/math.jl",
+          "src/coprocessors/fpga.jl",
+          "src/coprocessors/tpu.jl",
+          "src/coprocessors/crypto.jl",
+          "src/coprocessors/qpu.jl"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
       {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
@@ -161,32 +177,16 @@
       },
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "src/coprocessors/qpu.jl",
-          "src/coprocessors/tpu.jl",
-          "src/coprocessors/crypto.jl",
-          "src/coprocessors/math.jl",
-          "src/coprocessors/fpga.jl",
-          "src/coprocessors/npu.jl",
-          "src/backends/abstract.jl"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "src/coprocessors/qpu.jl",
-          "src/coprocessors/tpu.jl",
-          "src/coprocessors/crypto.jl",
+          "src/backends/abstract.jl",
+          "src/coprocessors/npu.jl",
           "src/coprocessors/math.jl",
           "src/coprocessors/fpga.jl",
-          "src/coprocessors/npu.jl",
-          "src/backends/abstract.jl"
+          "src/coprocessors/tpu.jl",
+          "src/coprocessors/crypto.jl",
+          "src/coprocessors/qpu.jl"
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"

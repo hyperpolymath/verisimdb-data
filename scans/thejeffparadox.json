@@ -6,17 +6,6 @@
   "weak_points": [
     {
       "category": "ProofDrift",
-      "location": "engine/test/runtests.jl",
-      "file": "engine/test/runtests.jl",
-      "severity": "Medium",
-      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in engine/test/runtests.jl",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "ProofDrift",
       "location": "engine/test/integration_tests.jl",
       "file": "engine/test/integration_tests.jl",
       "severity": "Medium",
@@ -38,10 +27,21 @@
       ],
       "suppressed": true,
       "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "engine/test/runtests.jl",
+      "file": "engine/test/runtests.jl",
+      "severity": "Medium",
+      "description": "1 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in engine/test/runtests.jl",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
     }
   ],
   "statistics": {
-    "total_lines": 5887,
+    "total_lines": 5923,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -50,36 +50,6 @@
     "threading_constructs": 2
   },
   "file_statistics": [
-    {
-      "file_path": "scripts/infinite_loop.sh",
-      "lines": 78,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 275,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 183,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
     {
       "file_path": "tui/src/game_state.adb",
       "lines": 214,
@@ -131,13 +101,13 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "engine/src/llm_client.jl",
-      "lines": 462,
+      "file_path": "engine/test/integration_tests.jl",
+      "lines": 331,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 4,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -161,19 +131,49 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "engine/test/integration_tests.jl",
-      "lines": 331,
+      "file_path": "engine/src/llm_client.jl",
+      "lines": 462,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/infinite_loop.sh",
+      "lines": 78,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "lines": 183,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 2
+    },
+    {
+      "file_path": "ffi/zig/src/main.zig",
+      "lines": 275,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 1,
+      "io_operations": 0,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -181,6 +181,18 @@
         "from": "engine/scripts/execute_turn.jl",
         "to": "engine/scripts/generate_report.jl",
         "relation": "shared_dir:engine/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "engine/src/embedding_client.jl",
+        "to": "engine/src/JeffEngine.jl",
+        "relation": "shared_dir:engine/src",
+        "weight": 1.0
+      },
+      {
+        "from": "engine/src/JeffEngine.jl",
+        "to": "engine/src/llm_client.jl",
+        "relation": "shared_dir:engine/src",
         "weight": 1.0
       },
       {
@@ -193,18 +205,6 @@
         "from": "tui/src/jeff_tui.adb",
         "to": "tui/src/tui.adb",
         "relation": "shared_dir:tui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "engine/src/llm_client.jl",
-        "to": "engine/src/embedding_client.jl",
-        "relation": "shared_dir:engine/src",
-        "weight": 1.0
-      },
-      {
-        "from": "engine/src/embedding_client.jl",
-        "to": "engine/src/JeffEngine.jl",
-        "relation": "shared_dir:engine/src",
         "weight": 1.0
       }
     ]
@@ -226,8 +226,8 @@
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "engine/test/runtests.jl",
-          "engine/test/integration_tests.jl"
+          "engine/test/integration_tests.jl",
+          "engine/test/runtests.jl"
         ],
         "frameworks": [],
         "relation": "ProofDrift->Cpu"
