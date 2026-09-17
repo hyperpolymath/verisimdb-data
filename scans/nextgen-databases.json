@@ -429,10 +429,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "network",
+    "disk",
     "memory",
-    "disk"
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -446,6 +446,12 @@
         "from": "nqc/nqc-enhanced-launcher.sh",
         "to": "nqc/nqc-launcher.sh",
         "relation": "shared_dir:nqc",
+        "weight": 1.0
+      },
+      {
+        "from": "nqc/test/nqc/cache_test.gleam",
+        "to": "nqc/test/nqc/formatter_test.gleam",
+        "relation": "shared_dir:nqc/test/nqc",
         "weight": 1.0
       },
       {
@@ -470,12 +476,6 @@
         "from": "nqc/src/nqc/profiles.gleam",
         "to": "nqc/src/nqc/highlight.gleam",
         "relation": "shared_dir:nqc/src/nqc",
-        "weight": 1.0
-      },
-      {
-        "from": "nqc/test/nqc/cache_test.gleam",
-        "to": "nqc/test/nqc/formatter_test.gleam",
-        "relation": "shared_dir:nqc/test/nqc",
         "weight": 1.0
       }
     ]
@@ -507,6 +507,16 @@
         "relation": "CommandInjection->Cpu"
       },
       {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "nqc/src/nqc/profiles.gleam"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -536,16 +546,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "nqc/src/nqc/profiles.gleam"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "MutationGap",

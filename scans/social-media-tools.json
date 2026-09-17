@@ -322,11 +322,11 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "disk",
     "memory",
     "network",
-    "cpu"
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
@@ -349,12 +349,6 @@
         "weight": 1.0
       },
       {
-        "from": "dipstick/tools/cli/migrate.sh",
-        "to": "dipstick/tools/cli/rollback.sh",
-        "relation": "shared_dir:dipstick/tools/cli",
-        "weight": 1.0
-      },
-      {
         "from": "dipstick/services/collector/tests/reflexive_tests.rs",
         "to": "dipstick/services/collector/tests/contract_tests.rs",
         "relation": "shared_dir:dipstick/services/collector/tests",
@@ -364,6 +358,12 @@
         "from": "dipstick/services/collector/tests/contract_tests.rs",
         "to": "dipstick/services/collector/tests/aspect_tests.rs",
         "relation": "shared_dir:dipstick/services/collector/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "dipstick/tools/cli/migrate.sh",
+        "to": "dipstick/tools/cli/rollback.sh",
+        "relation": "shared_dir:dipstick/tools/cli",
         "weight": 1.0
       },
       {
@@ -649,18 +649,18 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "dipstick/services/analyzer-rescript/src/Main.affine",
-          "dipstick/services/pestle-observatory/src/observatory.affine"
+          "dipstick/services/gateway-rescript/src/Gateway.res",
+          "dipstick/services/gateway-rescript/src/Gateway.affine"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "HardcodedSecret",
@@ -676,18 +676,18 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "dipstick/services/gateway-rescript/src/Gateway.res",
-          "dipstick/services/gateway-rescript/src/Gateway.affine"
+          "dipstick/services/analyzer-rescript/src/Main.affine",
+          "dipstick/services/pestle-observatory/src/observatory.affine"
         ],
         "frameworks": [
           "OTP",
           "Phoenix"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "PanicPath",

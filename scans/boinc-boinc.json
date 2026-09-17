@@ -216,25 +216,13 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "concurrency",
     "cpu",
-    "memory"
+    "concurrency",
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "rust-parser/src/ast/pretty_print.rs",
-        "to": "rust-parser/src/ast/visitor.rs",
-        "relation": "shared_dir:rust-parser/src/ast",
-        "weight": 1.0
-      },
-      {
-        "from": "rust-parser/src/analyzer/call_graph.rs",
-        "to": "rust-parser/src/analyzer/termination.rs",
-        "relation": "shared_dir:rust-parser/src/analyzer",
-        "weight": 1.0
-      },
       {
         "from": "elixir-coordinator/lib/coordinator/result_validator.ex",
         "to": "elixir-coordinator/lib/coordinator/database.ex",
@@ -257,6 +245,18 @@
         "from": "elixir-coordinator/lib/coordinator/proof_tracker.ex",
         "to": "elixir-coordinator/lib/coordinator/property_manager.ex",
         "relation": "shared_dir:elixir-coordinator/lib/coordinator",
+        "weight": 1.0
+      },
+      {
+        "from": "rust-parser/src/ast/pretty_print.rs",
+        "to": "rust-parser/src/ast/visitor.rs",
+        "relation": "shared_dir:rust-parser/src/ast",
+        "weight": 1.0
+      },
+      {
+        "from": "rust-parser/src/analyzer/call_graph.rs",
+        "to": "rust-parser/src/analyzer/termination.rs",
+        "relation": "shared_dir:rust-parser/src/analyzer",
         "weight": 1.0
       },
       {
@@ -361,7 +361,7 @@
     "rows": [
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "rust-parser/src/parser/parser.rs"
@@ -369,7 +369,19 @@
         "frameworks": [
           "OTP"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "rust-parser/src/bin/oblibeny-cli.rs"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -382,18 +394,6 @@
           "OTP"
         ],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "rust-parser/src/parser/parser.rs"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -420,16 +420,16 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "rust-parser/src/bin/oblibeny-cli.rs"
+          "rust-parser/src/parser/parser.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

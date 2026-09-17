@@ -493,10 +493,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "network",
     "memory",
-    "disk"
+    "disk",
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -543,21 +543,33 @@
         "weight": 1.0
       },
       {
-        "from": "src/lib/bs/core/DocumentExtract.affine",
-        "to": "src/lib/bs/core/Plural.affine",
-        "relation": "shared_dir:src/lib/bs/core",
+        "from": "tui/src/polyglot_tui-main.adb",
+        "to": "tui/src/polyglot_tui-terminal.adb",
+        "relation": "shared_dir:tui/src",
         "weight": 1.0
       },
       {
-        "from": "src/lib/bs/core/Plural.affine",
-        "to": "src/lib/bs/core/I18n.affine",
-        "relation": "shared_dir:src/lib/bs/core",
+        "from": "src/core/DocumentExtract.affine",
+        "to": "src/core/Plural.affine",
+        "relation": "shared_dir:src/core",
         "weight": 1.0
       },
       {
-        "from": "src/lib/bs/core/I18n.affine",
-        "to": "src/lib/bs/core/FuzzyMatch.affine",
-        "relation": "shared_dir:src/lib/bs/core",
+        "from": "src/core/Plural.affine",
+        "to": "src/core/I18n.affine",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/I18n.affine",
+        "to": "src/core/FuzzyMatch.affine",
+        "relation": "shared_dir:src/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/core/FuzzyMatch.affine",
+        "to": "src/core/RelativeTime.affine",
+        "relation": "shared_dir:src/core",
         "weight": 1.0
       },
       {
@@ -591,33 +603,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/core/DocumentExtract.affine",
-        "to": "src/core/Plural.affine",
-        "relation": "shared_dir:src/core",
+        "from": "src/lib/bs/core/DocumentExtract.affine",
+        "to": "src/lib/bs/core/Plural.affine",
+        "relation": "shared_dir:src/lib/bs/core",
         "weight": 1.0
       },
       {
-        "from": "src/core/Plural.affine",
-        "to": "src/core/I18n.affine",
-        "relation": "shared_dir:src/core",
+        "from": "src/lib/bs/core/Plural.affine",
+        "to": "src/lib/bs/core/I18n.affine",
+        "relation": "shared_dir:src/lib/bs/core",
         "weight": 1.0
       },
       {
-        "from": "src/core/I18n.affine",
-        "to": "src/core/FuzzyMatch.affine",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/core/FuzzyMatch.affine",
-        "to": "src/core/RelativeTime.affine",
-        "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "tui/src/polyglot_tui-main.adb",
-        "to": "tui/src/polyglot_tui-terminal.adb",
-        "relation": "shared_dir:tui/src",
+        "from": "src/lib/bs/core/I18n.affine",
+        "to": "src/lib/bs/core/FuzzyMatch.affine",
+        "relation": "shared_dir:src/lib/bs/core",
         "weight": 1.0
       },
       {
@@ -829,6 +829,21 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "bindings/rescript/I18n.affine",
+          "src/lib/bs/core/DocumentExtract.affine",
+          "src/lib/ocaml/DocumentExtract.affine",
+          "src/core/DocumentExtract.affine"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -857,21 +872,6 @@
           "WebServer"
         ],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "bindings/rescript/I18n.affine",
-          "src/lib/bs/core/DocumentExtract.affine",
-          "src/lib/ocaml/DocumentExtract.affine",
-          "src/core/DocumentExtract.affine"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

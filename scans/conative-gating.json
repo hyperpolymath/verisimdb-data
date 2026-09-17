@@ -278,8 +278,8 @@
   ],
   "recommended_attacks": [
     "network",
-    "disk",
     "cpu",
+    "disk",
     "memory"
   ],
   "dependency_graph": {
@@ -451,18 +451,30 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "scripts/mass-apply-templates.sh",
-          "scripts/mass-apply-templates.sh"
+          "templates/rsr-metadata.ncl"
         ],
         "frameworks": [
           "OTP",
           "Networking"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -479,17 +491,17 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
-          "src/main.rs"
+          "scripts/mass-apply-templates.sh"
         ],
         "frameworks": [
           "OTP",
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "HardcodedSecret",
@@ -523,32 +535,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "templates/rsr-metadata.ncl"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -560,6 +546,20 @@
           "Networking"
         ],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh",
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }

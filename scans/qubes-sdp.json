@@ -235,18 +235,12 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "qubes-setup.sh",
-        "to": "qubes-setup-advanced.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "tools/qubes-template-manager.sh",
         "to": "tools/qubes-restore.sh",
@@ -264,26 +258,17 @@
         "to": "tools/qubes-backup-validator.sh",
         "relation": "shared_dir:tools",
         "weight": 1.0
+      },
+      {
+        "from": "qubes-setup.sh",
+        "to": "qubes-setup-advanced.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "qubes-setup.sh",
-          "tests/unit-tests.sh",
-          "tests/security-tests.sh",
-          "tests/integration-tests.sh",
-          "qubes-setup-advanced.sh",
-          "scripts/rsr-verify.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -320,6 +305,21 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "qubes-setup.sh",
+          "tests/unit-tests.sh",
+          "tests/security-tests.sh",
+          "tests/integration-tests.sh",
+          "qubes-setup-advanced.sh",
+          "scripts/rsr-verify.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

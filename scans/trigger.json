@@ -427,18 +427,12 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
-    "memory",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/trigger/core/cryptography.adb",
-        "to": "src/trigger/core/application.adb",
-        "relation": "shared_dir:src/trigger/core",
-        "weight": 1.0
-      },
       {
         "from": "tests/unit/test_cryptography.adb",
         "to": "tests/unit/test_cryptography-body.adb",
@@ -452,21 +446,39 @@
         "weight": 1.0
       },
       {
-        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
-        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/telegram",
+        "from": "tests/test_harness.adb",
+        "to": "tests/test_harness-body.adb",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
-        "from": "src/trigger/platforms/twitter/twitter-platform.adb",
-        "to": "src/trigger/platforms/twitter/twitter-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/twitter",
+        "from": "tests/test_harness-body.adb",
+        "to": "tests/test_runner.adb",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/test_runner.adb",
+        "to": "tests/test_trigger.adb",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
         "from": "src/trigger/platforms/discord/discord-platform.adb",
         "to": "src/trigger/platforms/discord/discord-platform.ads",
         "relation": "shared_dir:src/trigger/platforms/discord",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trigger/core/cryptography.adb",
+        "to": "src/trigger/core/application.adb",
+        "relation": "shared_dir:src/trigger/core",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trigger/platforms/twitter/twitter-platform.adb",
+        "to": "src/trigger/platforms/twitter/twitter-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/twitter",
         "weight": 1.0
       },
       {
@@ -488,37 +500,15 @@
         "weight": 1.0
       },
       {
-        "from": "tests/test_harness.adb",
-        "to": "tests/test_harness-body.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_harness-body.adb",
-        "to": "tests/test_runner.adb",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test_runner.adb",
-        "to": "tests/test_trigger.adb",
-        "relation": "shared_dir:tests",
+        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
+        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/telegram",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/trigger-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
       {
         "source_category": "UncheckedError",
         "sink_axis": "cpu",
@@ -538,6 +528,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/trigger-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "ProofDrift",

@@ -697,11 +697,53 @@
   "recommended_attacks": [
     "disk",
     "network",
-    "memory",
-    "cpu"
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/prover/smt.rs",
+        "to": "src/prover/mod.rs",
+        "relation": "shared_dir:src/prover",
+        "weight": 1.0
+      },
+      {
+        "from": "src/prover/mod.rs",
+        "to": "src/prover/agda.rs",
+        "relation": "shared_dir:src/prover",
+        "weight": 1.0
+      },
+      {
+        "from": "src/prover/agda.rs",
+        "to": "src/prover/isabelle.rs",
+        "relation": "shared_dir:src/prover",
+        "weight": 1.0
+      },
+      {
+        "from": "src/prover/isabelle.rs",
+        "to": "src/prover/idris2.rs",
+        "relation": "shared_dir:src/prover",
+        "weight": 1.0
+      },
+      {
+        "from": "src/prover/idris2.rs",
+        "to": "src/prover/rocq.rs",
+        "relation": "shared_dir:src/prover",
+        "weight": 1.0
+      },
+      {
+        "from": "src/prover/rocq.rs",
+        "to": "src/prover/mizar.rs",
+        "relation": "shared_dir:src/prover",
+        "weight": 1.0
+      },
+      {
+        "from": "src/prover/mizar.rs",
+        "to": "src/prover/lean.rs",
+        "relation": "shared_dir:src/prover",
+        "weight": 1.0
+      },
       {
         "from": "src/diagnostic.rs",
         "to": "src/graph.rs",
@@ -799,48 +841,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/prover/smt.rs",
-        "to": "src/prover/mod.rs",
-        "relation": "shared_dir:src/prover",
-        "weight": 1.0
-      },
-      {
-        "from": "src/prover/mod.rs",
-        "to": "src/prover/agda.rs",
-        "relation": "shared_dir:src/prover",
-        "weight": 1.0
-      },
-      {
-        "from": "src/prover/agda.rs",
-        "to": "src/prover/isabelle.rs",
-        "relation": "shared_dir:src/prover",
-        "weight": 1.0
-      },
-      {
-        "from": "src/prover/isabelle.rs",
-        "to": "src/prover/idris2.rs",
-        "relation": "shared_dir:src/prover",
-        "weight": 1.0
-      },
-      {
-        "from": "src/prover/idris2.rs",
-        "to": "src/prover/rocq.rs",
-        "relation": "shared_dir:src/prover",
-        "weight": 1.0
-      },
-      {
-        "from": "src/prover/rocq.rs",
-        "to": "src/prover/mizar.rs",
-        "relation": "shared_dir:src/prover",
-        "weight": 1.0
-      },
-      {
-        "from": "src/prover/mizar.rs",
-        "to": "src/prover/lean.rs",
-        "relation": "shared_dir:src/prover",
-        "weight": 1.0
-      },
-      {
         "from": "src/lint/unpinned_headline.rs",
         "to": "src/lint/escape_hatch.rs",
         "relation": "shared_dir:src/lint",
@@ -909,15 +909,14 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
         "files": [
-          "scripts/provision-provers.sh",
-          "src/dispatch.rs"
+          "scripts/provision-provers.sh"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -928,6 +927,17 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/lint/unpinned_headline.rs",
+          "src/lint/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -956,6 +966,17 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/lint/unpinned_headline.rs",
+          "src/lint/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -982,36 +1003,15 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/provision-provers.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/lint/unpinned_headline.rs",
-          "src/lint/mod.rs"
+          "scripts/provision-provers.sh",
+          "src/dispatch.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/lint/unpinned_headline.rs",
-          "src/lint/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

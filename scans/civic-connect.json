@@ -354,14 +354,26 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "network",
-    "memory",
     "cpu",
+    "memory",
+    "network",
+    "disk",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/main.rs",
+        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
+        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
+        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
+        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
+        "weight": 1.0
+      },
       {
         "from": "indieweb2-bastion/graphql-dns-api/src/resolvers.rs",
         "to": "indieweb2-bastion/graphql-dns-api/src/main.rs",
@@ -378,18 +390,6 @@
         "from": "indieweb2-bastion/graphql-dns-api/src/blockchain.rs",
         "to": "indieweb2-bastion/graphql-dns-api/src/db.rs",
         "relation": "shared_dir:indieweb2-bastion/graphql-dns-api/src",
-        "weight": 1.0
-      },
-      {
-        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/main.rs",
-        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
-        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
-        "weight": 1.0
-      },
-      {
-        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
-        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
-        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
         "weight": 1.0
       },
       {
@@ -877,21 +877,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "backend/ada-core/src/civicconnect-verification.adb",
-          "backend/rust-api/src/api/verify.rs"
-        ],
-        "frameworks": [
-          "Phoenix",
-          "Ecto",
-          "WebServer"
-        ],
-        "relation": "UncheckedError->Cpu"
-      },
-      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -904,6 +889,21 @@
           "WebServer"
         ],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "indieweb2-bastion/policy/run.js",
+          "indieweb2-bastion/scripts/gen_scripts.js"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "Ecto",
+          "WebServer"
+        ],
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -920,19 +920,19 @@
         "relation": "DynamicCodeExecution->Cpu"
       },
       {
-        "source_category": "InputBoundary",
+        "source_category": "UncheckedError",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 1.0,
         "files": [
-          "indieweb2-bastion/policy/run.js",
-          "indieweb2-bastion/scripts/gen_scripts.js"
+          "backend/ada-core/src/civicconnect-verification.adb",
+          "backend/rust-api/src/api/verify.rs"
         ],
         "frameworks": [
           "Phoenix",
           "Ecto",
           "WebServer"
         ],
-        "relation": "InputBoundary->Cpu"
+        "relation": "UncheckedError->Cpu"
       }
     ]
   }

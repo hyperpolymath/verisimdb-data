@@ -809,18 +809,36 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
+    "network",
     "cpu",
     "disk",
-    "network",
-    "memory",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/federation_multinode.sh",
-        "to": "tests/e2e_full.sh",
-        "relation": "shared_dir:tests",
+        "from": "elixir/lib/boj_rest/catalog.ex",
+        "to": "elixir/lib/boj_rest/js_worker.ex",
+        "relation": "shared_dir:elixir/lib/boj_rest",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir/lib/boj_rest/js_worker.ex",
+        "to": "elixir/lib/boj_rest/node_key.ex",
+        "relation": "shared_dir:elixir/lib/boj_rest",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir/lib/boj_rest/node_key.ex",
+        "to": "elixir/lib/boj_rest/js_invoker.ex",
+        "relation": "shared_dir:elixir/lib/boj_rest",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fixtures/cartridges/feedback-mcp/ffi/cartridge_shim.zig",
+        "to": "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig",
+        "relation": "shared_dir:tests/fixtures/cartridges/feedback-mcp/ffi",
         "weight": 1.0
       },
       {
@@ -860,36 +878,6 @@
         "weight": 1.0
       },
       {
-        "from": "elixir/lib/boj_rest/catalog.ex",
-        "to": "elixir/lib/boj_rest/js_worker.ex",
-        "relation": "shared_dir:elixir/lib/boj_rest",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir/lib/boj_rest/js_worker.ex",
-        "to": "elixir/lib/boj_rest/node_key.ex",
-        "relation": "shared_dir:elixir/lib/boj_rest",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir/lib/boj_rest/node_key.ex",
-        "to": "elixir/lib/boj_rest/js_invoker.ex",
-        "relation": "shared_dir:elixir/lib/boj_rest",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir/test/aspect_test.exs",
-        "to": "elixir/test/catalog_test.exs",
-        "relation": "shared_dir:elixir/test",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir/test/catalog_test.exs",
-        "to": "elixir/test/node_key_test.exs",
-        "relation": "shared_dir:elixir/test",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/boj-health-check.sh",
         "to": "scripts/check-shebang-first.sh",
         "relation": "shared_dir:scripts",
@@ -911,24 +899,6 @@
         "from": "scripts/hcg-spec-coverage-check.sh",
         "to": "scripts/hcg-policy-smoke.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "mcp-bridge/lib/otel.js",
-        "to": "mcp-bridge/lib/api-clients.js",
-        "relation": "shared_dir:mcp-bridge/lib",
-        "weight": 1.0
-      },
-      {
-        "from": "mcp-bridge/lib/api-clients.js",
-        "to": "mcp-bridge/lib/dispatcher.js",
-        "relation": "shared_dir:mcp-bridge/lib",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/maintenance/perms-state.sh",
-        "to": "scripts/maintenance/run-maintenance.sh",
-        "relation": "shared_dir:scripts/maintenance",
         "weight": 1.0
       },
       {
@@ -974,9 +944,39 @@
         "weight": 1.0
       },
       {
-        "from": "tests/fixtures/cartridges/feedback-mcp/ffi/cartridge_shim.zig",
-        "to": "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig",
-        "relation": "shared_dir:tests/fixtures/cartridges/feedback-mcp/ffi",
+        "from": "tests/federation_multinode.sh",
+        "to": "tests/e2e_full.sh",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir/test/aspect_test.exs",
+        "to": "elixir/test/catalog_test.exs",
+        "relation": "shared_dir:elixir/test",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir/test/catalog_test.exs",
+        "to": "elixir/test/node_key_test.exs",
+        "relation": "shared_dir:elixir/test",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/maintenance/perms-state.sh",
+        "to": "scripts/maintenance/run-maintenance.sh",
+        "relation": "shared_dir:scripts/maintenance",
+        "weight": 1.0
+      },
+      {
+        "from": "mcp-bridge/lib/otel.js",
+        "to": "mcp-bridge/lib/api-clients.js",
+        "relation": "shared_dir:mcp-bridge/lib",
+        "weight": 1.0
+      },
+      {
+        "from": "mcp-bridge/lib/api-clients.js",
+        "to": "mcp-bridge/lib/dispatcher.js",
+        "relation": "shared_dir:mcp-bridge/lib",
         "weight": 1.0
       },
       {
@@ -1560,73 +1560,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/server.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/aspect_tests.sh",
-          "elixir/lib/boj_rest/js_worker.ex",
-          "elixir/lib/boj_rest/invoker.ex",
-          "elixir/lib/boj_rest/js_invoker.ex",
-          "scripts/maintenance/run-maintenance.sh"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "coord-tui/src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "elixir/test/aspect_test.exs",
-          "elixir/test/contract_test.exs",
-          "elixir/test/trust_policy_test.exs",
-          "elixir/test/invoker_test.exs",
-          "elixir/test/router_test.exs",
-          "elixir/test/catalog_test.exs",
-          "elixir/test/node_key_test.exs",
-          "elixir/test/js_invoker_test.exs",
-          "elixir/test/application_test.exs",
-          "elixir/test/js_worker_pool_test.exs",
-          "elixir/test/phase_c_seam_test.exs",
-          "elixir/test/credential_decryptor_test.exs"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "MutationGap->Cpu"
-      },
-      {
         "source_category": "ProofDrift",
         "sink_axis": "memory",
         "severity_value": 5.0,
@@ -1638,6 +1571,19 @@
           "WebServer"
         ],
         "relation": "ProofDrift->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/server.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -1684,17 +1630,21 @@
         "relation": "DynamicCodeExecution->Cpu"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "mcp-bridge/lib/security.js"
+          "tests/aspect_tests.sh",
+          "elixir/lib/boj_rest/js_worker.ex",
+          "elixir/lib/boj_rest/invoker.ex",
+          "elixir/lib/boj_rest/js_invoker.ex",
+          "scripts/maintenance/run-maintenance.sh"
         ],
         "frameworks": [
           "OTP",
           "WebServer"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -1710,6 +1660,30 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "elixir/test/aspect_test.exs",
+          "elixir/test/contract_test.exs",
+          "elixir/test/trust_policy_test.exs",
+          "elixir/test/invoker_test.exs",
+          "elixir/test/router_test.exs",
+          "elixir/test/catalog_test.exs",
+          "elixir/test/node_key_test.exs",
+          "elixir/test/js_invoker_test.exs",
+          "elixir/test/application_test.exs",
+          "elixir/test/js_worker_pool_test.exs",
+          "elixir/test/phase_c_seam_test.exs",
+          "elixir/test/credential_decryptor_test.exs"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "MutationGap->Cpu"
+      },
+      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -1723,6 +1697,19 @@
         "relation": "UnsafeCode->Memory"
       },
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "mcp-bridge/lib/security.js"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -1734,6 +1721,19 @@
           "WebServer"
         ],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "coord-tui/src/main.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
