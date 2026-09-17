@@ -531,16 +531,52 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
+    "disk",
     "concurrency",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/property_test.rs",
-        "to": "tests/e2e_test.rs",
-        "relation": "shared_dir:tests",
+        "from": "src/rsr/diff.rs",
+        "to": "src/rsr/templates.rs",
+        "relation": "shared_dir:src/rsr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rsr/templates.rs",
+        "to": "src/rsr/compliance.rs",
+        "relation": "shared_dir:src/rsr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rsr/compliance.rs",
+        "to": "src/rsr/config.rs",
+        "relation": "shared_dir:src/rsr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rsr/config.rs",
+        "to": "src/rsr/hooks.rs",
+        "relation": "shared_dir:src/rsr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rsr/hooks.rs",
+        "to": "src/rsr/remediation.rs",
+        "relation": "shared_dir:src/rsr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rsr/remediation.rs",
+        "to": "src/rsr/schemas.rs",
+        "relation": "shared_dir:src/rsr",
+        "weight": 1.0
+      },
+      {
+        "from": "src/rsr/schemas.rs",
+        "to": "src/rsr/requirements.rs",
+        "relation": "shared_dir:src/rsr",
         "weight": 1.0
       },
       {
@@ -586,9 +622,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/analyzer/recommender.rs",
-        "to": "src/analyzer/patterns.rs",
-        "relation": "shared_dir:src/analyzer",
+        "from": "tests/property_test.rs",
+        "to": "tests/e2e_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/cache/hash.rs",
+        "to": "src/cache/filesystem.rs",
+        "relation": "shared_dir:src/cache",
+        "weight": 1.0
+      },
+      {
+        "from": "src/errors/mod.rs",
+        "to": "src/errors/recovery.rs",
+        "relation": "shared_dir:src/errors",
         "weight": 1.0
       },
       {
@@ -610,57 +658,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/rsr/diff.rs",
-        "to": "src/rsr/templates.rs",
-        "relation": "shared_dir:src/rsr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rsr/templates.rs",
-        "to": "src/rsr/compliance.rs",
-        "relation": "shared_dir:src/rsr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rsr/compliance.rs",
-        "to": "src/rsr/config.rs",
-        "relation": "shared_dir:src/rsr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rsr/config.rs",
-        "to": "src/rsr/hooks.rs",
-        "relation": "shared_dir:src/rsr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rsr/hooks.rs",
-        "to": "src/rsr/remediation.rs",
-        "relation": "shared_dir:src/rsr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rsr/remediation.rs",
-        "to": "src/rsr/schemas.rs",
-        "relation": "shared_dir:src/rsr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/rsr/schemas.rs",
-        "to": "src/rsr/requirements.rs",
-        "relation": "shared_dir:src/rsr",
-        "weight": 1.0
-      },
-      {
-        "from": "src/cache/hash.rs",
-        "to": "src/cache/filesystem.rs",
-        "relation": "shared_dir:src/cache",
-        "weight": 1.0
-      },
-      {
-        "from": "src/errors/mod.rs",
-        "to": "src/errors/recovery.rs",
-        "relation": "shared_dir:src/errors",
+        "from": "src/analyzer/recommender.rs",
+        "to": "src/analyzer/patterns.rs",
+        "relation": "shared_dir:src/analyzer",
         "weight": 1.0
       },
       {
@@ -907,26 +907,6 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/analyzer/mod.rs",
-          "src/cache/filesystem.rs",
-          "src/rsr/templates.rs",
-          "src/rsr/compliance.rs",
-          "src/rsr/config.rs",
-          "src/rsr/remediation.rs",
-          "src/rsr/schemas.rs",
-          "src/rsr/requirements.rs",
-          "src/pipeline/definition.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -944,6 +924,26 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/analyzer/mod.rs",
+          "src/cache/filesystem.rs",
+          "src/rsr/templates.rs",
+          "src/rsr/compliance.rs",
+          "src/rsr/config.rs",
+          "src/rsr/remediation.rs",
+          "src/rsr/schemas.rs",
+          "src/rsr/requirements.rs",
+          "src/pipeline/definition.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
