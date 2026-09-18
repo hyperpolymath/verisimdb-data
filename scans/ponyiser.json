@@ -172,12 +172,18 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "memory",
-    "cpu",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/abi-ffi-gate.jl",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/pony_gen.rs",
@@ -189,26 +195,20 @@
         "to": "src/codegen/capability.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/abi-ffi-gate.jl",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/parser.rs"
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -219,6 +219,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/codegen/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -232,23 +242,13 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/codegen/parser.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

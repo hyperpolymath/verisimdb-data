@@ -301,31 +301,13 @@
     }
   ],
   "recommended_attacks": [
+    "network",
     "cpu",
     "disk",
-    "memory",
-    "network"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/atnChangelog.js",
-        "to": "scripts/update-thirdparty.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/update-thirdparty.js",
-        "to": "scripts/pack.js",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "RuntimeMessage.d.affine",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
       {
         "from": "modules/extensionUtils.mjs.js",
         "to": "modules/virusTotalIntegration.mjs.js",
@@ -355,41 +337,29 @@
         "to": "experiments/libunbound.d.affine",
         "relation": "shared_dir:experiments",
         "weight": 1.0
+      },
+      {
+        "from": "RuntimeMessage.d.affine",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/atnChangelog.js",
+        "to": "scripts/update-thirdparty.js",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/update-thirdparty.js",
+        "to": "scripts/pack.js",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/verify-rsr.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "wasm/parser/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -400,6 +370,26 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "modules/dnsbl.mjs.js"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "wasm/parser/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "InputBoundary",
@@ -417,6 +407,16 @@
         "relation": "InputBoundary->Cpu"
       },
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/verify-rsr.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -427,14 +427,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "modules/dnsbl.mjs.js"
+          "thirdparty/tabulator-tables/dist/js/tabulator_esm.js"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

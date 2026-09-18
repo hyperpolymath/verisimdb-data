@@ -278,8 +278,8 @@
   ],
   "recommended_attacks": [
     "network",
-    "cpu",
     "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
@@ -451,6 +451,20 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh",
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -465,7 +479,7 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "src/main.rs"
@@ -474,21 +488,7 @@
           "OTP",
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/contract/src/lib.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -535,8 +535,22 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/contract/src/lib.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/main.rs"
@@ -545,21 +559,7 @@
           "OTP",
           "Networking"
         ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh",
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

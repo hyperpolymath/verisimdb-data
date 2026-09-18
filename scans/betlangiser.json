@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "betlangiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -152,14 +152,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
           "src/codegen/codegen.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -172,24 +172,14 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/codegen.rs"
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/codegen/codegen.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -202,14 +192,24 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/manifest/mod.rs"
+          "src/codegen/codegen.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/codegen/codegen.rs"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       }
     ]
   }

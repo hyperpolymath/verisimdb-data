@@ -384,35 +384,11 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "core/src/lambdadelta/mod.rs",
-        "to": "core/src/lambdadelta/builtins.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/builtins.rs",
-        "to": "core/src/lambdadelta/reader.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "core/src/lambdadelta/reader.rs",
-        "to": "core/src/lambdadelta/eval.rs",
-        "relation": "shared_dir:core/src/lambdadelta",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/tests/WasmStoreTests.affine",
-        "to": "ui/tests/UpdateTests.affine",
-        "relation": "shared_dir:ui/tests",
-        "weight": 1.0
-      },
       {
         "from": "core/src/notebook.rs",
         "to": "core/src/storage.rs",
@@ -472,11 +448,45 @@
         "to": "ui/src/store/Persist.affine",
         "relation": "shared_dir:ui/src/store",
         "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/mod.rs",
+        "to": "core/src/lambdadelta/builtins.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/builtins.rs",
+        "to": "core/src/lambdadelta/reader.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "core/src/lambdadelta/reader.rs",
+        "to": "core/src/lambdadelta/eval.rs",
+        "relation": "shared_dir:core/src/lambdadelta",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/tests/WasmStoreTests.affine",
+        "to": "ui/tests/UpdateTests.affine",
+        "relation": "shared_dir:ui/tests",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "core/src/storage.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -509,27 +519,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "core/src/lambdadelta_host/tests.rs",
-          "desktop/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "core/src/storage.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -540,6 +529,17 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "core/src/lambdadelta_host/tests.rs",
+          "desktop/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }
