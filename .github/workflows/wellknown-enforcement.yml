@@ -6,11 +6,11 @@ on:
   push:
     branches: [main, master]
     paths:
-      - '.well-known/**'
+      - 'www/.well-known/**'
       - 'security.txt'
   pull_request:
     paths:
-      - '.well-known/**'
+      - 'www/.well-known/**'
   schedule:
     # Weekly expiry check
     - cron: '0 9 * * *'
@@ -30,6 +30,7 @@ jobs:
       - name: RFC 9116 security.txt validation
         run: |
           SECTXT=""
+          [ -f "www/.well-known/security.txt" ] && SECTXT="www/.well-known/security.txt"
           [ -f ".well-known/security.txt" ] && SECTXT=".well-known/security.txt"
           [ -f "security.txt" ] && SECTXT="security.txt"
           
@@ -64,9 +65,9 @@ jobs:
       - name: RSR well-known compliance
         run: |
           MISSING=""
-          [ ! -f ".well-known/security.txt" ] && [ ! -f "security.txt" ] && MISSING="$MISSING security.txt"
-          [ ! -f ".well-known/ai.txt" ] && MISSING="$MISSING ai.txt"
-          [ ! -f ".well-known/humans.txt" ] && MISSING="$MISSING humans.txt"
+          for f in security.txt ai.txt humans.txt; do
+            [ -f "www/.well-known/$f" ] || [ -f ".well-known/$f" ] || [ -f "$f" ] || MISSING="$MISSING $f"
+          done
           
           if [ -n "$MISSING" ]; then
             echo "::warning::Missing RSR recommended files:$MISSING"
