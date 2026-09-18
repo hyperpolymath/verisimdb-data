@@ -38,6 +38,35 @@ jobs:
         with:
           source: ./
           destination: ./_site
+      - name: Overlay the canonical www bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Publish the canonical bundle alongside whatever the SSG produced.
+          #
+          #   www/public/      -> the servable site root
+          #   www/.well-known/ -> must be reachable at /.well-known/ on this
+          #                       origin (RFC 9116, and RSR check
+          #                       www/.well-known/security.txt)
+          #
+          # Everything else under www/ (dns/, policies/, profiles/, runbooks/,
+          # errors/) is source material and is deliberately NOT published, so
+          # only these two subtrees are copied rather than all of www/.
+          #
+          # Deliberately additive: the generated site is left intact, so this
+          # cannot regress the existing pages.
+          if [ -d www/public ]; then
+            cp -a www/public/. _site/
+          fi
+          if [ -d www/.well-known ]; then
+            mkdir -p _site/.well-known
+            cp -a www/.well-known/. _site/.well-known/
+          fi
+          # Jekyll copied the repository tree, so the bundle *source* would be
+          # served at /www/. The canonical location is the root, above.
+          rm -rf _site/www
+          echo "published tree:"
+          find _site -maxdepth 2 | sort
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5.0.0
 
