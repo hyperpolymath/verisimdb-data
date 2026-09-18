@@ -289,13 +289,31 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
-    "network",
-    "memory"
+    "memory",
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/forge-mesh.sh",
+        "to": "scripts/mirror-sweep.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/mirror-sweep.sh",
+        "to": "scripts/setup.fish",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/setup.fish",
+        "to": "scripts/setup.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "src/system_security.adb",
         "to": "src/bitbucket_api.adb",
@@ -397,39 +415,11 @@
         "to": "src/storage.adb",
         "relation": "shared_dir:src",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/forge-mesh.sh",
-        "to": "scripts/mirror-sweep.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/mirror-sweep.sh",
-        "to": "scripts/setup.fish",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/setup.fish",
-        "to": "scripts/setup.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "src/syncthing_sync.adb"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -439,6 +429,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "src/syncthing_sync.adb"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

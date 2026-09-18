@@ -768,13 +768,25 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "network",
     "disk",
-    "memory",
-    "concurrency"
+    "network",
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/hydrator.ex",
+        "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
+        "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
+        "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
+        "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
+        "weight": 1.0
+      },
       {
         "from": "elixir-mcp/lib/feedback_a_tron/channels/mailman.ex",
         "to": "elixir-mcp/lib/feedback_a_tron/channels/matrix.ex",
@@ -830,21 +842,9 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/sync-state.sh",
-        "to": "scripts/scraper.exs",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/hydrator.ex",
-        "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
-        "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
-        "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
-        "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
+        "from": "elixir-mcp/scripts/mcp_tcp_smoke_test.sh",
+        "to": "elixir-mcp/scripts/consent_bypass_check.sh",
+        "relation": "shared_dir:elixir-mcp/scripts",
         "weight": 1.0
       },
       {
@@ -896,9 +896,9 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/scripts/mcp_tcp_smoke_test.sh",
-        "to": "elixir-mcp/scripts/consent_bypass_check.sh",
-        "relation": "shared_dir:elixir-mcp/scripts",
+        "from": "scripts/sync-state.sh",
+        "to": "scripts/scraper.exs",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -1302,6 +1302,37 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "elixir-mcp/lib/feedback_a_tron/synthesis/research.ex",
+          "elixir-mcp/lib/feedback_a_tron/credentials.ex",
+          "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
+          "elixir-mcp/lib/feedback_a_tron/channels/gitlab.ex",
+          "elixir-mcp/lib/feedback_a_tron/channels/github.ex",
+          "elixir-mcp/test/escript_smoke_test.exs"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -1313,33 +1344,6 @@
           "WebServer"
         ],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "AtomExhaustion->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "elixir-mcp/test/synthesis/template_fetcher_test.exs",
-          "ffi/zig/test/integration_test.zig"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -1360,22 +1364,17 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "elixir-mcp/lib/feedback_a_tron/synthesis/research.ex",
-          "elixir-mcp/lib/feedback_a_tron/credentials.ex",
-          "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
-          "elixir-mcp/lib/feedback_a_tron/channels/gitlab.ex",
-          "elixir-mcp/lib/feedback_a_tron/channels/github.ex",
-          "elixir-mcp/test/escript_smoke_test.exs"
+          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
         ],
         "frameworks": [
           "OTP",
           "WebServer"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "AtomExhaustion->Memory"
       },
       {
         "source_category": "MutationGap",
@@ -1416,17 +1415,18 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
+        "source_category": "InsecureProtocol",
         "sink_axis": "network",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
+          "elixir-mcp/test/synthesis/template_fetcher_test.exs",
+          "ffi/zig/test/integration_test.zig"
         ],
         "frameworks": [
           "OTP",
           "WebServer"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

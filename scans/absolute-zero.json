@@ -351,8 +351,8 @@
   ],
   "recommended_attacks": [
     "disk",
-    "cpu",
     "concurrency",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
@@ -364,15 +364,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/abi/AbsoluteZero/ABI/Foreign.idr",
-        "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
-        "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
-        "weight": 1.0
-      },
-      {
         "from": "examples/special-ops/os/ioctl_nop.c",
         "to": "examples/special-ops/os/sched_yield.c",
         "relation": "shared_dir:examples/special-ops/os",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/AbsoluteZero/ABI/Foreign.idr",
+        "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
+        "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
         "weight": 1.0
       }
     ]
@@ -381,23 +381,13 @@
     "rows": [
       {
         "source_category": "ResourceLeak",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "examples/scheme/nop.scm"
         ],
         "frameworks": [],
-        "relation": "ResourceLeak->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/whitespace/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "ResourceLeak->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -410,24 +400,14 @@
         "relation": "UnsafeCode->Memory"
       },
       {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "examples/scheme/nop.scm"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Memory"
-      },
-      {
-        "source_category": "PanicPath",
+        "source_category": "UnsafeCode",
         "sink_axis": "cpu",
         "severity_value": 3.5,
         "files": [
-          "examples/haskell/Nop.hs"
+          "examples/ada/balanced_ops.adb"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Cpu"
+        "relation": "UnsafeCode->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -441,14 +421,15 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "examples/ada/balanced_ops.adb"
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Cpu"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -472,6 +453,17 @@
         "relation": "ProofDrift->Memory"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
         "source_category": "ProofDrift",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -486,26 +478,34 @@
         "relation": "ProofDrift->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "verification/run-local-verification.sh",
-          "verification/verify-proofs.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "ResourceLeak",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "verification/run-local-verification.sh",
-          "verification/verify-proofs.sh"
+          "examples/scheme/nop.scm"
         ],
         "frameworks": [],
-        "relation": "PathTraversal->Disk"
+        "relation": "ResourceLeak->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "examples/haskell/Nop.hs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/whitespace/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

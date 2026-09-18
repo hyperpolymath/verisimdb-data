@@ -150,8 +150,8 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -196,16 +196,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/verify-same-cube.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -216,16 +206,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/invariant-path-core/src/doc_claims.rs",
-          "crates/invariant-path-core/src/annotations.rs",
-          "crates/invariant-path-cli/src/main.rs"
+          "crates/invariant-path-core/src/doc_claims.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PathTraversal",
@@ -238,14 +226,26 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/invariant-path-core/src/doc_claims.rs"
+          "scripts/verify-same-cube.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/invariant-path-core/src/doc_claims.rs",
+          "crates/invariant-path-core/src/annotations.rs",
+          "crates/invariant-path-cli/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
