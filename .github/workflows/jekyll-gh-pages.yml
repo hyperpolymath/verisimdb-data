@@ -42,6 +42,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # actions/jekyll-build-pages runs in a container and writes _site as
+          # root, so the runner user cannot create directories inside it.
+          # Without this, the bundle copy below fails with "Permission denied".
+          if [ -d _site ] && [ ! -w _site ]; then
+            sudo chown -R "$(id -u):$(id -g)" _site
+          fi
           # Publish the canonical bundle alongside whatever the SSG produced.
           #
           #   www/public/      -> the servable site root
@@ -69,6 +75,11 @@ jobs:
           find _site -maxdepth 2 | sort
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          # actions/upload-pages-artifact strips dot-entries by default
+          # (its tar runs --exclude=.[^/]*), which silently removed
+          # .well-known/ from the artifact. Publish it deliberately.
+          include-hidden-files: true
 
   # Deployment job
   deploy:
