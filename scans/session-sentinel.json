@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "session-sentinel",
-  "language": "zig",
+  "language": "affinescript",
   "frameworks": [],
   "weak_points": [
     {
@@ -281,18 +281,30 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
-    "concurrency",
     "network",
+    "concurrency",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/validate.test.deno.js",
-        "to": "tests/validate.test.affine",
-        "relation": "shared_dir:tests",
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/verisimdb.zig",
+        "to": "src/interface/ffi/src/main.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/src/main.zig",
+        "to": "src/interface/ffi/src/dbus.zig",
+        "relation": "shared_dir:src/interface/ffi/src",
         "weight": 1.0
       },
       {
@@ -374,47 +386,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/verisimdb.zig",
-        "to": "src/interface/ffi/src/main.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/src/main.zig",
-        "to": "src/interface/ffi/src/dbus.zig",
-        "relation": "shared_dir:src/interface/ffi/src",
+        "from": "tests/validate.test.deno.js",
+        "to": "tests/validate.test.affine",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/dbus.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/core/monitor.eph"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -426,6 +406,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/dbus.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -434,6 +424,16 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/core/monitor.eph"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       }
     ]
   }

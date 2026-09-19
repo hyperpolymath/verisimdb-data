@@ -403,9 +403,9 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -419,6 +419,36 @@
         "from": "examples/03-mutable-ripple.err",
         "to": "examples/09-null-cascade.err",
         "relation": "shared_dir:examples",
+        "weight": 1.0
+      },
+      {
+        "from": "error-pkg/src/install.rs",
+        "to": "error-pkg/src/resolve.rs",
+        "relation": "shared_dir:error-pkg/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ide/src/MonacoBindings.affine",
+        "to": "ide/src/Model.affine",
+        "relation": "shared_dir:ide/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ide/src/Model.affine",
+        "to": "ide/src/View.affine",
+        "relation": "shared_dir:ide/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ide/src/View.affine",
+        "to": "ide/src/Update.affine",
+        "relation": "shared_dir:ide/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ide/src/Update.affine",
+        "to": "ide/src/Main.affine",
+        "relation": "shared_dir:ide/src",
         "weight": 1.0
       },
       {
@@ -522,41 +552,21 @@
         "to": "levels/03-unterminated-string.err",
         "relation": "shared_dir:levels",
         "weight": 1.0
-      },
-      {
-        "from": "error-pkg/src/install.rs",
-        "to": "error-pkg/src/resolve.rs",
-        "relation": "shared_dir:error-pkg/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ide/src/MonacoBindings.affine",
-        "to": "ide/src/Model.affine",
-        "relation": "shared_dir:ide/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ide/src/Model.affine",
-        "to": "ide/src/View.affine",
-        "relation": "shared_dir:ide/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ide/src/View.affine",
-        "to": "ide/src/Update.affine",
-        "relation": "shared_dir:ide/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ide/src/Update.affine",
-        "to": "ide/src/Main.affine",
-        "relation": "shared_dir:ide/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "error-pkg/src/types.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -578,26 +588,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "verification/check-affinescript.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "error-pkg/src/types.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -606,6 +596,16 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "verification/check-affinescript.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

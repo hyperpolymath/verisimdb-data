@@ -467,12 +467,30 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "concurrency",
     "memory",
-    "disk"
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/scheduler/retry.rs",
+        "to": "src/scheduler/job_queue.rs",
+        "relation": "shared_dir:src/scheduler",
+        "weight": 1.0
+      },
+      {
+        "from": "src/scheduler/job_queue.rs",
+        "to": "src/scheduler/limiter.rs",
+        "relation": "shared_dir:src/scheduler",
+        "weight": 1.0
+      },
+      {
+        "from": "src/feedback/reranker.rs",
+        "to": "src/feedback/corpus_delta.rs",
+        "relation": "shared_dir:src/feedback",
+        "weight": 1.0
+      },
       {
         "from": "src/shutdown.rs",
         "to": "src/main.rs",
@@ -498,24 +516,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/scheduler/retry.rs",
-        "to": "src/scheduler/job_queue.rs",
-        "relation": "shared_dir:src/scheduler",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scheduler/job_queue.rs",
-        "to": "src/scheduler/limiter.rs",
-        "relation": "shared_dir:src/scheduler",
-        "weight": 1.0
-      },
-      {
-        "from": "src/feedback/reranker.rs",
-        "to": "src/feedback/corpus_delta.rs",
-        "relation": "shared_dir:src/feedback",
-        "weight": 1.0
-      },
-      {
         "from": "src/api/graphql.rs",
         "to": "src/api/rate_limit.rs",
         "relation": "shared_dir:src/api",
@@ -528,9 +528,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
+        "from": "tests/smoke.rs",
+        "to": "tests/seam_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/seam_test.rs",
+        "to": "tests/integration_tests.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/integration_tests.rs",
+        "to": "tests/lifecycle.rs",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -552,21 +564,9 @@
         "weight": 1.0
       },
       {
-        "from": "tests/smoke.rs",
-        "to": "tests/seam_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/seam_test.rs",
-        "to": "tests/integration_tests.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/integration_tests.rs",
-        "to": "tests/lifecycle.rs",
-        "relation": "shared_dir:tests",
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -1187,24 +1187,6 @@
     "rows": [
       {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "fuzz/fuzz_targets/fuzz_hmac.rs",
-          "src/scheduler/job_queue.rs",
-          "src/scheduler/limiter.rs",
-          "src/api/rate_limit.rs",
-          "src/dispatcher/echidna_client.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Database",
-          "Networking"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
@@ -1235,6 +1217,24 @@
           "Networking"
         ],
         "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "fuzz/fuzz_targets/fuzz_hmac.rs",
+          "src/scheduler/job_queue.rs",
+          "src/scheduler/limiter.rs",
+          "src/api/rate_limit.rs",
+          "src/dispatcher/echidna_client.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Database",
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory"
       }
     ]
   }
