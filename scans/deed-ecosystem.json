@@ -606,29 +606,17 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
     "cpu",
-    "concurrency"
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "rs/src/parser.rs",
-        "to": "rs/src/renderer.rs",
-        "relation": "shared_dir:rs/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rs/src/renderer.rs",
-        "to": "rs/src/error.rs",
-        "relation": "shared_dir:rs/src",
-        "weight": 1.0
-      },
-      {
-        "from": "rs/src/error.rs",
-        "to": "rs/src/types.rs",
-        "relation": "shared_dir:rs/src",
+        "from": "validate-action/.machine_readable/contractiles/trust/trust.ncl",
+        "to": "validate-action/.machine_readable/contractiles/trust/trust.k9.ncl",
+        "relation": "shared_dir:validate-action/.machine_readable/contractiles/trust",
         "weight": 1.0
       },
       {
@@ -650,9 +638,9 @@
         "weight": 1.0
       },
       {
-        "from": "validate-action/.machine_readable/contractiles/intend/intend.k9.ncl",
-        "to": "validate-action/.machine_readable/contractiles/intend/intend.ncl",
-        "relation": "shared_dir:validate-action/.machine_readable/contractiles/intend",
+        "from": "validate-action/.machine_readable/contractiles/dust/dust.ncl",
+        "to": "validate-action/.machine_readable/contractiles/dust/dust.k9.ncl",
+        "relation": "shared_dir:validate-action/.machine_readable/contractiles/dust",
         "weight": 1.0
       },
       {
@@ -662,9 +650,21 @@
         "weight": 1.0
       },
       {
+        "from": "members/tooling/scm2a2ml/src/lib.rs",
+        "to": "members/tooling/scm2a2ml/src/main.rs",
+        "relation": "shared_dir:members/tooling/scm2a2ml/src",
+        "weight": 1.0
+      },
+      {
         "from": "deno/src/A2ML_Parser.affine",
         "to": "deno/src/A2ML_Types.affine",
         "relation": "shared_dir:deno/src",
+        "weight": 1.0
+      },
+      {
+        "from": "validate-action/.machine_readable/contractiles/intend/intend.k9.ncl",
+        "to": "validate-action/.machine_readable/contractiles/intend/intend.ncl",
+        "relation": "shared_dir:validate-action/.machine_readable/contractiles/intend",
         "weight": 1.0
       },
       {
@@ -674,15 +674,21 @@
         "weight": 1.0
       },
       {
-        "from": "validate-action/.machine_readable/contractiles/dust/dust.ncl",
-        "to": "validate-action/.machine_readable/contractiles/dust/dust.k9.ncl",
-        "relation": "shared_dir:validate-action/.machine_readable/contractiles/dust",
+        "from": "rs/src/parser.rs",
+        "to": "rs/src/renderer.rs",
+        "relation": "shared_dir:rs/src",
         "weight": 1.0
       },
       {
-        "from": "validate-action/.machine_readable/contractiles/trust/trust.ncl",
-        "to": "validate-action/.machine_readable/contractiles/trust/trust.k9.ncl",
-        "relation": "shared_dir:validate-action/.machine_readable/contractiles/trust",
+        "from": "rs/src/renderer.rs",
+        "to": "rs/src/error.rs",
+        "relation": "shared_dir:rs/src",
+        "weight": 1.0
+      },
+      {
+        "from": "rs/src/error.rs",
+        "to": "rs/src/types.rs",
+        "relation": "shared_dir:rs/src",
         "weight": 1.0
       },
       {
@@ -690,17 +696,43 @@
         "to": "validate-action/.machine_readable/contractiles/must/must.k9.ncl",
         "relation": "shared_dir:validate-action/.machine_readable/contractiles/must",
         "weight": 1.0
-      },
-      {
-        "from": "members/tooling/scm2a2ml/src/lib.rs",
-        "to": "members/tooling/scm2a2ml/src/main.rs",
-        "relation": "shared_dir:members/tooling/scm2a2ml/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "members/tooling/scm2a2ml/src/main.rs",
+          "members/tooling/a2ml-estate-normaliser/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "members/tooling/scm2a2ml/src/main.rs",
+          "members/tooling/a2ml-estate-normaliser/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "haskell/bench/Main.hs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Cpu"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -733,49 +765,6 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "haskell/bench/Main.hs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "members/tooling/scm2a2ml/src/main.rs",
-          "members/tooling/a2ml-estate-normaliser/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "rs/src/parser.rs",
-          "members/tooling/a2ml-estate-normaliser/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "members/tooling/scm2a2ml/src/main.rs",
-          "members/tooling/a2ml-estate-normaliser/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -788,6 +777,17 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "rs/src/parser.rs",
+          "members/tooling/a2ml-estate-normaliser/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

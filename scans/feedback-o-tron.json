@@ -767,11 +767,11 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "memory",
     "network",
     "concurrency",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -785,6 +785,12 @@
         "from": "elixir-mcp/lib/feedback_a_tron/synthesis/template_fetcher.ex",
         "to": "elixir-mcp/lib/feedback_a_tron/synthesis/template_cache.ex",
         "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron/synthesis",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/scripts/mcp_tcp_smoke_test.sh",
+        "to": "elixir-mcp/scripts/consent_bypass_check.sh",
+        "relation": "shared_dir:elixir-mcp/scripts",
         "weight": 1.0
       },
       {
@@ -842,18 +848,6 @@
         "weight": 1.0
       },
       {
-        "from": "elixir-mcp/scripts/mcp_tcp_smoke_test.sh",
-        "to": "elixir-mcp/scripts/consent_bypass_check.sh",
-        "relation": "shared_dir:elixir-mcp/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "elixir-mcp/test/escript_smoke_test.exs",
-        "to": "elixir-mcp/test/retry_test.exs",
-        "relation": "shared_dir:elixir-mcp/test",
-        "weight": 1.0
-      },
-      {
         "from": "elixir-mcp/lib/feedback_a_tron/credentials.ex",
         "to": "elixir-mcp/lib/feedback_a_tron/network_verifier.ex",
         "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron",
@@ -893,6 +887,12 @@
         "from": "elixir-mcp/lib/feedback_a_tron/retry.ex",
         "to": "elixir-mcp/lib/feedback_a_tron/secure_dns.ex",
         "relation": "shared_dir:elixir-mcp/lib/feedback_a_tron",
+        "weight": 1.0
+      },
+      {
+        "from": "elixir-mcp/test/escript_smoke_test.exs",
+        "to": "elixir-mcp/test/retry_test.exs",
+        "relation": "shared_dir:elixir-mcp/test",
         "weight": 1.0
       },
       {
@@ -1302,6 +1302,19 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -1320,9 +1333,9 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "AtomExhaustion",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
           "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
         ],
@@ -1330,20 +1343,7 @@
           "OTP",
           "WebServer"
         ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "julia-stats/src/FeedbackStats.jl"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "InputBoundary->Cpu"
+        "relation": "AtomExhaustion->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -1362,19 +1362,6 @@
           "WebServer"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "AtomExhaustion",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "elixir-mcp/lib/feedback_a_tron/credentials/file_store.ex"
-        ],
-        "frameworks": [
-          "OTP",
-          "WebServer"
-        ],
-        "relation": "AtomExhaustion->Memory"
       },
       {
         "source_category": "MutationGap",
@@ -1427,6 +1414,19 @@
           "WebServer"
         ],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "julia-stats/src/FeedbackStats.jl"
+        ],
+        "frameworks": [
+          "OTP",
+          "WebServer"
+        ],
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

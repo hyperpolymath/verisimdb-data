@@ -353,12 +353,30 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "disk",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
+        "to": "satellites/a2mliser/scripts/install-zig.sh",
+        "relation": "shared_dir:satellites/a2mliser/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/idris_emitter.rs",
+        "to": "src/abi/verify.rs",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/verify.rs",
+        "to": "src/abi/zig_ffi_parser.rs",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
       {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/scaffold.rs",
@@ -378,43 +396,15 @@
         "weight": 1.0
       },
       {
-        "from": "satellites/a2mliser/scripts/abi-ffi-gate.jl",
-        "to": "satellites/a2mliser/scripts/install-zig.sh",
-        "relation": "shared_dir:satellites/a2mliser/scripts",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/abi-ffi-gate.jl",
         "to": "scripts/install-zig.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/idris_emitter.rs",
-        "to": "src/abi/verify.rs",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/verify.rs",
-        "to": "src/abi/zig_ffi_parser.rs",
-        "relation": "shared_dir:src/abi",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/abi/idris_emitter.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -428,6 +418,30 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "satellites/a2mliser/src/manifest/mod.rs",
+          "src/abi/idris_emitter.rs",
+          "src/abi/verify.rs",
+          "src/manifest/mod.rs",
+          "src/scan/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/abi/idris_emitter.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -448,20 +462,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "satellites/a2mliser/src/manifest/mod.rs",
-          "src/abi/idris_emitter.rs",
-          "src/abi/verify.rs",
-          "src/manifest/mod.rs",
-          "src/scan/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

@@ -869,30 +869,18 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "cpu",
-    "concurrency",
+    "memory",
     "disk",
-    "memory"
+    "network",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "zoterho-template/RhodiumLinter.affine",
-        "to": "zoterho-template/bootstrap.affine",
-        "relation": "shared_dir:zoterho-template",
-        "weight": 1.0
-      },
-      {
-        "from": "zoterho-template/bootstrap.affine",
-        "to": "zoterho-template/ZoteRhoTemplate.affine",
-        "relation": "shared_dir:zoterho-template",
-        "weight": 1.0
-      },
-      {
-        "from": "zoterho-template/ZoteRhoTemplate.affine",
-        "to": "zoterho-template/Preferences.affine",
-        "relation": "shared_dir:zoterho-template",
+        "from": "zotpress/src/rescript/Utils.affine",
+        "to": "zotpress/src/rescript/Zotpress.affine",
+        "relation": "shared_dir:zotpress/src/rescript",
         "weight": 1.0
       },
       {
@@ -929,6 +917,24 @@
         "from": "rescript-templater/scripts/generate-sbom.sh",
         "to": "rescript-templater/scripts/verify-release.sh",
         "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "zoterho-template/RhodiumLinter.affine",
+        "to": "zoterho-template/bootstrap.affine",
+        "relation": "shared_dir:zoterho-template",
+        "weight": 1.0
+      },
+      {
+        "from": "zoterho-template/bootstrap.affine",
+        "to": "zoterho-template/ZoteRhoTemplate.affine",
+        "relation": "shared_dir:zoterho-template",
+        "weight": 1.0
+      },
+      {
+        "from": "zoterho-template/ZoteRhoTemplate.affine",
+        "to": "zoterho-template/Preferences.affine",
+        "relation": "shared_dir:zoterho-template",
         "weight": 1.0
       },
       {
@@ -983,12 +989,6 @@
         "from": "formbd/migration/src/sync.jl",
         "to": "formbd/migration/src/migrate.jl",
         "relation": "shared_dir:formbd/migration/src",
-        "weight": 1.0
-      },
-      {
-        "from": "zotpress/src/rescript/Utils.affine",
-        "to": "zotpress/src/rescript/Zotpress.affine",
-        "relation": "shared_dir:zotpress/src/rescript",
         "weight": 1.0
       },
       {
@@ -1423,7 +1423,7 @@
     "rows": [
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
+        "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
           "voyant-export/accessibility-tools/dashboard/scanner.js",
@@ -1432,32 +1432,7 @@
         "frameworks": [
           "WebServer"
         ],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "formbd/migration/bin/doi.jl",
-          "formbd/migration/bin/score.jl"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "fogbinder/src/wasm/crypto/src/lib.rs"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "UnsafeFFI",
@@ -1477,17 +1452,17 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
+          "formbd/migration/bin/doi.jl",
+          "formbd/migration/bin/score.jl"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "DynamicCodeExecution->Network"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -1517,6 +1492,31 @@
           "WebServer"
         ],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/wasm/crypto/src/lib.rs"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }

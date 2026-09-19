@@ -809,14 +809,38 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "network",
-    "memory",
     "cpu",
-    "disk"
+    "memory",
+    "disk",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/boj-health-check.sh",
+        "to": "scripts/check-shebang-first.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/check-shebang-first.sh",
+        "to": "scripts/hcg-surface-drift-check.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/hcg-surface-drift-check.sh",
+        "to": "scripts/hcg-spec-coverage-check.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/hcg-spec-coverage-check.sh",
+        "to": "scripts/hcg-policy-smoke.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "mcp-bridge/lib/otel.js",
         "to": "mcp-bridge/lib/api-clients.js",
@@ -854,27 +878,51 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/boj-health-check.sh",
-        "to": "scripts/check-shebang-first.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/abi/Boj/SafeHTTP.idr",
+        "to": "src/abi/Boj/SafePromptInjection.idr",
+        "relation": "shared_dir:src/abi/Boj",
         "weight": 1.0
       },
       {
-        "from": "scripts/check-shebang-first.sh",
-        "to": "scripts/hcg-surface-drift-check.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/abi/Boj/SafePromptInjection.idr",
+        "to": "src/abi/Boj/SafetyLemmas.idr",
+        "relation": "shared_dir:src/abi/Boj",
         "weight": 1.0
       },
       {
-        "from": "scripts/hcg-surface-drift-check.sh",
-        "to": "scripts/hcg-spec-coverage-check.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/abi/Boj/SafetyLemmas.idr",
+        "to": "src/abi/Boj/SafeCORS.idr",
+        "relation": "shared_dir:src/abi/Boj",
         "weight": 1.0
       },
       {
-        "from": "scripts/hcg-spec-coverage-check.sh",
-        "to": "scripts/hcg-policy-smoke.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/abi/Boj/SafeCORS.idr",
+        "to": "src/abi/Boj/Safety.idr",
+        "relation": "shared_dir:src/abi/Boj",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/Boj/Safety.idr",
+        "to": "src/abi/Boj/SafeWebSocket.idr",
+        "relation": "shared_dir:src/abi/Boj",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/Boj/SafeWebSocket.idr",
+        "to": "src/abi/Boj/SafeAPIKey.idr",
+        "relation": "shared_dir:src/abi/Boj",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/federation_multinode.sh",
+        "to": "tests/e2e_full.sh",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/fixtures/cartridges/feedback-mcp/ffi/cartridge_shim.zig",
+        "to": "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig",
+        "relation": "shared_dir:tests/fixtures/cartridges/feedback-mcp/ffi",
         "weight": 1.0
       },
       {
@@ -929,54 +977,6 @@
         "from": "ffi/zig/src/loader.zig",
         "to": "ffi/zig/src/abi_verify.zig",
         "relation": "shared_dir:ffi/zig/src",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/fixtures/cartridges/feedback-mcp/ffi/cartridge_shim.zig",
-        "to": "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig",
-        "relation": "shared_dir:tests/fixtures/cartridges/feedback-mcp/ffi",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/federation_multinode.sh",
-        "to": "tests/e2e_full.sh",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Boj/SafeHTTP.idr",
-        "to": "src/abi/Boj/SafePromptInjection.idr",
-        "relation": "shared_dir:src/abi/Boj",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Boj/SafePromptInjection.idr",
-        "to": "src/abi/Boj/SafetyLemmas.idr",
-        "relation": "shared_dir:src/abi/Boj",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Boj/SafetyLemmas.idr",
-        "to": "src/abi/Boj/SafeCORS.idr",
-        "relation": "shared_dir:src/abi/Boj",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Boj/SafeCORS.idr",
-        "to": "src/abi/Boj/Safety.idr",
-        "relation": "shared_dir:src/abi/Boj",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Boj/Safety.idr",
-        "to": "src/abi/Boj/SafeWebSocket.idr",
-        "relation": "shared_dir:src/abi/Boj",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Boj/SafeWebSocket.idr",
-        "to": "src/abi/Boj/SafeAPIKey.idr",
-        "relation": "shared_dir:src/abi/Boj",
         "weight": 1.0
       },
       {
@@ -1560,6 +1560,77 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "coord-tui/src/main.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "coord-tui/src/main.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/aspect_tests.sh",
+          "elixir/lib/boj_rest/js_worker.ex",
+          "elixir/lib/boj_rest/invoker.ex",
+          "elixir/lib/boj_rest/js_invoker.ex",
+          "scripts/maintenance/run-maintenance.sh"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "tests/aspect_security_test.zig"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "elixir/lib/boj_rest/js_worker.ex",
+          "elixir/lib/boj_rest/invoker.ex",
+          "elixir/lib/boj_rest/js_invoker.ex"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -1584,142 +1655,6 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "src/abi/Boj/SafetyLemmas.idr"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "ProofDrift->Memory"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "tests/aspect_security_test.zig"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/server.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/server.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "coord-tui/src/main.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "elixir/lib/boj_rest/js_worker.ex",
-          "elixir/lib/boj_rest/invoker.ex",
-          "elixir/lib/boj_rest/js_invoker.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "coord-tui/src/main.rs"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "mcp-bridge/lib/security.js"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/aspect_tests.sh",
-          "elixir/lib/boj_rest/js_worker.ex",
-          "elixir/lib/boj_rest/invoker.ex",
-          "elixir/lib/boj_rest/js_invoker.ex",
-          "scripts/maintenance/run-maintenance.sh"
-        ],
-        "frameworks": [
-          "WebServer",
-          "OTP"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -1736,6 +1671,19 @@
         "relation": "InsecureProtocol->Network"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/server.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 5.0,
@@ -1747,6 +1695,58 @@
           "OTP"
         ],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "mcp-bridge/lib/security.js"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "src/abi/Boj/SafetyLemmas.idr"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "ProofDrift->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "tests/fixtures/cartridges/feedback-mcp/ffi/feedback_ffi.zig"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/server.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
