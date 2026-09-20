@@ -150,7 +150,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 3326,
+    "total_lines": 3296,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 2,
@@ -235,24 +235,12 @@
   ],
   "recommended_attacks": [
     "memory",
+    "cpu",
     "network",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "tools/seamctl/src/validate.rs",
-        "to": "tools/seamctl/src/graph.rs",
-        "relation": "shared_dir:tools/seamctl/src",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/seamctl/src/graph.rs",
-        "to": "tools/seamctl/src/report.rs",
-        "relation": "shared_dir:tools/seamctl/src",
-        "weight": 1.0
-      },
       {
         "from": "services/seamstressd/test/runner_test.exs",
         "to": "services/seamstressd/test/e2e_test.exs",
@@ -264,22 +252,42 @@
         "to": "services/seamstressd/test/property_test.exs",
         "relation": "shared_dir:services/seamstressd/test",
         "weight": 1.0
+      },
+      {
+        "from": "tools/seamctl/src/validate.rs",
+        "to": "tools/seamctl/src/graph.rs",
+        "relation": "shared_dir:tools/seamctl/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/seamctl/src/graph.rs",
+        "to": "tools/seamctl/src/report.rs",
+        "relation": "shared_dir:tools/seamctl/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
+        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "services/seamstressd/lib/seamstressd/runner.ex",
-          "services/seamstressd/test/runner_test.exs",
-          "services/seamstressd/bench/runner_bench.exs"
+          "tools/seamctl/src/graph.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tools/seamctl/src/graph.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -294,40 +302,6 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tools/seamctl/src/validate.rs",
-          "tools/seamctl/src/graph.rs",
-          "tools/seamctl/src/report.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tools/seamctl/src/validate.rs",
-          "tools/seamctl/src/graph.rs",
-          "tools/seamctl/src/report.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tools/seamctl/src/graph.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -340,16 +314,6 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tools/seamctl/src/graph.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -359,6 +323,42 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tools/seamctl/src/validate.rs",
+          "tools/seamctl/src/graph.rs",
+          "tools/seamctl/src/report.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "services/seamstressd/lib/seamstressd/runner.ex",
+          "services/seamstressd/test/runner_test.exs",
+          "services/seamstressd/bench/runner_bench.exs"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tools/seamctl/src/validate.rs",
+          "tools/seamctl/src/graph.rs",
+          "tools/seamctl/src/report.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

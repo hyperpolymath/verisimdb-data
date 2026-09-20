@@ -403,30 +403,12 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "examples/05-web-server-stable.err",
-        "to": "examples/03-mutable-ripple.err",
-        "relation": "shared_dir:examples",
-        "weight": 1.0
-      },
-      {
-        "from": "examples/03-mutable-ripple.err",
-        "to": "examples/09-null-cascade.err",
-        "relation": "shared_dir:examples",
-        "weight": 1.0
-      },
-      {
-        "from": "error-pkg/src/install.rs",
-        "to": "error-pkg/src/resolve.rs",
-        "relation": "shared_dir:error-pkg/src",
-        "weight": 1.0
-      },
       {
         "from": "ide/src/MonacoBindings.affine",
         "to": "ide/src/Model.affine",
@@ -449,6 +431,30 @@
         "from": "ide/src/Update.affine",
         "to": "ide/src/Main.affine",
         "relation": "shared_dir:ide/src",
+        "weight": 1.0
+      },
+      {
+        "from": "levels/09-operators.err",
+        "to": "levels/03-unterminated-string.err",
+        "relation": "shared_dir:levels",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/05-web-server-stable.err",
+        "to": "examples/03-mutable-ripple.err",
+        "relation": "shared_dir:examples",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/03-mutable-ripple.err",
+        "to": "examples/09-null-cascade.err",
+        "relation": "shared_dir:examples",
+        "weight": 1.0
+      },
+      {
+        "from": "error-pkg/src/install.rs",
+        "to": "error-pkg/src/resolve.rs",
+        "relation": "shared_dir:error-pkg/src",
         "weight": 1.0
       },
       {
@@ -546,36 +552,20 @@
         "to": "compiler/src/TypeChecker.affine",
         "relation": "shared_dir:compiler/src",
         "weight": 1.0
-      },
-      {
-        "from": "levels/09-operators.err",
-        "to": "levels/03-unterminated-string.err",
-        "relation": "shared_dir:levels",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "error-pkg/src/types.rs"
+          "compiler/error-wasm/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "error-pkg/src/types.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -588,14 +578,24 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "compiler/error-wasm/src/lib.rs"
+          "error-pkg/src/types.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "error-pkg/src/types.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PathTraversal",

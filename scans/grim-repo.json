@@ -397,7 +397,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 12870,
+    "total_lines": 12842,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -558,13 +558,19 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
+    "memory",
     "cpu",
     "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/src/scripts/aibdp/AibdpChecker.mjs",
+        "to": "scripts/src/scripts/aibdp/AibdpChecker.res.mjs",
+        "relation": "shared_dir:scripts/src/scripts/aibdp",
+        "weight": 1.0
+      },
       {
         "from": "scripts/src/core/GrimCore.res.mjs",
         "to": "scripts/src/core/GrimCore.mjs",
@@ -600,17 +606,23 @@
         "to": "scripts/src/scripts/license/GrimLicenseChecker.mjs",
         "relation": "shared_dir:scripts/src/scripts/license",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/src/scripts/aibdp/AibdpChecker.mjs",
-        "to": "scripts/src/scripts/aibdp/AibdpChecker.res.mjs",
-        "relation": "shared_dir:scripts/src/scripts/aibdp",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/userscripts/GrimSecurityScanner.user.js",
+          "scripts/src/scripts/security/GrimSecurityScanner.mjs",
+          "scripts/src/scripts/security/GrimSecurityScanner.res.mjs"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
@@ -649,20 +661,6 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/userscripts/GrimTemplateEngine.user.js",
-          "scripts/src/core/GrimCore.res.mjs",
-          "scripts/src/core/GrimCore.mjs",
-          "scripts/src/scripts/template/GrimTemplateEngine.res.mjs",
-          "scripts/src/scripts/template/GrimTemplateEngine.mjs"
-        ],
-        "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -697,16 +695,18 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "InputBoundary",
         "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "scripts/userscripts/GrimSecurityScanner.user.js",
-          "scripts/src/scripts/security/GrimSecurityScanner.mjs",
-          "scripts/src/scripts/security/GrimSecurityScanner.res.mjs"
+          "scripts/userscripts/GrimTemplateEngine.user.js",
+          "scripts/src/core/GrimCore.res.mjs",
+          "scripts/src/core/GrimCore.mjs",
+          "scripts/src/scripts/template/GrimTemplateEngine.res.mjs",
+          "scripts/src/scripts/template/GrimTemplateEngine.mjs"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }
