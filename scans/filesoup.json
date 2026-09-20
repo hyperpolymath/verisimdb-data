@@ -145,7 +145,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 5723,
+    "total_lines": 5695,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 30,
@@ -281,10 +281,10 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "network",
+    "disk",
     "memory",
-    "disk"
+    "cpu",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -305,6 +305,16 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/verify-rsr.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -314,6 +324,21 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "plugins/duplicate-finder/src/lib.rs",
+          "plugins/version-detection/src/lib.rs",
+          "plugins/secret-scanner/src/lib.rs",
+          "crates/fslint-plugin-sdk/src/lib.rs",
+          "crates/fslint-cli/src/output.rs",
+          "crates/fslint-cli/src/query.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -331,17 +356,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "plugins/secret-scanner/src/lib.rs",
-          "crates/fslint-cli/tests/integration_test.rs"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -354,16 +368,6 @@
       },
       {
         "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/verify-rsr.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
@@ -373,19 +377,15 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "plugins/duplicate-finder/src/lib.rs",
-          "plugins/version-detection/src/lib.rs",
           "plugins/secret-scanner/src/lib.rs",
-          "crates/fslint-plugin-sdk/src/lib.rs",
-          "crates/fslint-cli/src/output.rs",
-          "crates/fslint-cli/src/query.rs"
+          "crates/fslint-cli/tests/integration_test.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

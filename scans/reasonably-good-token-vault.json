@@ -66,7 +66,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 2408,
+    "total_lines": 2380,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 11,
@@ -120,9 +120,9 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": []
@@ -130,24 +130,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "rgtv-cli/src/main.rs"
+          "vault-broker/src/main.rs",
+          "rgtv-cli/src/main.rs",
+          "vault-worker/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "rgtv-cli/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -172,16 +164,24 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "ResourceLeak",
         "sink_axis": "memory",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "vault-broker/src/main.rs",
-          "rgtv-cli/src/main.rs",
-          "vault-worker/src/lib.rs"
+          "rgtv-cli/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "ResourceLeak->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "rgtv-cli/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

@@ -56,7 +56,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 10511,
+    "total_lines": 10483,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -281,14 +281,32 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "concurrency",
+    "cpu",
     "network",
+    "memory",
     "disk",
-    "cpu"
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
+        "to": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
+        "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "weight": 1.0
+      },
+      {
+        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
+        "to": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
+        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
+        "weight": 1.0
+      },
       {
         "from": "crates/neurophone-core/tests/aspect_concurrency.rs",
         "to": "crates/neurophone-core/tests/lifecycle.rs",
@@ -311,24 +329,6 @@
         "from": "scripts/setup.sh",
         "to": "scripts/build-android.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/NeurophoneBridge.java",
-        "to": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
-        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/NeurophoneService.java",
-        "to": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
-        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
-        "weight": 1.0
-      },
-      {
-        "from": "android/app/src/main/java/ai/neurophone/BootReceiver.java",
-        "to": "android/app/src/main/java/ai/neurophone/NeurophoneActivity.java",
-        "relation": "shared_dir:android/app/src/main/java/ai/neurophone",
         "weight": 1.0
       },
       {
@@ -615,19 +615,6 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "crates/claude-client/src/egress_gate.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "Concurrent"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -639,6 +626,19 @@
           "Concurrent"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "crates/claude-client/src/egress_gate.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "Concurrent"
+        ],
+        "relation": "HardcodedSecret->Network"
       }
     ]
   }

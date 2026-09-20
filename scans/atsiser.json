@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "atsiser",
-  "language": "rust",
+  "language": "idris",
   "frameworks": [],
   "weak_points": [
     {
@@ -199,18 +199,12 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "memory",
     "disk",
-    "memory"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/abi-ffi-gate.py",
-        "to": "scripts/install-zig.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
       {
         "from": "src/codegen/compiler.rs",
         "to": "src/codegen/parser.rs",
@@ -228,11 +222,28 @@
         "to": "src/codegen/ats_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "scripts/abi-ffi-gate.py",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/manifest/mod.rs",
+          "src/codegen/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
@@ -243,6 +254,16 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UncheckedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "examples/safe-malloc/include/stdlib_subset.h"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -263,27 +284,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/manifest/mod.rs",
-          "src/codegen/parser.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UncheckedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "examples/safe-malloc/include/stdlib_subset.h"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedAllocation->Memory"
       }
     ]
   }

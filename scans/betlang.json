@@ -302,7 +302,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 32968,
+    "total_lines": 32940,
     "unsafe_blocks": 70,
     "panic_sites": 51,
     "unwrap_calls": 112,
@@ -656,10 +656,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "network",
-    "cpu",
     "disk",
+    "cpu",
+    "memory",
     "concurrency"
   ],
   "dependency_graph": {
@@ -668,12 +668,6 @@
         "from": "tools/bet-cli/src/main.rs",
         "to": "tools/bet-cli/src/repl.rs",
         "relation": "shared_dir:tools/bet-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": "bindings/julia/src/lib.rs",
-        "to": "bindings/julia/src/Betlang.jl",
-        "relation": "shared_dir:bindings/julia/src",
         "weight": 1.0
       },
       {
@@ -716,6 +710,12 @@
         "from": "compiler/bet-syntax/src/pretty.rs",
         "to": "compiler/bet-syntax/src/symbol.rs",
         "relation": "shared_dir:compiler/bet-syntax/src",
+        "weight": 1.0
+      },
+      {
+        "from": "bindings/julia/src/lib.rs",
+        "to": "bindings/julia/src/Betlang.jl",
+        "relation": "shared_dir:bindings/julia/src",
         "weight": 1.0
       },
       {
@@ -1119,49 +1119,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ui/public/app.js",
-          "repl/shell.rkt"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "DynamicCodeExecution->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "ui/launcher/keepopen.sh",
-          "repl/shell.rkt"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "ui/INSTALL.sh",
-          "ui/launcher/keepopen.sh",
-          "ui/launcher/betlang-playground.sh"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -1193,22 +1150,17 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
         "files": [
-          "bindings/julia/src/lib.rs",
-          "bindings/chapel/src/lib.rs",
-          "compiler/bet-check/src/lib.rs",
-          "compiler/bet-parse/src/tests.rs",
-          "compiler/bet-syntax/src/symbol.rs",
-          "compiler/bet-wasm/src/lib.rs"
+          "repl/shell.rkt"
         ],
         "frameworks": [
           "Concurrent",
           "Networking"
         ],
-        "relation": "PanicPath->Memory"
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -1227,6 +1179,22 @@
           "Networking"
         ],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "bindings/julia/src/lib.rs",
+          "bindings/julia/src/lib.rs",
+          "bindings/chapel/src/lib.rs",
+          "bindings/chapel/src/lib.rs"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Concurrency"
       },
       {
         "source_category": "UnsafeFFI",
@@ -1255,6 +1223,35 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "ui/INSTALL.sh",
+          "ui/launcher/keepopen.sh",
+          "ui/launcher/betlang-playground.sh"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "ui/launcher/keepopen.sh",
+          "repl/shell.rkt"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -1287,6 +1284,20 @@
       },
       {
         "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ui/public/app.js",
+          "repl/shell.rkt"
+        ],
+        "frameworks": [
+          "Concurrent",
+          "Networking"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
@@ -1299,33 +1310,22 @@
         "relation": "DynamicCodeExecution->Network"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "bindings/julia/src/lib.rs",
           "bindings/julia/src/lib.rs",
           "bindings/chapel/src/lib.rs",
-          "bindings/chapel/src/lib.rs"
+          "compiler/bet-check/src/lib.rs",
+          "compiler/bet-parse/src/tests.rs",
+          "compiler/bet-syntax/src/symbol.rs",
+          "compiler/bet-wasm/src/lib.rs"
         ],
         "frameworks": [
           "Concurrent",
           "Networking"
         ],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "repl/shell.rkt"
-        ],
-        "frameworks": [
-          "Concurrent",
-          "Networking"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

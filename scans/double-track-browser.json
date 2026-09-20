@@ -166,7 +166,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 12285,
+    "total_lines": 12257,
     "unsafe_blocks": 106,
     "panic_sites": 1,
     "unwrap_calls": 46,
@@ -418,17 +418,53 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "memory",
     "disk",
-    "cpu"
+    "cpu",
+    "memory",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
+        "from": "lib/ocaml/Background.affine",
+        "to": "lib/ocaml/DomBindings.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/DomBindings.affine",
+        "to": "lib/ocaml/Chrome.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Chrome.affine",
+        "to": "lib/ocaml/Storage.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Storage.affine",
+        "to": "lib/ocaml/Content.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
         "from": "tests/affine/extension_lifecycle_test.affine",
         "to": "tests/affine/driver.affine",
         "relation": "shared_dir:tests/affine",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/build.sh",
+        "to": "scripts/build.affine",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/bindings/DomBindings.affine",
+        "to": "src/bindings/Chrome.affine",
+        "relation": "shared_dir:src/bindings",
         "weight": 1.0
       },
       {
@@ -460,42 +496,6 @@
         "to": "rust_core/src/profile.rs",
         "relation": "shared_dir:rust_core/src",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/build.sh",
-        "to": "scripts/build.affine",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Background.affine",
-        "to": "lib/ocaml/DomBindings.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/DomBindings.affine",
-        "to": "lib/ocaml/Chrome.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Chrome.affine",
-        "to": "lib/ocaml/Storage.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Storage.affine",
-        "to": "lib/ocaml/Content.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "src/bindings/DomBindings.affine",
-        "to": "src/bindings/Chrome.affine",
-        "relation": "shared_dir:src/bindings",
-        "weight": 1.0
       }
     ]
   },
@@ -503,24 +503,13 @@
     "rows": [
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
+        "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
           "src/dashboard/Dashboard.res.js"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "tests/aspect/security_test.affine",
-          "tests/property/extension_properties_test.affine"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "DynamicCodeExecution->Memory"
       },
       {
         "source_category": "UnsafeFFI",
@@ -538,18 +527,14 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
         "files": [
-          "rust_core/src/schedule.rs",
-          "rust_core/src/lib.rs",
-          "rust_core/src/interests.rs",
-          "rust_core/src/form_data.rs",
-          "rust_core/src/profile.rs"
+          "src/dashboard/Dashboard.res.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "PanicPath",
@@ -566,14 +551,29 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "src/dashboard/Dashboard.res.js"
+          "tests/aspect/security_test.affine",
+          "tests/property/extension_properties_test.affine"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rust_core/src/schedule.rs",
+          "rust_core/src/lib.rs",
+          "rust_core/src/interests.rs",
+          "rust_core/src/form_data.rs",
+          "rust_core/src/profile.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       }
     ]
   }

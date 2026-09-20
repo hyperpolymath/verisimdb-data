@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "session-sentinel",
-  "language": "affinescript",
+  "language": "zig",
   "frameworks": [],
   "weak_points": [
     {
@@ -50,7 +50,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 13378,
+    "total_lines": 13350,
     "unsafe_blocks": 15,
     "panic_sites": 1,
     "unwrap_calls": 0,
@@ -282,10 +282,10 @@
   ],
   "recommended_attacks": [
     "disk",
-    "network",
-    "concurrency",
     "cpu",
-    "memory"
+    "concurrency",
+    "memory",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -305,6 +305,12 @@
         "from": "src/interface/ffi/src/main.zig",
         "to": "src/interface/ffi/src/dbus.zig",
         "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/validate.test.deno.js",
+        "to": "tests/validate.test.affine",
+        "relation": "shared_dir:tests",
         "weight": 1.0
       },
       {
@@ -384,37 +390,11 @@
         "to": "src/core/providers.affine",
         "relation": "shared_dir:src/core",
         "weight": 1.0
-      },
-      {
-        "from": "tests/validate.test.deno.js",
-        "to": "tests/validate.test.affine",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/interface/ffi/src/icons.zig"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/interface/ffi/src/dbus.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
@@ -434,6 +414,26 @@
         ],
         "frameworks": [],
         "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/interface/ffi/src/dbus.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/interface/ffi/src/icons.zig"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }
