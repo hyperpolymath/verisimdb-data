@@ -64,6 +64,12 @@ jobs:
       - name: Check for Ruby (banned for this estate; adapters only)
         run: |
           set -euo pipefail
+          # `explore` is an SSG-family repository: Ruby/Jekyll is its product,
+          # not an incidental estate tool. Its exemption is recorded in ADR-0002.
+          if case "${GITHUB_REPOSITORY:-}" in explore|*/explore) true ;; *) false ;; esac; then
+            echo "✅ Ruby policy exempted: explore is an SSG-family repository"
+            exit 0
+          fi
           # Ruby is a banned implementation language. The only permitted Ruby is an
           # *adapter* that lets a Ruby host application call into estate code, and it
           # must declare itself as one by living under bindings/|integrations/|adapters/.
@@ -97,6 +103,12 @@ jobs:
       - name: Check for Ruby on the build path
         run: |
           set -euo pipefail
+          # `explore` is an SSG-family repository: its Jekyll build is the
+          # product and is exempt by ADR-0002, including its CI runtime.
+          if case "${GITHUB_REPOSITORY:-}" in explore|*/explore) true ;; *) false ;; esac; then
+            echo "✅ Ruby CI policy exempted: explore is an SSG-family repository"
+            exit 0
+          fi
           # A repo can pass the file audit and still boot Ruby in CI — that is
           # exactly the shape this estate's dependabot noise came from: a bump PR
           # for ruby/setup-ruby in a repo with nothing Ruby left to build. So the
