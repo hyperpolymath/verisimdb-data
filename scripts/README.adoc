@@ -118,3 +118,68 @@ mix run test_integration.exs
 
 This will: - Load all scans from verisimdb-data - Generate Logtalk facts
 - Show summary statistics
+
+=== Pages and policy scripts
+
+==== `+build-site.mjs+`
+
+Builds the GitHub Pages site into `+_site/+` from the publish allowlist in
+`+site.json+`. Runs under Bun (tier 1) or Node >= 18; zero dependencies, so
+there is no lockfile and no package-manager tier for `+runtime-policy.yml+` to
+police. It exists because Ruby is a banned language for this estate: the
+workflows it replaced ran `+ruby/setup-ruby+` and
+`+actions/jekyll-build-pages+`.
+
+*Usage:*
+
+[source,bash]
+----
+just site-check                     # plan only, write nothing
+just site                           # build _site/
+just site-verify                    # two builds must agree on the digest
+node scripts/build-site.mjs --baseurl /verisimdb-data   # project-page prefix
+----
+
+*Contract:* only allowlisted paths are published; symlinks are never followed
+out of the repo; a missing `+"required": true+` source fails the build; and a
+copy that would land `+index.html+` at the site root fails the build with an
+explanation, because `+/+` on this origin serves `+index.json+` — a root
+`+index.html+` would take it over and change the content type consumers see.
+The human hub is therefore written to `+hub/index.html+` (or wherever
+`+"index_page"+` says). `+pages.yml+` guards the same property again after
+building, so a mistake fails in CI even if the build was skipped; failing in
+`+just site+` as well is what keeps it from being a surprise.
+
+*Config:* `+copy+` entries are `+{"from": path, "to": dir, "required": bool}+`,
+and a bare string is accepted as `+{"from": string, "to": "."}+`. Paths are
+resolved against the repo root — not the caller's working directory — and
+absolute paths, `+..+` and globs are rejected as config errors rather than
+sanitised, so `+--config+`/`+--out+` are relative to the repo too. Every other
+malformed entry is reported as `+build-site: config copy[N]: expected a string or
+{from,to}, got ...+`; a stack trace out of a build script is how a repo ends up
+with a hand-rolled publisher nobody trusts.
+
+==== `+estate-ruby-exit.mjs+`
+
+Applies the mechanical half of the estate's Ruby exit to *another* repo: deletes
+the Jekyll Pages workflows, writes the three replacement files from this repo
+(`+--assets-dir+`, default: this checkout), strips Ruby pins from
+`+actions.lock+`, and adds the Dependabot ignores. Dry run by default. It
+refuses to touch a repo whose Ruby is behaviour rather than plumbing —
+`+rspec+`, `+rubocop+`, `+bundle exec rake+` — because deleting a test suite to
+make a gate green is not a conversion.
+
+*Usage:*
+
+[source,bash]
+----
+node scripts/estate-ruby-exit.mjs ../filesoup              # classify only
+node scripts/estate-ruby-exit.mjs ../filesoup --apply      # write, review, commit
+node scripts/estate-ruby-exit.mjs --all ~/hyperpolymath-repos
+----
+
+The exemption rules are shared with
+`+.github/workflows/rsr-antipattern.yml+` (adapters under
+`+bindings/*/ruby/+`, `+integrations/*/ruby/+`, `+adapters/*/ruby/+`; Homebrew
+formulae; vendored mirrors). Keep the two in sync, or a repo the tool "fixed"
+will still fail CI.

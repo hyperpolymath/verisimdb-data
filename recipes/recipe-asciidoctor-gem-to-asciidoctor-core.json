@@ -1,0 +1,28 @@
+{
+  "action": "substitute_text",
+  "auto_fixable": false,
+  "confidence": 0.8,
+  "description": "Replace the Ruby AsciiDoc toolchain (asciidoctor, asciidoctor-diagram, asciidoctor-rouge, asciidoctor-pdf, rouge gems installed over ruby/setup-ruby) with @asciidoctor/core under Bun/Node, the same upstream engine ported to JS, or with publishing AsciiDoc source when no rendered surface is required. Ruby is a banned language for the estate (verisimdb-data ADR-0002).",
+  "failed_fixes": 0,
+  "false_positives": 0,
+  "fix_script": null,
+  "id": "recipe-asciidoctor-gem-to-asciidoctor-core",
+  "languages": [
+    "ruby",
+    "yaml",
+    "shell"
+  ],
+  "match": "'gem install asciidoctor' (any variant) in a CI step, or a docs job whose only toolchain is ruby/setup-ruby",
+  "pattern_ids": [
+    "PA121-ruby-on-build-path"
+  ],
+  "proven_module": null,
+  "replacement": "bun add -D @asciidoctor/core && bun scripts/render-docs.mjs (or publish .adoc source via scripts/build-site.mjs and drop the render step); keep asciidoctor-diagram equivalents only if a JS plugin exists, otherwise move diagrams to pre-rendered SVG committed as data",
+  "successful_fixes": 0,
+  "total_attempts": 0,
+  "triangle_tier": "substitute",
+  "notes": [
+    "PDF output and PlantUML/Mermaid diagram blocks have no drop-in @asciidoctor/core equivalent; those two features are why hypatia still boots Ruby. Decide per repo: drop PDF, pre-render diagrams, or take a written exception — do not keep Ruby as the default answer.",
+    "A JS render adds a lockfile: keep exactly one package manager (runtime-policy.yml fails mixed toolchains)."
+  ]
+}

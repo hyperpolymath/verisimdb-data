@@ -110,7 +110,6 @@ jobs:
           has_go=$(find . -name "*.go" -path "*/src/*" -o -path "*/cmd/*" -o -path "*/pkg/*" 2>/dev/null | head -1)
           has_rs=$(find . -name "*.rs" -path "*/src/*" 2>/dev/null | head -1)
           has_java=$(find . -name "*.java" -path "*/src/*" 2>/dev/null | head -1)
-          has_rb=$(find . -name "*.rb" -path "*/lib/*" -o -path "*/app/*" 2>/dev/null | head -1)
 
           echo "Detected languages:"
           [ -n "$has_js" ] && echo "  - javascript-typescript"
@@ -118,7 +117,12 @@ jobs:
           [ -n "$has_go" ] && echo "  - go"
           [ -n "$has_rs" ] && echo "  - rust (note: CodeQL rust is limited)"
           [ -n "$has_java" ] && echo "  - java-kotlin"
-          [ -n "$has_rb" ] && echo "  - ruby"
+          # Ruby is deliberately absent from the matrix. It is a banned
+          # implementation language for this estate, so "add ruby to CodeQL"
+          # is never the right fix for a finding here — removing the Ruby is.
+          # rsr-antipattern.yml owns that check; this lane only refuses to
+          # launder Ruby back in through a security-tooling config.
+          # See docs/decisions/ADR-0002-ruby-banned-except-adapters.adoc.
 
           # Check for over-reach
           if grep -q "language:.*'go'" .github/workflows/codeql.yml && [ -z "$has_go" ]; then
@@ -130,8 +134,12 @@ jobs:
           if grep -q "language:.*'java'" .github/workflows/codeql.yml && [ -z "$has_java" ]; then
             echo "WARNING: CodeQL configured for Java but no Java files found"
           fi
-          if grep -q "language:.*'ruby'" .github/workflows/codeql.yml && [ -z "$has_rb" ]; then
-            echo "WARNING: CodeQL configured for Ruby but no Ruby files found"
+          if grep -q "language:.*'ruby'" .github/workflows/codeql.yml; then
+            echo "ERROR: CodeQL is configured for Ruby."
+            echo "Ruby is banned for this estate (ADR-0002). Do not widen analysis to"
+            echo "cover it — remove the Ruby from the matrix and delete the source, or"
+            echo "relocate it under bindings/*/ruby/ if it is genuinely an adapter."
+            exit 1
           fi
 
           echo "CodeQL check complete"

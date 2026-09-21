@@ -1,0 +1,117 @@
+# SPDX-License-Identifier: MPL-2.0
+# This workflow is managed by gh actions-lock.
+#
+# Pages deploy for verisimdb-data — Ruby-free by policy.
+#
+# Replaces two retired workflows, both of which put Ruby on the critical path:
+#   * jekyll.yml           — ruby/setup-ruby + `bundle exec jekyll build`. It had no
+#                            Gemfile to bundle against and failed with startup_failure
+#                            on every push to main (last observed 2026-09-21).
+#   * jekyll-gh-pages.yml  — actions/jekyll-build-pages, a container whose only job is
+#                            to run Jekyll (Ruby). It published the whole repository tree.
+#
+# The build is now scripts/build-site.mjs, run under Bun (tier 1 per LANGUAGE-POLICY §1)
+# with a Node >= 18 fallback. Zero dependencies, so no lockfile and no package-manager
+# tier to reconcile with runtime-policy.yml. Publish surface is the allowlist in
+# site.json. Ruby is banned for this estate; see docs/decisions/ADR-0002.
+name: Deploy Pages site
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "index.json"
+      - "scans/**"
+      - "dispatch/**"
+      - "outcomes/**"
+      - "patterns/**"
+      - "recipes/**"
+      - "health/**"
+      - "policy/**"
+      - "docs/**"
+      - "www/**"
+      - "README.adoc"
+      - "LICENSE"
+      - "site.json"
+      - "scripts/build-site.mjs"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v6.0.0
+
+      - name: Build site and prove reproducibility
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: |
+          set -euo pipefail
+          if command -v bun >/dev/null 2>&1; then
+            runtime="bun run"
+          else
+            runtime="node"
+          fi
+          echo "build runtime: $runtime (Bun tier 1; Node >= 18 is the preinstalled fallback)"
+          $runtime scripts/build-site.mjs --baseurl "$BASE_PATH" | tee /tmp/build-1.log
+          rm -rf _site
+          $runtime scripts/build-site.mjs --baseurl "$BASE_PATH" | tee /tmp/build-2.log
+          first=$(sed -n 's/.*\(sha256=[0-9a-f]\{64\}\).*/\1/p' /tmp/build-1.log | head -1)
+          second=$(sed -n 's/.*\(sha256=[0-9a-f]\{64\}\).*/\1/p' /tmp/build-2.log | head -1)
+          if [ -z "$first" ] || [ "$first" != "$second" ]; then
+            echo "::error::site build is not reproducible ($first vs $second)"
+            exit 1
+          fi
+          echo "reproducible site build: $first"
+
+      - name: Guard the machine-readable root
+        run: |
+          set -euo pipefail
+          # '/' on this site is an API endpoint: GitHub Pages serves index.json as the
+          # directory index, and a root index.html would take that over and change the
+          # content type consumers see. The human hub lives at /hub/ instead.
+          if [ -e _site/index.html ]; then
+            echo "::error::refusing to publish _site/index.html; '/' must serve index.json"
+            exit 1
+          fi
+          for required in index.json .well-known/security.txt; do
+            if [ ! -f "_site/$required" ]; then
+              echo "::error::required published path missing from the build: $required"
+              exit 1
+            fi
+          done
+          echo "publish surface OK ($(find _site -type f | wc -l | tr -d ' ') files)"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: _site
+          # upload-pages-artifact strips dot-entries by default (its tar runs
+          # --exclude=.[^/]*), which silently removes .well-known/ and .nojekyll.
+          include-hidden-files: true
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1

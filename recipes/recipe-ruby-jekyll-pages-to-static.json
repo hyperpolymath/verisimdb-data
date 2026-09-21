@@ -1,0 +1,29 @@
+{
+  "action": "substitute_workflow",
+  "auto_fixable": true,
+  "confidence": 0.9,
+  "description": "Retire Jekyll-based GitHub Pages builds: delete the ruby/setup-ruby + actions/jekyll-build-pages workflows and publish from an explicit allowlist with scripts/build-site.mjs (Bun tier 1, Node >= 18 fallback). Ruby is a banned language for the estate; the Pages lane is where it hid. See verisimdb-data ADR-0002.",
+  "failed_fixes": 0,
+  "false_positives": 0,
+  "fix_script": null,
+  "id": "recipe-ruby-jekyll-pages-to-static",
+  "languages": [
+    "ruby",
+    "yaml",
+    "shell"
+  ],
+  "match": ".github/workflows/*.yml containing 'ruby/setup-ruby', 'actions/jekyll-build-pages', 'bundle exec jekyll', or a Jekyll '_site' upload",
+  "pattern_ids": [
+    "PA121-ruby-on-build-path"
+  ],
+  "proven_module": null,
+  "replacement": ".github/workflows/pages.yml running 'bun run scripts/build-site.mjs' (node fallback), site.json publish allowlist, '.nojekyll' marker, upload-pages-artifact with include-hidden-files: true, and actions.lock regenerated so no ruby/* pin survives",
+  "successful_fixes": 0,
+  "total_attempts": 0,
+  "triangle_tier": "eliminate",
+  "notes": [
+    "Verify before replacing: if '/' on the current site serves index.json (GitHub Pages falls back to index.json for a directory index), do NOT emit a root index.html — put the human hub at /hub/.",
+    "Measure the live URL surface first (curl -o /dev/null -w '%{http_code}' per path) and carry forward the data endpoints; the Jekyll mirror's incidental exposure of repo-internal files is deliberately not preserved.",
+    "Also add ruby/setup-ruby and actions/jekyll-build-pages to dependabot.yml ignores, or the bump PRs keep arriving for pins that should be deleted."
+  ]
+}
