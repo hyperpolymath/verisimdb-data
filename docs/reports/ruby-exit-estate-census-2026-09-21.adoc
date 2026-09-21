@@ -186,10 +186,10 @@ worse than no tool.
 `explore` pins `gem "github-pages", "~> 232", group: :jekyll_plugins`, and its
 Rakefile drives Jekyll, rubocop and minitest. Ruby there is not the
 implementation language, it is the *platform*: Jekyll plugins are Ruby by
-construction. Either treat `explore` as SSG-family (exempt, with a named owner
-and a reason recorded) or move the behaviour into the publisher and retire the
-gem. Option 2 is the only one consistent with "Ruby is banned"; it is also a
-real project, so schedule it instead of smuggling it into a cleanup PR.
+construction. Recorded after the census: treat `explore` as SSG-family
+(exempt). The RSR gate skips both Ruby checks when `GITHUB_REPOSITORY` names
+`explore`. Converting it to a different SSG remains a separate project, not
+cleanup.
 
 == C. Permitted, and staying that way — 154 artefacts
 
@@ -198,11 +198,26 @@ real project, so schedule it instead of smuggling it into a cleanup PR.
 
 | proven-servers | 104 | `bindings/ruby/lib/proven_servers/**` — adapter, named in the policy
 | proven | 32 | `bindings/ruby/lib/proven/**`, `bindings/mustache/helpers/proven-helpers.rb` — adapter
-| palimpsest-license | 6 | `integrations/server/ruby/**` — adapter-shaped; *needs a yes/no*, ADR-0002 open question 1
+| palimpsest-license | 6 | `integrations/server/ruby/**` — adapter, accepted after census (ADR-0002)
 | standards | 6 | `rhodium-standard-repositories/satellites/palimpsest-license/**` — vendored mirror
 | boj-server, bunsenite, cloud-sync-tuner, k9-ecosystem, homebrew-tap, academic-workflow-suite | 6 | Homebrew formulae: the format *is* a Ruby DSL, so "convert" is not an available action — retire them for Guix, or accept them as packaging metadata
 
 |===
+
+== Decisions after the census
+
+The census is retained as the 2026-09-21 baseline; the following decisions change
+policy disposition without rewriting that historical scan:
+
+* `palimpsest-license` is accepted as an adapter exemption. All six Ruby files
+  are under `integrations/server/ruby/`, and the gemspec identifies a Ruby/Rails
+  integration.
+* `awesome-coq` and `awesome-ipfs` retire `awesome_bot` and use the pinned,
+  non-Ruby `lycheeverse/lychee-action` link checker instead. Their repository-
+  specific link exclusions remain.
+* `explore` is exempted as an SSG-family repository. Its Ruby/Jekyll runtime is
+  the product and plugin platform, not an incidental build dependency. The RSR
+  gate therefore skips both Ruby checks when `GITHUB_REPOSITORY` names `explore`.
 
 == Rollout order
 
