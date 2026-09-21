@@ -350,10 +350,10 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "memory",
     "disk",
-    "cpu"
+    "cpu",
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -391,26 +391,6 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "examples/ada/balanced_ops.adb"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "examples/ada/balanced_ops.adb"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -419,6 +399,20 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "proofs/coq/lambda/LambdaCNO.v",
+          "proofs/coq/physics/LandauerDerivation.v",
+          "proofs/coq/quantum/QuantumCNO.v",
+          "proofs/coq/common/PhysicsConstants.v",
+          "proofs/coq/common/StatMechBasis.v"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -441,6 +435,16 @@
         "relation": "PanicPath->Disk"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "examples/ada/balanced_ops.adb"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Cpu"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 5.0,
@@ -450,6 +454,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "examples/ada/balanced_ops.adb"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "ProofDrift",
@@ -463,18 +477,15 @@
         "relation": "ProofDrift->Memory"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "proofs/coq/lambda/LambdaCNO.v",
-          "proofs/coq/physics/LandauerDerivation.v",
-          "proofs/coq/quantum/QuantumCNO.v",
-          "proofs/coq/common/PhysicsConstants.v",
-          "proofs/coq/common/StatMechBasis.v"
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "ResourceLeak",
@@ -495,17 +506,6 @@
         ],
         "frameworks": [],
         "relation": "ResourceLeak->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "verification/run-local-verification.sh",
-          "verification/verify-proofs.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }
