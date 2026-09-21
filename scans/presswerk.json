@@ -503,12 +503,18 @@
   ],
   "recommended_attacks": [
     "memory",
-    "disk",
     "concurrency",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/presswerk-document/src/pdf/reader.rs",
+        "to": "crates/presswerk-document/src/pdf/writer.rs",
+        "relation": "shared_dir:crates/presswerk-document/src/pdf",
+        "weight": 1.0
+      },
       {
         "from": "crates/presswerk-core/src/human_errors.rs",
         "to": "crates/presswerk-core/src/error.rs",
@@ -522,45 +528,9 @@
         "weight": 1.0
       },
       {
-        "from": "crates/presswerk-security/src/audit.rs",
-        "to": "crates/presswerk-security/src/storage.rs",
-        "relation": "shared_dir:crates/presswerk-security/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-document/src/pdf/reader.rs",
-        "to": "crates/presswerk-document/src/pdf/writer.rs",
-        "relation": "shared_dir:crates/presswerk-document/src/pdf",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/pages/edit.rs",
-        "to": "crates/presswerk-app/src/pages/add_printer.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/pages/add_printer.rs",
-        "to": "crates/presswerk-app/src/pages/scan.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/pages/scan.rs",
-        "to": "crates/presswerk-app/src/pages/easy_print.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/pages/easy_print.rs",
-        "to": "crates/presswerk-app/src/pages/print.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/services/data_dir.rs",
-        "to": "crates/presswerk-app/src/services/app_services.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/services",
+        "from": "crates/presswerk-app/src/main.rs",
+        "to": "crates/presswerk-app/src/state.rs",
+        "relation": "shared_dir:crates/presswerk-app/src",
         "weight": 1.0
       },
       {
@@ -612,9 +582,39 @@
         "weight": 1.0
       },
       {
-        "from": "crates/presswerk-app/src/main.rs",
-        "to": "crates/presswerk-app/src/state.rs",
-        "relation": "shared_dir:crates/presswerk-app/src",
+        "from": "crates/presswerk-security/src/audit.rs",
+        "to": "crates/presswerk-security/src/storage.rs",
+        "relation": "shared_dir:crates/presswerk-security/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/pages/edit.rs",
+        "to": "crates/presswerk-app/src/pages/add_printer.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/pages/add_printer.rs",
+        "to": "crates/presswerk-app/src/pages/scan.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/pages/scan.rs",
+        "to": "crates/presswerk-app/src/pages/easy_print.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/pages/easy_print.rs",
+        "to": "crates/presswerk-app/src/pages/print.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/pages",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/services/data_dir.rs",
+        "to": "crates/presswerk-app/src/services/app_services.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/services",
         "weight": 1.0
       },
       {
@@ -838,46 +838,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
-        "files": [
-          "crates/presswerk-bridge/src/ios/mod.rs",
-          "crates/presswerk-bridge/src/ios/mod.rs",
-          "crates/presswerk-bridge/src/android/mod.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/presswerk-security/src/storage.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "crates/presswerk-bridge/src/ios/mod.rs",
-          "crates/presswerk-bridge/src/ios/mod.rs",
-          "crates/presswerk-bridge/src/android/mod.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -909,6 +869,18 @@
       },
       {
         "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/presswerk-security/src/storage.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -918,6 +890,34 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "crates/presswerk-bridge/src/ios/mod.rs",
+          "crates/presswerk-bridge/src/ios/mod.rs",
+          "crates/presswerk-bridge/src/android/mod.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "concurrency",
+        "severity_value": 3.5,
+        "files": [
+          "crates/presswerk-bridge/src/ios/mod.rs",
+          "crates/presswerk-bridge/src/ios/mod.rs",
+          "crates/presswerk-bridge/src/android/mod.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Concurrency"
       }
     ]
   }

@@ -357,35 +357,11 @@
     "concurrency",
     "cpu",
     "memory",
-    "disk",
-    "network"
+    "network",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "indieweb2-bastion/policy/curps/webmention.ncl",
-        "to": "indieweb2-bastion/policy/curps/policy.ncl",
-        "relation": "shared_dir:indieweb2-bastion/policy/curps",
-        "weight": 1.0
-      },
-      {
-        "from": "backend/ada-core/src/civicconnect-accounts.ads",
-        "to": "backend/ada-core/src/civicconnect.ads",
-        "relation": "shared_dir:backend/ada-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/main.rs",
-        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
-        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
-        "weight": 1.0
-      },
-      {
-        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
-        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
-        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
-        "weight": 1.0
-      },
       {
         "from": "indieweb2-bastion/graphql-dns-api/src/resolvers.rs",
         "to": "indieweb2-bastion/graphql-dns-api/src/main.rs",
@@ -402,6 +378,30 @@
         "from": "indieweb2-bastion/graphql-dns-api/src/blockchain.rs",
         "to": "indieweb2-bastion/graphql-dns-api/src/db.rs",
         "relation": "shared_dir:indieweb2-bastion/graphql-dns-api/src",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/main.rs",
+        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
+        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/services/webmention-rate-limiter/src/handlers.rs",
+        "to": "indieweb2-bastion/services/webmention-rate-limiter/src/limiter.rs",
+        "relation": "shared_dir:indieweb2-bastion/services/webmention-rate-limiter/src",
+        "weight": 1.0
+      },
+      {
+        "from": "backend/ada-core/src/civicconnect-accounts.ads",
+        "to": "backend/ada-core/src/civicconnect.ads",
+        "relation": "shared_dir:backend/ada-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "indieweb2-bastion/policy/curps/webmention.ncl",
+        "to": "indieweb2-bastion/policy/curps/policy.ncl",
+        "relation": "shared_dir:indieweb2-bastion/policy/curps",
         "weight": 1.0
       },
       {
@@ -877,19 +877,18 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "indieweb2-bastion/policy/run.js",
-          "indieweb2-bastion/scripts/gen_scripts.js"
+          "backend/elixir-phoenix/lib/civic_web.ex"
         ],
         "frameworks": [
           "WebServer",
           "Ecto",
           "Phoenix"
         ],
-        "relation": "InputBoundary->Cpu"
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "HardcodedSecret",
@@ -906,20 +905,6 @@
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "backend/elixir-phoenix/lib/civic_web.ex"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Ecto",
-          "Phoenix"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
         "source_category": "UncheckedError",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -933,6 +918,21 @@
           "Phoenix"
         ],
         "relation": "UncheckedError->Cpu"
+      },
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "indieweb2-bastion/policy/run.js",
+          "indieweb2-bastion/scripts/gen_scripts.js"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Ecto",
+          "Phoenix"
+        ],
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

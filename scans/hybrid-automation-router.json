@@ -306,9 +306,9 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
     "memory",
+    "cpu",
+    "concurrency",
     "disk"
   ],
   "dependency_graph": {
@@ -317,6 +317,12 @@
         "from": "crates/har-meta/src/graph.rs",
         "to": "crates/har-meta/src/a2ml.rs",
         "relation": "shared_dir:crates/har-meta/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/har-install/src/mapping.rs",
+        "to": "crates/har-install/src/capture.rs",
+        "relation": "shared_dir:crates/har-install/src",
         "weight": 1.0
       },
       {
@@ -335,12 +341,6 @@
         "from": "crates/har-core/src/error.rs",
         "to": "crates/har-core/src/target.rs",
         "relation": "shared_dir:crates/har-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/har-install/src/mapping.rs",
-        "to": "crates/har-install/src/capture.rs",
-        "relation": "shared_dir:crates/har-install/src",
         "weight": 1.0
       },
       {
@@ -468,6 +468,21 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/har-meta/src/graph.rs",
+          "crates/har-dispatch/src/lib.rs",
+          "crates/har-metrics/src/lib.rs",
+          "crates/har-router/src/lib.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -492,21 +507,6 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/har-meta/src/graph.rs",
-          "crates/har-dispatch/src/lib.rs",
-          "crates/har-metrics/src/lib.rs",
-          "crates/har-router/src/lib.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",

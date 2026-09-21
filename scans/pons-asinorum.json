@@ -461,16 +461,34 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
     "disk",
+    "cpu",
     "time"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": ".machine_readable/contractiles/intend/intend.k9.ncl",
-        "to": ".machine_readable/contractiles/intend/intend.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/intend",
+        "from": ".machine_readable/contractiles/trust/trust.ncl",
+        "to": ".machine_readable/contractiles/trust/trust.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/trust",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/dust/dust.ncl",
+        "to": ".machine_readable/contractiles/dust/dust.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/dust",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/must/must.ncl",
+        "to": ".machine_readable/contractiles/must/must.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/must",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.ncl",
+        "to": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/adjust",
         "weight": 1.0
       },
       {
@@ -480,15 +498,9 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/bust/bust.k9.ncl",
-        "to": ".machine_readable/contractiles/bust/bust.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/bust",
-        "weight": 1.0
-      },
-      {
-        "from": ".machine_readable/contractiles/adjust/adjust.ncl",
-        "to": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/adjust",
+        "from": ".machine_readable/contractiles/intend/intend.k9.ncl",
+        "to": ".machine_readable/contractiles/intend/intend.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/intend",
         "weight": 1.0
       },
       {
@@ -534,27 +546,32 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/must/must.ncl",
-        "to": ".machine_readable/contractiles/must/must.k9.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/must",
-        "weight": 1.0
-      },
-      {
-        "from": ".machine_readable/contractiles/trust/trust.ncl",
-        "to": ".machine_readable/contractiles/trust/trust.k9.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/trust",
-        "weight": 1.0
-      },
-      {
-        "from": ".machine_readable/contractiles/dust/dust.ncl",
-        "to": ".machine_readable/contractiles/dust/dust.k9.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/dust",
+        "from": ".machine_readable/contractiles/bust/bust.k9.ncl",
+        "to": ".machine_readable/contractiles/bust/bust.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/bust",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/pons-rules/src/t0/swallowed_error.rs",
+          "crates/pons-rules/src/t0/empty_effect_loop.rs",
+          "crates/pons-rules/src/t0/unreachable_after_jump.rs",
+          "crates/pons-rules/src/t0/string_concat_in_loop.rs",
+          "crates/pons-rules/src/t0/self_assignment.rs",
+          "crates/pons-rules/src/t0/while_true_no_break.rs",
+          "crates/pons-rules/src/t0/constant_condition.rs",
+          "crates/pons-rules/src/t0/div_by_literal_zero.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
       {
         "source_category": "UnboundedLoop",
         "sink_axis": "time",
@@ -567,19 +584,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedLoop->Time"
-      },
-      {
-        "source_category": "UnboundedLoop",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "fixtures/empty-effect-loop/positive/basic.py",
-          "fixtures/while-true-no-break/negative/basic.py",
-          "fixtures/while-true-no-break/positive/basic.py",
-          "fixtures/constant-condition/negative/basic.py"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedLoop->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -599,21 +603,17 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "UnboundedLoop",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
         "files": [
-          "crates/pons-rules/src/t0/swallowed_error.rs",
-          "crates/pons-rules/src/t0/empty_effect_loop.rs",
-          "crates/pons-rules/src/t0/unreachable_after_jump.rs",
-          "crates/pons-rules/src/t0/string_concat_in_loop.rs",
-          "crates/pons-rules/src/t0/self_assignment.rs",
-          "crates/pons-rules/src/t0/while_true_no_break.rs",
-          "crates/pons-rules/src/t0/constant_condition.rs",
-          "crates/pons-rules/src/t0/div_by_literal_zero.rs"
+          "fixtures/empty-effect-loop/positive/basic.py",
+          "fixtures/while-true-no-break/negative/basic.py",
+          "fixtures/while-true-no-break/positive/basic.py",
+          "fixtures/constant-condition/negative/basic.py"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedLoop->Cpu"
       }
     ]
   }
