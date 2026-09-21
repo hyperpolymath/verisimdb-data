@@ -1,0 +1,26 @@
+{
+  "action": "rewrite_language",
+  "auto_fixable": false,
+  "confidence": 0.65,
+  "description": "Port remaining Ruby source (CI meta-tests, ruleset and lockfile tooling, host-app examples) to an estate language instead of deleting it. Ruby files outside a declared adapter path fail rsr-antipattern.yml; this recipe is the way to make that green without weakening the ban.",
+  "failed_fixes": 0,
+  "false_positives": 0,
+  "fix_script": null,
+  "id": "recipe-ruby-source-to-estate-runtime",
+  "languages": [
+    "ruby"
+  ],
+  "match": "*.rb, Gemfile, Gemfile.lock, Rakefile, *.gemspec, .ruby-version outside bindings/*/ruby/, integrations/*/ruby/ and adapters/*/ruby/",
+  "pattern_ids": [
+    "PA122-ruby-source-outside-adapters"
+  ],
+  "proven_module": null,
+  "replacement": "Tooling and CI meta-tests -> Bun/Node (.mjs; the 'yaml' package covers the Psych YAML AST uses, and exposes real line numbers, which js-yaml does not); numeric or report generation -> Julia; services -> Elixir; ABI/FFI -> Zig; anything asserting memory or panic-freedom -> Rust. Delete .ruby-version, Gemfile.lock and Rakefile in the same commit — a leftover lockfile keeps the dependabot ecosystem alive.",
+  "successful_fixes": 0,
+  "total_attempts": 0,
+  "triangle_tier": "eliminate",
+  "notes": [
+    "Ruby-only platforms are not source, they are configuration: Homebrew formulae (a Ruby DSL) and Jekyll plugin repos stay exempt as packaging/host-platform surfaces and are tracked as exceptions, not conversions.",
+    "Vendored mirrors (vendor/, macports-ports/, */satellites/) are exempt: this policy does not own other projects' trees and rewriting a mirror destroys provenance."
+  ]
+}

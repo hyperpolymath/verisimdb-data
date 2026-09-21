@@ -70,3 +70,25 @@ crg-badge:
       D) color="orange" ;; E) color="red" ;; F) color="critical" ;; \
       *) color="lightgrey" ;; esac; \
     echo "[![CRG $$grade](https://img.shields.io/badge/CRG-$$grade-$$color?style=flat-square)](https://github.com/hyperpolymath/standards/tree/main/component-readiness-grades)"
+
+# ── Pages site (Ruby-free: see docs/decisions/ADR-0002) ───────────────────
+# Build the Pages site into _site/. Bun is tier 1; Node >= 18 is the fallback.
+site:
+    @if command -v bun >/dev/null 2>&1; then bun run scripts/build-site.mjs; else node scripts/build-site.mjs; fi
+
+# Plan the publish surface without writing anything
+site-check:
+    @if command -v bun >/dev/null 2>&1; then bun run scripts/build-site.mjs --dry-run; else node scripts/build-site.mjs --dry-run; fi
+
+# Prove the build is reproducible: two runs must agree on the digest
+site-verify:
+    @set -eu; \
+    build() { if command -v bun >/dev/null 2>&1; then bun run scripts/build-site.mjs; else node scripts/build-site.mjs; fi; }; \
+    first=$$(build | grep -o 'sha256=[0-9a-f]*' | head -1); \
+    second=$$(build | grep -o 'sha256=[0-9a-f]*' | head -1); \
+    if [ -z "$$first" ] || [ "$$first" != "$$second" ]; then echo "NOT reproducible: $$first vs $$second"; exit 1; fi; \
+    echo "reproducible: $$first"
+
+# Drop the generated site
+site-clean:
+    @rm -rf _site && echo "removed _site"

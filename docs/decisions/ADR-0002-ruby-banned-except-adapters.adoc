@@ -1,0 +1,188 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+= ADR-0002: Ruby exits the estate; only adapters may keep it
+:revdate: 2026-09-21
+:status: Proposed
+
+== Status
+
+Proposed — 2026-09-21. Implemented here in `verisimdb-data`; filed as the
+estate-wide rule for the remaining repos listed in <<scope>>.
+
+== Context
+
+Ruby arrived in this estate as boilerplate, not as a decision. GitHub's
+"Deploy Jekyll site to Pages" sample workflow was copied into repos that
+have no Jekyll site, and it dragged a toolchain in with it: `Gemfile`less
+`bundle exec`, the `actions/jekyll-build-pages` container (whose only
+contents are Ruby + Jekyll), and in `hypatia` five `gem install asciidoctor*`
+invocations standing between a push and `_site/docs`.
+
+Three things about that state are worth writing down:
+
+. *It is already broken.* `verisimdb-data`'s `jekyll.yml` failed with
+  `startup_failure` on every push to `main` (last observed 2026-09-21),
+  because `bundle exec` has no `Gemfile` to resolve. The sibling
+  `jekyll-gh-pages.yml` "succeeded" by mirroring the entire repository tree
+  into `_site` — including `scans/`, `dispatch/` and `outcomes/` — and
+  publishing it on `hyperpolymath.github.io`. A build that both fails and
+  over-publishes is not infrastructure anybody chose.
+. *Its maintenance noise is not free.* Dependabot PR #130
+  (`ruby/setup-ruby` 1.321.0 → 1.324.0, actions group) was auto-merged on
+  2026-09-21. It edited `jekyll.yml` and nothing else: `actions.lock` still
+  pinned `v1.321.0` afterwards, so the repo was left with a workflow that
+  disagrees with its own lockfile — on a lane that does not run. The bump was
+  approved by policy and still produced only drift.
+. *Ruby is not this estate's language.* The estate runs Julia, Rust, Zig,
+  Elixir, Nickel, Guile/Scheme, ReScript and AffineScript. The scan corpus
+  indexed in `scans/` — 536 repo snapshots — reports *zero* repos whose
+  primary language is Ruby. Ruby here has always been a means of reaching a
+  gem, never a place where logic lives.
+
+== Decision
+
+Ruby is a banned implementation and build language. Ruby source is replaced,
+not re-pinned. Enforcement lives in `rsr-antipattern.yml`, which now fails on
+Ruby files *and* on Ruby on the build path (`ruby/setup-ruby`,
+`jekyll-build-pages`, `bundle exec|install`, `gem install`, `rake`), so a repo
+cannot pass a file audit while still booting a Ruby VM in CI.
+
+Conversion targets, chosen by role rather than by taste:
+
+[cols="1,2,2",options="header"]
+|===
+| Role | Target | Why this one
+
+| Pages / static asset publishing
+| Bun (`scripts/build-site.mjs`), Node >= 18 fallback
+| Bun is tier 1 per LANGUAGE-POLICY §1; zero dependencies, so no lockfile and
+  no package-manager tier for `runtime-policy.yml` to police.
+
+| AsciiDoc → HTML rendering
+| `@asciidoctor/core` under Bun/Node (deferred), or publish source
+| It is the same upstream Asciidoctor engine, ported; the Ruby gem and the JS
+  package are the same project. `verisimdb-data` publishes `.adoc` as source
+  because it has no docs site to build.
+
+| Numeric / data analysis
+| Julia
+| Already the estate default here: `scripts/generate-summaries.jl` replaced
+  its Python equivalent, and `stapeln.toml` installs `julia` in the image.
+
+| FFI, ABI, low-level
+| Zig
+| Existing estate standard (`ffi/zig/`, shared with `proven`, `burble`,
+  `gossamer`).
+
+| Long-lived services, concurrency
+| Elixir
+| 32 estate repos already primary-Elixir; `mix` is a first-class dependabot
+  ecosystem here.
+
+| Safety-critical tooling, proofs
+| Rust
+| 110 estate repos; `recipes/recipe-panic-to-result.json` already encodes the
+  panics discipline.
+
+| Surface-syntax experiments
+| AffineScript
+| Estate-owned, but v0.2 and self-described as "not yet for production" —
+  correct for language work, not for a deploy pipeline.
+|===
+
+[[exemptions]]
+== Exemptions
+
+Ruby survives only where it is *not* the language the estate is written in,
+but a socket into somebody else's runtime:
+
+. *Adapters.* Paths shaped `bindings/*/ruby/`, `integrations/*/ruby/`,
+  `adapters/*/ruby/`, and Ruby template helpers under `bindings/*/…/helpers/`.
+  This covers the Ruby bindings in `proven` and `proven-servers`, which the
+  policy names explicitly, and the SSG family, where a Ruby adapter is a
+  supported host integration.
+. *Vendored mirrors.* `vendor/`, `macports-ports/`, and `*/satellites/` trees:
+  this policy does not own other projects' file layouts, and rewriting a
+  mirror breaks provenance for no gain.
+. *Homebrew formulae* (`Formula/`, `packaging/homebrew/`,
+  `release/homebrew/`). A formula is a Ruby DSL — the format admits no other
+  language — so this is packaging metadata, not implementation. The estate's
+  real answer for these is Guix (`guix.scm` is already primary in
+  `guix-nix-policy.yml`); "delete the formulae, ship Guix packages" is a
+  separate, larger change and is *not* what this ADR authorises.
+
+== Consequences
+
+In this repo:
+
+* `jekyll.yml` and `jekyll-gh-pages.yml` are deleted; `.github/workflows/pages.yml`
+  replaces both, and `actions.lock` loses `ruby/setup-ruby` and
+  `actions/jekyll-build-pages`.
+* The publish surface becomes an allowlist (`site.json`) rather than "whatever
+  the SSG walked". URL compatibility was checked against the live deployment
+  before the change, not after: `index.json`, `scans/**`, `dispatch/**`,
+  `outcomes/**`, `patterns/**`, `recipes/**`, `health/**`, `policy/**`,
+  `docs/**`, `README.adoc` and `.well-known/**` all served 200 and still do.
+  `Justfile`, `setup.sh`, `guix.scm`, `mise.toml`, `stapeln.toml`,
+  `repo-paths.json`, `examples/**` and `ffi/**` stop being served; the git tree
+  remains canonical for them.
+* `/` keeps serving `index.json` — GitHub Pages falls back to it for a
+  directory index — so the builder writes its HTML hub to `/hub/` and
+  `pages.yml` fails the build if a root `index.html` appears. A "harmless"
+  landing page would have silently changed the content type of a machine
+  endpoint.
+* `.github/dependabot.yml` ignores `ruby/setup-ruby` and
+  `actions/jekyll-build-pages`. Bumping a tool that policy requires deleting
+  spends one of two open PR slots on a guaranteed-close PR.
+* Builds are proven reproducible in CI (two builds, one digest) — something the
+  Jekyll container never offered, since its output depended on the image tag.
+
+[[scope]]
+The cross-repo numbers in the paragraph above come from a census of all 366
+`hyperpolymath` repos at their default-branch `HEAD` on 2026-09-21, classified
+by the gate this ADR introduces. It is written up, with per-repo file lists and
+the rollout order, in
+`docs/reports/ruby-exit-estate-census-2026-09-21.adoc`: 21 of 366 repos carry
+Ruby on the build path — 10 of them a dead Jekyll Pages workflow that converts by
+file swap, 10 where Ruby is doing a check whose semantics must be reproduced —
+plus 17 Ruby artefacts across 5 repos flagged for conversion, and
+142 files in `proven`, `proven-servers` and `palimpsest-license` pass as
+adapters. No repo in the fleet's own scan corpus — 536 snapshots — reports Ruby
+as its primary language.
+
+== Open questions
+
+. Is `palimpsest-license/integrations/server/ruby/` an adapter under this
+  policy? It is shaped like one (a client for Ruby host apps) but the repo is
+  not in the SSG family and is not `proven`.
+. `awesome-coq` / `awesome-ipfs` run `gem install awesome_bot` for link
+  checking. Retire the tool (there are JS link checkers) or take the exception?
+. `explore` is a `github-pages`-gem Jekyll site whose tests exercise Jekyll
+  plugins. Converting it means choosing a different SSG, which is an SSG-family
+  decision, not a `verisimdb-data` one.
+
+== Alternatives considered
+
+Keep Ruby, pin it, and merge the dependabot bumps::
+Rejected. The pin is what makes the estate depend on a runtime nobody
+maintains here, and #130 is the cost of that: a bump PR for a workflow that
+does not run.
+
+Swap Jekyll for another SSG (Zola, Cobalt, Antora, Hugo)::
+Rejected *for this repo*. There is no content pipeline here to preserve: the
+site is `index.json` plus static trees. A new SSG is a new binary in the
+supply chain and a new template to keep in sync across 366 repos, to produce
+output a publisher script already produces deterministically. An SSG remains
+the right answer for repos that genuinely render markup — that belongs in the
+SSG family, not in a data store.
+
+Render AsciiDoc in `verisimdb-data` CI with `@asciidoctor/core`::
+Deferred rather than rejected. It adds a lockfile and `node_modules` to a
+`guix.scm`-managed repo to serve a page nobody has asked for. Adopt it when a
+docs surface needs it; the ban is satisfied either way because it is not Ruby.
+
+Delete Pages entirely from this repo::
+Considered, and honest: nothing in `README.adoc` promises a site. Rejected
+because `.well-known/security.txt` (RFC 9116, and `wellknown-enforcement.yml`)
+is served from that origin and is a contractual surface, and `index.json` is
+already fetched from it.

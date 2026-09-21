@@ -34,6 +34,8 @@ This repository serves *two explicit purposes*, per
 | `health/`              | Health-state snapshots                             | data
 | `index.json`           | Master index of stored data                        | data
 | `ffi/zig/`             | Zig FFI implementation                             | ABI dogfood
+| `scripts/`             | Ingest, index regen, and `build-site.mjs`        | both
+| `site.json`            | Pages publish allowlist (no Ruby, no Jekyll)     | both
 | `.machine_readable/`   | Contractile machinery (org-wide)                  | both
 | `.github/workflows/`   | CI (ingest, mirrors, governance)                  | both
 | `docs/decisions/`      | ADRs                                              | both
@@ -105,6 +107,23 @@ Each scan result in `scans/` is a JSON file with the structure:
 `scans/` on every push and fails if the working tree changes (i.e. the
 committed index must match what the regen script produces from the
 files on disk). See `scripts/regen-index.sh`.
+
+=== Pages publishing
+
+`https://hyperpolymath.github.io/verisimdb-data/` serves `index.json` at `/`
+plus the trees allowlisted in `site.json`. The builder is
+`scripts/build-site.mjs` — Bun (tier 1) with a Node >= 18 fallback, zero
+dependencies. There is no Jekyll on this path: Ruby is a banned language for
+this estate, so the retired `ruby/setup-ruby` / `actions/jekyll-build-pages`
+workflows were replaced rather than re-pinned. See
+`docs/decisions/ADR-0002-ruby-banned-except-adapters.adoc`.
+
+[source,bash]
+----
+just site-check    # plan the publish surface
+just site          # build _site/
+just site-verify   # two builds, one digest (reproducible)
+----
 
 == Purpose 2 — ABI dogfood
 

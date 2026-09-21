@@ -1,0 +1,238 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+= Ruby exit — estate census and conversion plan
+:revdate: 2026-09-21
+:status: Data report
+
+== Method
+
+All 366 repositories on the `hyperpolymath` account were listed at `HEAD` of
+their default branch on 2026-09-21 by blobless partial clone
+(`git clone --filter=blob:none --no-checkout`, 0 clone failures) and searched
+for `*.rb`, `*.rake`, `*.gemspec`, `Gemfile`, `Gemfile.lock`, `Rakefile`,
+`.ruby-version`, `_config.yml`, `.jekyllrc` and for `ruby/`, `jekyll/`,
+`satellites/` path segments. The 219 repos with no `actions.lock` were
+additionally shallow-cloned and had `.github/workflows` grepped, so Ruby in CI
+is covered where a lockfile audit cannot see it.
+
+Then 22 of those repos were re-checked with `scripts/estate-ruby-exit.mjs`
+(added here), whose `classify()`/`planFor()` applies
+*the same* exemption rules as `rsr-antipattern.yml` — so "exempt" and "flagged"
+below are the gate's verdicts, not a human's guesses.
+
+Limitations, stated plainly: default branch only; submodules not expanded;
+reusable-workflow inheritance was looked for and not found in the repos checked — see <<inherit>>; and
+`scans/*.json` here are historical snapshots of *other* projects, so they
+describe the fleet, not the current tree of an estate repo.
+`phantom-metal-taste` and `social-media-polygraph` are classified from
+workflow-file evidence only (not re-run through the tool).
+
+== Baseline: Ruby was never this estate's language
+
+Counting the `language` field of the 536 scan snapshots in `scans/`:
+
+|===
+| rust | shell | julia | nickel | idris | elixir | affinescript | javascript | zig | rescript | ada | *ruby*
+| 110 | 98 | 65 | 38 | 33 | 32 | 28 | 25 | 17 | 17 | 15 | *0*
+|===
+
+Zero repos report Ruby as primary. Every Ruby artefact found is either a
+pasted build step or a binding that lets a Ruby program call estate code, which
+is why the exit is cheap: 171 Ruby-path artefacts exist across 13 repos, and
+154 of them are exempt by policy. 17 need porting.
+
+== A. Ruby on the build path — 21 repos of 366
+
+Counted with the patterns `.github/workflows/rsr-antipattern.yml` now uses —
+invocation shapes, not substrings — over every public repo at
+`main`@`6f4a77b`-day, reading `.github/workflows`, `.github/actions`,
+`.gitlab-ci.yml` and the Justfile, ignoring comment lines. 21 flagged, 343
+clean. The scan is reproducible from `/home/user/ci-ruby-pass4.sh` in the
+session workspace; the line numbers below are from that pass.
+
+|===
+| Repo | What the scan finds | Lane
+
+| verisimdb-data | `actions.lock` pins only — this branch deletes both sides | done here
+| bebop-ffi | `jekyll-gh-pages.yml:39` (jekyll-build-pages) and `jekyll.yml:43` `ruby/setup-ruby` + `:53 bundle exec jekyll build` | mechanical
+| betlang | `jekyll-gh-pages.yml:39` only — its real Pages job is Idris2 (`pages.yml`) | mechanical (delete)
+| candy-crash | `ci.yml:41` + `:74` `ruby/setup-ruby`, `:53 bundle install`; plus one `.rb`, a gemspec and a Rakefile | split: Pages mechanical, the suite needs an owner
+| deed-validate-action | `jekyll.yml:40` + `:50 bundle exec jekyll build` | mechanical
+| ensaid-spec | `casket-pages.yml:32` (jekyll-build-pages, despite the name) | mechanical
+| explore | `collections-renames.yml:22`; `Gemfile` pins `github-pages`, 10 `.rb` files | human
+| filesoup | `jekyll-gh-pages.yml:37` | mechanical
+| hypatia | `quality.yml:29` + `:36-38 gem install asciidoctor{,-diagram,-rouge}` | mechanical (docs render)
+| lol | `jekyll-gh-pages.yml:39` | mechanical
+| marid | `estate-rules.yml:59 sudo gem install asciidoctor -v 2.0.26 --no-document` | mechanical (docs render)
+| phantom-metal-taste | `jekyll-gh-pages.yml:31` | mechanical
+| protocol-squisher | `docs.yml:25 sudo gem install --no-document asciidoctor` | mechanical (docs render)
+| qubes-sdp | `jekyll-gh-pages.yml:38`, in a repo whose `_config.yml` says "No Jekyll" | mechanical (delete)
+| rsr-template-repo | `estate-rules.yml:59`, byte-identical to `marid`'s line | *first*: it is the template
+| safe-brute-force | `jekyll-gh-pages.yml:34` | mechanical
+| social-media-polygraph | `jekyll-gh-pages.yml:36` | mechanical
+| standards | `readme-derive-reusable.yml:129 sudo gem install asciidoctor asciidoctor-reducer`; 4 live `scripts/*.rb` | human
+| the-nash-equilibrium | `quality.yml:67 gem install asciidoctor --no-document` | mechanical (docs render)
+| awesome-coq | `awesome-bot.yml:20` + `:24 gem install awesome_bot` | human (retire the tool)
+| awesome-ipfs | `pull_requests.yml:25` + `:31 gem install awesome_bot` | human (retire the tool)
+|===
+
+Ten of the 21 are pure file swaps — `pages.yml`, `scripts/build-site.mjs` and
+`site.json` in; the Jekyll workflow and the two `actions.lock` pins out — which
+is what `estate-ruby-exit.mjs --apply` does, stopping short of committing. The
+other ten need a person, and `estate-ruby-exit.mjs` reaches the same verdict on
+each of them ("needing a human"); verisimdb-data is finished by this PR.
+
+The second group is bigger than "delete a workflow" for a reason worth stating,
+because each case is a *check* whose semantics live in the Ruby tool:
+
+[cols="1,2",options="header"]
+|===
+| Repo | Why it is not a swap
+
+| marid, rsr-template-repo
+| the gate's own comment says the asciidoctor version is pinned "because the
+  verdict rests on a stderr comparison" — a replacement must reproduce that
+  stderr, not merely parse
+| protocol-squisher
+| installs asciidoctor to syntax-check `*.adoc` plus `provenance/PROVENANCE.adoc`
+  file by file; the value is the non-zero exit, not the HTML
+| the-nash-equilibrium
+| same install, then `scripts/check-docs-render.sh .`. The workflow notes a
+  companion "pure syntax scan" that needs no asciidoctor, so part of this may be
+  deletable rather than portable
+| hypatia
+| installs `asciidoctor-diagram`, `asciidoctor-pdf` and `rouge` and builds
+  `_site/docs`; diagram and PDF output are outside `rust-asciidoc`, so this is a
+  feature decision, not a swap
+| standards
+| `readme-derive-reusable.yml:129` (pandoc + asciidoctor + reducer for derived
+  READMEs), plus four `scripts/*.rb` that other files in the repo reference (3
+  and 2 referrers) — live tooling, not cruft
+| candy-crash
+| Pages plus a real Ruby suite: `rspec`, `rubocop`, `brakeman`, `bundler-audit`,
+  a `Rakefile` and a gemspec
+| explore
+| a Jekyll *plugin* gem — Ruby is the product; see <<explore>>
+| awesome-coq, awesome-ipfs
+| the entire Ruby step is `gem install awesome_bot`, a link checker. Retiring the
+  step (or checking links in the estate runtime) is cheaper than maintaining a
+  Ruby job for one binary
+|===
+
+The four AsciiDoc-check repos are one job — "make `.adoc` fail the build when it
+is malformed" — so they should convert as a set, against one replacement with a
+documented exit-code and stderr contract.
+
+Two repos the scan does *not* flag, recorded because they are the interesting
+edge of a precision-first gate:
+
+* `tree-navigator` requires `gollum` (a Ruby gem) in a Justfile recipe, but
+  only *mentions* `gem install gollum` inside an echo, so the anchored pattern
+  lets it pass. The dependency is real; the gate deliberately reads strings.
+* `echidna` matched an earlier, looser pattern on the literal text
+  `bundle install failed` inside a `grep` of a container build log. That false
+  positive is why the gate is anchored to invocations, and why `tree-navigator`
+  is listed here instead of being silently dropped.
+
+[[inherit]]
+=== Where the docs-render Ruby comes from, and what is *not* true
+
+`rsr-template-repo/.github/workflows/estate-rules.yml:59` and
+`marid/.github/workflows/estate-rules.yml:59` are byte-identical, so that
+`gem install asciidoctor -v 2.0.26` line is spread by the template: every repo
+cloned from it inherits it, and fixing the template is worth more than fixing
+the copies. `standards/.github/workflows/readme-derive-reusable.yml:129`
+installs the same two gems for README derivation.
+
+What the scan does *not* support, and what an earlier draft of this report
+wrongly claimed:
+
+* `standards`' `.github/` contains **one** `gem install` line (the reusable
+  above) and **no** `jekyll` reference at all — not "four estate scripts", and
+  its `docs-build-reusable.yml` has no `ruby:` input to flip.
+* Nothing inherited through reusable workflows showed up in the repos checked:
+  of a 12-repo sample, none calls `readme-derive-reusable.yml` (`marid` has a
+  readme workflow that does not). Whether some other repo calls it is
+  **unverified** — the code-search API is rate-limited here, so the honest
+  statement is that inheritance was looked for and not found in the sample.
+
+So the "a repo can show no Ruby and still boot one" hazard is real in principle
+(the gate would miss `gem install` text in a file it does not read, as with
+`tree-navigator`) but is *not* the mechanism by which these 21 got Ruby. They
+got it from their own workflow files, and from the template.
+
+== B. Ruby source outside a declared adapter — 17 artefacts, 5 repos
+
+|===
+| Repo | Flagged | What it is
+
+| explore | 10 | `.ruby-version`, `Gemfile`, `Gemfile.lock`, `Rakefile`, `_config.yml`, five minitest files — the whole project shape (see <<explore>>)
+| standards | 4 | `scripts/plan-ruleset-constraint-repair.rb` (53 l.), `scripts/reconcile-scorecard-actions-lock.rb` (99 l.), `scripts/tests/reconcile-scorecard-actions-lock-test.rb`, `scripts/tests/science-ci-security-test.rb`
+| dafniser | 1 | `tests/ci/static_analysis_gate_test.rb` (51 l.) — loads `static-analysis-gate.yml`, plants fake `panic-attack`/`git` bins, asserts the shell the gate emits
+| hypatia | 1 | `test/dogfood_manifest_detection_test.rb` (28 l.) — same shape against `dogfood-gate.yml`
+| academic-workflow-suite | 1 | `examples/integrations/canvas/awap_integration.rb`
+|===
+
+Four of these (both `standards` scripts and both CI meta-tests) depend on a
+YAML parser that reports *line numbers*: Ruby uses `Psych` and walks
+`Psych::Nodes::Mapping` for `key.start_line`. In JS that is the `yaml` package
+(its CST exposes `range`/`linePos`) — **not** `js-yaml`, which discards
+positions, and a tool that names line numbers to a human without real ones is
+worse than no tool.
+
+[[explore]]
+=== `explore` is the hard case, and it is a policy question
+
+`explore` pins `gem "github-pages", "~> 232", group: :jekyll_plugins`, and its
+Rakefile drives Jekyll, rubocop and minitest. Ruby there is not the
+implementation language, it is the *platform*: Jekyll plugins are Ruby by
+construction. Either treat `explore` as SSG-family (exempt, with a named owner
+and a reason recorded) or move the behaviour into the publisher and retire the
+gem. Option 2 is the only one consistent with "Ruby is banned"; it is also a
+real project, so schedule it instead of smuggling it into a cleanup PR.
+
+== C. Permitted, and staying that way — 154 artefacts
+
+|===
+| Repo | Files | Why exempt
+
+| proven-servers | 104 | `bindings/ruby/lib/proven_servers/**` — adapter, named in the policy
+| proven | 32 | `bindings/ruby/lib/proven/**`, `bindings/mustache/helpers/proven-helpers.rb` — adapter
+| palimpsest-license | 6 | `integrations/server/ruby/**` — adapter-shaped; *needs a yes/no*, ADR-0002 open question 1
+| standards | 6 | `rhodium-standard-repositories/satellites/palimpsest-license/**` — vendored mirror
+| boj-server, bunsenite, cloud-sync-tuner, k9-ecosystem, homebrew-tap, academic-workflow-suite | 6 | Homebrew formulae: the format *is* a Ruby DSL, so "convert" is not an available action — retire them for Guix, or accept them as packaging metadata
+
+|===
+
+== Rollout order
+
+. Land this PR. It proves the Pages replacement end to end and deletes the pin
+   dependabot is bumping (#130).
+. Copy `pages.yml`, `scripts/build-site.mjs`, `site.json` and the two
+   `rsr-antipattern.yml` steps into `rsr-template-repo` and `standards`, so new
+   repos are born without Ruby.
+. Fan out the 10 mechanical repos with `estate-ruby-exit.mjs --apply`; review
+   each diff, run `gh actions-lock`, and check the published URL surface before
+   merge (`/` on a repo whose Pages root serves `index.json` must not gain a
+   root `index.html` — the tool sets `index_page: hub/index.html` when
+   `index.json` exists, but confirm it).
+. Convert `standards` (`readme-derive-reusable.yml` + 4 scripts). That single
+   PR also un-Ruby-ifies `boj-server` and `standards/doc-format.yml`.
+. `hypatia` (docs gems → `@asciidoctor/core`, or publish source; plus its
+   meta-test), then `awesome-coq`/`awesome-ipfs` (retire `awesome_bot`), then
+   `candy-crash` (real Ruby app: port the suite or record an exception).
+. `explore`: decide <<explore>> first; do not start it as cleanup.
+. `proven` / `proven-servers` / SSG adapters: no work. Kept out of the ban by
+   path, and now *tested* by the gate's exemption, so an adapter cannot quietly
+   become an implementation.
+
+Delete the workflow and its lock entry together. #130 in this repo is the
+cautionary example: it bumped `jekyll.yml` alone, leaving `actions.lock` behind
+by one version — the estate's own tooling for that class of drift is
+`standards/scripts/reconcile-scorecard-actions-lock.rb`, which is itself Ruby and
+is in the porting list above.
+
+Per repo: regenerate `actions.lock`, add the two `ignore:` entries to
+`dependabot.yml`, and delete any `Gemfile.lock`/`.ruby-version` in the same
+commit — a leftover lockfile keeps the ecosystem alive and Dependabot
+interested.

@@ -5,8 +5,12 @@
 # RSR Anti-Pattern CI Check
 # SPDX-License-Identifier: MPL-2.0
 #
-# Enforces: No TypeScript, No Go, No Python (except SaltStack), No npm
+# Enforces: No Ruby, No TypeScript, No Go, No Python (except SaltStack), No npm
 # Allows: AffineScript, Deno, WASM, Rust, OCaml, Haskell, Guile/Scheme
+#
+# Ruby is a banned language for this estate; the sole exception is an adapter
+# under a path that declares itself one (bindings|integrations|adapters)/*/ruby/
+# — see docs/decisions/ADR-0002-ruby-banned-except-adapters.adoc.
 
 name: RSR Anti-Pattern Check
 
@@ -57,6 +61,77 @@ jobs:
           fi
           echo "✅ No non-SaltStack Python files"
 
+      - name: Check for Ruby (banned for this estate; adapters only)
+        run: |
+          set -euo pipefail
+          # Ruby is a banned implementation language. The only permitted Ruby is an
+          # *adapter* that lets a Ruby host application call into estate code, and it
+          # must declare itself as one by living under bindings/|integrations/|adapters/.
+          # Exemptions below are policy, not convenience:
+          #   */ruby/, */helpers/   — adapter code, permitted by ADR-0002
+          #   Formula/, */homebrew/ — Homebrew formulae are a Ruby DSL; the formula is
+          #                           packaging metadata, not estate implementation
+          #   vendor/, satellites/, macports-ports/ — mirrors of other projects' trees,
+          #                           which this policy does not own
+          RUBY_SOURCES=$(find . \( -name '*.rb' -o -name '*.rake' -o -name '*.gemspec' \
+              -o -name 'Gemfile' -o -name 'Gemfile.lock' -o -name 'Rakefile' \
+              -o -name '.ruby-version' \) \
+              -not -path './.git/*' -type f 2>/dev/null \
+            | grep -Ev '^\./(bindings|integrations|adapters)(/[A-Za-z0-9._-]+)?/(ruby|helpers)/' \
+            | grep -Ev '^\./(Formula|Casks)/|/(homebrew|tap)/' \
+            | grep -Ev '^\./(vendor|macports-ports)/|/satellites/' \
+            || true)
+          if [ -n "$RUBY_SOURCES" ]; then
+            echo "::error::Ruby source detected. Ruby is banned for this estate."
+            echo "$RUBY_SOURCES"
+            echo ""
+            echo "Convert it: Bun/Node for tooling and site builds, Julia or Rust for"
+            echo "computation, Zig for FFI, Elixir for concurrency, AffineScript where a"
+            echo "face exists. Adapter Ruby is fine only under"
+            echo "bindings/*/ruby/ or integrations/*/ruby/. See"
+            echo "docs/decisions/ADR-0002-ruby-banned-except-adapters.adoc."
+            exit 1
+          fi
+          echo "✅ No Ruby outside permitted adapter paths"
+
+      - name: Check for Ruby on the build path
+        run: |
+          set -euo pipefail
+          # A repo can pass the file audit and still boot Ruby in CI — that is
+          # exactly the shape this estate's dependabot noise came from: a bump PR
+          # for ruby/setup-ruby in a repo with nothing Ruby left to build. So the
+          # pin/invocation surface is audited too, not just *.rb files.
+          #
+          # Three deliberate constraints:
+          #   --exclude=rsr-antipattern.yml — this file contains the pattern list,
+          #     so it would match itself (a bug this estate has hit before).
+          #   comment lines are dropped — prose that *describes* the retired Ruby
+          #     tooling is how a migration explains itself; only instructions count.
+          #   patterns are anchored to invocation shapes, not substrings. A loose
+          #     substring match flags `echidna`, whose CI greps for the literal text
+          #     "bundle install failed" in a container build log — it has no Ruby.
+          #     An estate-wide check that cries wolf gets switched off by the next
+          #     person who has to triage it, so precision here is the whole game.
+          # (the `.?` on the second line is the quote in a lockfile entry, e.g.
+          #  `        - 'ruby/setup-ruby@v1.324.0'` — written as `.` because a
+          #  single quote cannot appear inside this single-quoted shell string.)
+          RUBY_CI=$(grep -rnIE --exclude=rsr-antipattern.yml \
+              -e 'uses:[[:space:]]*(ruby/setup-ruby|actions/jekyll-build-pages)' \
+              -e '^[[:space:]]*(-[[:space:]]+)?.?(ruby/setup-ruby|actions/jekyll-build-pages)@' \
+              -e '^[[:space:]]*(-[[:space:]]+)?(run:[[:space:]]*)?(sudo[[:space:]]+)?(gem install|bundle exec|bundle install|rake[[:space:]])' \
+              .github/workflows .github/actions .gitlab-ci.yml Justfile justfile 2>/dev/null \
+            | grep -vE '^[^:]+:[0-9]+:[[:space:]]*#' || true)
+          if [ -n "$RUBY_CI" ]; then
+            echo "::error::Ruby on the build path. Ruby is banned for this estate."
+            echo "$RUBY_CI"
+            echo ""
+            echo "Pages/docs builds use scripts/build-site.mjs (Bun tier 1, Node >= 18"
+            echo "fallback) driven by site.json; see"
+            echo "docs/decisions/ADR-0002-ruby-banned-except-adapters.adoc."
+            exit 1
+          fi
+          echo "✅ No Ruby in CI configuration"
+
       - name: Check for npm lockfiles
         run: |
           if [ -f "package-lock.json" ] || [ -f "yarn.lock" ]; then
@@ -90,5 +165,6 @@ jobs:
           echo "║  Allowed: AffineScript, Deno, WASM, Rust, OCaml, Haskell, ║"
           echo "║           Guile/Scheme, SaltStack (Python)                 ║"
           echo "║                                                            ║"
-          echo "║  Blocked: TypeScript, Go, npm, Python (non-Salt)          ║"
+          echo "║  Blocked: Ruby (outside adapters), TypeScript, Go, npm,   ║"
+          echo "║           Python (non-Salt)                               ║"
           echo "╚════════════════════════════════════════════════════════════╝"

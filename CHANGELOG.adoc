@@ -18,6 +18,23 @@ https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 
 ==== Added
 
+* feat(pages): Ruby-free Pages publisher — `scripts/build-site.mjs`
+  (Bun tier 1, Node >= 18 fallback, zero deps) driven by the publish
+  allowlist in `site.json`, with a reproducibility digest on every build
+* feat(ci): `rsr-antipattern.yml` now fails Ruby source outside a declared
+  adapter path, and Ruby on the build path — matched as invocations
+  (`uses: ruby/setup-ruby`, a lockfile pin, `gem install`, `bundle exec`,
+  `rake`), not as substrings, so prose that merely quotes those words does
+  not trip it
+* feat(just): `site`, `site-check`, `site-verify`, `site-clean` recipes
+* chore(deps): dependabot ignores `ruby/setup-ruby` and
+  `actions/jekyll-build-pages` — bumps to deleted tooling are not
+  dependencies this estate maintains
+* docs: ADR-0002 — Ruby is banned for the estate; adapters are the only
+  exemption (includes the cross-repo Ruby census)
+* recipes: `recipe-ruby-jekyll-pages-to-static`,
+  `recipe-asciidoctor-gem-to-asciidoctor-core`,
+  `recipe-ruby-source-to-estate-runtime`
 * feat(crg): add crg-grade and crg-badge justfile recipes
 * feat: add self-health VeriSimDB Zig module to close observability loop
 * feat: migrate generate-summaries from Python to Julia
@@ -25,6 +42,17 @@ https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 * feat: add UX Justfile with doctor, tour, help-me, assail recipes
 * feat: deploy UX Manifesto infrastructure
 * feat: initialize verisimdb-data as standalone repo
+
+==== Removed
+
+* chore(ci)!: delete `jekyll.yml` and `jekyll-gh-pages.yml` (Ruby/Jekyll
+  Pages builds) and drop `ruby/setup-ruby` + `actions/jekyll-build-pages`
+  from `actions.lock`. `jekyll.yml` had been failing with `startup_failure`
+  on every push to `main`; `jekyll-gh-pages.yml` published the entire
+  repository tree. #130 was auto-merged while this work was in flight and
+  bumped `jekyll.yml` to `ruby/setup-ruby@v1.324.0` while leaving
+  `actions.lock` at `v1.321.0` — a workflow out of sync with its own lockfile.
+  Deleting both sides is what actually settles it.
 
 ==== Fixed
 
