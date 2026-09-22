@@ -5,25 +5,24 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "PanicPath",
-      "location": "aletheia/src/checks.rs",
-      "file": "aletheia/src/checks.rs",
+      "category": "InsecureProtocol",
+      "location": "aletheia/src/output.rs",
+      "file": "aletheia/src/output.rs",
       "severity": "Medium",
-      "description": "0 panic sites and 1 unwrap/expect calls in aletheia/src/checks.rs",
+      "description": "1 HTTP (non-HTTPS) URLs in aletheia/src/output.rs",
       "recommended_attack": [
-        "memory",
-        "disk"
+        "network"
       ],
       "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 9241,
+    "total_lines": 12358,
     "unsafe_blocks": 0,
     "panic_sites": 0,
-    "unwrap_calls": 1,
-    "allocation_sites": 33,
-    "io_operations": 34,
+    "unwrap_calls": 0,
+    "allocation_sites": 71,
+    "io_operations": 39,
     "threading_constructs": 2
   },
   "file_statistics": [
@@ -93,7 +92,7 @@
     },
     {
       "file_path": "aletheia/scripts/create-template.sh",
-      "lines": 571,
+      "lines": 572,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -122,30 +121,51 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "aletheia/src/config.rs",
-      "lines": 243,
+      "file_path": "aletheia/src/main.rs",
+      "lines": 422,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 4,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 0,
+      "io_operations": 4,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "aletheia/src/output.rs",
+      "lines": 626,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 6,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "aletheia/src/config.rs",
+      "lines": 538,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 1,
+      "allocation_sites": 8,
       "io_operations": 1,
       "threading_constructs": 0
     },
     {
       "file_path": "aletheia/src/checks.rs",
-      "lines": 402,
+      "lines": 1932,
       "unsafe_blocks": 0,
       "panic_sites": 0,
-      "unwrap_calls": 1,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 0,
-      "io_operations": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 10,
+      "allocation_sites": 28,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
       "file_path": "aletheia/src/types.rs",
-      "lines": 89,
+      "lines": 246,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -165,12 +185,25 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "disk",
+    "network",
     "cpu",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "aletheia/src/main.rs",
+        "to": "aletheia/src/output.rs",
+        "relation": "shared_dir:aletheia/src",
+        "weight": 1.0
+      },
+      {
+        "from": "aletheia/src/output.rs",
+        "to": "aletheia/src/config.rs",
+        "relation": "shared_dir:aletheia/src",
+        "weight": 1.0
+      },
       {
         "from": "aletheia/src/config.rs",
         "to": "aletheia/src/checks.rs",
@@ -200,24 +233,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "aletheia/src/checks.rs"
+          "aletheia/src/output.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "aletheia/src/checks.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

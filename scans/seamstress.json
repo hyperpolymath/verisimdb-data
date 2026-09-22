@@ -234,25 +234,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
     "cpu",
-    "network"
+    "network",
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "services/seamstressd/test/runner_test.exs",
-        "to": "services/seamstressd/test/e2e_test.exs",
-        "relation": "shared_dir:services/seamstressd/test",
-        "weight": 1.0
-      },
-      {
-        "from": "services/seamstressd/test/e2e_test.exs",
-        "to": "services/seamstressd/test/property_test.exs",
-        "relation": "shared_dir:services/seamstressd/test",
-        "weight": 1.0
-      },
       {
         "from": "tools/seamctl/src/validate.rs",
         "to": "tools/seamctl/src/graph.rs",
@@ -264,11 +252,35 @@
         "to": "tools/seamctl/src/report.rs",
         "relation": "shared_dir:tools/seamctl/src",
         "weight": 1.0
+      },
+      {
+        "from": "services/seamstressd/test/runner_test.exs",
+        "to": "services/seamstressd/test/e2e_test.exs",
+        "relation": "shared_dir:services/seamstressd/test",
+        "weight": 1.0
+      },
+      {
+        "from": "services/seamstressd/test/e2e_test.exs",
+        "to": "services/seamstressd/test/property_test.exs",
+        "relation": "shared_dir:services/seamstressd/test",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "services/seamstressd/test/seamstressd_test.exs",
+          "services/seamstressd/test/runner_test.exs",
+          "services/seamstressd/test/e2e_test.exs"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "disk",
@@ -292,16 +304,16 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "services/seamstressd/test/seamstressd_test.exs",
+          "services/seamstressd/lib/seamstressd/runner.ex",
           "services/seamstressd/test/runner_test.exs",
-          "services/seamstressd/test/e2e_test.exs"
+          "services/seamstressd/bench/runner_bench.exs"
         ],
         "frameworks": [],
-        "relation": "MutationGap->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -336,18 +348,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "services/seamstressd/lib/seamstressd/runner.ex",
-          "services/seamstressd/test/runner_test.exs",
-          "services/seamstressd/bench/runner_bench.exs"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "InsecureProtocol",

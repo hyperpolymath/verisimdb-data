@@ -188,7 +188,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 15076,
+    "total_lines": 15497,
     "unsafe_blocks": 108,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -399,19 +399,13 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
     "concurrency",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "ffi/zig/src/main.zig",
-        "to": "ffi/zig/src/store.zig",
-        "relation": "shared_dir:ffi/zig/src",
-        "weight": 1.0
-      },
       {
         "from": "orchestrator/lib/lol/source_registry.ex",
         "to": "orchestrator/lib/lol/crawler_worker.ex",
@@ -443,9 +437,9 @@
         "weight": 1.0
       },
       {
-        "from": "api/zig-gateway/src/lol_ffi.zig",
-        "to": "api/zig-gateway/src/main.zig",
-        "relation": "shared_dir:api/zig-gateway/src",
+        "from": "ffi/zig/src/main.zig",
+        "to": "ffi/zig/src/store.zig",
+        "relation": "shared_dir:ffi/zig/src",
         "weight": 1.0
       },
       {
@@ -458,6 +452,12 @@
         "from": "src/verisimdb/VeriSimDB.affine",
         "to": "src/verisimdb/Export.affine",
         "relation": "shared_dir:src/verisimdb",
+        "weight": 1.0
+      },
+      {
+        "from": "api/zig-gateway/src/lol_ffi.zig",
+        "to": "api/zig-gateway/src/main.zig",
+        "relation": "shared_dir:api/zig-gateway/src",
         "weight": 1.0
       },
       {
@@ -599,17 +599,16 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "orchestrator/test/crawler_worker_test.exs",
-          "orchestrator/test/rate_limiter_test.exs"
+          "scripts/verisimdb-ingest.sh"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "MutationGap->Cpu"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnsafeCode",
@@ -650,22 +649,6 @@
         "relation": "ProofDrift->Cpu"
       },
       {
-        "source_category": "UnsafeDeserialization",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/crawlers/BibleCloud.affine",
-          "src/crawlers/BibleCom.affine",
-          "src/crawlers/FindBible.affine",
-          "src/utils/Http.affine",
-          "src/api/DigitalBiblePlatform.affine"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeDeserialization->Memory"
-      },
-      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -680,16 +663,33 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "scripts/verisimdb-ingest.sh"
+          "orchestrator/test/crawler_worker_test.exs",
+          "orchestrator/test/rate_limiter_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "PathTraversal->Disk"
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnsafeDeserialization",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/crawlers/BibleCloud.affine",
+          "src/crawlers/BibleCom.affine",
+          "src/crawlers/FindBible.affine",
+          "src/utils/Http.affine",
+          "src/api/DigitalBiblePlatform.affine"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeDeserialization->Memory"
       }
     ]
   }

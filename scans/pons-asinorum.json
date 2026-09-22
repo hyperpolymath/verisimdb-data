@@ -460,13 +460,19 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
-    "cpu",
-    "time"
+    "memory",
+    "time",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": ".machine_readable/contractiles/adjust/adjust.ncl",
+        "to": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/adjust",
+        "weight": 1.0
+      },
       {
         "from": ".machine_readable/contractiles/trust/trust.ncl",
         "to": ".machine_readable/contractiles/trust/trust.k9.ncl",
@@ -486,15 +492,15 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/adjust/adjust.ncl",
-        "to": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/adjust",
-        "weight": 1.0
-      },
-      {
         "from": "crates/pons-core/src/engine.rs",
         "to": "crates/pons-core/src/source.rs",
         "relation": "shared_dir:crates/pons-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/bust/bust.k9.ncl",
+        "to": ".machine_readable/contractiles/bust/bust.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/bust",
         "weight": 1.0
       },
       {
@@ -544,34 +550,11 @@
         "to": "crates/pons-rules/src/t0/div_by_literal_zero.rs",
         "relation": "shared_dir:crates/pons-rules/src/t0",
         "weight": 1.0
-      },
-      {
-        "from": ".machine_readable/contractiles/bust/bust.k9.ncl",
-        "to": ".machine_readable/contractiles/bust/bust.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/bust",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/pons-rules/src/t0/swallowed_error.rs",
-          "crates/pons-rules/src/t0/empty_effect_loop.rs",
-          "crates/pons-rules/src/t0/unreachable_after_jump.rs",
-          "crates/pons-rules/src/t0/string_concat_in_loop.rs",
-          "crates/pons-rules/src/t0/self_assignment.rs",
-          "crates/pons-rules/src/t0/while_true_no_break.rs",
-          "crates/pons-rules/src/t0/constant_condition.rs",
-          "crates/pons-rules/src/t0/div_by_literal_zero.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "UnboundedLoop",
         "sink_axis": "time",
@@ -584,6 +567,19 @@
         ],
         "frameworks": [],
         "relation": "UnboundedLoop->Time"
+      },
+      {
+        "source_category": "UnboundedLoop",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "fixtures/empty-effect-loop/positive/basic.py",
+          "fixtures/while-true-no-break/negative/basic.py",
+          "fixtures/while-true-no-break/positive/basic.py",
+          "fixtures/constant-condition/negative/basic.py"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedLoop->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -603,17 +599,21 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "UnboundedLoop",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "fixtures/empty-effect-loop/positive/basic.py",
-          "fixtures/while-true-no-break/negative/basic.py",
-          "fixtures/while-true-no-break/positive/basic.py",
-          "fixtures/constant-condition/negative/basic.py"
+          "crates/pons-rules/src/t0/swallowed_error.rs",
+          "crates/pons-rules/src/t0/empty_effect_loop.rs",
+          "crates/pons-rules/src/t0/unreachable_after_jump.rs",
+          "crates/pons-rules/src/t0/string_concat_in_loop.rs",
+          "crates/pons-rules/src/t0/self_assignment.rs",
+          "crates/pons-rules/src/t0/while_true_no_break.rs",
+          "crates/pons-rules/src/t0/constant_condition.rs",
+          "crates/pons-rules/src/t0/div_by_literal_zero.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedLoop->Cpu"
+        "relation": "PanicPath->Disk"
       }
     ]
   }
