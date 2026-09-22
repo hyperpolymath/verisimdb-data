@@ -466,10 +466,10 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
-    "cpu",
-    "concurrency"
+    "concurrency",
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -477,6 +477,24 @@
         "from": "src/feedback/reranker.rs",
         "to": "src/feedback/corpus_delta.rs",
         "relation": "shared_dir:src/feedback",
+        "weight": 1.0
+      },
+      {
+        "from": "src/adapters/codeberg.rs",
+        "to": "src/adapters/mod.rs",
+        "relation": "shared_dir:src/adapters",
+        "weight": 1.0
+      },
+      {
+        "from": "src/adapters/mod.rs",
+        "to": "src/adapters/gitlab.rs",
+        "relation": "shared_dir:src/adapters",
+        "weight": 1.0
+      },
+      {
+        "from": "src/adapters/gitlab.rs",
+        "to": "src/adapters/bitbucket.rs",
+        "relation": "shared_dir:src/adapters",
         "weight": 1.0
       },
       {
@@ -504,15 +522,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/scheduler/retry.rs",
-        "to": "src/scheduler/job_queue.rs",
-        "relation": "shared_dir:src/scheduler",
+        "from": "src/api/graphql.rs",
+        "to": "src/api/rate_limit.rs",
+        "relation": "shared_dir:src/api",
         "weight": 1.0
       },
       {
-        "from": "src/scheduler/job_queue.rs",
-        "to": "src/scheduler/limiter.rs",
-        "relation": "shared_dir:src/scheduler",
+        "from": "src/api/rate_limit.rs",
+        "to": "src/api/webhooks.rs",
+        "relation": "shared_dir:src/api",
         "weight": 1.0
       },
       {
@@ -534,39 +552,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/adapters/codeberg.rs",
-        "to": "src/adapters/mod.rs",
-        "relation": "shared_dir:src/adapters",
+        "from": "src/scheduler/retry.rs",
+        "to": "src/scheduler/job_queue.rs",
+        "relation": "shared_dir:src/scheduler",
         "weight": 1.0
       },
       {
-        "from": "src/adapters/mod.rs",
-        "to": "src/adapters/gitlab.rs",
-        "relation": "shared_dir:src/adapters",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/gitlab.rs",
-        "to": "src/adapters/bitbucket.rs",
-        "relation": "shared_dir:src/adapters",
+        "from": "src/scheduler/job_queue.rs",
+        "to": "src/scheduler/limiter.rs",
+        "relation": "shared_dir:src/scheduler",
         "weight": 1.0
       },
       {
         "from": "src/abi/Foreign.idr",
         "to": "src/abi/Types.idr",
         "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/graphql.rs",
-        "to": "src/api/rate_limit.rs",
-        "relation": "shared_dir:src/api",
-        "weight": 1.0
-      },
-      {
-        "from": "src/api/rate_limit.rs",
-        "to": "src/api/webhooks.rs",
-        "relation": "shared_dir:src/api",
         "weight": 1.0
       },
       {
@@ -1204,21 +1204,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "proofs/coq/admitted_stub.v",
-          "proofs/lean/sorry_stub.lean"
-        ],
-        "frameworks": [
-          "WebServer",
-          "Database",
-          "Networking"
-        ],
-        "relation": "ProofDrift->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -1235,6 +1220,21 @@
           "Networking"
         ],
         "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "proofs/coq/admitted_stub.v",
+          "proofs/lean/sorry_stub.lean"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Database",
+          "Networking"
+        ],
+        "relation": "ProofDrift->Cpu"
       }
     ]
   }

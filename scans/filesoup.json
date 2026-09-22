@@ -145,7 +145,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 5695,
+    "total_lines": 6116,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 30,
@@ -282,43 +282,28 @@
   ],
   "recommended_attacks": [
     "memory",
+    "disk",
     "cpu",
-    "network",
-    "disk"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/fslint-core/src/scanner.rs",
-        "to": "crates/fslint-core/src/plugin_loader.rs",
-        "relation": "shared_dir:crates/fslint-core/src",
-        "weight": 1.0
-      },
-      {
         "from": "crates/fslint-cli/src/output.rs",
         "to": "crates/fslint-cli/src/query.rs",
         "relation": "shared_dir:crates/fslint-cli/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/fslint-core/src/scanner.rs",
+        "to": "crates/fslint-core/src/plugin_loader.rs",
+        "relation": "shared_dir:crates/fslint-core/src",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "plugins/duplicate-finder/src/lib.rs",
-          "plugins/version-detection/src/lib.rs",
-          "plugins/secret-scanner/src/lib.rs",
-          "crates/fslint-plugin-sdk/src/lib.rs",
-          "crates/fslint-cli/src/output.rs",
-          "crates/fslint-cli/src/query.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -335,14 +320,19 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "scripts/verify-rsr.sh"
+          "plugins/duplicate-finder/src/lib.rs",
+          "plugins/version-detection/src/lib.rs",
+          "plugins/secret-scanner/src/lib.rs",
+          "crates/fslint-plugin-sdk/src/lib.rs",
+          "crates/fslint-cli/src/output.rs",
+          "crates/fslint-cli/src/query.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -386,6 +376,16 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/verify-rsr.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }

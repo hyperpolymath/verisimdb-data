@@ -211,18 +211,6 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/aspect_test.rs",
-        "to": "tests/property_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/property_test.rs",
-        "to": "tests/e2e_test.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "src/bridge/mod.rs",
         "to": "src/bridge/reachability.rs",
         "relation": "shared_dir:src/bridge",
@@ -251,6 +239,18 @@
         "to": "src/bridge/intelligence.rs",
         "relation": "shared_dir:src/bridge",
         "weight": 1.0
+      },
+      {
+        "from": "tests/aspect_test.rs",
+        "to": "tests/property_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/property_test.rs",
+        "to": "tests/e2e_test.rs",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
       }
     ]
   },
@@ -268,14 +268,15 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/bridge/classify.rs"
+          "src/bridge/reachability.rs",
+          "src/bridge/registry.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -288,15 +289,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/bridge/reachability.rs",
-          "src/bridge/registry.rs"
+          "src/bridge/classify.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

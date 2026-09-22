@@ -149,8 +149,8 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
+    "disk",
     "memory"
   ],
   "dependency_graph": {
@@ -184,6 +184,28 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/invariant-path-core/src/doc_claims.rs",
+          "crates/invariant-path-core/src/annotations.rs",
+          "crates/invariant-path-cli/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/invariant-path-core/src/doc_claims.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -194,14 +216,14 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "scripts/verify-same-cube.sh"
+          "crates/invariant-path-core/src/doc_claims.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -216,36 +238,14 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "crates/invariant-path-core/src/doc_claims.rs"
+          "scripts/verify-same-cube.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/invariant-path-core/src/doc_claims.rs",
-          "crates/invariant-path-core/src/annotations.rs",
-          "crates/invariant-path-cli/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/invariant-path-core/src/doc_claims.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "CommandInjection->Cpu"
       }
     ]
   }

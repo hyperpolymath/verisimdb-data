@@ -98,6 +98,18 @@
       "test_context": "production"
     },
     {
+      "category": "UnboundedAllocation",
+      "location": "src/oracle/src/lib.rs",
+      "file": "src/oracle/src/lib.rs",
+      "severity": "Medium",
+      "description": "Potential unbounded allocation pattern detected in src/oracle/src/lib.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "HardcodedSecret",
       "location": "src/oracle/src/lib.rs",
       "file": "src/oracle/src/lib.rs",
@@ -143,12 +155,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 11850,
+    "total_lines": 12084,
     "unsafe_blocks": 2,
     "panic_sites": 0,
     "unwrap_calls": 12,
-    "allocation_sites": 63,
-    "io_operations": 44,
+    "allocation_sites": 71,
+    "io_operations": 46,
     "threading_constructs": 3
   },
   "file_statistics": [
@@ -245,24 +257,24 @@
     },
     {
       "file_path": "src/oracle/src/lib.rs",
-      "lines": 1065,
+      "lines": 1287,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 14,
-      "io_operations": 1,
+      "safe_unwrap_calls": 5,
+      "allocation_sites": 22,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
       "file_path": "src/main.rs",
-      "lines": 1904,
+      "lines": 1934,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 12,
       "safe_unwrap_calls": 9,
       "allocation_sites": 16,
-      "io_operations": 13,
+      "io_operations": 14,
       "threading_constructs": 0
     },
     {
@@ -278,9 +290,9 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "disk",
+    "memory",
     "network",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -452,6 +464,37 @@
     "rows": [
       {
         "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh",
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "tests/security_aspect_test.rs",
+          "tests/gating_pipeline_test.rs",
+          "benches/oracle_bench.rs",
+          "src/contract/src/lib.rs",
+          "src/oracle/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
@@ -477,20 +520,6 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh",
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -502,34 +531,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/contract/src/lib.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/contract/src/lib.rs",
-          "src/main.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -545,21 +546,34 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "tests/security_aspect_test.rs",
-          "tests/gating_pipeline_test.rs",
-          "benches/oracle_bench.rs",
           "src/contract/src/lib.rs",
-          "src/oracle/src/lib.rs"
+          "src/oracle/src/lib.rs",
+          "src/main.rs"
         ],
         "frameworks": [
           "OTP",
           "Networking"
         ],
-        "relation": "HardcodedSecret->Network"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/contract/src/lib.rs",
+          "src/oracle/src/lib.rs",
+          "src/main.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
