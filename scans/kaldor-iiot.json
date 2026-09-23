@@ -3,9 +3,9 @@
   "program_path": "kaldor-iiot",
   "language": "affinescript",
   "frameworks": [
+    "Cache",
     "WebServer",
-    "Database",
-    "Cache"
+    "Database"
   ],
   "weak_points": [
     {
@@ -71,16 +71,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "firmware/src/main.cpp",
-      "lines": 465,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "firmware/src/sensors.cpp",
       "lines": 267,
       "unsafe_blocks": 0,
@@ -101,6 +91,16 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "firmware/src/main.cpp",
+      "lines": 465,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "setup.sh",
       "lines": 278,
       "unsafe_blocks": 0,
@@ -112,18 +112,12 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
+    "cpu",
     "network",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "firmware/src/main.cpp",
-        "to": "firmware/src/sensors.cpp",
-        "relation": "shared_dir:firmware/src",
-        "weight": 1.0
-      },
       {
         "from": "firmware/src/sensors.cpp",
         "to": "firmware/src/data_buffer.cpp",
@@ -131,15 +125,9 @@
         "weight": 1.0
       },
       {
-        "from": "backend/analytics/src/Analytics.jl",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "backend/analytics/src/Analytics.jl",
-        "to": "Database",
-        "relation": "framework",
+        "from": "firmware/src/data_buffer.cpp",
+        "to": "firmware/src/main.cpp",
+        "relation": "shared_dir:firmware/src",
         "weight": 1.0
       },
       {
@@ -149,16 +137,16 @@
         "weight": 1.0
       },
       {
-        "from": "firmware-zig/src/hal.zig",
+        "from": "backend/analytics/src/Analytics.jl",
         "to": "WebServer",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
-        "from": "firmware-zig/src/hal.zig",
+        "from": "backend/analytics/src/Analytics.jl",
         "to": "Database",
         "relation": "framework",
-        "weight": 2.0
+        "weight": 1.0
       },
       {
         "from": "firmware-zig/src/hal.zig",
@@ -167,6 +155,24 @@
         "weight": 2.0
       },
       {
+        "from": "firmware-zig/src/hal.zig",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "firmware-zig/src/hal.zig",
+        "to": "Database",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
+        "from": "scripts/deployment/deploy.sh",
+        "to": "Cache",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
         "from": "scripts/deployment/deploy.sh",
         "to": "WebServer",
         "relation": "framework",
@@ -179,7 +185,7 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/deployment/deploy.sh",
+        "from": "firmware/include/sensors.h",
         "to": "Cache",
         "relation": "framework",
         "weight": 1.0
@@ -197,25 +203,7 @@
         "weight": 1.0
       },
       {
-        "from": "firmware/include/sensors.h",
-        "to": "Cache",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "firmware/src/main.cpp",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "firmware/src/main.cpp",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "firmware/src/main.cpp",
+        "from": "firmware/src/sensors.cpp",
         "to": "Cache",
         "relation": "framework",
         "weight": 1.0
@@ -233,7 +221,7 @@
         "weight": 1.0
       },
       {
-        "from": "firmware/src/sensors.cpp",
+        "from": "firmware/src/data_buffer.cpp",
         "to": "Cache",
         "relation": "framework",
         "weight": 1.0
@@ -251,7 +239,25 @@
         "weight": 1.0
       },
       {
-        "from": "firmware/src/data_buffer.cpp",
+        "from": "firmware/src/main.cpp",
+        "to": "Cache",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "firmware/src/main.cpp",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "firmware/src/main.cpp",
+        "to": "Database",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "setup.sh",
         "to": "Cache",
         "relation": "framework",
         "weight": 1.0
@@ -265,12 +271,6 @@
       {
         "from": "setup.sh",
         "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "setup.sh",
-        "to": "Cache",
         "relation": "framework",
         "weight": 1.0
       }
@@ -286,9 +286,9 @@
           "backend/api/tests/api.test.js"
         ],
         "frameworks": [
+          "Cache",
           "WebServer",
-          "Database",
-          "Cache"
+          "Database"
         ],
         "relation": "HardcodedSecret->Network"
       }
