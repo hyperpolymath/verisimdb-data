@@ -59,6 +59,17 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "src/hardware/mock.rs",
+      "lines": 307,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 17,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
       "file_path": "src/hardware/display.rs",
       "lines": 192,
       "unsafe_blocks": 0,
@@ -79,35 +90,24 @@
       "allocation_sites": 0,
       "io_operations": 0,
       "threading_constructs": 1
-    },
-    {
-      "file_path": "src/hardware/mock.rs",
-      "lines": 307,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 17,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 1
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/hardware/display.rs",
-        "to": "src/hardware/sensor.rs",
+        "from": "src/hardware/mock.rs",
+        "to": "src/hardware/display.rs",
         "relation": "shared_dir:src/hardware",
         "weight": 1.0
       },
       {
-        "from": "src/hardware/sensor.rs",
-        "to": "src/hardware/mock.rs",
+        "from": "src/hardware/display.rs",
+        "to": "src/hardware/sensor.rs",
         "relation": "shared_dir:src/hardware",
         "weight": 1.0
       },
@@ -124,6 +124,12 @@
         "weight": 1.0
       },
       {
+        "from": "src/hardware/mock.rs",
+        "to": "Networking",
+        "relation": "framework",
+        "weight": 2.0
+      },
+      {
         "from": "src/hardware/display.rs",
         "to": "Networking",
         "relation": "framework",
@@ -134,29 +140,11 @@
         "to": "Networking",
         "relation": "framework",
         "weight": 2.0
-      },
-      {
-        "from": "src/hardware/mock.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/config/mod.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -168,6 +156,18 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/config/mod.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }

@@ -41,6 +41,30 @@
     },
     {
       "category": "CommandInjection",
+      "location": "verification/run-local-verification.sh",
+      "file": "verification/run-local-verification.sh",
+      "severity": "Critical",
+      "description": "eval usage in verification/run-local-verification.sh",
+      "recommended_attack": [
+        "cpu",
+        "disk"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "location": "verification/run-local-verification.sh",
+      "file": "verification/run-local-verification.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in verification/run-local-verification.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "CommandInjection",
       "location": "verification/verify-proofs.sh",
       "file": "verification/verify-proofs.sh",
       "severity": "Critical",
@@ -64,26 +88,36 @@
       "test_context": "production"
     },
     {
-      "category": "CommandInjection",
-      "location": "verification/run-local-verification.sh",
-      "file": "verification/run-local-verification.sh",
-      "severity": "Critical",
-      "description": "eval usage in verification/run-local-verification.sh",
+      "category": "PanicPath",
+      "location": "src/whitespace/src/lib.rs",
+      "file": "src/whitespace/src/lib.rs",
+      "severity": "Medium",
+      "description": "0 panic sites and 8 unwrap/expect calls in src/whitespace/src/lib.rs",
       "recommended_attack": [
-        "cpu",
+        "memory",
         "disk"
       ],
-      "suppressed": true,
       "test_context": "production"
     },
     {
-      "category": "PathTraversal",
-      "location": "verification/run-local-verification.sh",
-      "file": "verification/run-local-verification.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in verification/run-local-verification.sh",
+      "category": "ProofDrift",
+      "location": "src/abi/AbsoluteZero/ABI/Layout.idr",
+      "file": "src/abi/AbsoluteZero/ABI/Layout.idr",
+      "severity": "Critical",
+      "description": "1 believe_me (banned proof escape hatch — type checker bypass) in src/abi/AbsoluteZero/ABI/Layout.idr",
       "recommended_attack": [
-        "disk"
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "ProofDrift",
+      "location": "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
+      "file": "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
+      "severity": "Critical",
+      "description": "4 believe_me (banned proof escape hatch — type checker bypass) in src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
+      "recommended_attack": [
+        "memory"
       ],
       "test_context": "production"
     },
@@ -143,40 +177,6 @@
       "test_context": "production"
     },
     {
-      "category": "PanicPath",
-      "location": "src/whitespace/src/lib.rs",
-      "file": "src/whitespace/src/lib.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 8 unwrap/expect calls in src/whitespace/src/lib.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "ProofDrift",
-      "location": "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
-      "file": "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
-      "severity": "Critical",
-      "description": "4 believe_me (banned proof escape hatch — type checker bypass) in src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "ProofDrift",
-      "location": "src/abi/AbsoluteZero/ABI/Layout.idr",
-      "file": "src/abi/AbsoluteZero/ABI/Layout.idr",
-      "severity": "Critical",
-      "description": "1 believe_me (banned proof escape hatch — type checker bypass) in src/abi/AbsoluteZero/ABI/Layout.idr",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "MutationGap",
       "location": "Cargo.toml",
       "file": "Cargo.toml",
@@ -187,25 +187,15 @@
     }
   ],
   "statistics": {
-    "total_lines": 18735,
+    "total_lines": 18984,
     "unsafe_blocks": 29,
     "panic_sites": 6,
     "unwrap_calls": 8,
     "allocation_sites": 13,
-    "io_operations": 11,
+    "io_operations": 14,
     "threading_constructs": 8
   },
   "file_statistics": [
-    {
-      "file_path": "examples/elixir/nop.ex",
-      "lines": 400,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
     {
       "file_path": "examples/special-ops/os/ioctl_nop.c",
       "lines": 458,
@@ -227,14 +217,24 @@
       "threading_constructs": 4
     },
     {
-      "file_path": "examples/rust/nop.rs",
-      "lines": 87,
+      "file_path": "examples/erlang/nop.erl",
+      "lines": 276,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
+      "io_operations": 0,
+      "threading_constructs": 1
+    },
+    {
+      "file_path": "examples/elixir/nop.ex",
+      "lines": 400,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 1
     },
     {
       "file_path": "examples/haskell/Nop.hs",
@@ -247,14 +247,14 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "examples/erlang/nop.erl",
-      "lines": 276,
+      "file_path": "examples/rust/nop.rs",
+      "lines": 87,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
+      "io_operations": 1,
+      "threading_constructs": 0
     },
     {
       "file_path": "verification/setup-and-verify.sh",
@@ -277,58 +277,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/whitespace/src/lib.rs",
-      "lines": 317,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 8,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 10,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/brainfuck/src/lib.rs",
-      "lines": 283,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/AbsoluteZero/ABI/Foreign.idr",
-      "lines": 368,
-      "unsafe_blocks": 24,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
-      "lines": 124,
-      "unsafe_blocks": 4,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/AbsoluteZero/ABI/Layout.idr",
-      "lines": 303,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "ffi/zig/test/integration_test.zig",
       "lines": 183,
       "unsafe_blocks": 0,
@@ -347,20 +295,92 @@
       "allocation_sites": 1,
       "io_operations": 0,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "src/whitespace/src/lib.rs",
+      "lines": 317,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 8,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 10,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/abi/AbsoluteZero/ABI/Foreign.idr",
+      "lines": 368,
+      "unsafe_blocks": 24,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/abi/AbsoluteZero/ABI/Layout.idr",
+      "lines": 303,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
+      "lines": 124,
+      "unsafe_blocks": 4,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/brainfuck/src/lib.rs",
+      "lines": 283,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "safe_unwrap_calls": 2,
+      "allocation_sites": 2,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "proofs/tests/gate-selftest.sh",
+      "lines": 122,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "proofs/coq/check-assumptions.sh",
+      "lines": 66,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "concurrency",
-    "disk",
     "memory",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "examples/special-ops/os/ioctl_nop.c",
-        "to": "examples/special-ops/os/sched_yield.c",
-        "relation": "shared_dir:examples/special-ops/os",
+        "from": "src/abi/AbsoluteZero/ABI/Foreign.idr",
+        "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
+        "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
         "weight": 1.0
       },
       {
@@ -370,15 +390,35 @@
         "weight": 1.0
       },
       {
-        "from": "src/abi/AbsoluteZero/ABI/Foreign.idr",
-        "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
-        "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
+        "from": "examples/special-ops/os/ioctl_nop.c",
+        "to": "examples/special-ops/os/sched_yield.c",
+        "relation": "shared_dir:examples/special-ops/os",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/whitespace/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "ResourceLeak",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "examples/scheme/nop.scm"
+        ],
+        "frameworks": [],
+        "relation": "ResourceLeak->Memory"
+      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -390,37 +430,77 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "PanicPath",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
         "files": [
-          "verification/verify-proofs.sh",
-          "verification/run-local-verification.sh"
+          "examples/haskell/Nop.hs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "PanicPath->Cpu"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "memory",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
-          "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
-          "src/abi/AbsoluteZero/ABI/Layout.idr"
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Memory"
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "examples/ada/balanced_ops.adb"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Cpu"
+      },
+      {
+        "source_category": "ResourceLeak",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "examples/scheme/nop.scm"
+        ],
+        "frameworks": [],
+        "relation": "ResourceLeak->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "examples/ada/balanced_ops.adb"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "verification/verify-proofs.sh",
-          "verification/run-local-verification.sh"
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "src/abi/AbsoluteZero/ABI/Layout.idr",
+          "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Memory"
       },
       {
         "source_category": "ProofDrift",
@@ -437,75 +517,15 @@
         "relation": "ProofDrift->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/whitespace/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "examples/haskell/Nop.hs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "examples/ada/balanced_ops.adb"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Cpu"
-      },
-      {
         "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
-          "verification/verify-proofs.sh",
-          "verification/run-local-verification.sh"
+          "verification/run-local-verification.sh",
+          "verification/verify-proofs.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "examples/ada/balanced_ops.adb"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "ResourceLeak",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "examples/scheme/nop.scm"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Cpu"
-      },
-      {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "examples/scheme/nop.scm"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Memory"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

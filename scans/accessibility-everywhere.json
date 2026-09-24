@@ -8,6 +8,31 @@
   "weak_points": [
     {
       "category": "DynamicCodeExecution",
+      "location": "tools/testing-dashboard/app.js",
+      "file": "tools/testing-dashboard/app.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in tools/testing-dashboard/app.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
+      "location": "tools/browser-extension/axe.min.js",
+      "file": "tools/browser-extension/axe.min.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in tools/browser-extension/axe.min.js",
+      "recommended_attack": [
+        "memory",
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "DynamicCodeExecution",
       "location": "tools/monitoring-api/tests/aspect/security_test.js",
       "file": "tools/monitoring-api/tests/aspect/security_test.js",
       "severity": "Critical",
@@ -28,31 +53,6 @@
         "network"
       ],
       "test_context": "test_only"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "tools/browser-extension/axe.min.js",
-      "file": "tools/browser-extension/axe.min.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in tools/browser-extension/axe.min.js",
-      "recommended_attack": [
-        "memory",
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "DynamicCodeExecution",
-      "location": "tools/testing-dashboard/app.js",
-      "file": "tools/testing-dashboard/app.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in tools/testing-dashboard/app.js",
-      "recommended_attack": [
-        "memory",
-        "network"
-      ],
-      "suppressed": true,
-      "test_context": "production"
     }
   ],
   "statistics": {
@@ -66,13 +66,23 @@
   },
   "file_statistics": [
     {
-      "file_path": "tools/monitoring-api/src/Externs.affine",
-      "lines": 101,
+      "file_path": "tools/stale/packages/scanner/src/Externs.affine",
+      "lines": 38,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tools/testing-dashboard/app.js",
+      "lines": 412,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
       "threading_constructs": 0
     },
     {
@@ -96,28 +106,18 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "tools/testing-dashboard/app.js",
-      "lines": 412,
+      "file_path": "tools/monitoring-api/src/Externs.affine",
+      "lines": 101,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 2,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
       "file_path": "tools/cli/src/Externs.affine",
       "lines": 96,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tools/stale/packages/scanner/src/Externs.affine",
-      "lines": 38,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -159,13 +159,19 @@
   "recommended_attacks": [
     "memory",
     "network",
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tools/monitoring-api/src/Externs.affine",
+        "from": "tools/stale/packages/scanner/src/Externs.affine",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "tools/testing-dashboard/app.js",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -183,19 +189,13 @@
         "weight": 1.0
       },
       {
-        "from": "tools/testing-dashboard/app.js",
+        "from": "tools/monitoring-api/src/Externs.affine",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
       },
       {
         "from": "tools/cli/src/Externs.affine",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tools/stale/packages/scanner/src/Externs.affine",
         "to": "WebServer",
         "relation": "framework",
         "weight": 1.0
@@ -236,6 +236,19 @@
       },
       {
         "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "tools/testing-dashboard/app.js",
+          "tools/browser-extension/axe.min.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
@@ -248,25 +261,12 @@
       },
       {
         "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "tools/browser-extension/axe.min.js",
-          "tools/testing-dashboard/app.js"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
         "sink_axis": "memory",
         "severity_value": 5.0,
         "files": [
-          "tools/monitoring-api/tests/aspect/security_test.js",
+          "tools/testing-dashboard/app.js",
           "tools/browser-extension/axe.min.js",
-          "tools/testing-dashboard/app.js"
+          "tools/monitoring-api/tests/aspect/security_test.js"
         ],
         "frameworks": [
           "WebServer"
