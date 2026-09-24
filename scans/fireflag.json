@@ -5,27 +5,15 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "DynamicCodeExecution",
-      "location": "extension/lib/dom-utils.js",
-      "file": "extension/lib/dom-utils.js",
-      "severity": "High",
-      "description": "DOM manipulation (innerHTML/document.write) in extension/lib/dom-utils.js",
+      "category": "InputBoundary",
+      "location": "tests/property/FlagPropertiesTest.res.js",
+      "file": "tests/property/FlagPropertiesTest.res.js",
+      "severity": "Medium",
+      "description": "5 JSON.parse call(s) with 0 try block(s) in tests/property/FlagPropertiesTest.res.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
       "recommended_attack": [
-        "memory",
-        "network"
+        "cpu"
       ],
-      "test_context": "production"
-    },
-    {
-      "category": "HardcodedSecret",
-      "location": "scripts/sign-extension.sh",
-      "file": "scripts/sign-extension.sh",
-      "severity": "Critical",
-      "description": "Possible hardcoded secret in scripts/sign-extension.sh",
-      "recommended_attack": [
-        "network"
-      ],
-      "test_context": "production"
+      "test_context": "test_only"
     },
     {
       "category": "InputBoundary",
@@ -39,15 +27,16 @@
       "test_context": "test_only"
     },
     {
-      "category": "InputBoundary",
-      "location": "tests/property/FlagPropertiesTest.res.js",
-      "file": "tests/property/FlagPropertiesTest.res.js",
-      "severity": "Medium",
-      "description": "5 JSON.parse call(s) with 0 try block(s) in tests/property/FlagPropertiesTest.res.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "category": "DynamicCodeExecution",
+      "location": "extension/lib/dom-utils.js",
+      "file": "extension/lib/dom-utils.js",
+      "severity": "High",
+      "description": "DOM manipulation (innerHTML/document.write) in extension/lib/dom-utils.js",
       "recommended_attack": [
-        "cpu"
+        "memory",
+        "network"
       ],
-      "test_context": "test_only"
+      "test_context": "production"
     },
     {
       "category": "InsecureProtocol",
@@ -55,6 +44,17 @@
       "file": ".screenshots/generate-mockups.sh",
       "severity": "Medium",
       "description": "4 HTTP (non-HTTPS) URLs in .screenshots/generate-mockups.sh",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "HardcodedSecret",
+      "location": "scripts/sign-extension.sh",
+      "file": "scripts/sign-extension.sh",
+      "severity": "Critical",
+      "description": "Possible hardcoded secret in scripts/sign-extension.sh",
       "recommended_attack": [
         "network"
       ],
@@ -71,6 +71,16 @@
     "threading_constructs": 0
   },
   "file_statistics": [
+    {
+      "file_path": ".containerization/build.sh",
+      "lines": 153,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
     {
       "file_path": "extension/lib/rescript/DatabaseUpdater.res.js",
       "lines": 355,
@@ -92,16 +102,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "extension/sidebar/sidebar.js",
-      "lines": 378,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "extension/popup/popup.js",
       "lines": 264,
       "unsafe_blocks": 0,
@@ -112,18 +112,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "scripts/sign-extension.sh",
-      "lines": 185,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": ".containerization/build.sh",
-      "lines": 153,
+      "file_path": "extension/sidebar/sidebar.js",
+      "lines": 378,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -140,13 +130,23 @@
       "allocation_sites": 0,
       "io_operations": 4,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/sign-extension.sh",
+      "lines": 185,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "memory",
-    "disk",
-    "network"
+    "network",
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": []
@@ -164,16 +164,6 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          ".screenshots/generate-mockups.sh"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
         "severity_value": 3.5,
@@ -188,8 +178,8 @@
         "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "tests/bench/FlagBench.res.js",
-          "tests/property/FlagPropertiesTest.res.js"
+          "tests/property/FlagPropertiesTest.res.js",
+          "tests/bench/FlagBench.res.js"
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
@@ -203,6 +193,16 @@
         ],
         "frameworks": [],
         "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          ".screenshots/generate-mockups.sh"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

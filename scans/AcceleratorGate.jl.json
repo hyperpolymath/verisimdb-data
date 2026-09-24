@@ -6,10 +6,10 @@
   "weak_points": [
     {
       "category": "ProofDrift",
-      "location": "test/runtests.jl",
-      "file": "test/runtests.jl",
+      "location": "test/e2e_test.jl",
+      "file": "test/e2e_test.jl",
       "severity": "Medium",
-      "description": "45 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
+      "description": "10 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
       "recommended_attack": [
         "cpu"
       ],
@@ -17,10 +17,10 @@
     },
     {
       "category": "ProofDrift",
-      "location": "test/e2e_test.jl",
-      "file": "test/e2e_test.jl",
+      "location": "test/runtests.jl",
+      "file": "test/runtests.jl",
       "severity": "Medium",
-      "description": "10 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/e2e_test.jl",
+      "description": "45 `@test x isa Y` assertion(s) with no value check — type-only tests may substitute for an unwritten formal theorem in test/runtests.jl",
       "recommended_attack": [
         "cpu"
       ],
@@ -38,17 +38,6 @@
       "test_context": "test_only"
     },
     {
-      "category": "UnsafeFFI",
-      "location": "src/operations.jl",
-      "file": "src/operations.jl",
-      "severity": "Medium",
-      "description": "5 ccall/FFI calls in src/operations.jl",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "DynamicCodeExecution",
       "location": "src/AcceleratorGate.jl",
       "file": "src/AcceleratorGate.jl",
@@ -56,6 +45,17 @@
       "description": "eval/Meta.parse in src/AcceleratorGate.jl",
       "recommended_attack": [
         "cpu",
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "src/operations.jl",
+      "file": "src/operations.jl",
+      "severity": "Medium",
+      "description": "5 ccall/FFI calls in src/operations.jl",
+      "recommended_attack": [
         "memory"
       ],
       "test_context": "production"
@@ -81,9 +81,9 @@
   },
   "file_statistics": [
     {
-      "file_path": "src/operations.jl",
-      "lines": 307,
-      "unsafe_blocks": 5,
+      "file_path": "src/AcceleratorGate.jl",
+      "lines": 832,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -91,9 +91,9 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/AcceleratorGate.jl",
-      "lines": 832,
-      "unsafe_blocks": 0,
+      "file_path": "src/operations.jl",
+      "lines": 307,
+      "unsafe_blocks": 5,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -108,8 +108,8 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/operations.jl",
-        "to": "src/AcceleratorGate.jl",
+        "from": "src/AcceleratorGate.jl",
+        "to": "src/operations.jl",
         "relation": "shared_dir:src",
         "weight": 1.0
       }
@@ -128,16 +128,14 @@
         "relation": "DynamicCodeExecution->Memory"
       },
       {
-        "source_category": "ProofDrift",
+        "source_category": "DynamicCodeExecution",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 3.5,
         "files": [
-          "test/runtests.jl",
-          "test/e2e_test.jl",
-          "test/property_test.jl"
+          "src/AcceleratorGate.jl"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "UnsafeFFI",
@@ -150,14 +148,16 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "ProofDrift",
         "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "src/AcceleratorGate.jl"
+          "test/e2e_test.jl",
+          "test/runtests.jl",
+          "test/property_test.jl"
         ],
         "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "ProofDrift->Cpu"
       }
     ]
   }

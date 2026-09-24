@@ -6,6 +6,39 @@
   "weak_points": [
     {
       "category": "UnsafeCode",
+      "location": "server/ffi/zig/src/main.zig",
+      "file": "server/ffi/zig/src/main.zig",
+      "severity": "High",
+      "description": "2 unsafe pointer casts in server/ffi/zig/src/main.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "server/ffi/zig/src/main.zig",
+      "file": "server/ffi/zig/src/main.zig",
+      "severity": "High",
+      "description": "1 C interop imports in server/ffi/zig/src/main.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UncheckedError",
+      "location": "server/ffi/zig/src/main.zig",
+      "file": "server/ffi/zig/src/main.zig",
+      "severity": "Low",
+      "description": "13 TODO/FIXME/HACK markers in server/ffi/zig/src/main.zig",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
       "location": "server/native/src/lithoglyph_nif.zig",
       "file": "server/native/src/lithoglyph_nif.zig",
       "severity": "High",
@@ -47,39 +80,6 @@
         "memory"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "UnsafeCode",
-      "location": "server/ffi/zig/src/main.zig",
-      "file": "server/ffi/zig/src/main.zig",
-      "severity": "High",
-      "description": "2 unsafe pointer casts in server/ffi/zig/src/main.zig",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UnsafeFFI",
-      "location": "server/ffi/zig/src/main.zig",
-      "file": "server/ffi/zig/src/main.zig",
-      "severity": "High",
-      "description": "1 C interop imports in server/ffi/zig/src/main.zig",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UncheckedError",
-      "location": "server/ffi/zig/src/main.zig",
-      "file": "server/ffi/zig/src/main.zig",
-      "severity": "Low",
-      "description": "13 TODO/FIXME/HACK markers in server/ffi/zig/src/main.zig",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "production"
     }
   ],
   "statistics": {
@@ -103,6 +103,16 @@
       "threading_constructs": 0
     },
     {
+      "file_path": "server/ffi/zig/src/main.zig",
+      "lines": 488,
+      "unsafe_blocks": 3,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
       "file_path": "server/native/src/lithoglyph_nif.zig",
       "lines": 462,
       "unsafe_blocks": 23,
@@ -113,8 +123,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "server/src/glyphbase_server.gleam",
-      "lines": 131,
+      "file_path": "server/src/router.gleam",
+      "lines": 595,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -143,8 +153,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "server/src/router.gleam",
-      "lines": 595,
+      "file_path": "server/src/glyphbase_server.gleam",
+      "lines": 131,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -156,16 +166,6 @@
       "file_path": "server/src/abi/Foreign.idr",
       "lines": 219,
       "unsafe_blocks": 9,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "server/ffi/zig/src/main.zig",
-      "lines": 488,
-      "unsafe_blocks": 3,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
@@ -194,15 +194,15 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
-    "memory"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "server/src/glyphbase_server.gleam",
-        "to": "server/src/router.gleam",
+        "from": "server/src/router.gleam",
+        "to": "server/src/glyphbase_server.gleam",
         "relation": "shared_dir:server/src",
         "weight": 1.0
       },
@@ -221,10 +221,10 @@
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
+          "server/ffi/zig/src/main.zig",
           "server/native/src/lithoglyph_nif.zig",
           "server/src/lithoglyph/client.gleam",
-          "server/src/lithoglyph/nif_ffi.gleam",
-          "server/ffi/zig/src/main.zig"
+          "server/src/lithoglyph/nif_ffi.gleam"
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
@@ -244,8 +244,8 @@
         "sink_axis": "memory",
         "severity_value": 3.5,
         "files": [
-          "server/native/src/lithoglyph_nif.zig",
-          "server/ffi/zig/src/main.zig"
+          "server/ffi/zig/src/main.zig",
+          "server/native/src/lithoglyph_nif.zig"
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
