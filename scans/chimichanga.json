@@ -45,6 +45,17 @@
     },
     {
       "category": "MutationGap",
+      "location": "test/integration/crash_capture_test.exs",
+      "file": "test/integration/crash_capture_test.exs",
+      "severity": "Low",
+      "description": "Elixir test file test/integration/crash_capture_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "test_context": "test_only"
+    },
+    {
+      "category": "MutationGap",
       "location": "test/integration/memory_isolation_test.exs",
       "file": "test/integration/memory_isolation_test.exs",
       "severity": "Low",
@@ -53,17 +64,6 @@
         "cpu"
       ],
       "suppressed": true,
-      "test_context": "test_only"
-    },
-    {
-      "category": "MutationGap",
-      "location": "test/integration/crash_capture_test.exs",
-      "file": "test/integration/crash_capture_test.exs",
-      "severity": "Low",
-      "description": "Elixir test file test/integration/crash_capture_test.exs uses ExUnit.Case but has no ExUnitProperties/StreamData — add property-based tests to improve mutation coverage",
-      "recommended_attack": [
-        "cpu"
-      ],
       "test_context": "test_only"
     },
     {
@@ -89,8 +89,28 @@
   },
   "file_statistics": [
     {
-      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
-      "lines": 66,
+      "file_path": "test_wasm/src/lib.rs",
+      "lines": 286,
+      "unsafe_blocks": 10,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "bench/boundary_bench.exs",
+      "lines": 110,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "bench/startup_bench.exs",
+      "lines": 116,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -109,14 +129,24 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "test_wasm/src/lib.rs",
-      "lines": 286,
-      "unsafe_blocks": 10,
+      "file_path": "test/test_helper.exs",
+      "lines": 49,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "test/integration/memory_isolation_test.exs",
+      "lines": 87,
+      "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
-      "threading_constructs": 0
+      "threading_constructs": 1
     },
     {
       "file_path": "ffi/zig/test/integration_test.zig",
@@ -139,38 +169,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "test/integration/memory_isolation_test.exs",
-      "lines": 87,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "test/test_helper.exs",
-      "lines": 49,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "bench/boundary_bench.exs",
-      "lines": 110,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "bench/startup_bench.exs",
-      "lines": 116,
+      "file_path": ".machine_readable/contractiles/bust/bust.ncl",
+      "lines": 66,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -181,8 +181,8 @@
   ],
   "recommended_attacks": [
     "memory",
-    "cpu",
-    "concurrency"
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -193,7 +193,19 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/bust/bust.ncl",
+        "from": "test_wasm/src/lib.rs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 30.0
+      },
+      {
+        "from": "bench/boundary_bench.exs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "bench/startup_bench.exs",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -205,10 +217,16 @@
         "weight": 1.0
       },
       {
-        "from": "test_wasm/src/lib.rs",
+        "from": "test/test_helper.exs",
         "to": "OTP",
         "relation": "framework",
-        "weight": 30.0
+        "weight": 1.0
+      },
+      {
+        "from": "test/integration/memory_isolation_test.exs",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 2.0
       },
       {
         "from": "ffi/zig/test/integration_test.zig",
@@ -223,25 +241,7 @@
         "weight": 1.0
       },
       {
-        "from": "test/integration/memory_isolation_test.exs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "test/test_helper.exs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "bench/boundary_bench.exs",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "bench/startup_bench.exs",
+        "from": ".machine_readable/contractiles/bust/bust.ncl",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -251,17 +251,19 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "test_wasm/src/lib.rs",
-          "test_wasm/src/lib.rs"
+          "test/munition_test.exs",
+          "test/integration/crash_capture_test.exs",
+          "test/integration/memory_isolation_test.exs",
+          "test/integration/fuel_exhaustion_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -277,19 +279,17 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "test/munition_test.exs",
-          "test/integration/memory_isolation_test.exs",
-          "test/integration/crash_capture_test.exs",
-          "test/integration/fuel_exhaustion_test.exs"
+          "test_wasm/src/lib.rs",
+          "test_wasm/src/lib.rs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "MutationGap->Cpu"
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

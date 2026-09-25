@@ -6,28 +6,6 @@
   "weak_points": [
     {
       "category": "UnsafeFFI",
-      "location": "src/Dom.affine",
-      "file": "src/Dom.affine",
-      "severity": "Medium",
-      "description": "30 FFI/external bindings in src/Dom.affine",
-      "recommended_attack": [
-        "memory"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "InsecureProtocol",
-      "location": "src/Page.affine",
-      "file": "src/Page.affine",
-      "severity": "Medium",
-      "description": "2 HTTP (non-HTTPS) URLs in src/Page.affine",
-      "recommended_attack": [
-        "network"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UnsafeFFI",
       "location": "src/Deno.affine",
       "file": "src/Deno.affine",
       "severity": "Medium",
@@ -43,6 +21,28 @@
       "file": "src/Components.affine",
       "severity": "Medium",
       "description": "1 HTTP (non-HTTPS) URLs in src/Components.affine",
+      "recommended_attack": [
+        "network"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "src/Dom.affine",
+      "file": "src/Dom.affine",
+      "severity": "Medium",
+      "description": "30 FFI/external bindings in src/Dom.affine",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "InsecureProtocol",
+      "location": "src/Page.affine",
+      "file": "src/Page.affine",
+      "severity": "Medium",
+      "description": "2 HTTP (non-HTTPS) URLs in src/Page.affine",
       "recommended_attack": [
         "network"
       ],
@@ -70,36 +70,6 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "src/JsCoq.affine",
-      "lines": 68,
-      "unsafe_blocks": 2,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/Dom.affine",
-      "lines": 60,
-      "unsafe_blocks": 30,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/Server.affine",
-      "lines": 82,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "src/Deno.affine",
       "lines": 37,
       "unsafe_blocks": 9,
@@ -118,37 +88,67 @@
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "src/Dom.affine",
+      "lines": 60,
+      "unsafe_blocks": 30,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/JsCoq.affine",
+      "lines": 68,
+      "unsafe_blocks": 2,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/Server.affine",
+      "lines": 82,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "network",
-    "disk",
     "cpu",
-    "memory"
+    "memory",
+    "disk",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/JsCoq.affine",
+        "from": "src/Deno.affine",
+        "to": "src/Components.affine",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/Components.affine",
         "to": "src/Dom.affine",
         "relation": "shared_dir:src",
         "weight": 1.0
       },
       {
         "from": "src/Dom.affine",
+        "to": "src/JsCoq.affine",
+        "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/JsCoq.affine",
         "to": "src/Server.affine",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/Server.affine",
-        "to": "src/Deno.affine",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/Deno.affine",
-        "to": "src/Components.affine",
         "relation": "shared_dir:src",
         "weight": 1.0
       }
@@ -157,26 +157,26 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/Dom.affine",
-          "src/Deno.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "src/Page.affine",
-          "src/Components.affine"
+          "src/Components.affine",
+          "src/Page.affine"
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/Deno.affine",
+          "src/Dom.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }
