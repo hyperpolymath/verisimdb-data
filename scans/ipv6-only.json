@@ -50,16 +50,6 @@
   },
   "file_statistics": [
     {
-      "file_path": "scripts/he-check-status.sh",
-      "lines": 153,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 5,
-      "threading_constructs": 0
-    },
-    {
       "file_path": "scripts/he-cert-check.sh",
       "lines": 99,
       "unsafe_blocks": 0,
@@ -67,6 +57,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/he-tunnel-setup.sh",
+      "lines": 236,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 5,
       "threading_constructs": 0
     },
     {
@@ -80,8 +80,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "scripts/he-tunnel-setup.sh",
-      "lines": 236,
+      "file_path": "scripts/he-check-status.sh",
+      "lines": 153,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -101,27 +101,27 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
-    "network"
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/he-check-status.sh",
-        "to": "scripts/he-cert-check.sh",
+        "from": "scripts/he-cert-check.sh",
+        "to": "scripts/he-tunnel-setup.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "scripts/he-cert-check.sh",
+        "from": "scripts/he-tunnel-setup.sh",
         "to": "scripts/he-update-endpoint.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
         "from": "scripts/he-update-endpoint.sh",
-        "to": "scripts/he-tunnel-setup.sh",
+        "to": "scripts/he-check-status.sh",
         "relation": "shared_dir:scripts",
         "weight": 1.0
       }
@@ -130,14 +130,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
-          "scripts/he-tunnel-setup.sh"
+          "src/scripts/ipv6-config.sh"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -150,6 +150,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/he-tunnel-setup.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
@@ -158,16 +168,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "src/scripts/ipv6-config.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
       }
     ]
   }
