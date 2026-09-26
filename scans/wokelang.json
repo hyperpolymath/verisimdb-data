@@ -732,22 +732,22 @@
   "recommended_attacks": [
     "network",
     "disk",
+    "cpu",
     "concurrency",
-    "memory",
-    "cpu"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "verification/conformance/valid/v23_nested_consent.woke",
-        "to": "verification/conformance/valid/v05_consent.woke",
-        "relation": "shared_dir:verification/conformance/valid",
+        "from": "src/lexer/token.rs",
+        "to": "src/lexer/mod.rs",
+        "relation": "shared_dir:src/lexer",
         "weight": 1.0
       },
       {
-        "from": "src/lsp/handlers/diagnostics.rs",
-        "to": "src/lsp/handlers/completion.rs",
-        "relation": "shared_dir:src/lsp/handlers",
+        "from": "src/security/consent.rs",
+        "to": "src/security/mod.rs",
+        "relation": "shared_dir:src/security",
         "weight": 1.0
       },
       {
@@ -817,15 +817,39 @@
         "weight": 1.0
       },
       {
-        "from": "src/lexer/token.rs",
-        "to": "src/lexer/mod.rs",
-        "relation": "shared_dir:src/lexer",
+        "from": "conformance/valid/v23_nested_consent.woke",
+        "to": "conformance/valid/v05_consent.woke",
+        "relation": "shared_dir:conformance/valid",
         "weight": 1.0
       },
       {
-        "from": "src/lsp/backend.rs",
-        "to": "src/lsp/stdlib_metadata.rs",
-        "relation": "shared_dir:src/lsp",
+        "from": "src/vm/bytecode.rs",
+        "to": "src/vm/machine.rs",
+        "relation": "shared_dir:src/vm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/vm/machine.rs",
+        "to": "src/vm/mod.rs",
+        "relation": "shared_dir:src/vm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/vm/mod.rs",
+        "to": "src/vm/compiler.rs",
+        "relation": "shared_dir:src/vm",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/conformance/valid/v23_nested_consent.woke",
+        "to": "verification/conformance/valid/v05_consent.woke",
+        "relation": "shared_dir:verification/conformance/valid",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lsp/handlers/diagnostics.rs",
+        "to": "src/lsp/handlers/completion.rs",
+        "relation": "shared_dir:src/lsp/handlers",
         "weight": 1.0
       },
       {
@@ -865,42 +889,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/vm/bytecode.rs",
-        "to": "src/vm/machine.rs",
-        "relation": "shared_dir:src/vm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/vm/machine.rs",
-        "to": "src/vm/mod.rs",
-        "relation": "shared_dir:src/vm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/vm/mod.rs",
-        "to": "src/vm/compiler.rs",
-        "relation": "shared_dir:src/vm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/security/consent.rs",
-        "to": "src/security/mod.rs",
-        "relation": "shared_dir:src/security",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interpreter/value.rs",
-        "to": "src/interpreter/mod.rs",
-        "relation": "shared_dir:src/interpreter",
-        "weight": 1.0
-      },
-      {
-        "from": "conformance/valid/v23_nested_consent.woke",
-        "to": "conformance/valid/v05_consent.woke",
-        "relation": "shared_dir:conformance/valid",
-        "weight": 1.0
-      },
-      {
         "from": "src/main.rs",
         "to": "src/modules.rs",
         "relation": "shared_dir:src",
@@ -910,6 +898,18 @@
         "from": "src/modules.rs",
         "to": "src/sexpr.rs",
         "relation": "shared_dir:src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/lsp/backend.rs",
+        "to": "src/lsp/stdlib_metadata.rs",
+        "relation": "shared_dir:src/lsp",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interpreter/value.rs",
+        "to": "src/interpreter/mod.rs",
+        "relation": "shared_dir:src/interpreter",
         "weight": 1.0
       },
       {
@@ -1253,16 +1253,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "src/stdlib/net.rs"
+          "src/ffi/c_api.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -1285,16 +1285,16 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "src/ffi/c_api.rs"
+          "src/stdlib/net.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "UnsafeCode",

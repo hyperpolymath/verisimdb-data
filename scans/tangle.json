@@ -339,8 +339,8 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "concurrency",
+    "memory",
     "cpu",
     "disk"
   ],
@@ -400,7 +400,7 @@
     "rows": [
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/rust/src/parser.rs",
@@ -408,18 +408,7 @@
           "src/rust/src/lexer.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "proofs/check-tg3-differential.sh",
-          "proofs/bootstrap-lean.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -434,16 +423,15 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "CommandInjection",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "bench/bench_lexer.rs",
-          "verification/benchmarks/bench_lexer.rs",
-          "src/rust/src/main.rs"
+          "proofs/check-tg3-differential.sh",
+          "proofs/bootstrap-lean.sh"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -457,8 +445,20 @@
         "relation": "CommandInjection->Disk"
       },
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "bench/bench_lexer.rs",
+          "verification/benchmarks/bench_lexer.rs",
+          "src/rust/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
           "src/rust/src/parser.rs",
@@ -466,7 +466,7 @@
           "src/rust/src/lexer.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

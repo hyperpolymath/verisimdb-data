@@ -281,20 +281,14 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "network",
-    "concurrency",
+    "disk",
     "cpu",
-    "disk"
+    "network",
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/Types.idr",
-        "relation": "shared_dir:src/interface/abi",
-        "weight": 1.0
-      },
       {
         "from": "src/core/config.affine",
         "to": "src/core/healer.eph",
@@ -374,6 +368,18 @@
         "weight": 1.0
       },
       {
+        "from": "tests/validate.test.deno.js",
+        "to": "tests/validate.test.affine",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/Types.idr",
+        "relation": "shared_dir:src/interface/abi",
+        "weight": 1.0
+      },
+      {
         "from": "src/interface/ffi/src/verisimdb.zig",
         "to": "src/interface/ffi/src/dbus.zig",
         "relation": "shared_dir:src/interface/ffi/src",
@@ -384,26 +390,20 @@
         "to": "src/interface/ffi/src/main.zig",
         "relation": "shared_dir:src/interface/ffi/src",
         "weight": 1.0
-      },
-      {
-        "from": "tests/validate.test.deno.js",
-        "to": "tests/validate.test.affine",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
-          "src/core/monitor.eph"
+          "src/interface/ffi/src/icons.zig"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "PathTraversal",
@@ -416,16 +416,6 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "src/interface/ffi/src/icons.zig"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
         "severity_value": 3.5,
@@ -434,6 +424,16 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/core/monitor.eph"
+        ],
+        "frameworks": [],
+        "relation": "UncheckedError->Cpu"
       }
     ]
   }

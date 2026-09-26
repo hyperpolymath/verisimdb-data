@@ -517,11 +517,29 @@
   "recommended_attacks": [
     "memory",
     "disk",
-    "cpu",
-    "network"
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/julia/server/rate_limiting.jl",
+        "to": "src/julia/server/authentication.jl",
+        "relation": "shared_dir:src/julia/server",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/plugin_system.jl",
+        "to": "src/plugins/marketplace.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
+      {
+        "from": "src/plugins/marketplace.jl",
+        "to": "src/plugins/webhooks.jl",
+        "relation": "shared_dir:src/plugins",
+        "weight": 1.0
+      },
       {
         "from": "src/julia/data_sources/BEA.jl",
         "to": "src/julia/data_sources/BIS.jl",
@@ -577,27 +595,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/julia/server/rate_limiting.jl",
-        "to": "src/julia/server/authentication.jl",
-        "relation": "shared_dir:src/julia/server",
-        "weight": 1.0
-      },
-      {
         "from": "src/visualization/charts.rs",
         "to": "src/visualization/report_generator.jl",
         "relation": "shared_dir:src/visualization",
-        "weight": 1.0
-      },
-      {
-        "from": "src/plugins/plugin_system.jl",
-        "to": "src/plugins/marketplace.jl",
-        "relation": "shared_dir:src/plugins",
-        "weight": 1.0
-      },
-      {
-        "from": "src/plugins/marketplace.jl",
-        "to": "src/plugins/webhooks.jl",
-        "relation": "shared_dir:src/plugins",
         "weight": 1.0
       }
     ]
@@ -615,15 +615,24 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "src/enterprise/saml_auth.jl",
-          "src/julia/data_sources/IMF.jl"
+          "tests/julia/test_client.jl"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/visualization/charts.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -636,14 +645,27 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
         "files": [
-          "src/visualization/charts.rs"
+          "tests/julia/test_client.jl",
+          "src/julia/data_sources/BEA.jl",
+          "src/julia/data_sources/Census.jl"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "src/enterprise/saml_auth.jl",
+          "src/julia/data_sources/IMF.jl"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "InputBoundary",
@@ -661,28 +683,6 @@
         ],
         "frameworks": [],
         "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tests/julia/test_client.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "tests/julia/test_client.jl",
-          "src/julia/data_sources/BEA.jl",
-          "src/julia/data_sources/Census.jl"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
       }
     ]
   }
