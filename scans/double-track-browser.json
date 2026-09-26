@@ -419,9 +419,9 @@
   ],
   "recommended_attacks": [
     "cpu",
+    "network",
     "memory",
-    "disk",
-    "network"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -450,9 +450,9 @@
         "weight": 1.0
       },
       {
-        "from": "tests/affine/driver.affine",
-        "to": "tests/affine/extension_lifecycle_test.affine",
-        "relation": "shared_dir:tests/affine",
+        "from": "scripts/build.affine",
+        "to": "scripts/build.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -492,9 +492,9 @@
         "weight": 1.0
       },
       {
-        "from": "scripts/build.affine",
-        "to": "scripts/build.sh",
-        "relation": "shared_dir:scripts",
+        "from": "tests/affine/driver.affine",
+        "to": "tests/affine/extension_lifecycle_test.affine",
+        "relation": "shared_dir:tests/affine",
         "weight": 1.0
       }
     ]
@@ -526,6 +526,27 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "tests/aspect/security_test.affine",
+          "tests/property/extension_properties_test.affine"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/dashboard/Dashboard.res.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
+      },
+      {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -553,27 +574,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "tests/aspect/security_test.affine",
-          "tests/property/extension_properties_test.affine"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }

@@ -400,8 +400,8 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "concurrency",
     "disk",
+    "concurrency",
     "memory"
   ],
   "dependency_graph": {
@@ -410,12 +410,6 @@
         "from": "api/zig-gateway/src/lol_ffi.zig",
         "to": "api/zig-gateway/src/main.zig",
         "relation": "shared_dir:api/zig-gateway/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/store.zig",
-        "to": "ffi/zig/src/main.zig",
-        "relation": "shared_dir:ffi/zig/src",
         "weight": 1.0
       },
       {
@@ -458,6 +452,12 @@
         "from": "src/verisimdb/Export.affine",
         "to": "src/verisimdb/VeriSimDB.affine",
         "relation": "shared_dir:src/verisimdb",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/store.zig",
+        "to": "ffi/zig/src/main.zig",
+        "relation": "shared_dir:ffi/zig/src",
         "weight": 1.0
       },
       {
@@ -585,16 +585,42 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "ffi/zig/src/main.zig"
+          "scripts/verisimdb-ingest.sh"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "test/Vitest.affine",
+          "src/utils/Http.affine"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "proofs/theories/information_theory.agda",
+          "analysis/test/runtests.jl"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "ProofDrift->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -611,18 +637,6 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/verisimdb-ingest.sh"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -634,32 +648,6 @@
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "proofs/theories/information_theory.agda",
-          "analysis/test/runtests.jl"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "test/Vitest.affine",
-          "src/utils/Http.affine"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -690,6 +678,18 @@
           "OTP"
         ],
         "relation": "UnsafeDeserialization->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/src/main.zig"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "UnsafeCode->Memory"
       }
     ]
   }

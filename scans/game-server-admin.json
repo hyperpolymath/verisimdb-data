@@ -524,41 +524,23 @@
   ],
   "recommended_attacks": [
     "disk",
-    "memory",
     "cpu",
     "network",
-    "concurrency"
+    "concurrency",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/interface/ffi/test/property_test.zig",
-        "to": "src/interface/ffi/test/mock_servers.zig",
-        "relation": "shared_dir:src/interface/ffi/test",
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/AbiRuntimeTest.idr",
+        "relation": "shared_dir:src/interface/abi",
         "weight": 1.0
       },
       {
-        "from": "src/wasm/build.sh",
-        "to": "src/wasm/probe.zig",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/probe.zig",
-        "to": "src/wasm/build-typed.sh",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/build-typed.sh",
-        "to": "src/wasm/launch-gsa.sh",
-        "relation": "shared_dir:src/wasm",
-        "weight": 1.0
-      },
-      {
-        "from": "src/wasm/launch-gsa.sh",
-        "to": "src/wasm/build-complete.sh",
-        "relation": "shared_dir:src/wasm",
+        "from": "game-server-admin-launcher.sh",
+        "to": "play.sh",
+        "relation": "shared_dir:",
         "weight": 1.0
       },
       {
@@ -595,6 +577,30 @@
         "from": "src/interface/ffi/src/main.zig",
         "to": "src/interface/ffi/src/game_profiles.zig",
         "relation": "shared_dir:src/interface/ffi/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/build.sh",
+        "to": "src/wasm/probe.zig",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/probe.zig",
+        "to": "src/wasm/build-typed.sh",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/build-typed.sh",
+        "to": "src/wasm/launch-gsa.sh",
+        "relation": "shared_dir:src/wasm",
+        "weight": 1.0
+      },
+      {
+        "from": "src/wasm/launch-gsa.sh",
+        "to": "src/wasm/build-complete.sh",
+        "relation": "shared_dir:src/wasm",
         "weight": 1.0
       },
       {
@@ -658,18 +664,6 @@
         "weight": 1.0
       },
       {
-        "from": "game-server-admin-launcher.sh",
-        "to": "play.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "src/ui/tea/gsa_gui.affine",
-        "to": "src/ui/tea/gsa_ffi.affine",
-        "relation": "shared_dir:src/ui/tea",
-        "weight": 1.0
-      },
-      {
         "from": "src/core/Types.eph",
         "to": "src/core/Shell.eph",
         "relation": "shared_dir:src/core",
@@ -688,15 +682,42 @@
         "weight": 1.0
       },
       {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/AbiRuntimeTest.idr",
-        "relation": "shared_dir:src/interface/abi",
+        "from": "src/interface/ffi/test/property_test.zig",
+        "to": "src/interface/ffi/test/mock_servers.zig",
+        "relation": "shared_dir:src/interface/ffi/test",
+        "weight": 1.0
+      },
+      {
+        "from": "src/ui/tea/gsa_gui.affine",
+        "to": "src/ui/tea/gsa_ffi.affine",
+        "relation": "shared_dir:src/ui/tea",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/wizard.sh",
+          "scripts/steam-stage.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "game-server-admin-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
       {
         "source_category": "DynamicCodeExecution",
         "sink_axis": "network",
@@ -731,27 +752,6 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "game-server-admin-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/wizard.sh",
-          "scripts/steam-stage.sh"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "DynamicCodeExecution",

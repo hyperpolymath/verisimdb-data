@@ -18,6 +18,17 @@
       "test_context": "production"
     },
     {
+      "category": "PathTraversal",
+      "location": "scripts/creusot-evidence.sh",
+      "file": "scripts/creusot-evidence.sh",
+      "severity": "Medium",
+      "description": "Hardcoded /tmp/ path without mktemp in scripts/creusot-evidence.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "test_context": "production"
+    },
+    {
       "category": "ProofDrift",
       "location": "test/integrations/huggingface_tests.jl",
       "file": "test/integrations/huggingface_tests.jl",
@@ -232,12 +243,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 38545,
+    "total_lines": 38891,
     "unsafe_blocks": 67,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 241,
-    "io_operations": 99,
+    "io_operations": 102,
     "threading_constructs": 10
   },
   "file_statistics": [
@@ -373,7 +384,7 @@
     },
     {
       "file_path": "crypto/src/lib.rs",
-      "lines": 680,
+      "lines": 799,
       "unsafe_blocks": 21,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -381,6 +392,16 @@
       "io_operations": 0,
       "threading_constructs": 0,
       "ffi_safe_wrapper": true
+    },
+    {
+      "file_path": "scripts/creusot-evidence.sh",
+      "lines": 149,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
+      "threading_constructs": 0
     },
     {
       "file_path": "scripts/gpu-performance-evidence.jl",
@@ -925,12 +946,30 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
+    "disk",
     "concurrency",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/layers/normalization.jl",
+        "to": "src/layers/abstract.jl",
+        "relation": "shared_dir:src/layers",
+        "weight": 1.0
+      },
+      {
+        "from": "src/layers/abstract.jl",
+        "to": "src/layers/conv.jl",
+        "relation": "shared_dir:src/layers",
+        "weight": 1.0
+      },
+      {
+        "from": "src/layers/conv.jl",
+        "to": "src/layers/dense.jl",
+        "relation": "shared_dir:src/layers",
+        "weight": 1.0
+      },
       {
         "from": "packages/SMTLib.jl/src/abi/Foreign.idr",
         "to": "packages/SMTLib.jl/src/abi/Types.idr",
@@ -938,57 +977,21 @@
         "weight": 1.0
       },
       {
-        "from": "templates/AxiomVPUExtSkeleton.jl",
-        "to": "templates/AxiomFPGAExtSkeleton.jl",
-        "relation": "shared_dir:templates",
+        "from": "ext/AxiomCUDAExt.jl",
+        "to": "ext/AxiomMetalExt.jl",
+        "relation": "shared_dir:ext",
         "weight": 1.0
       },
       {
-        "from": "templates/AxiomFPGAExtSkeleton.jl",
-        "to": "templates/AxiomPPUExtSkeleton.jl",
-        "relation": "shared_dir:templates",
+        "from": "ext/AxiomMetalExt.jl",
+        "to": "ext/AxiomAMDGPUExt.jl",
+        "relation": "shared_dir:ext",
         "weight": 1.0
       },
       {
-        "from": "templates/AxiomPPUExtSkeleton.jl",
-        "to": "templates/AxiomTPUExtSkeleton.jl",
-        "relation": "shared_dir:templates",
-        "weight": 1.0
-      },
-      {
-        "from": "templates/AxiomTPUExtSkeleton.jl",
-        "to": "templates/AxiomMathExtSkeleton.jl",
-        "relation": "shared_dir:templates",
-        "weight": 1.0
-      },
-      {
-        "from": "templates/AxiomMathExtSkeleton.jl",
-        "to": "templates/AxiomNPUExtSkeleton.jl",
-        "relation": "shared_dir:templates",
-        "weight": 1.0
-      },
-      {
-        "from": "templates/AxiomNPUExtSkeleton.jl",
-        "to": "templates/AxiomCryptoExtSkeleton.jl",
-        "relation": "shared_dir:templates",
-        "weight": 1.0
-      },
-      {
-        "from": "templates/AxiomCryptoExtSkeleton.jl",
-        "to": "templates/AxiomDSPExtSkeleton.jl",
-        "relation": "shared_dir:templates",
-        "weight": 1.0
-      },
-      {
-        "from": "templates/AxiomDSPExtSkeleton.jl",
-        "to": "templates/AxiomQPUExtSkeleton.jl",
-        "relation": "shared_dir:templates",
-        "weight": 1.0
-      },
-      {
-        "from": "test/verification/proof_export_tests.jl",
-        "to": "test/verification/soundness_tests.jl",
-        "relation": "shared_dir:test/verification",
+        "from": "scripts/creusot-evidence.sh",
+        "to": "scripts/gpu-performance-evidence.jl",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -1049,48 +1052,6 @@
         "from": "scripts/verification-telemetry-evidence.jl",
         "to": "scripts/tpu-strict-evidence.jl",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "src/verification/signing.jl",
-        "to": "src/verification/serialization.jl",
-        "relation": "shared_dir:src/verification",
-        "weight": 1.0
-      },
-      {
-        "from": "src/verification/serialization.jl",
-        "to": "src/verification/certificates.jl",
-        "relation": "shared_dir:src/verification",
-        "weight": 1.0
-      },
-      {
-        "from": "src/backends/julia_backend.jl",
-        "to": "src/backends/zig_ffi.jl",
-        "relation": "shared_dir:src/backends",
-        "weight": 1.0
-      },
-      {
-        "from": "src/backends/zig_ffi.jl",
-        "to": "src/backends/abstract.jl",
-        "relation": "shared_dir:src/backends",
-        "weight": 1.0
-      },
-      {
-        "from": "zig/src/threading.zig",
-        "to": "zig/src/bench.zig",
-        "relation": "shared_dir:zig/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ext/AxiomCUDAExt.jl",
-        "to": "ext/AxiomMetalExt.jl",
-        "relation": "shared_dir:ext",
-        "weight": 1.0
-      },
-      {
-        "from": "ext/AxiomMetalExt.jl",
-        "to": "ext/AxiomAMDGPUExt.jl",
-        "relation": "shared_dir:ext",
         "weight": 1.0
       },
       {
@@ -1166,21 +1127,75 @@
         "weight": 1.0
       },
       {
-        "from": "src/layers/normalization.jl",
-        "to": "src/layers/abstract.jl",
-        "relation": "shared_dir:src/layers",
+        "from": "test/verification/proof_export_tests.jl",
+        "to": "test/verification/soundness_tests.jl",
+        "relation": "shared_dir:test/verification",
         "weight": 1.0
       },
       {
-        "from": "src/layers/abstract.jl",
-        "to": "src/layers/conv.jl",
-        "relation": "shared_dir:src/layers",
+        "from": "templates/AxiomVPUExtSkeleton.jl",
+        "to": "templates/AxiomFPGAExtSkeleton.jl",
+        "relation": "shared_dir:templates",
         "weight": 1.0
       },
       {
-        "from": "src/layers/conv.jl",
-        "to": "src/layers/dense.jl",
-        "relation": "shared_dir:src/layers",
+        "from": "templates/AxiomFPGAExtSkeleton.jl",
+        "to": "templates/AxiomPPUExtSkeleton.jl",
+        "relation": "shared_dir:templates",
+        "weight": 1.0
+      },
+      {
+        "from": "templates/AxiomPPUExtSkeleton.jl",
+        "to": "templates/AxiomTPUExtSkeleton.jl",
+        "relation": "shared_dir:templates",
+        "weight": 1.0
+      },
+      {
+        "from": "templates/AxiomTPUExtSkeleton.jl",
+        "to": "templates/AxiomMathExtSkeleton.jl",
+        "relation": "shared_dir:templates",
+        "weight": 1.0
+      },
+      {
+        "from": "templates/AxiomMathExtSkeleton.jl",
+        "to": "templates/AxiomNPUExtSkeleton.jl",
+        "relation": "shared_dir:templates",
+        "weight": 1.0
+      },
+      {
+        "from": "templates/AxiomNPUExtSkeleton.jl",
+        "to": "templates/AxiomCryptoExtSkeleton.jl",
+        "relation": "shared_dir:templates",
+        "weight": 1.0
+      },
+      {
+        "from": "templates/AxiomCryptoExtSkeleton.jl",
+        "to": "templates/AxiomDSPExtSkeleton.jl",
+        "relation": "shared_dir:templates",
+        "weight": 1.0
+      },
+      {
+        "from": "templates/AxiomDSPExtSkeleton.jl",
+        "to": "templates/AxiomQPUExtSkeleton.jl",
+        "relation": "shared_dir:templates",
+        "weight": 1.0
+      },
+      {
+        "from": "src/backends/julia_backend.jl",
+        "to": "src/backends/zig_ffi.jl",
+        "relation": "shared_dir:src/backends",
+        "weight": 1.0
+      },
+      {
+        "from": "src/backends/zig_ffi.jl",
+        "to": "src/backends/abstract.jl",
+        "relation": "shared_dir:src/backends",
+        "weight": 1.0
+      },
+      {
+        "from": "zig/src/threading.zig",
+        "to": "zig/src/bench.zig",
+        "relation": "shared_dir:zig/src",
         "weight": 1.0
       },
       {
@@ -1188,32 +1203,23 @@
         "to": "src/integrations/interop.jl",
         "relation": "shared_dir:src/integrations",
         "weight": 1.0
+      },
+      {
+        "from": "src/verification/signing.jl",
+        "to": "src/verification/serialization.jl",
+        "relation": "shared_dir:src/verification",
+        "weight": 1.0
+      },
+      {
+        "from": "src/verification/serialization.jl",
+        "to": "src/verification/certificates.jl",
+        "relation": "shared_dir:src/verification",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/verification/signing.jl",
-          "src/backends/zig_ffi.jl"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "crypto/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
       {
         "source_category": "InputBoundary",
         "sink_axis": "cpu",
@@ -1227,6 +1233,16 @@
         "relation": "InputBoundary->Cpu"
       },
       {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "crypto/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -1235,6 +1251,27 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/verification/signing.jl",
+          "src/backends/zig_ffi.jl"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/creusot-evidence.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "ProofDrift",
