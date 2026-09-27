@@ -502,13 +502,19 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "concurrency",
     "disk",
     "cpu",
-    "concurrency"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "crates/presswerk-app/src/main.rs",
+        "to": "crates/presswerk-app/src/state.rs",
+        "relation": "shared_dir:crates/presswerk-app/src",
+        "weight": 1.0
+      },
       {
         "from": "crates/presswerk-core/src/human_errors.rs",
         "to": "crates/presswerk-core/src/error.rs",
@@ -519,12 +525,6 @@
         "from": "crates/presswerk-core/src/error.rs",
         "to": "crates/presswerk-core/src/types.rs",
         "relation": "shared_dir:crates/presswerk-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/main.rs",
-        "to": "crates/presswerk-app/src/state.rs",
-        "relation": "shared_dir:crates/presswerk-app/src",
         "weight": 1.0
       },
       {
@@ -555,18 +555,6 @@
         "from": "crates/presswerk-app/src/pages/edit.rs",
         "to": "crates/presswerk-app/src/pages/print.rs",
         "relation": "shared_dir:crates/presswerk-app/src/pages",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-app/src/services/data_dir.rs",
-        "to": "crates/presswerk-app/src/services/app_services.rs",
-        "relation": "shared_dir:crates/presswerk-app/src/services",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/presswerk-document/src/pdf/writer.rs",
-        "to": "crates/presswerk-document/src/pdf/reader.rs",
-        "relation": "shared_dir:crates/presswerk-document/src/pdf",
         "weight": 1.0
       },
       {
@@ -615,6 +603,18 @@
         "from": "crates/presswerk-print/src/discovery.rs",
         "to": "crates/presswerk-print/src/protocol.rs",
         "relation": "shared_dir:crates/presswerk-print/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-app/src/services/data_dir.rs",
+        "to": "crates/presswerk-app/src/services/app_services.rs",
+        "relation": "shared_dir:crates/presswerk-app/src/services",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/presswerk-document/src/pdf/writer.rs",
+        "to": "crates/presswerk-document/src/pdf/reader.rs",
+        "relation": "shared_dir:crates/presswerk-document/src/pdf",
         "weight": 1.0
       },
       {
@@ -839,20 +839,6 @@
     "rows": [
       {
         "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "crates/presswerk-bridge/src/android/mod.rs",
-          "crates/presswerk-bridge/src/ios/mod.rs",
-          "crates/presswerk-bridge/src/ios/mod.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
         "files": [
@@ -893,16 +879,18 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "crates/presswerk-security/src/storage.rs"
+          "crates/presswerk-bridge/src/android/mod.rs",
+          "crates/presswerk-bridge/src/ios/mod.rs",
+          "crates/presswerk-bridge/src/ios/mod.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnsafeCode->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -918,6 +906,18 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/presswerk-security/src/storage.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }

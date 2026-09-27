@@ -449,10 +449,10 @@
     }
   ],
   "recommended_attacks": [
-    "network",
+    "memory",
     "cpu",
     "disk",
-    "memory"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -460,12 +460,6 @@
         "from": "nqc/test/nqc/formatter_test.gleam",
         "to": "nqc/test/nqc/cache_test.gleam",
         "relation": "shared_dir:nqc/test/nqc",
-        "weight": 1.0
-      },
-      {
-        "from": "nqc/nqc-launcher.sh",
-        "to": "nqc/nqc-enhanced-launcher.sh",
-        "relation": "shared_dir:nqc",
         "weight": 1.0
       },
       {
@@ -493,15 +487,21 @@
         "weight": 1.0
       },
       {
+        "from": "nqc/verification/tests/nqc/formatter_test.gleam",
+        "to": "nqc/verification/tests/nqc/cache_test.gleam",
+        "relation": "shared_dir:nqc/verification/tests/nqc",
+        "weight": 1.0
+      },
+      {
         "from": "guix.scm",
         "to": "setup.sh",
         "relation": "shared_dir:",
         "weight": 1.0
       },
       {
-        "from": "nqc/verification/tests/nqc/formatter_test.gleam",
-        "to": "nqc/verification/tests/nqc/cache_test.gleam",
-        "relation": "shared_dir:nqc/verification/tests/nqc",
+        "from": "nqc/nqc-launcher.sh",
+        "to": "nqc/nqc-enhanced-launcher.sh",
+        "relation": "shared_dir:nqc",
         "weight": 1.0
       }
     ]
@@ -517,6 +517,16 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "nqc/nqc-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "InsecureProtocol",
@@ -538,16 +548,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "nqc/nqc-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnsafeFFI",

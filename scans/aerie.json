@@ -681,37 +681,13 @@
   ],
   "recommended_attacks": [
     "disk",
-    "concurrency",
-    "network",
     "cpu",
-    "memory"
+    "network",
+    "memory",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "ffi/zig/src/kanren.zig",
-        "to": "ffi/zig/src/gnosis.zig",
-        "relation": "shared_dir:ffi/zig/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/gnosis.zig",
-        "to": "ffi/zig/src/aerie.zig",
-        "relation": "shared_dir:ffi/zig/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ffi/zig/src/aerie.zig",
-        "to": "ffi/zig/src/connector.zig",
-        "relation": "shared_dir:ffi/zig/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/abi/Gnosis.idr",
-        "to": "src/abi/Foreign.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
       {
         "from": "specs/components/bitemporal-store.k9.ncl",
         "to": "specs/components/known-limitations.k9.ncl",
@@ -797,6 +773,36 @@
         "weight": 1.0
       },
       {
+        "from": "ffi/zig/src/kanren.zig",
+        "to": "ffi/zig/src/gnosis.zig",
+        "relation": "shared_dir:ffi/zig/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/gnosis.zig",
+        "to": "ffi/zig/src/aerie.zig",
+        "relation": "shared_dir:ffi/zig/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ffi/zig/src/aerie.zig",
+        "to": "ffi/zig/src/connector.zig",
+        "relation": "shared_dir:ffi/zig/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/Gnosis.idr",
+        "to": "src/abi/Foreign.idr",
+        "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "aerie-launcher.sh",
+        "to": "setup.sh",
+        "relation": "shared_dir:",
+        "weight": 1.0
+      },
+      {
         "from": "src/api/zig/respond.zig",
         "to": "src/api/zig/smokeping_client.zig",
         "relation": "shared_dir:src/api/zig",
@@ -849,42 +855,11 @@
         "to": "src/api/zig/hyperglass_client.zig",
         "relation": "shared_dir:src/api/zig",
         "weight": 1.0
-      },
-      {
-        "from": "aerie-launcher.sh",
-        "to": "setup.sh",
-        "relation": "shared_dir:",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/api/zig/smokeping_client.zig",
-          "src/api/zig/librespeed_client.zig",
-          "src/api/zig/verisim_client.zig",
-          "src/api/zig/main.zig",
-          "src/api/zig/hyperglass_client.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "aerie-launcher.sh",
-          "src/stale/hyperglass/.tests/ga-backend-app.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -899,16 +874,6 @@
         ],
         "frameworks": [],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "aerie-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnsafeCode",
@@ -926,6 +891,41 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/api/zig/smokeping_client.zig",
+          "src/api/zig/librespeed_client.zig",
+          "src/api/zig/verisim_client.zig",
+          "src/api/zig/main.zig",
+          "src/api/zig/hyperglass_client.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "aerie-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "aerie-launcher.sh",
+          "src/stale/hyperglass/.tests/ga-backend-app.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

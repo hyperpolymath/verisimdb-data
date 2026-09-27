@@ -136,7 +136,7 @@
       "location": "proofs/coq/common/StatMechBasis.v",
       "file": "proofs/coq/common/StatMechBasis.v",
       "severity": "Medium",
-      "description": "4 Axiom/Parameter declaration(s) (unverified postulate) in proofs/coq/common/StatMechBasis.v",
+      "description": "2 Axiom/Parameter declaration(s) (unverified postulate) in proofs/coq/common/StatMechBasis.v",
       "recommended_attack": [
         "cpu"
       ],
@@ -187,12 +187,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 18984,
+    "total_lines": 19648,
     "unsafe_blocks": 29,
     "panic_sites": 6,
     "unwrap_calls": 8,
     "allocation_sites": 13,
-    "io_operations": 14,
+    "io_operations": 20,
     "threading_constructs": 8
   },
   "file_statistics": [
@@ -278,12 +278,22 @@
     },
     {
       "file_path": "proofs/tests/gate-selftest.sh",
-      "lines": 122,
+      "lines": 130,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "proofs/coq/check-axiom-tags.sh",
+      "lines": 163,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 6,
       "threading_constructs": 0
     },
     {
@@ -370,13 +380,25 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "concurrency",
-    "memory",
-    "cpu"
+    "cpu",
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "proofs/coq/check-axiom-tags.sh",
+        "to": "proofs/coq/check-assumptions.sh",
+        "relation": "shared_dir:proofs/coq",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/AbsoluteZero/ABI/Foreign.idr",
+        "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
+        "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
+        "weight": 1.0
+      },
       {
         "from": "examples/special-ops/os/ioctl_nop.c",
         "to": "examples/special-ops/os/sched_yield.c",
@@ -388,30 +410,42 @@
         "to": "verification/verify-proofs.sh",
         "relation": "shared_dir:verification",
         "weight": 1.0
-      },
-      {
-        "from": "src/abi/AbsoluteZero/ABI/Foreign.idr",
-        "to": "src/abi/AbsoluteZero/ABI/Layout.idr",
-        "relation": "shared_dir:src/abi/AbsoluteZero/ABI",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "proofs/coq/lambda/LambdaCNO.v",
-          "proofs/coq/physics/LandauerDerivation.v",
-          "proofs/coq/quantum/QuantumCNO.v",
-          "proofs/coq/common/PhysicsConstants.v",
-          "proofs/coq/common/StatMechBasis.v"
+          "src/whitespace/src/lib.rs"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "memory",
+        "severity_value": 5.0,
+        "files": [
+          "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
+          "src/abi/AbsoluteZero/ABI/Layout.idr"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Memory"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "verification/verify-proofs.sh",
+          "verification/run-local-verification.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "ResourceLeak",
@@ -422,6 +456,36 @@
         ],
         "frameworks": [],
         "relation": "ResourceLeak->Cpu"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "examples/ada/balanced_ops.adb"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "examples/haskell/Nop.hs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Cpu"
+      },
+      {
+        "source_category": "ResourceLeak",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "examples/scheme/nop.scm"
+        ],
+        "frameworks": [],
+        "relation": "ResourceLeak->Memory"
       },
       {
         "source_category": "UnsafeCode",
@@ -445,68 +509,6 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "memory",
-        "severity_value": 5.0,
-        "files": [
-          "src/abi/AbsoluteZero/ABI/Proofs/DivMod.idr",
-          "src/abi/AbsoluteZero/ABI/Layout.idr"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "cpu",
-        "severity_value": 3.5,
-        "files": [
-          "examples/haskell/Nop.hs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/whitespace/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/whitespace/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "ResourceLeak",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "examples/scheme/nop.scm"
-        ],
-        "frameworks": [],
-        "relation": "ResourceLeak->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "verification/verify-proofs.sh",
-          "verification/run-local-verification.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
         "source_category": "PathTraversal",
         "sink_axis": "disk",
         "severity_value": 2.5,
@@ -518,14 +520,28 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "UnsafeCode",
+        "source_category": "ProofDrift",
         "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "examples/ada/balanced_ops.adb"
+          "proofs/coq/lambda/LambdaCNO.v",
+          "proofs/coq/physics/LandauerDerivation.v",
+          "proofs/coq/quantum/QuantumCNO.v",
+          "proofs/coq/common/PhysicsConstants.v",
+          "proofs/coq/common/StatMechBasis.v"
         ],
         "frameworks": [],
-        "relation": "UnsafeCode->Cpu"
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/whitespace/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
       }
     ]
   }

@@ -431,14 +431,20 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "disk",
-    "network",
     "memory",
-    "cpu"
+    "cpu",
+    "disk",
+    "concurrency",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/deploy-site.sh",
+        "to": "scripts/add-arxiv-badge.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "lsp/src/completions.rs",
         "to": "lsp/src/diagnostics.rs",
@@ -492,17 +498,21 @@
         "to": "prototype/affinescript/src/DumpAst.affine",
         "relation": "shared_dir:prototype/affinescript/src",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/deploy-site.sh",
-        "to": "scripts/add-arxiv-badge.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "scripts/deploy-site.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Network"
+      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -512,6 +522,18 @@
         ],
         "frameworks": [],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "lsp/src/completions.rs",
+          "lsp/src/diagnostics.rs",
+          "lsp/src/hover.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -537,16 +559,6 @@
       },
       {
         "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "scripts/deploy-site.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
-      },
-      {
-        "source_category": "ExcessivePermissions",
         "sink_axis": "disk",
         "severity_value": 3.5,
         "files": [
@@ -566,18 +578,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "lsp/src/completions.rs",
-          "lsp/src/diagnostics.rs",
-          "lsp/src/hover.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
       }
     ]
   }
