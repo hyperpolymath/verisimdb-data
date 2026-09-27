@@ -445,26 +445,14 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "concurrency",
-    "cpu",
     "network",
+    "concurrency",
+    "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/arbiter/lib/conative_gating/audit_log.ex",
-        "to": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
-        "relation": "shared_dir:src/arbiter/lib/conative_gating",
-        "weight": 1.0
-      },
-      {
-        "from": "src/contract/src/arbiter.rs",
-        "to": "src/contract/src/lib.rs",
-        "relation": "shared_dir:src/contract/src",
-        "weight": 1.0
-      },
       {
         "from": "scripts/reconcile-wharf-repos.sh",
         "to": "scripts/apply-common-files.sh",
@@ -484,15 +472,27 @@
         "weight": 1.0
       },
       {
-        "from": "src/slm/src/http.rs",
-        "to": "src/slm/src/provider.rs",
-        "relation": "shared_dir:src/slm/src",
+        "from": "src/contract/src/arbiter.rs",
+        "to": "src/contract/src/lib.rs",
+        "relation": "shared_dir:src/contract/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/arbiter/lib/conative_gating/audit_log.ex",
+        "to": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
+        "relation": "shared_dir:src/arbiter/lib/conative_gating",
         "weight": 1.0
       },
       {
         "from": "src/oracle/src/nickel.rs",
         "to": "src/oracle/src/lib.rs",
         "relation": "shared_dir:src/oracle/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/slm/src/http.rs",
+        "to": "src/slm/src/provider.rs",
+        "relation": "shared_dir:src/slm/src",
         "weight": 1.0
       },
       {
@@ -729,65 +729,6 @@
     "rows": [
       {
         "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh",
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "src/contract/src/arbiter.rs",
-          "src/slm/src/provider.rs",
-          "src/oracle/src/nickel.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "src/contract/src/arbiter.rs",
-          "src/slm/src/provider.rs",
-          "src/oracle/src/nickel.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "templates/rsr-metadata.ncl"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
@@ -798,39 +739,6 @@
           "OTP"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "benches/oracle_bench.rs",
-          "tests/security_aspect_test.rs",
-          "tests/gating_pipeline_test.rs",
-          "src/contract/src/lib.rs",
-          "src/oracle/src/lib.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/arbiter/test/audit_log_test.exs",
-          "src/arbiter/test/arbiter_protocol_test.exs",
-          "src/arbiter/test/consensus_arbiter_test.exs",
-          "src/arbiter/test/protocol_server_test.exs"
-        ],
-        "frameworks": [
-          "Networking",
-          "OTP"
-        ],
-        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -861,6 +769,98 @@
           "OTP"
         ],
         "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "src/contract/src/arbiter.rs",
+          "src/slm/src/provider.rs",
+          "src/oracle/src/nickel.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh",
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/arbiter/test/audit_log_test.exs",
+          "src/arbiter/test/arbiter_protocol_test.exs",
+          "src/arbiter/test/consensus_arbiter_test.exs",
+          "src/arbiter/test/protocol_server_test.exs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "benches/oracle_bench.rs",
+          "tests/security_aspect_test.rs",
+          "tests/gating_pipeline_test.rs",
+          "src/contract/src/lib.rs",
+          "src/oracle/src/lib.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "src/contract/src/arbiter.rs",
+          "src/slm/src/provider.rs",
+          "src/oracle/src/nickel.rs"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "templates/rsr-metadata.ncl"
+        ],
+        "frameworks": [
+          "Networking",
+          "OTP"
+        ],
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }

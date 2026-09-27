@@ -174,12 +174,6 @@
         "weight": 1.0
       },
       {
-        "from": "tests/integration_tests.rs",
-        "to": "tests/abi-gate.sh",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "src/codegen/parser.rs",
         "to": "src/codegen/halide_gen.rs",
         "relation": "shared_dir:src/codegen",
@@ -190,20 +184,26 @@
         "to": "src/codegen/build_gen.rs",
         "relation": "shared_dir:src/codegen",
         "weight": 1.0
+      },
+      {
+        "from": "tests/integration_tests.rs",
+        "to": "tests/abi-gate.sh",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnboundedAllocation",
+        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/manifest/mod.rs"
+          "src/codegen/parser.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -216,14 +216,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "src/codegen/parser.rs"
+          "src/manifest/mod.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
