@@ -317,11 +317,17 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "disk"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bag/lib/bag/mesh.ex",
+        "to": "bag/lib/bag/executor.ex",
+        "relation": "shared_dir:bag/lib/bag",
+        "weight": 1.0
+      },
       {
         "from": "bag/test/ci_baton_test.exs",
         "to": "bag/test/mesh_check_test.exs",
@@ -344,12 +350,6 @@
         "from": "src/crypto.zig",
         "to": "src/main.zig",
         "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "bag/lib/bag/mesh.ex",
-        "to": "bag/lib/bag/executor.ex",
-        "relation": "shared_dir:bag/lib/bag",
         "weight": 1.0
       },
       {
@@ -423,23 +423,23 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
         "files": [
-          "bag/test/bag_test.exs",
-          "bag/test/github_bridge_test.exs",
+          "bag/lib/bag/github_bridge.ex",
+          "bag/lib/bag/executor.ex",
+          "bag/test/test_helper.exs",
           "bag/test/merge_orchestration_e2e_test.exs",
           "bag/test/ci_sweep_manifest_test.exs",
           "bag/test/planner_test.exs",
-          "bag/test/bag_report_test.exs",
           "bag/test/ci_baton_test.exs",
           "bag/test/mesh_check_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "MutationGap->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -461,23 +461,23 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "bag/lib/bag/github_bridge.ex",
-          "bag/lib/bag/executor.ex",
-          "bag/test/test_helper.exs",
+          "bag/test/bag_test.exs",
+          "bag/test/github_bridge_test.exs",
           "bag/test/merge_orchestration_e2e_test.exs",
           "bag/test/ci_sweep_manifest_test.exs",
           "bag/test/planner_test.exs",
+          "bag/test/bag_report_test.exs",
           "bag/test/ci_baton_test.exs",
           "bag/test/mesh_check_test.exs"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "MutationGap->Cpu"
       }
     ]
   }

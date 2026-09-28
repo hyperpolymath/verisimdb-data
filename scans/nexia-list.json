@@ -431,15 +431,15 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/ld-mint.js",
-        "to": "scripts/test-ci-honesty.sh",
-        "relation": "shared_dir:scripts",
+        "from": "ui/src/store/WasmStore.affine",
+        "to": "ui/src/store/Exchange.affine",
+        "relation": "shared_dir:ui/src/store",
         "weight": 1.0
       },
       {
-        "from": "ui/tests/UpdateTests.affine",
-        "to": "ui/tests/WasmStoreTests.affine",
-        "relation": "shared_dir:ui/tests",
+        "from": "ui/src/store/Exchange.affine",
+        "to": "ui/src/store/Persist.affine",
+        "relation": "shared_dir:ui/src/store",
         "weight": 1.0
       },
       {
@@ -470,12 +470,6 @@
         "from": "core/src/note.rs",
         "to": "core/src/wasm.rs",
         "relation": "shared_dir:core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "core/tests/invariants.rs",
-        "to": "core/tests/lambdadelta_plugin_system.rs",
-        "relation": "shared_dir:core/tests",
         "weight": 1.0
       },
       {
@@ -527,15 +521,21 @@
         "weight": 1.0
       },
       {
-        "from": "ui/src/store/WasmStore.affine",
-        "to": "ui/src/store/Exchange.affine",
-        "relation": "shared_dir:ui/src/store",
+        "from": "ui/tests/UpdateTests.affine",
+        "to": "ui/tests/WasmStoreTests.affine",
+        "relation": "shared_dir:ui/tests",
         "weight": 1.0
       },
       {
-        "from": "ui/src/store/Exchange.affine",
-        "to": "ui/src/store/Persist.affine",
-        "relation": "shared_dir:ui/src/store",
+        "from": "scripts/ld-mint.js",
+        "to": "scripts/test-ci-honesty.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "core/tests/invariants.rs",
+        "to": "core/tests/lambdadelta_plugin_system.rs",
+        "relation": "shared_dir:core/tests",
         "weight": 1.0
       }
     ]
@@ -543,37 +543,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "desktop/src/main.rs",
-          "core/src/lambdadelta_host/tests.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "ui/src/store/WasmStore.affine",
-          "ui/src/store/Persist.affine",
-          "ui/src/bindings/DomBindings.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "core/src/storage.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "InputBoundary",
@@ -597,14 +574,37 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "desktop/src/main.rs",
+          "core/src/lambdadelta_host/tests.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "core/src/storage.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "ui/src/store/WasmStore.affine",
+          "ui/src/store/Persist.affine",
+          "ui/src/bindings/DomBindings.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }
