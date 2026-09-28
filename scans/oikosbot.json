@@ -371,16 +371,34 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
+    "disk",
     "memory"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "policies/finding_taxonomy.ecl",
-        "to": "policies/carbon_budget.ecl",
-        "relation": "shared_dir:policies",
+        "from": "tests/test-container-contract.sh",
+        "to": "tests/test-action-arguments.sh",
+        "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "analyzers/code-haskell/src/Eco/Pareto.hs",
+        "to": "analyzers/code-haskell/src/Eco/Analysis.hs",
+        "relation": "shared_dir:analyzers/code-haskell/src/Eco",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-telemetry/src/derive.rs",
+        "to": "crates/oikosbot-telemetry/src/snapshot.rs",
+        "relation": "shared_dir:crates/oikosbot-telemetry/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/oikosbot-telemetry/src/snapshot.rs",
+        "to": "crates/oikosbot-telemetry/src/collect.rs",
+        "relation": "shared_dir:crates/oikosbot-telemetry/src",
         "weight": 1.0
       },
       {
@@ -408,30 +426,6 @@
         "weight": 1.0
       },
       {
-        "from": "bot-integration-affine/src/Main.affine",
-        "to": "bot-integration-affine/src/Config.affine",
-        "relation": "shared_dir:bot-integration-affine/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/oikosbot-telemetry/src/derive.rs",
-        "to": "crates/oikosbot-telemetry/src/snapshot.rs",
-        "relation": "shared_dir:crates/oikosbot-telemetry/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/oikosbot-telemetry/src/snapshot.rs",
-        "to": "crates/oikosbot-telemetry/src/collect.rs",
-        "relation": "shared_dir:crates/oikosbot-telemetry/src",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/test-container-contract.sh",
-        "to": "tests/test-action-arguments.sh",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
-      },
-      {
         "from": "crates/oikosbot-cli/src/config.rs",
         "to": "crates/oikosbot-cli/src/main.rs",
         "relation": "shared_dir:crates/oikosbot-cli/src",
@@ -444,9 +438,15 @@
         "weight": 1.0
       },
       {
-        "from": "analyzers/code-haskell/src/Eco/Pareto.hs",
-        "to": "analyzers/code-haskell/src/Eco/Analysis.hs",
-        "relation": "shared_dir:analyzers/code-haskell/src/Eco",
+        "from": "policies/finding_taxonomy.ecl",
+        "to": "policies/carbon_budget.ecl",
+        "relation": "shared_dir:policies",
+        "weight": 1.0
+      },
+      {
+        "from": "bot-integration-affine/src/Main.affine",
+        "to": "bot-integration-affine/src/Config.affine",
+        "relation": "shared_dir:bot-integration-affine/src",
         "weight": 1.0
       },
       {
@@ -604,6 +604,18 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/ci/linter-verify.sh"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -619,18 +631,6 @@
           "Networking"
         ],
         "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tools/ci/linter-verify.sh"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnboundedAllocation",

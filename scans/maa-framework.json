@@ -248,13 +248,25 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "cpu",
     "memory",
-    "disk"
+    "disk",
+    "network",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "aletheia/extraction/rhodibot/src/main.rs",
+        "to": "aletheia/extraction/rhodibot/src/bot.rs",
+        "relation": "shared_dir:aletheia/extraction/rhodibot/src",
+        "weight": 1.0
+      },
+      {
+        "from": "aletheia/extraction/rhodibot/src/bot.rs",
+        "to": "aletheia/extraction/rhodibot/src/lib.rs",
+        "relation": "shared_dir:aletheia/extraction/rhodibot/src",
+        "weight": 1.0
+      },
       {
         "from": "aletheia/src/config.rs",
         "to": "aletheia/src/main.rs",
@@ -284,32 +296,20 @@
         "to": "aletheia/templates/ada/src/@@MOD_NAME@@.ads",
         "relation": "shared_dir:aletheia/templates/ada/src",
         "weight": 1.0
-      },
-      {
-        "from": "aletheia/extraction/rhodibot/src/main.rs",
-        "to": "aletheia/extraction/rhodibot/src/bot.rs",
-        "relation": "shared_dir:aletheia/extraction/rhodibot/src",
-        "weight": 1.0
-      },
-      {
-        "from": "aletheia/extraction/rhodibot/src/bot.rs",
-        "to": "aletheia/extraction/rhodibot/src/lib.rs",
-        "relation": "shared_dir:aletheia/extraction/rhodibot/src",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "aletheia/src/output.rs"
+          "aletheia/scripts/create-template.sh"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "MutationGap",
@@ -322,14 +322,14 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "aletheia/scripts/create-template.sh"
+          "aletheia/src/output.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "InsecureProtocol->Network"
       }
     ]
   }
