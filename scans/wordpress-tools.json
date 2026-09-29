@@ -980,11 +980,11 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "cpu",
     "memory",
-    "disk",
-    "network"
+    "network",
+    "concurrency",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -995,9 +995,33 @@
         "weight": 1.0
       },
       {
-        "from": "praxis/Core/introspection/src/reports/html-reporter.rkt",
-        "to": "praxis/Core/introspection/src/reports/json-reporter.rkt",
-        "relation": "shared_dir:praxis/Core/introspection/src/reports",
+        "from": "resurrect/src/socp-tui/src/config.rs",
+        "to": "resurrect/src/socp-tui/src/app.rs",
+        "relation": "shared_dir:resurrect/src/socp-tui/src",
+        "weight": 1.0
+      },
+      {
+        "from": "resurrect/src/socp-tui/src/app.rs",
+        "to": "resurrect/src/socp-tui/src/events.rs",
+        "relation": "shared_dir:resurrect/src/socp-tui/src",
+        "weight": 1.0
+      },
+      {
+        "from": "praxis/wp_praxis_core/src/parser/toml.rs",
+        "to": "praxis/wp_praxis_core/src/parser/yaml.rs",
+        "relation": "shared_dir:praxis/wp_praxis_core/src/parser",
+        "weight": 1.0
+      },
+      {
+        "from": "project-wharf/deploy/local-test.sh",
+        "to": "project-wharf/deploy/verify-sqli.sh",
+        "relation": "shared_dir:project-wharf/deploy",
+        "weight": 1.0
+      },
+      {
+        "from": "project-wharf/deploy/verify-sqli.sh",
+        "to": "project-wharf/deploy/setup.sh",
+        "relation": "shared_dir:project-wharf/deploy",
         "weight": 1.0
       },
       {
@@ -1034,24 +1058,6 @@
         "from": "praxis/wp_praxis_core/src/manifest.rs",
         "to": "praxis/wp_praxis_core/src/symbol.rs",
         "relation": "shared_dir:praxis/wp_praxis_core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "praxis/wp_praxis_core/src/parser/toml.rs",
-        "to": "praxis/wp_praxis_core/src/parser/yaml.rs",
-        "relation": "shared_dir:praxis/wp_praxis_core/src/parser",
-        "weight": 1.0
-      },
-      {
-        "from": "project-wharf/deploy/local-test.sh",
-        "to": "project-wharf/deploy/verify-sqli.sh",
-        "relation": "shared_dir:project-wharf/deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "project-wharf/deploy/verify-sqli.sh",
-        "to": "project-wharf/deploy/setup.sh",
-        "relation": "shared_dir:project-wharf/deploy",
         "weight": 1.0
       },
       {
@@ -1103,15 +1109,9 @@
         "weight": 1.0
       },
       {
-        "from": "resurrect/src/socp-tui/src/config.rs",
-        "to": "resurrect/src/socp-tui/src/app.rs",
-        "relation": "shared_dir:resurrect/src/socp-tui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "resurrect/src/socp-tui/src/app.rs",
-        "to": "resurrect/src/socp-tui/src/events.rs",
-        "relation": "shared_dir:resurrect/src/socp-tui/src",
+        "from": "praxis/Core/introspection/src/reports/html-reporter.rkt",
+        "to": "praxis/Core/introspection/src/reports/json-reporter.rkt",
+        "relation": "shared_dir:praxis/Core/introspection/src/reports",
         "weight": 1.0
       },
       {
@@ -1455,18 +1455,16 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
         "severity_value": 3.5,
         "files": [
-          "praxis/Core/cli-wrapper/lib/wp_praxis_cli/validator.ex",
-          "praxis/Core/introspection/src/viz/graph-generator.rkt",
-          "plugin-conflict-mapper/bin/install-wp-tests.sh"
+          "journal-theme/tests/accessibility_test.js"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "DynamicCodeExecution->Network"
       },
       {
         "source_category": "UnsafeCode",
@@ -1482,6 +1480,31 @@
         "relation": "UnsafeCode->Concurrency"
       },
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "resurrect/state/lib/state-utils.scm"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "journal-theme/tests/accessibility_test.js",
+          "resurrect/state/lib/state-utils.scm"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -1492,52 +1515,6 @@
           "Ecto"
         ],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "praxis/wp_injector/src/main.rs",
-          "project-wharf/crates/wharf-core/src/config.rs",
-          "project-wharf/crates/wharf-core/src/nebula.rs",
-          "project-wharf/crates/wharf-core/src/fleet.rs",
-          "project-wharf/crates/wharf-core/src/integrity.rs",
-          "project-wharf/bin/yacht-agent/src/ebpf.rs",
-          "resurrect/src/socp-tui/src/config.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "project-wharf/crates/wharf-ebpf/src/main.rs",
-          "project-wharf/crates/wharf-ebpf/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "praxis/Core/db-schema/test/support/data_case.ex",
-          "praxis/Core/db-schema/test/schema_test.exs",
-          "praxis/Core/db-schema/test/query_test.exs",
-          "praxis/Core/db-schema/test/schema/symbol_test.exs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "MutationGap->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -1558,45 +1535,51 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "journal-theme/tests/accessibility_test.js",
-          "resurrect/state/lib/state-utils.scm"
+          "praxis/Core/db-schema/test/support/data_case.ex",
+          "praxis/Core/db-schema/test/schema_test.exs",
+          "praxis/Core/db-schema/test/query_test.exs",
+          "praxis/Core/db-schema/test/schema/symbol_test.exs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "praxis/Core/db-schema/config/test.exs",
-          "praxis/Core/db-schema/config/dev.exs",
-          "plugin-conflict-mapper/bin/install-wp-tests.sh",
-          "secured/php-aegis/validation/run-validation.sh"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "PathTraversal",
+        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "project-wharf/deploy/local-test.sh",
-          "project-wharf/deploy/setup.sh"
+          "praxis/wp_injector/src/main.rs",
+          "praxis/wp_praxis_core/src/verification.rs",
+          "sinople-theme/wasm/semantic_processor/src/lib.rs",
+          "project-wharf/crates/wharf-core/src/crypto.rs",
+          "project-wharf/xtask/src/main.rs",
+          "project-wharf/bin/yacht-agent/src/main.rs",
+          "resurrect/src/socp-tui/src/events.rs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "PathTraversal->Disk"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 3.5,
+        "files": [
+          "praxis/Core/cli-wrapper/lib/wp_praxis_cli/validator.ex",
+          "praxis/Core/introspection/src/viz/graph-generator.rkt",
+          "plugin-conflict-mapper/bin/install-wp-tests.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -1617,16 +1600,63 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
-        "severity_value": 3.5,
+        "severity_value": 2.5,
         "files": [
-          "resurrect/state/lib/state-utils.scm"
+          "praxis/wp_injector/src/main.rs",
+          "project-wharf/crates/wharf-core/src/config.rs",
+          "project-wharf/crates/wharf-core/src/nebula.rs",
+          "project-wharf/crates/wharf-core/src/fleet.rs",
+          "project-wharf/crates/wharf-core/src/integrity.rs",
+          "project-wharf/bin/yacht-agent/src/ebpf.rs",
+          "resurrect/src/socp-tui/src/config.rs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "DynamicCodeExecution->Cpu"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "praxis/Core/db-schema/config/test.exs",
+          "praxis/Core/db-schema/config/dev.exs",
+          "plugin-conflict-mapper/bin/install-wp-tests.sh",
+          "secured/php-aegis/validation/run-validation.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "project-wharf/crates/wharf-ebpf/src/main.rs",
+          "project-wharf/crates/wharf-ebpf/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "project-wharf/deploy/local-test.sh",
+          "project-wharf/deploy/setup.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -1640,36 +1670,6 @@
           "Ecto"
         ],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "journal-theme/tests/accessibility_test.js"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "praxis/wp_injector/src/main.rs",
-          "praxis/wp_praxis_core/src/verification.rs",
-          "sinople-theme/wasm/semantic_processor/src/lib.rs",
-          "project-wharf/crates/wharf-core/src/crypto.rs",
-          "project-wharf/xtask/src/main.rs",
-          "project-wharf/bin/yacht-agent/src/main.rs",
-          "resurrect/src/socp-tui/src/events.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

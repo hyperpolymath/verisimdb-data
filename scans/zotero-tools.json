@@ -869,32 +869,14 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "cpu",
+    "concurrency",
+    "network",
     "memory",
-    "disk",
-    "concurrency"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "zotpress/scripts/build.affine",
-        "to": "zotpress/scripts/build-js.affine",
-        "relation": "shared_dir:zotpress/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "zotpress/scripts/build-js.affine",
-        "to": "zotpress/scripts/build-css.affine",
-        "relation": "shared_dir:zotpress/scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "rescript-templater/init-zotero-plugin.sh",
-        "to": "rescript-templater/init-raczotbuild.rkt",
-        "relation": "shared_dir:rescript-templater",
-        "weight": 1.0
-      },
       {
         "from": "formbd/migration/bin/publisher.jl",
         "to": "formbd/migration/bin/doi.jl",
@@ -914,12 +896,6 @@
         "weight": 1.0
       },
       {
-        "from": "zotpress/src/rescript/Utils.affine",
-        "to": "zotpress/src/rescript/Zotpress.affine",
-        "relation": "shared_dir:zotpress/src/rescript",
-        "weight": 1.0
-      },
-      {
         "from": "formbd/migration/src/server.jl",
         "to": "formbd/migration/src/sync.jl",
         "relation": "shared_dir:formbd/migration/src",
@@ -932,15 +908,15 @@
         "weight": 1.0
       },
       {
-        "from": "rescript-templater/scripts/generate-sbom.sh",
-        "to": "rescript-templater/scripts/sign-release.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
+        "from": "zotpress/scripts/build.affine",
+        "to": "zotpress/scripts/build-js.affine",
+        "relation": "shared_dir:zotpress/scripts",
         "weight": 1.0
       },
       {
-        "from": "rescript-templater/scripts/sign-release.sh",
-        "to": "rescript-templater/scripts/verify-release.sh",
-        "relation": "shared_dir:rescript-templater/scripts",
+        "from": "zotpress/scripts/build-js.affine",
+        "to": "zotpress/scripts/build-css.affine",
+        "relation": "shared_dir:zotpress/scripts",
         "weight": 1.0
       },
       {
@@ -959,6 +935,12 @@
         "from": "fogbinder/lib/ocaml/Fogbinder.affine",
         "to": "fogbinder/lib/ocaml/ZoteroBindings.affine",
         "relation": "shared_dir:fogbinder/lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/init-zotero-plugin.sh",
+        "to": "rescript-templater/init-raczotbuild.rkt",
+        "relation": "shared_dir:rescript-templater",
         "weight": 1.0
       },
       {
@@ -1019,6 +1001,24 @@
         "from": "voyant-export/src/background.v3.affine",
         "to": "voyant-export/src/UI.affine",
         "relation": "shared_dir:voyant-export/src",
+        "weight": 1.0
+      },
+      {
+        "from": "zotpress/src/rescript/Utils.affine",
+        "to": "zotpress/src/rescript/Zotpress.affine",
+        "relation": "shared_dir:zotpress/src/rescript",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/generate-sbom.sh",
+        "to": "rescript-templater/scripts/sign-release.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "rescript-templater/scripts/sign-release.sh",
+        "to": "rescript-templater/scripts/verify-release.sh",
+        "relation": "shared_dir:rescript-templater/scripts",
         "weight": 1.0
       },
       {
@@ -1422,6 +1422,48 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "zotpress/src/rescript/Zotpress.affine",
+          "fogbinder/lib/ocaml/ZoteroBindings.affine",
+          "fogbinder/src/zotero/ZoteroBindings.affine",
+          "voyant-export/src/Zotero.affine",
+          "voyant-export/src/Firefox.affine",
+          "zoterho-template/ZoteRhoTemplate.affine"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "voyant-export/accessibility-tools/dashboard/scanner.js",
+          "voyant-export/accessibility-tools/browser-extension/popup.js"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "fogbinder/src/wasm/crypto/src/lib.rs"
+        ],
+        "frameworks": [
+          "WebServer"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -1451,17 +1493,17 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "voyant-export/accessibility-tools/dashboard/scanner.js",
-          "voyant-export/accessibility-tools/browser-extension/popup.js"
+          "formbd/migration/bin/doi.jl",
+          "formbd/migration/bin/score.jl"
         ],
         "frameworks": [
           "WebServer"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "DynamicCodeExecution",
@@ -1475,48 +1517,6 @@
           "WebServer"
         ],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "zotpress/src/rescript/Zotpress.affine",
-          "fogbinder/lib/ocaml/ZoteroBindings.affine",
-          "fogbinder/src/zotero/ZoteroBindings.affine",
-          "voyant-export/src/Zotero.affine",
-          "voyant-export/src/Firefox.affine",
-          "zoterho-template/ZoteRhoTemplate.affine"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "fogbinder/src/wasm/crypto/src/lib.rs"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "formbd/migration/bin/doi.jl",
-          "formbd/migration/bin/score.jl"
-        ],
-        "frameworks": [
-          "WebServer"
-        ],
-        "relation": "InputBoundary->Cpu"
       }
     ]
   }

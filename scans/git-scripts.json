@@ -371,12 +371,6 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "ui/src/HarApi.affine",
-        "to": "ui/src/App.affine",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/standardize_readmes.sh",
         "to": "scripts/wiki-audit.sh",
         "relation": "shared_dir:scripts",
@@ -417,11 +411,37 @@
         "to": "lib/script_manager/health_dashboard.ex",
         "relation": "shared_dir:lib/script_manager",
         "weight": 1.0
+      },
+      {
+        "from": "ui/src/HarApi.affine",
+        "to": "ui/src/App.affine",
+        "relation": "shared_dir:ui/src",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "lib/script_manager/tui.ex"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "launchers/git-scripts-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -445,16 +465,6 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "launchers/git-scripts-launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
@@ -474,16 +484,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "lib/script_manager/tui.ex"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

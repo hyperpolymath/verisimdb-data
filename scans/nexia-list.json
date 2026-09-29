@@ -424,12 +424,18 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
-    "disk",
-    "memory"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "core/tests/invariants.rs",
+        "to": "core/tests/lambdadelta_plugin_system.rs",
+        "relation": "shared_dir:core/tests",
+        "weight": 1.0
+      },
       {
         "from": "ui/src/store/WasmStore.affine",
         "to": "ui/src/store/Exchange.affine",
@@ -440,6 +446,36 @@
         "from": "ui/src/store/Exchange.affine",
         "to": "ui/src/store/Persist.affine",
         "relation": "shared_dir:ui/src/store",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/Msg.affine",
+        "to": "ui/src/View.affine",
+        "relation": "shared_dir:ui/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/View.affine",
+        "to": "ui/src/Main.affine",
+        "relation": "shared_dir:ui/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/src/Main.affine",
+        "to": "ui/src/Update.affine",
+        "relation": "shared_dir:ui/src",
+        "weight": 1.0
+      },
+      {
+        "from": "ui/tests/UpdateTests.affine",
+        "to": "ui/tests/WasmStoreTests.affine",
+        "relation": "shared_dir:ui/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/ld-mint.js",
+        "to": "scripts/test-ci-honesty.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -473,24 +509,6 @@
         "weight": 1.0
       },
       {
-        "from": "ui/src/Msg.affine",
-        "to": "ui/src/View.affine",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/View.affine",
-        "to": "ui/src/Main.affine",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
-      },
-      {
-        "from": "ui/src/Main.affine",
-        "to": "ui/src/Update.affine",
-        "relation": "shared_dir:ui/src",
-        "weight": 1.0
-      },
-      {
         "from": "core/src/lambdadelta/package.rs",
         "to": "core/src/lambdadelta/harness.rs",
         "relation": "shared_dir:core/src/lambdadelta",
@@ -519,24 +537,6 @@
         "to": "core/src/lambdadelta/reader.rs",
         "relation": "shared_dir:core/src/lambdadelta",
         "weight": 1.0
-      },
-      {
-        "from": "ui/tests/UpdateTests.affine",
-        "to": "ui/tests/WasmStoreTests.affine",
-        "relation": "shared_dir:ui/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/ld-mint.js",
-        "to": "scripts/test-ci-honesty.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "core/tests/invariants.rs",
-        "to": "core/tests/lambdadelta_plugin_system.rs",
-        "relation": "shared_dir:core/tests",
-        "weight": 1.0
       }
     ]
   },
@@ -553,14 +553,27 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "ui/tests/contract.test.js"
+          "desktop/src/main.rs",
+          "core/src/lambdadelta_host/tests.rs"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "ui/src/store/WasmStore.affine",
+          "ui/src/store/Persist.affine",
+          "ui/src/bindings/DomBindings.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -574,15 +587,14 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "desktop/src/main.rs",
-          "core/src/lambdadelta_host/tests.rs"
+          "ui/tests/contract.test.js"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "InputBoundary->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -593,18 +605,6 @@
         ],
         "frameworks": [],
         "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "ui/src/store/WasmStore.affine",
-          "ui/src/store/Persist.affine",
-          "ui/src/bindings/DomBindings.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
       }
     ]
   }
