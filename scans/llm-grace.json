@@ -14,21 +14,65 @@
         "disk"
       ],
       "test_context": "test_only"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "src/monitor/monitor.zig",
+      "file": "src/monitor/monitor.zig",
+      "severity": "High",
+      "description": "1 C interop imports in src/monitor/monitor.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "src/monitor/main.zig",
+      "file": "src/monitor/main.zig",
+      "severity": "High",
+      "description": "1 C interop imports in src/monitor/main.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "location": "src/ledger/lmdb.zig",
+      "file": "src/ledger/lmdb.zig",
+      "severity": "High",
+      "description": "2 unsafe pointer casts in src/ledger/lmdb.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "src/ledger/lmdb.zig",
+      "file": "src/ledger/lmdb.zig",
+      "severity": "High",
+      "description": "1 C interop imports in src/ledger/lmdb.zig",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 5395,
-    "unsafe_blocks": 4,
+    "total_lines": 7152,
+    "unsafe_blocks": 9,
     "panic_sites": 0,
     "unwrap_calls": 0,
-    "allocation_sites": 1,
-    "io_operations": 11,
-    "threading_constructs": 0
+    "allocation_sites": 3,
+    "io_operations": 18,
+    "threading_constructs": 1
   },
   "file_statistics": [
     {
-      "file_path": ".claude/hooks/session-start.sh",
-      "lines": 24,
+      "file_path": "scripts/dev.sh",
+      "lines": 158,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -45,6 +89,36 @@
       "allocation_sites": 0,
       "io_operations": 7,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "src/control/safety.zig",
+      "lines": 31,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/monitor/monitor.zig",
+      "lines": 682,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 2,
+      "io_operations": 5,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/monitor/main.zig",
+      "lines": 122,
+      "unsafe_blocks": 1,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 0,
+      "threading_constructs": 1
     },
     {
       "file_path": "src/interface/ffi/src/main.zig",
@@ -64,6 +138,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 0,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "src/ledger/lmdb.zig",
+      "lines": 330,
+      "unsafe_blocks": 3,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -88,14 +172,44 @@
     }
   ],
   "recommended_attacks": [
+    "memory",
     "cpu",
     "disk"
   ],
   "dependency_graph": {
-    "edges": []
+    "edges": [
+      {
+        "from": "src/monitor/monitor.zig",
+        "to": "src/monitor/main.zig",
+        "relation": "shared_dir:src/monitor",
+        "weight": 1.0
+      }
+    ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/monitor/monitor.zig",
+          "src/monitor/main.zig",
+          "src/ledger/lmdb.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "src/ledger/lmdb.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
       {
         "source_category": "PathTraversal",
         "sink_axis": "disk",

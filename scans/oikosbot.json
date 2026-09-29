@@ -371,12 +371,18 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "bot-integration-affine/src/Main.affine",
+        "to": "bot-integration-affine/src/Config.affine",
+        "relation": "shared_dir:bot-integration-affine/src",
+        "weight": 1.0
+      },
       {
         "from": "tests/test-container-contract.sh",
         "to": "tests/test-action-arguments.sh",
@@ -399,6 +405,12 @@
         "from": "crates/oikosbot-telemetry/src/snapshot.rs",
         "to": "crates/oikosbot-telemetry/src/collect.rs",
         "relation": "shared_dir:crates/oikosbot-telemetry/src",
+        "weight": 1.0
+      },
+      {
+        "from": "policies/finding_taxonomy.ecl",
+        "to": "policies/carbon_budget.ecl",
+        "relation": "shared_dir:policies",
         "weight": 1.0
       },
       {
@@ -435,18 +447,6 @@
         "from": "crates/oikosbot-cli/src/main.rs",
         "to": "crates/oikosbot-cli/src/estate.rs",
         "relation": "shared_dir:crates/oikosbot-cli/src",
-        "weight": 1.0
-      },
-      {
-        "from": "policies/finding_taxonomy.ecl",
-        "to": "policies/carbon_budget.ecl",
-        "relation": "shared_dir:policies",
-        "weight": 1.0
-      },
-      {
-        "from": "bot-integration-affine/src/Main.affine",
-        "to": "bot-integration-affine/src/Config.affine",
-        "relation": "shared_dir:bot-integration-affine/src",
         "weight": 1.0
       },
       {
@@ -604,16 +604,21 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tools/ci/linter-verify.sh"
+          "crates/oikosbot-analysis/src/dependencies.rs",
+          "crates/oikosbot-analysis/src/migration.rs",
+          "crates/oikosbot-analysis/src/analyzer.rs",
+          "crates/oikosbot-cli/src/config.rs",
+          "crates/oikosbot-cli/src/main.rs",
+          "crates/oikosbot-fleet/src/lib.rs"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "PathTraversal->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -633,21 +638,16 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/oikosbot-analysis/src/dependencies.rs",
-          "crates/oikosbot-analysis/src/migration.rs",
-          "crates/oikosbot-analysis/src/analyzer.rs",
-          "crates/oikosbot-cli/src/config.rs",
-          "crates/oikosbot-cli/src/main.rs",
-          "crates/oikosbot-fleet/src/lib.rs"
+          "tools/ci/linter-verify.sh"
         ],
         "frameworks": [
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PathTraversal->Disk"
       }
     ]
   }

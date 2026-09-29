@@ -403,30 +403,12 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "memory",
-    "cpu"
+    "cpu",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "examples/09-null-cascade.err",
-        "to": "examples/05-web-server-stable.err",
-        "relation": "shared_dir:examples",
-        "weight": 1.0
-      },
-      {
-        "from": "examples/05-web-server-stable.err",
-        "to": "examples/03-mutable-ripple.err",
-        "relation": "shared_dir:examples",
-        "weight": 1.0
-      },
-      {
-        "from": "error-pkg/src/resolve.rs",
-        "to": "error-pkg/src/install.rs",
-        "relation": "shared_dir:error-pkg/src",
-        "weight": 1.0
-      },
       {
         "from": "ide/src/MonacoBindings.affine",
         "to": "ide/src/View.affine",
@@ -449,6 +431,18 @@
         "from": "ide/src/Model.affine",
         "to": "ide/src/Update.affine",
         "relation": "shared_dir:ide/src",
+        "weight": 1.0
+      },
+      {
+        "from": "levels/03-unterminated-string.err",
+        "to": "levels/09-operators.err",
+        "relation": "shared_dir:levels",
+        "weight": 1.0
+      },
+      {
+        "from": "error-pkg/src/resolve.rs",
+        "to": "error-pkg/src/install.rs",
+        "relation": "shared_dir:error-pkg/src",
         "weight": 1.0
       },
       {
@@ -548,25 +542,21 @@
         "weight": 1.0
       },
       {
-        "from": "levels/03-unterminated-string.err",
-        "to": "levels/09-operators.err",
-        "relation": "shared_dir:levels",
+        "from": "examples/09-null-cascade.err",
+        "to": "examples/05-web-server-stable.err",
+        "relation": "shared_dir:examples",
+        "weight": 1.0
+      },
+      {
+        "from": "examples/05-web-server-stable.err",
+        "to": "examples/03-mutable-ripple.err",
+        "relation": "shared_dir:examples",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "error-pkg/src/types.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -589,13 +579,13 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "error-pkg/src/types.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PathTraversal",
@@ -606,6 +596,16 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "error-pkg/src/types.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
