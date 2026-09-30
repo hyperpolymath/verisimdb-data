@@ -445,30 +445,18 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
-    "cpu",
     "network",
-    "concurrency"
+    "memory",
+    "concurrency",
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/reconcile-wharf-repos.sh",
-        "to": "scripts/apply-common-files.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/apply-common-files.sh",
-        "to": "scripts/mass-apply-templates.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/mass-apply-templates.sh",
-        "to": "scripts/apply-justfiles.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/contract/src/arbiter.rs",
+        "to": "src/contract/src/lib.rs",
+        "relation": "shared_dir:src/contract/src",
         "weight": 1.0
       },
       {
@@ -490,9 +478,21 @@
         "weight": 1.0
       },
       {
-        "from": "src/contract/src/arbiter.rs",
-        "to": "src/contract/src/lib.rs",
-        "relation": "shared_dir:src/contract/src",
+        "from": "scripts/reconcile-wharf-repos.sh",
+        "to": "scripts/apply-common-files.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/apply-common-files.sh",
+        "to": "scripts/mass-apply-templates.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/mass-apply-templates.sh",
+        "to": "scripts/apply-justfiles.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
@@ -728,6 +728,51 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh",
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "src/contract/src/lib.rs",
+          "src/oracle/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "src/contract/src/arbiter.rs",
+          "src/slm/src/provider.rs",
+          "src/oracle/src/nickel.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -777,17 +822,16 @@
       },
       {
         "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
-          "scripts/mass-apply-templates.sh",
           "scripts/mass-apply-templates.sh"
         ],
         "frameworks": [
           "OTP",
           "Networking"
         ],
-        "relation": "CommandInjection->Cpu"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "InsecureProtocol",
@@ -801,19 +845,6 @@
           "Networking"
         ],
         "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -830,37 +861,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "src/contract/src/lib.rs",
-          "src/oracle/src/lib.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "src/contract/src/arbiter.rs",
-          "src/slm/src/provider.rs",
-          "src/oracle/src/nickel.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "PanicPath->Disk"
       }
     ]
   }

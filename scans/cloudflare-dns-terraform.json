@@ -182,12 +182,30 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "disk",
+    "network",
     "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/edge-redirect-check.sh",
+        "to": "scripts/test-edge-redirect-check.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/test-edge-redirect-check.sh",
+        "to": "scripts/test-dns-origin-audit.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/test-dns-origin-audit.sh",
+        "to": "scripts/dns-origin-audit.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": "workers/consent-aware-http.js",
         "to": "workers/security-headers.js",
@@ -211,38 +229,20 @@
         "to": "extract-current-dns.sh",
         "relation": "shared_dir:",
         "weight": 1.0
-      },
-      {
-        "from": "scripts/edge-redirect-check.sh",
-        "to": "scripts/test-edge-redirect-check.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/test-edge-redirect-check.sh",
-        "to": "scripts/test-dns-origin-audit.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/test-dns-origin-audit.sh",
-        "to": "scripts/dns-origin-audit.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
         "severity_value": 2.5,
         "files": [
-          "workers/consent-aware-http.js"
+          "scripts/test-edge-redirect-check.sh"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "CommandInjection",
@@ -255,14 +255,14 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "scripts/test-edge-redirect-check.sh"
+          "workers/consent-aware-http.js"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "InputBoundary->Cpu"
       }
     ]
   }

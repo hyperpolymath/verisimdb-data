@@ -294,8 +294,8 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
     "cpu",
+    "disk",
     "memory",
     "network"
   ],
@@ -326,15 +326,15 @@
         "weight": 1.0
       },
       {
-        "from": "bof-meetings/presentations/demo-http-headers.sh",
-        "to": "bof-meetings/presentations/demo-dns-discovery.sh",
-        "relation": "shared_dir:bof-meetings/presentations",
-        "weight": 1.0
-      },
-      {
         "from": "scripts/migrate-version.jl",
         "to": "scripts/generate-structure.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "bof-meetings/presentations/demo-http-headers.sh",
+        "to": "bof-meetings/presentations/demo-dns-discovery.sh",
+        "relation": "shared_dir:bof-meetings/presentations",
         "weight": 1.0
       },
       {
@@ -444,6 +444,44 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "tools/pmpl-audit/src/main.rs"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "bof-meetings/presentations/demo-http-headers.sh",
+          "bof-meetings/presentations/demo-dns-discovery.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
+        "files": [
+          "bof-meetings/presentations/demo-http-headers.sh",
+          "bof-meetings/presentations/demo-dns-discovery.sh"
+        ],
+        "frameworks": [
+          "Ecto"
+        ],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
         "severity_value": 2.5,
@@ -460,42 +498,16 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "bof-meetings/presentations/demo-http-headers.sh",
-          "bof-meetings/presentations/demo-dns-discovery.sh"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
-          "tools/pmpl-audit/src/main.rs"
+          "tools/pmpl-verify/src/main.rs"
         ],
         "frameworks": [
           "Ecto"
         ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "bof-meetings/presentations/demo-http-headers.sh",
-          "bof-meetings/presentations/demo-dns-discovery.sh"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "CommandInjection->Disk"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -510,20 +522,8 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tools/pmpl-verify/src/main.rs"
-        ],
-        "frameworks": [
-          "Ecto"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "tools/pmpl-audit/src/main.rs"
@@ -531,7 +531,7 @@
         "frameworks": [
           "Ecto"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Memory"
       }
     ]
   }

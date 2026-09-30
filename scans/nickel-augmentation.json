@@ -229,18 +229,6 @@
   "dependency_graph": {
     "edges": [
       {
-        "from": "augmented/examples/nickel/ci.ncl",
-        "to": "augmented/examples/nickel/infra.ncl",
-        "relation": "shared_dir:augmented/examples/nickel",
-        "weight": 1.0
-      },
-      {
-        "from": "augmented/examples/nickel/infra.ncl",
-        "to": "augmented/examples/nickel/build.ncl",
-        "relation": "shared_dir:augmented/examples/nickel",
-        "weight": 1.0
-      },
-      {
         "from": "augmented/lib/ci.ncl",
         "to": "augmented/lib/proven-bridge.ncl",
         "relation": "shared_dir:augmented/lib",
@@ -263,22 +251,35 @@
         "to": "augmented/lib/proven.ncl",
         "relation": "shared_dir:augmented/lib",
         "weight": 1.0
+      },
+      {
+        "from": "augmented/examples/nickel/ci.ncl",
+        "to": "augmented/examples/nickel/infra.ncl",
+        "relation": "shared_dir:augmented/examples/nickel",
+        "weight": 1.0
+      },
+      {
+        "from": "augmented/examples/nickel/infra.ncl",
+        "to": "augmented/examples/nickel/build.ncl",
+        "relation": "shared_dir:augmented/examples/nickel",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
         "files": [
           "tests/e2e/test_pipeline.sh",
+          "tests/integration/test_contracts.sh",
           "tests/unit/test_basic.sh",
           "tests/property/test_invariants.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "HardcodedSecret",
@@ -303,17 +304,16 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
         "files": [
           "tests/e2e/test_pipeline.sh",
-          "tests/integration/test_contracts.sh",
           "tests/unit/test_basic.sh",
           "tests/property/test_invariants.sh"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

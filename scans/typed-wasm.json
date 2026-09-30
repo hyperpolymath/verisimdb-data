@@ -408,12 +408,42 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "cpu",
-    "disk"
+    "disk",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "src/parser/Parser.affine",
+        "to": "src/parser/Lexer.affine",
+        "relation": "shared_dir:src/parser",
+        "weight": 1.0
+      },
+      {
+        "from": "src/parser/Lexer.affine",
+        "to": "src/parser/Checker.affine",
+        "relation": "shared_dir:src/parser",
+        "weight": 1.0
+      },
+      {
+        "from": "src/parser/Checker.affine",
+        "to": "src/parser/Ast.affine",
+        "relation": "shared_dir:src/parser",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/typed-wasm-verify/src/section.rs",
+        "to": "crates/typed-wasm-verify/src/cross.rs",
+        "relation": "shared_dir:crates/typed-wasm-verify/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/typed-wasm-verify/src/cross.rs",
+        "to": "crates/typed-wasm-verify/src/verify.rs",
+        "relation": "shared_dir:crates/typed-wasm-verify/src",
+        "weight": 1.0
+      },
       {
         "from": "crates/typed-wasm-codegen/tests/optimization.rs",
         "to": "crates/typed-wasm-codegen/tests/roundtrip.rs",
@@ -445,36 +475,6 @@
         "weight": 1.0
       },
       {
-        "from": "crates/typed-wasm-verify/src/section.rs",
-        "to": "crates/typed-wasm-verify/src/cross.rs",
-        "relation": "shared_dir:crates/typed-wasm-verify/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/typed-wasm-verify/src/cross.rs",
-        "to": "crates/typed-wasm-verify/src/verify.rs",
-        "relation": "shared_dir:crates/typed-wasm-verify/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/parser/Parser.affine",
-        "to": "src/parser/Lexer.affine",
-        "relation": "shared_dir:src/parser",
-        "weight": 1.0
-      },
-      {
-        "from": "src/parser/Lexer.affine",
-        "to": "src/parser/Checker.affine",
-        "relation": "shared_dir:src/parser",
-        "weight": 1.0
-      },
-      {
-        "from": "src/parser/Checker.affine",
-        "to": "src/parser/Ast.affine",
-        "relation": "shared_dir:src/parser",
-        "weight": 1.0
-      },
-      {
         "from": "crates/typed-wasm-codegen/src/parser.rs",
         "to": "crates/typed-wasm-codegen/src/errors.rs",
         "relation": "shared_dir:crates/typed-wasm-codegen/src",
@@ -490,6 +490,60 @@
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "InputBoundary",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "tests/contracts/airborne-step-state-contract.mjs"
+        ],
+        "frameworks": [],
+        "relation": "InputBoundary->Cpu"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/typed-wasm-codegen/src/lib.rs",
+          "crates/typed-wasm-verify/src/section.rs",
+          "crates/typed-wasm-verify/src/verify.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/typed-wasm-codegen/src/lib.rs",
+          "crates/typed-wasm-verify/src/section.rs",
+          "crates/typed-wasm-verify/src/verify.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "crates/typed-wasm-codegen/src/bin/tw.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tests/parser/ParserTests.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
+      },
       {
         "source_category": "UnsafeCode",
         "sink_axis": "memory",
@@ -511,34 +565,14 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "InputBoundary",
-        "sink_axis": "cpu",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "tests/contracts/airborne-step-state-contract.mjs"
+          "tools/provision.sh"
         ],
         "frameworks": [],
-        "relation": "InputBoundary->Cpu"
-      },
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tests/parser/ParserTests.affine"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/typed-wasm-codegen/src/bin/tw.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -559,40 +593,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/typed-wasm-codegen/src/lib.rs",
-          "crates/typed-wasm-verify/src/section.rs",
-          "crates/typed-wasm-verify/src/verify.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tools/provision.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/typed-wasm-codegen/src/lib.rs",
-          "crates/typed-wasm-verify/src/section.rs",
-          "crates/typed-wasm-verify/src/verify.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
       }
     ]
   }

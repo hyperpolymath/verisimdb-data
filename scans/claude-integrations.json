@@ -217,10 +217,10 @@
     }
   ],
   "recommended_attacks": [
-    "disk",
-    "cpu",
+    "network",
     "memory",
-    "network"
+    "disk",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
@@ -307,16 +307,28 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "gecko-browser-extension/src/content/content.js"
+          "firefox-lsp/lib/adapters/firefox.ex"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "DynamicCodeExecution->Memory"
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "firefox-lsp/lib/adapters/firefox.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "HardcodedSecret",
@@ -341,18 +353,6 @@
           "OTP"
         ],
         "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "firefox-lsp/lib/adapters/firefox.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "AtomExhaustion",
@@ -380,16 +380,16 @@
         "relation": "MutationGap->Cpu"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "firefox-lsp/lib/adapters/firefox.ex"
+          "gecko-browser-extension/src/content/content.js"
         ],
         "frameworks": [
           "OTP"
         ],
-        "relation": "CommandInjection->Disk"
+        "relation": "DynamicCodeExecution->Memory"
       }
     ]
   }
