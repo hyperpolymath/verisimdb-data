@@ -187,23 +187,23 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
     "cpu",
+    "disk",
+    "memory",
     "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/maintenance/perms-state.sh",
-        "to": "scripts/maintenance/run-maintenance.sh",
-        "relation": "shared_dir:scripts/maintenance",
-        "weight": 1.0
-      },
-      {
         "from": "src/abi/Foreign.idr",
         "to": "src/abi/Types.idr",
         "relation": "shared_dir:src/abi",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/maintenance/perms-state.sh",
+        "to": "scripts/maintenance/run-maintenance.sh",
+        "relation": "shared_dir:scripts/maintenance",
         "weight": 1.0
       }
     ]
@@ -219,6 +219,17 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "src/main.rs",
+          "src/api/mod.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -241,17 +252,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "src/main.rs",
-          "src/api/mod.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",

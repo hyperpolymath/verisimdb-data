@@ -449,10 +449,10 @@
     }
   ],
   "recommended_attacks": [
-    "network",
     "memory",
+    "disk",
     "cpu",
-    "disk"
+    "network"
   ],
   "dependency_graph": {
     "edges": [
@@ -460,6 +460,12 @@
         "from": "nqc/nqc-launcher.sh",
         "to": "nqc/nqc-enhanced-launcher.sh",
         "relation": "shared_dir:nqc",
+        "weight": 1.0
+      },
+      {
+        "from": "nqc/verification/tests/nqc/formatter_test.gleam",
+        "to": "nqc/verification/tests/nqc/cache_test.gleam",
+        "relation": "shared_dir:nqc/verification/tests/nqc",
         "weight": 1.0
       },
       {
@@ -497,41 +503,11 @@
         "to": "nqc/src/nqc/formatter.gleam",
         "relation": "shared_dir:nqc/src/nqc",
         "weight": 1.0
-      },
-      {
-        "from": "nqc/verification/tests/nqc/formatter_test.gleam",
-        "to": "nqc/verification/tests/nqc/cache_test.gleam",
-        "relation": "shared_dir:nqc/verification/tests/nqc",
-        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "nqc/src/nqc/profiles.gleam"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
-      },
-      {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "verisim-core/test/runtests.jl",
-          "verisim-modular-experiment/test/runtests.jl",
-          "verisim-modular-experiment/test/test_seams.jl",
-          "verisim-modular-experiment/test/test_krladapter_integration.jl",
-          "verisim-modular-experiment/test/test_vcl.jl"
-        ],
-        "frameworks": [],
-        "relation": "ProofDrift->Cpu"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -554,16 +530,6 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "verisim-modular-experiment/test/runtests.jl"
-        ],
-        "frameworks": [],
-        "relation": "MutationGap->Cpu"
-      },
-      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 2.5,
@@ -582,6 +548,40 @@
         ],
         "frameworks": [],
         "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "verisim-core/test/runtests.jl",
+          "verisim-modular-experiment/test/runtests.jl",
+          "verisim-modular-experiment/test/test_seams.jl",
+          "verisim-modular-experiment/test/test_krladapter_integration.jl",
+          "verisim-modular-experiment/test/test_vcl.jl"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "verisim-modular-experiment/test/runtests.jl"
+        ],
+        "frameworks": [],
+        "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "nqc/src/nqc/profiles.gleam"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

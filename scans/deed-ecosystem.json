@@ -606,13 +606,19 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
     "disk",
-    "memory",
-    "cpu"
+    "concurrency",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "members/tooling/scm2a2ml/src/main.rs",
+        "to": "members/tooling/scm2a2ml/src/lib.rs",
+        "relation": "shared_dir:members/tooling/scm2a2ml/src",
+        "weight": 1.0
+      },
       {
         "from": "rs/generated/idrisiser/idris2/A2ml/Verified/document_parser.idr",
         "to": "rs/generated/idrisiser/idris2/A2ml/Verified/document_types.idr",
@@ -626,9 +632,9 @@
         "weight": 1.0
       },
       {
-        "from": "validate-action/.machine_readable/contractiles/must/must.ncl",
-        "to": "validate-action/.machine_readable/contractiles/must/must.k9.ncl",
-        "relation": "shared_dir:validate-action/.machine_readable/contractiles/must",
+        "from": "validate-action/.machine_readable/contractiles/intend/intend.k9.ncl",
+        "to": "validate-action/.machine_readable/contractiles/intend/intend.ncl",
+        "relation": "shared_dir:validate-action/.machine_readable/contractiles/intend",
         "weight": 1.0
       },
       {
@@ -662,12 +668,6 @@
         "weight": 1.0
       },
       {
-        "from": "validate-action/.machine_readable/contractiles/trust/trust.ncl",
-        "to": "validate-action/.machine_readable/contractiles/trust/trust.k9.ncl",
-        "relation": "shared_dir:validate-action/.machine_readable/contractiles/trust",
-        "weight": 1.0
-      },
-      {
         "from": "validate-action/.machine_readable/contractiles/dust/dust.k9.ncl",
         "to": "validate-action/.machine_readable/contractiles/dust/dust.ncl",
         "relation": "shared_dir:validate-action/.machine_readable/contractiles/dust",
@@ -686,32 +686,21 @@
         "weight": 1.0
       },
       {
-        "from": "members/tooling/scm2a2ml/src/main.rs",
-        "to": "members/tooling/scm2a2ml/src/lib.rs",
-        "relation": "shared_dir:members/tooling/scm2a2ml/src",
+        "from": "validate-action/.machine_readable/contractiles/must/must.ncl",
+        "to": "validate-action/.machine_readable/contractiles/must/must.k9.ncl",
+        "relation": "shared_dir:validate-action/.machine_readable/contractiles/must",
         "weight": 1.0
       },
       {
-        "from": "validate-action/.machine_readable/contractiles/intend/intend.k9.ncl",
-        "to": "validate-action/.machine_readable/contractiles/intend/intend.ncl",
-        "relation": "shared_dir:validate-action/.machine_readable/contractiles/intend",
+        "from": "validate-action/.machine_readable/contractiles/trust/trust.ncl",
+        "to": "validate-action/.machine_readable/contractiles/trust/trust.k9.ncl",
+        "relation": "shared_dir:validate-action/.machine_readable/contractiles/trust",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "members/tooling/a2ml-estate-normaliser/src/main.rs",
-          "members/tooling/scm2a2ml/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "cpu",
@@ -723,15 +712,15 @@
         "relation": "PanicPath->Cpu"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "members/tooling/a2ml-estate-normaliser/src/main.rs",
-          "rs/src/parser.rs"
+          "members/tooling/scm2a2ml/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "MutationGap",
@@ -748,6 +737,16 @@
         "relation": "MutationGap->Cpu"
       },
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "members/tooling/scm2a2ml/scripts/verify_a2ml_structure.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Disk"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -759,6 +758,28 @@
         "relation": "PanicPath->Memory"
       },
       {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "members/tooling/a2ml-estate-normaliser/src/main.rs",
+          "rs/src/parser.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "members/tooling/a2ml-estate-normaliser/src/main.rs",
+          "members/tooling/scm2a2ml/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
         "severity_value": 5.0,
@@ -767,27 +788,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "members/tooling/scm2a2ml/scripts/verify_a2ml_structure.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "members/tooling/a2ml-estate-normaliser/src/main.rs",
-          "members/tooling/scm2a2ml/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
       }
     ]
   }
