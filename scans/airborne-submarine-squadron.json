@@ -42,17 +42,6 @@
     },
     {
       "category": "PathTraversal",
-      "location": "install.sh",
-      "file": "install.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in install.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
       "location": "desktop/install-debug.sh",
       "file": "desktop/install-debug.sh",
       "severity": "Medium",
@@ -85,11 +74,23 @@
       "test_context": "production"
     },
     {
+      "category": "InsecureProtocol",
+      "location": "test/server_test.js",
+      "file": "test/server_test.js",
+      "severity": "Medium",
+      "description": "5 HTTP (non-HTTPS) URLs in test/server_test.js",
+      "recommended_attack": [
+        "network"
+      ],
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
       "category": "InputBoundary",
       "location": "test/compatibility_test.js",
       "file": "test/compatibility_test.js",
       "severity": "Medium",
-      "description": "3 JSON.parse call(s) with 0 try block(s) in test/compatibility_test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
+      "description": "4 JSON.parse call(s) with 0 try block(s) in test/compatibility_test.js — JSON.parse throws SyntaxError on malformed input; wrap in try-catch",
       "recommended_attack": [
         "cpu"
       ],
@@ -107,30 +108,6 @@
       "test_context": "production"
     },
     {
-      "category": "ExcessivePermissions",
-      "location": "run.js",
-      "file": "run.js",
-      "severity": "High",
-      "description": "Deno -A (all permissions) in run.js",
-      "recommended_attack": [
-        "network",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "ExcessivePermissions",
-      "location": "launcher.sh",
-      "file": "launcher.sh",
-      "severity": "High",
-      "description": "Deno -A (all permissions) in launcher.sh",
-      "recommended_attack": [
-        "network",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "PathTraversal",
       "location": "launcher.sh",
       "file": "launcher.sh",
@@ -143,12 +120,12 @@
     }
   ],
   "statistics": {
-    "total_lines": 34344,
+    "total_lines": 37156,
     "unsafe_blocks": 1,
     "panic_sites": 0,
     "unwrap_calls": 1,
     "allocation_sites": 11,
-    "io_operations": 43,
+    "io_operations": 53,
     "threading_constructs": 3
   },
   "file_statistics": [
@@ -175,18 +152,48 @@
       "threading_constructs": 1
     },
     {
-      "file_path": "gossamer/launch.sh",
-      "lines": 182,
+      "file_path": "scripts/check-lock-closure.py",
+      "lines": 81,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 1,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "test/manual/verisimdb_smoke.js",
+      "lines": 59,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "test/server_test.js",
+      "lines": 265,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "gossamer/launch.sh",
+      "lines": 144,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 3,
       "threading_constructs": 0
     },
     {
       "file_path": "gossamer/app_gossamer.js",
-      "lines": 6579,
+      "lines": 6709,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -235,8 +242,8 @@
       "threading_constructs": 0
     },
     {
-      "file_path": "test_verisimdb_simple.js",
-      "lines": 59,
+      "file_path": "run.js",
+      "lines": 455,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -376,40 +383,28 @@
     },
     {
       "file_path": "launcher.sh",
-      "lines": 317,
+      "lines": 273,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 6,
+      "io_operations": 8,
       "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
-    "network",
-    "concurrency",
-    "memory",
     "cpu",
+    "concurrency",
+    "network",
+    "memory",
     "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "test_verisimdb_simple.js",
+        "from": "run.js",
         "to": "launcher.sh",
         "relation": "shared_dir:",
-        "weight": 1.0
-      },
-      {
-        "from": "gossamer/launch.sh",
-        "to": "gossamer/app_gossamer.js",
-        "relation": "shared_dir:gossamer",
-        "weight": 1.0
-      },
-      {
-        "from": "gossamer/app_gossamer.js",
-        "to": "gossamer/verisimdb.js",
-        "relation": "shared_dir:gossamer",
         "weight": 1.0
       },
       {
@@ -477,6 +472,18 @@
         "to": "archive/src/main_incremental_temp.affine",
         "relation": "shared_dir:archive/src",
         "weight": 1.0
+      },
+      {
+        "from": "gossamer/launch.sh",
+        "to": "gossamer/app_gossamer.js",
+        "relation": "shared_dir:gossamer",
+        "weight": 1.0
+      },
+      {
+        "from": "gossamer/app_gossamer.js",
+        "to": "gossamer/verisimdb.js",
+        "relation": "shared_dir:gossamer",
+        "weight": 1.0
       }
     ]
   },
@@ -491,6 +498,29 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tray/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "desktop/install-debug.sh",
+          "desktop/install.sh",
+          "gossamer/launch.sh",
+          "launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -513,15 +543,24 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "network",
-        "severity_value": 3.5,
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
         "files": [
-          "run.js",
-          "launcher.sh"
+          "tray/src/main.rs"
         ],
         "frameworks": [],
-        "relation": "ExcessivePermissions->Network"
+        "relation": "UnboundedAllocation->Cpu"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "test/server_test.js"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
       },
       {
         "source_category": "InputBoundary",
@@ -535,30 +574,6 @@
         "relation": "InputBoundary->Cpu"
       },
       {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "install.sh",
-          "desktop/install-debug.sh",
-          "desktop/install.sh",
-          "gossamer/launch.sh",
-          "launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "UnsafeCode",
         "sink_axis": "concurrency",
         "severity_value": 3.5,
@@ -567,27 +582,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "tray/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "ExcessivePermissions",
-        "sink_axis": "disk",
-        "severity_value": 3.5,
-        "files": [
-          "run.js",
-          "launcher.sh"
-        ],
-        "frameworks": [],
-        "relation": "ExcessivePermissions->Disk"
       }
     ]
   }

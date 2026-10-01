@@ -5,29 +5,6 @@
   "frameworks": [],
   "weak_points": [
     {
-      "category": "CommandInjection",
-      "location": "game-server-admin-launcher.sh",
-      "file": "game-server-admin-launcher.sh",
-      "severity": "Medium",
-      "description": "23 potentially unquoted variable expansions in game-server-admin-launcher.sh",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "suppressed": true,
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "game-server-admin-launcher.sh",
-      "file": "game-server-admin-launcher.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in game-server-admin-launcher.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
       "category": "HardcodedSecret",
       "location": "scripts/wizard.sh",
       "file": "scripts/wizard.sh",
@@ -132,23 +109,23 @@
     }
   ],
   "statistics": {
-    "total_lines": 24829,
+    "total_lines": 25103,
     "unsafe_blocks": 25,
     "panic_sites": 7,
     "unwrap_calls": 0,
     "allocation_sites": 6,
-    "io_operations": 138,
+    "io_operations": 133,
     "threading_constructs": 15
   },
   "file_statistics": [
     {
       "file_path": "game-server-admin-launcher.sh",
-      "lines": 429,
+      "lines": 642,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
       "allocation_sites": 0,
-      "io_operations": 9,
+      "io_operations": 3,
       "threading_constructs": 0
     },
     {
@@ -199,6 +176,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 3,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "scripts/install-zig.sh",
+      "lines": 61,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 1,
       "threading_constructs": 0
     },
     {
@@ -523,78 +510,36 @@
     }
   ],
   "recommended_attacks": [
-    "concurrency",
-    "cpu",
-    "network",
     "disk",
-    "memory"
+    "memory",
+    "network",
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/gossamer-integration-test.sh",
-        "to": "scripts/install-quadlets.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/wasm/build.sh",
+        "to": "src/wasm/probe.zig",
+        "relation": "shared_dir:src/wasm",
         "weight": 1.0
       },
       {
-        "from": "scripts/install-quadlets.sh",
-        "to": "scripts/e2e-test.sh",
-        "relation": "shared_dir:scripts",
+        "from": "src/wasm/probe.zig",
+        "to": "src/wasm/build-typed.sh",
+        "relation": "shared_dir:src/wasm",
         "weight": 1.0
       },
       {
-        "from": "scripts/e2e-test.sh",
-        "to": "scripts/gen_result_codes.zig",
-        "relation": "shared_dir:scripts",
+        "from": "src/wasm/build-typed.sh",
+        "to": "src/wasm/launch-gsa.sh",
+        "relation": "shared_dir:src/wasm",
         "weight": 1.0
       },
       {
-        "from": "scripts/gen_result_codes.zig",
-        "to": "scripts/install-desktop.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/install-desktop.sh",
-        "to": "scripts/self-heal.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/self-heal.sh",
-        "to": "scripts/gen_abi_expected.zig",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/gen_abi_expected.zig",
-        "to": "scripts/wizard.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/wizard.sh",
-        "to": "scripts/steam-stage.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/steam-stage.sh",
-        "to": "scripts/provision-server.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/provision-server.sh",
-        "to": "scripts/generate-clades.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/ffi/test/property_test.zig",
-        "to": "src/interface/ffi/test/mock_servers.zig",
-        "relation": "shared_dir:src/interface/ffi/test",
+        "from": "src/wasm/launch-gsa.sh",
+        "to": "src/wasm/build-complete.sh",
+        "relation": "shared_dir:src/wasm",
         "weight": 1.0
       },
       {
@@ -613,12 +558,6 @@
         "from": "src/core/Bridge.eph",
         "to": "src/core/GrooveClient.eph",
         "relation": "shared_dir:src/core",
-        "weight": 1.0
-      },
-      {
-        "from": "src/interface/abi/Foreign.idr",
-        "to": "src/interface/abi/AbiRuntimeTest.idr",
-        "relation": "shared_dir:src/interface/abi",
         "weight": 1.0
       },
       {
@@ -658,9 +597,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/ui/tea/gsa_gui.affine",
-        "to": "src/ui/tea/gsa_ffi.affine",
-        "relation": "shared_dir:src/ui/tea",
+        "from": "src/interface/abi/Foreign.idr",
+        "to": "src/interface/abi/AbiRuntimeTest.idr",
+        "relation": "shared_dir:src/interface/abi",
         "weight": 1.0
       },
       {
@@ -670,70 +609,87 @@
         "weight": 1.0
       },
       {
-        "from": "src/wasm/build.sh",
-        "to": "src/wasm/probe.zig",
-        "relation": "shared_dir:src/wasm",
+        "from": "src/ui/tea/gsa_gui.affine",
+        "to": "src/ui/tea/gsa_ffi.affine",
+        "relation": "shared_dir:src/ui/tea",
         "weight": 1.0
       },
       {
-        "from": "src/wasm/probe.zig",
-        "to": "src/wasm/build-typed.sh",
-        "relation": "shared_dir:src/wasm",
+        "from": "scripts/gossamer-integration-test.sh",
+        "to": "scripts/install-quadlets.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "src/wasm/build-typed.sh",
-        "to": "src/wasm/launch-gsa.sh",
-        "relation": "shared_dir:src/wasm",
+        "from": "scripts/install-quadlets.sh",
+        "to": "scripts/e2e-test.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       },
       {
-        "from": "src/wasm/launch-gsa.sh",
-        "to": "src/wasm/build-complete.sh",
-        "relation": "shared_dir:src/wasm",
+        "from": "scripts/e2e-test.sh",
+        "to": "scripts/gen_result_codes.zig",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/gen_result_codes.zig",
+        "to": "scripts/install-desktop.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-desktop.sh",
+        "to": "scripts/install-zig.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/install-zig.sh",
+        "to": "scripts/self-heal.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/self-heal.sh",
+        "to": "scripts/gen_abi_expected.zig",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/gen_abi_expected.zig",
+        "to": "scripts/wizard.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/wizard.sh",
+        "to": "scripts/steam-stage.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/steam-stage.sh",
+        "to": "scripts/provision-server.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/provision-server.sh",
+        "to": "scripts/generate-clades.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/interface/ffi/test/property_test.zig",
+        "to": "src/interface/ffi/test/mock_servers.zig",
+        "relation": "shared_dir:src/interface/ffi/test",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/gui/fli/fli-editable.js",
-          "src/gui/fli/fli-tooltip.js",
-          "src/gui/fli/fli-terminal.js",
-          "src/gui/fli/fli-gauge.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/wizard.sh",
-          "scripts/steam-stage.sh"
-        ],
-        "frameworks": [],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "src/gui/fli/fli-editable.js",
-          "src/gui/fli/fli-tooltip.js",
-          "src/gui/fli/fli-terminal.js",
-          "src/gui/fli/fli-gauge.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Memory"
-      },
       {
         "source_category": "InsecureProtocol",
         "sink_axis": "network",
@@ -749,7 +705,6 @@
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "game-server-admin-launcher.sh",
           "scripts/steam-stage.sh",
           "src/wasm/launch-gsa.sh"
         ],
@@ -757,14 +712,41 @@
         "relation": "PathTraversal->Disk"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
         "files": [
-          "game-server-admin-launcher.sh"
+          "src/gui/fli/fli-editable.js",
+          "src/gui/fli/fli-tooltip.js",
+          "src/gui/fli/fli-terminal.js",
+          "src/gui/fli/fli-gauge.js"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/wizard.sh",
+          "scripts/steam-stage.sh"
+        ],
+        "frameworks": [],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/gui/fli/fli-editable.js",
+          "src/gui/fli/fli-tooltip.js",
+          "src/gui/fli/fli-terminal.js",
+          "src/gui/fli/fli-gauge.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }
