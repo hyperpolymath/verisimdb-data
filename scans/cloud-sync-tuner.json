@@ -154,21 +154,21 @@
   "recommended_attacks": [
     "concurrency",
     "disk",
-    "cpu",
-    "memory"
+    "memory",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "scripts/config-sync.sh",
-        "to": "scripts/config-import.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
         "from": "tests/test_runner.adb",
         "to": "tests/verify_formal.adb",
         "relation": "shared_dir:tests",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/config-sync.sh",
+        "to": "scripts/config-import.sh",
+        "relation": "shared_dir:scripts",
         "weight": 1.0
       }
     ]
@@ -176,14 +176,14 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 5.0,
         "files": [
-          "tray-daemon/src/main.rs"
+          "aur/submit-to-aur.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "CommandInjection->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -197,6 +197,16 @@
       },
       {
         "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "tray-daemon/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "PanicPath",
         "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
@@ -204,16 +214,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
-        "files": [
-          "aur/submit-to-aur.sh"
-        ],
-        "frameworks": [],
-        "relation": "CommandInjection->Cpu"
       }
     ]
   }

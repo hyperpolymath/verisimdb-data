@@ -445,32 +445,14 @@
     }
   ],
   "recommended_attacks": [
-    "network",
-    "memory",
     "concurrency",
     "disk",
-    "cpu"
+    "network",
+    "cpu",
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "src/contract/src/arbiter.rs",
-        "to": "src/contract/src/lib.rs",
-        "relation": "shared_dir:src/contract/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/slm/src/http.rs",
-        "to": "src/slm/src/provider.rs",
-        "relation": "shared_dir:src/slm/src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/arbiter/lib/conative_gating/audit_log.ex",
-        "to": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
-        "relation": "shared_dir:src/arbiter/lib/conative_gating",
-        "weight": 1.0
-      },
       {
         "from": "src/oracle/src/nickel.rs",
         "to": "src/oracle/src/lib.rs",
@@ -493,6 +475,24 @@
         "from": "scripts/mass-apply-templates.sh",
         "to": "scripts/apply-justfiles.sh",
         "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "src/slm/src/http.rs",
+        "to": "src/slm/src/provider.rs",
+        "relation": "shared_dir:src/slm/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/contract/src/arbiter.rs",
+        "to": "src/contract/src/lib.rs",
+        "relation": "shared_dir:src/contract/src",
+        "weight": 1.0
+      },
+      {
+        "from": "src/arbiter/lib/conative_gating/audit_log.ex",
+        "to": "src/arbiter/lib/conative_gating/consensus_arbiter.ex",
+        "relation": "shared_dir:src/arbiter/lib/conative_gating",
         "weight": 1.0
       },
       {
@@ -742,8 +742,51 @@
         "relation": "CommandInjection->Cpu"
       },
       {
+        "source_category": "HardcodedSecret",
+        "sink_axis": "network",
+        "severity_value": 5.0,
+        "files": [
+          "benches/oracle_bench.rs",
+          "tests/security_aspect_test.rs",
+          "tests/gating_pipeline_test.rs",
+          "src/contract/src/lib.rs",
+          "src/oracle/src/lib.rs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "HardcodedSecret->Network"
+      },
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "templates/rsr-metadata.ncl"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "CommandInjection",
+        "sink_axis": "disk",
+        "severity_value": 5.0,
+        "files": [
+          "scripts/mass-apply-templates.sh"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "CommandInjection->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "src/main.rs",
@@ -754,7 +797,7 @@
           "OTP",
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "PanicPath",
@@ -773,24 +816,8 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "MutationGap",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "src/arbiter/test/audit_log_test.exs",
-          "src/arbiter/test/arbiter_protocol_test.exs",
-          "src/arbiter/test/consensus_arbiter_test.exs",
-          "src/arbiter/test/protocol_server_test.exs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "MutationGap->Cpu"
-      },
-      {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "src/main.rs",
@@ -801,50 +828,7 @@
           "OTP",
           "Networking"
         ],
-        "relation": "UnboundedAllocation->Cpu"
-      },
-      {
-        "source_category": "HardcodedSecret",
-        "sink_axis": "network",
-        "severity_value": 5.0,
-        "files": [
-          "benches/oracle_bench.rs",
-          "tests/security_aspect_test.rs",
-          "tests/gating_pipeline_test.rs",
-          "src/contract/src/lib.rs",
-          "src/oracle/src/lib.rs"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "HardcodedSecret->Network"
-      },
-      {
-        "source_category": "CommandInjection",
-        "sink_axis": "disk",
-        "severity_value": 5.0,
-        "files": [
-          "scripts/mass-apply-templates.sh"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "templates/rsr-metadata.ncl"
-        ],
-        "frameworks": [
-          "OTP",
-          "Networking"
-        ],
-        "relation": "InsecureProtocol->Network"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -861,6 +845,22 @@
           "Networking"
         ],
         "relation": "PanicPath->Memory"
+      },
+      {
+        "source_category": "MutationGap",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
+        "files": [
+          "src/arbiter/test/audit_log_test.exs",
+          "src/arbiter/test/arbiter_protocol_test.exs",
+          "src/arbiter/test/consensus_arbiter_test.exs",
+          "src/arbiter/test/protocol_server_test.exs"
+        ],
+        "frameworks": [
+          "OTP",
+          "Networking"
+        ],
+        "relation": "MutationGap->Cpu"
       }
     ]
   }

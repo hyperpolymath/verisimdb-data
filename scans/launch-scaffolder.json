@@ -147,21 +147,10 @@
         "cpu"
       ],
       "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "docs/ruleset-audit-2026-04-10/wave2-apply.sh",
-      "file": "docs/ruleset-audit-2026-04-10/wave2-apply.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in docs/ruleset-audit-2026-04-10/wave2-apply.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 8984,
+    "total_lines": 9088,
     "unsafe_blocks": 0,
     "panic_sites": 0,
     "unwrap_calls": 41,
@@ -236,7 +225,7 @@
     },
     {
       "file_path": "crates/launcher-common/src/template.rs",
-      "lines": 1046,
+      "lines": 1050,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 39,
@@ -258,7 +247,7 @@
     },
     {
       "file_path": "crates/launcher-common/src/standard.rs",
-      "lines": 663,
+      "lines": 758,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 1,
@@ -374,7 +363,7 @@
     },
     {
       "file_path": "docs/ruleset-audit-2026-04-10/audit.sh",
-      "lines": 184,
+      "lines": 189,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -390,18 +379,6 @@
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "crates/launcher-common/tests/round_trip.rs",
-        "to": "crates/launcher-common/tests/per_app_deed.rs",
-        "relation": "shared_dir:crates/launcher-common/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/launcher-common/tests/per_app_deed.rs",
-        "to": "crates/launcher-common/tests/deed_corpus.rs",
-        "relation": "shared_dir:crates/launcher-common/tests",
-        "weight": 1.0
-      },
       {
         "from": "crates/launcher/src/cmd_config.rs",
         "to": "crates/launcher/src/cmd_realign.rs",
@@ -430,6 +407,18 @@
         "from": "docs/ruleset-audit-2026-04-10/wave2-apply.sh",
         "to": "docs/ruleset-audit-2026-04-10/audit.sh",
         "relation": "shared_dir:docs/ruleset-audit-2026-04-10",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher-common/tests/round_trip.rs",
+        "to": "crates/launcher-common/tests/per_app_deed.rs",
+        "relation": "shared_dir:crates/launcher-common/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/launcher-common/tests/per_app_deed.rs",
+        "to": "crates/launcher-common/tests/deed_corpus.rs",
+        "relation": "shared_dir:crates/launcher-common/tests",
         "weight": 1.0
       },
       {
@@ -485,6 +474,27 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "CommandInjection",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "crates/launcher-common/tests/fixtures/metadata_block/minted-2026-09-23_stapeln-launcher-deed.sh",
+          "crates/launcher-common/tests/fixtures/metadata_block/minted-2026-09-22_stapeln-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "crates/launcher-common/tests/fixtures/metadata_block/minted-2026-09-22_stapeln-launcher.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
         "source_category": "UnboundedAllocation",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -500,15 +510,16 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "crates/launcher-common/tests/fixtures/metadata_block/minted-2026-09-23_stapeln-launcher-deed.sh",
-          "crates/launcher-common/tests/fixtures/metadata_block/minted-2026-09-22_stapeln-launcher.sh"
+          "crates/launcher-common/src/template.rs",
+          "crates/launcher-common/src/standard.rs",
+          "crates/launcher-common/src/deed.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -527,18 +538,6 @@
       },
       {
         "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/launcher-common/src/template.rs",
-          "crates/launcher-common/src/standard.rs",
-          "crates/launcher-common/src/deed.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
@@ -548,17 +547,6 @@
         ],
         "frameworks": [],
         "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/launcher-common/tests/fixtures/metadata_block/minted-2026-09-22_stapeln-launcher.sh",
-          "docs/ruleset-audit-2026-04-10/wave2-apply.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
       }
     ]
   }

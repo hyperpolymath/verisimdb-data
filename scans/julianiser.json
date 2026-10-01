@@ -1,7 +1,7 @@
 {
   "schema_version": "2.5",
   "program_path": "julianiser",
-  "language": "idris",
+  "language": "rust",
   "frameworks": [],
   "weak_points": [
     {
@@ -241,9 +241,9 @@
     }
   ],
   "recommended_attacks": [
+    "disk",
     "cpu",
-    "memory",
-    "disk"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -298,16 +298,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
+        "source_category": "UncheckedError",
+        "sink_axis": "cpu",
+        "severity_value": 1.0,
         "files": [
-          "src/codegen/benchmark.rs",
-          "src/codegen/parser.rs",
-          "src/codegen/julia_gen.rs"
+          "src/codegen/benchmark.rs"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Memory"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "UnboundedAllocation",
@@ -321,14 +319,16 @@
         "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
+        "source_category": "PanicPath",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
         "files": [
-          "src/codegen/benchmark.rs"
+          "src/codegen/benchmark.rs",
+          "src/codegen/parser.rs",
+          "src/codegen/julia_gen.rs"
         ],
         "frameworks": [],
-        "relation": "UncheckedError->Cpu"
+        "relation": "PanicPath->Memory"
       },
       {
         "source_category": "UnboundedAllocation",

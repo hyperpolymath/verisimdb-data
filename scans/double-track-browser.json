@@ -418,9 +418,9 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
-    "disk",
     "network",
+    "disk",
+    "memory",
     "cpu"
   ],
   "dependency_graph": {
@@ -429,36 +429,6 @@
         "from": "scripts/build.affine",
         "to": "scripts/build.sh",
         "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/affine/driver.affine",
-        "to": "tests/affine/extension_lifecycle_test.affine",
-        "relation": "shared_dir:tests/affine",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Storage.affine",
-        "to": "lib/ocaml/Background.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Background.affine",
-        "to": "lib/ocaml/Content.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Content.affine",
-        "to": "lib/ocaml/Chrome.affine",
-        "relation": "shared_dir:lib/ocaml",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/ocaml/Chrome.affine",
-        "to": "lib/ocaml/DomBindings.affine",
-        "relation": "shared_dir:lib/ocaml",
         "weight": 1.0
       },
       {
@@ -496,21 +466,41 @@
         "to": "src/bindings/DomBindings.affine",
         "relation": "shared_dir:src/bindings",
         "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Storage.affine",
+        "to": "lib/ocaml/Background.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Background.affine",
+        "to": "lib/ocaml/Content.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Content.affine",
+        "to": "lib/ocaml/Chrome.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "lib/ocaml/Chrome.affine",
+        "to": "lib/ocaml/DomBindings.affine",
+        "relation": "shared_dir:lib/ocaml",
+        "weight": 1.0
+      },
+      {
+        "from": "tests/affine/driver.affine",
+        "to": "tests/affine/extension_lifecycle_test.affine",
+        "relation": "shared_dir:tests/affine",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "network",
-        "severity_value": 3.5,
-        "files": [
-          "src/dashboard/Dashboard.res.js"
-        ],
-        "frameworks": [],
-        "relation": "DynamicCodeExecution->Network"
-      },
       {
         "source_category": "PanicPath",
         "sink_axis": "memory",
@@ -526,20 +516,6 @@
         "relation": "PanicPath->Memory"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "rust_core/src/interests.rs",
-          "rust_core/src/form_data.rs",
-          "rust_core/src/profile.rs",
-          "rust_core/src/schedule.rs",
-          "rust_core/src/lib.rs"
-        ],
-        "frameworks": [],
-        "relation": "PanicPath->Disk"
-      },
-      {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -553,6 +529,20 @@
         ],
         "frameworks": [],
         "relation": "UnsafeFFI->Memory"
+      },
+      {
+        "source_category": "PanicPath",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "rust_core/src/interests.rs",
+          "rust_core/src/form_data.rs",
+          "rust_core/src/profile.rs",
+          "rust_core/src/schedule.rs",
+          "rust_core/src/lib.rs"
+        ],
+        "frameworks": [],
+        "relation": "PanicPath->Disk"
       },
       {
         "source_category": "InsecureProtocol",
@@ -574,6 +564,16 @@
         ],
         "frameworks": [],
         "relation": "DynamicCodeExecution->Memory"
+      },
+      {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "network",
+        "severity_value": 3.5,
+        "files": [
+          "src/dashboard/Dashboard.res.js"
+        ],
+        "frameworks": [],
+        "relation": "DynamicCodeExecution->Network"
       }
     ]
   }
