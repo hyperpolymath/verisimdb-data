@@ -827,14 +827,32 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
-    "concurrency",
+    "memory",
     "network",
     "disk",
-    "memory"
+    "concurrency",
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "vexometer/scripts/publish-bench-to-verisim.sh",
+        "to": "vexometer/scripts/run-benchmarks.sh",
+        "relation": "shared_dir:vexometer/scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "vext-email-gateway/src/main.rs",
+        "to": "vext-email-gateway/src/types.rs",
+        "relation": "shared_dir:vext-email-gateway/src",
+        "weight": 1.0
+      },
+      {
+        "from": "verbosity-compressor/src/main.rs",
+        "to": "verbosity-compressor/src/lib.rs",
+        "relation": "shared_dir:verbosity-compressor/src",
+        "weight": 1.0
+      },
       {
         "from": "vext/vext-core/src/config.rs",
         "to": "vext/vext-core/src/main.rs",
@@ -878,15 +896,9 @@
         "weight": 1.0
       },
       {
-        "from": "vexometer-efficacy/src/main.rs",
-        "to": "vexometer-efficacy/src/lib.rs",
-        "relation": "shared_dir:vexometer-efficacy/src",
-        "weight": 1.0
-      },
-      {
-        "from": "vexometer/scripts/publish-bench-to-verisim.sh",
-        "to": "vexometer/scripts/run-benchmarks.sh",
-        "relation": "shared_dir:vexometer/scripts",
+        "from": "vexometer/tests/test_runner.adb",
+        "to": "vexometer/tests/benchmark_runner.adb",
+        "relation": "shared_dir:vexometer/tests",
         "weight": 1.0
       },
       {
@@ -1028,41 +1040,15 @@
         "weight": 1.0
       },
       {
-        "from": "vexometer/tests/test_runner.adb",
-        "to": "vexometer/tests/benchmark_runner.adb",
-        "relation": "shared_dir:vexometer/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "vext-email-gateway/src/main.rs",
-        "to": "vext-email-gateway/src/types.rs",
-        "relation": "shared_dir:vext-email-gateway/src",
-        "weight": 1.0
-      },
-      {
-        "from": "verbosity-compressor/src/main.rs",
-        "to": "verbosity-compressor/src/lib.rs",
-        "relation": "shared_dir:verbosity-compressor/src",
+        "from": "vexometer-efficacy/src/main.rs",
+        "to": "vexometer-efficacy/src/lib.rs",
+        "relation": "shared_dir:vexometer-efficacy/src",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "vexometer-efficacy/src/main.rs",
-          "verbosity-compressor/src/main.rs",
-          "vext/vext-core/src/config.rs",
-          "lazy-eliminator/src/config.rs",
-          "lazy-eliminator/src/main.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "UnboundedAllocation",
         "sink_axis": "cpu",
@@ -1078,14 +1064,28 @@
         "relation": "UnboundedAllocation->Cpu"
       },
       {
-        "source_category": "HardcodedSecret",
+        "source_category": "InsecureProtocol",
         "sink_axis": "network",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "vexometer/src/vexometer-api.adb"
+          "vexometer/src/vexometer-reports.adb"
         ],
         "frameworks": [],
-        "relation": "HardcodedSecret->Network"
+        "relation": "InsecureProtocol->Network"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "vexometer-efficacy/src/main.rs",
+          "verbosity-compressor/src/main.rs",
+          "vext/vext-core/src/config.rs",
+          "lazy-eliminator/src/config.rs",
+          "lazy-eliminator/src/main.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "PanicPath",
@@ -1101,14 +1101,14 @@
         "relation": "PanicPath->Disk"
       },
       {
-        "source_category": "InsecureProtocol",
+        "source_category": "HardcodedSecret",
         "sink_axis": "network",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "vexometer/src/vexometer-reports.adb"
+          "vexometer/src/vexometer-api.adb"
         ],
         "frameworks": [],
-        "relation": "InsecureProtocol->Network"
+        "relation": "HardcodedSecret->Network"
       },
       {
         "source_category": "PanicPath",

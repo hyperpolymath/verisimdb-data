@@ -531,8 +531,8 @@
   ],
   "recommended_attacks": [
     "concurrency",
-    "cpu",
     "memory",
+    "cpu",
     "disk"
   ],
   "dependency_graph": {
@@ -604,9 +604,9 @@
         "weight": 1.0
       },
       {
-        "from": "src/errors/recovery.rs",
-        "to": "src/errors/mod.rs",
-        "relation": "shared_dir:src/errors",
+        "from": "src/analyzer/recommender.rs",
+        "to": "src/analyzer/patterns.rs",
+        "relation": "shared_dir:src/analyzer",
         "weight": 1.0
       },
       {
@@ -646,12 +646,6 @@
         "weight": 1.0
       },
       {
-        "from": "src/analyzer/recommender.rs",
-        "to": "src/analyzer/patterns.rs",
-        "relation": "shared_dir:src/analyzer",
-        "weight": 1.0
-      },
-      {
         "from": "examples/multi-env/environments/dev.ncl",
         "to": "examples/multi-env/environments/prod.ncl",
         "relation": "shared_dir:examples/multi-env/environments",
@@ -661,6 +655,12 @@
         "from": "examples/multi-env/environments/prod.ncl",
         "to": "examples/multi-env/environments/staging.ncl",
         "relation": "shared_dir:examples/multi-env/environments",
+        "weight": 1.0
+      },
+      {
+        "from": "src/errors/recovery.rs",
+        "to": "src/errors/mod.rs",
+        "relation": "shared_dir:src/errors",
         "weight": 1.0
       },
       {
@@ -878,6 +878,26 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/rsr/config.rs",
+          "src/rsr/requirements.rs",
+          "src/rsr/compliance.rs",
+          "src/rsr/templates.rs",
+          "src/rsr/remediation.rs",
+          "src/rsr/schemas.rs",
+          "src/pipeline/definition.rs",
+          "src/analyzer/mod.rs",
+          "src/cache/filesystem.rs"
+        ],
+        "frameworks": [
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory"
+      },
+      {
         "source_category": "PanicPath",
         "sink_axis": "memory",
         "severity_value": 2.5,
@@ -904,26 +924,6 @@
           "Networking"
         ],
         "relation": "PanicPath->Disk"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/rsr/config.rs",
-          "src/rsr/requirements.rs",
-          "src/rsr/compliance.rs",
-          "src/rsr/templates.rs",
-          "src/rsr/remediation.rs",
-          "src/rsr/schemas.rs",
-          "src/pipeline/definition.rs",
-          "src/analyzer/mod.rs",
-          "src/cache/filesystem.rs"
-        ],
-        "frameworks": [
-          "Networking"
-        ],
-        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "UnboundedAllocation",

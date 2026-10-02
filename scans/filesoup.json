@@ -281,23 +281,23 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "network",
-    "disk",
-    "cpu"
+    "memory",
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/fslint-cli/src/output.rs",
-        "to": "crates/fslint-cli/src/query.rs",
-        "relation": "shared_dir:crates/fslint-cli/src",
-        "weight": 1.0
-      },
-      {
         "from": "crates/fslint-core/src/scanner.rs",
         "to": "crates/fslint-core/src/plugin_loader.rs",
         "relation": "shared_dir:crates/fslint-core/src",
+        "weight": 1.0
+      },
+      {
+        "from": "crates/fslint-cli/src/output.rs",
+        "to": "crates/fslint-cli/src/query.rs",
+        "relation": "shared_dir:crates/fslint-cli/src",
         "weight": 1.0
       }
     ]
@@ -306,29 +306,24 @@
     "rows": [
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "plugins/secret-scanner/src/lib.rs",
           "crates/fslint-core/src/config.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
-        "source_category": "PanicPath",
+        "source_category": "CommandInjection",
         "sink_axis": "disk",
-        "severity_value": 2.5,
+        "severity_value": 5.0,
         "files": [
-          "plugins/version-detection/src/lib.rs",
-          "plugins/secret-scanner/src/lib.rs",
-          "plugins/duplicate-finder/src/lib.rs",
-          "crates/fslint-plugin-sdk/src/lib.rs",
-          "crates/fslint-cli/src/output.rs",
-          "crates/fslint-cli/src/query.rs"
+          "scripts/verify-rsr.sh"
         ],
         "frameworks": [],
-        "relation": "PanicPath->Disk"
+        "relation": "CommandInjection->Disk"
       },
       {
         "source_category": "PanicPath",
@@ -358,14 +353,14 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
           "plugins/secret-scanner/src/lib.rs",
           "crates/fslint-core/src/config.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
+        "relation": "UnboundedAllocation->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -378,14 +373,19 @@
         "relation": "CommandInjection->Cpu"
       },
       {
-        "source_category": "CommandInjection",
+        "source_category": "PanicPath",
         "sink_axis": "disk",
-        "severity_value": 5.0,
+        "severity_value": 2.5,
         "files": [
-          "scripts/verify-rsr.sh"
+          "plugins/version-detection/src/lib.rs",
+          "plugins/secret-scanner/src/lib.rs",
+          "plugins/duplicate-finder/src/lib.rs",
+          "crates/fslint-plugin-sdk/src/lib.rs",
+          "crates/fslint-cli/src/output.rs",
+          "crates/fslint-cli/src/query.rs"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "PanicPath->Disk"
       }
     ]
   }

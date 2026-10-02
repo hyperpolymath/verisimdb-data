@@ -1096,29 +1096,35 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
     "disk",
-    "concurrency",
-    "cpu"
+    "memory",
+    "cpu",
+    "concurrency"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "test/conformance_test.exs",
-        "to": "test/doc_generator_test.exs",
-        "relation": "shared_dir:test",
+        "from": "lib/phronesis/consensus/raft.ex",
+        "to": "lib/phronesis/consensus/server.ex",
+        "relation": "shared_dir:lib/phronesis/consensus",
         "weight": 1.0
       },
       {
-        "from": "test/doc_generator_test.exs",
-        "to": "test/compiler_test.exs",
-        "relation": "shared_dir:test",
+        "from": "verification/tests/conformance_test.exs",
+        "to": "verification/tests/doc_generator_test.exs",
+        "relation": "shared_dir:verification/tests",
         "weight": 1.0
       },
       {
-        "from": "test/compiler_test.exs",
-        "to": "test/analyzer_test.exs",
-        "relation": "shared_dir:test",
+        "from": "verification/tests/doc_generator_test.exs",
+        "to": "verification/tests/compiler_test.exs",
+        "relation": "shared_dir:verification/tests",
+        "weight": 1.0
+      },
+      {
+        "from": "verification/tests/compiler_test.exs",
+        "to": "verification/tests/analyzer_test.exs",
+        "relation": "shared_dir:verification/tests",
         "weight": 1.0
       },
       {
@@ -1188,27 +1194,21 @@
         "weight": 1.0
       },
       {
-        "from": "verification/tests/conformance_test.exs",
-        "to": "verification/tests/doc_generator_test.exs",
-        "relation": "shared_dir:verification/tests",
+        "from": "test/conformance_test.exs",
+        "to": "test/doc_generator_test.exs",
+        "relation": "shared_dir:test",
         "weight": 1.0
       },
       {
-        "from": "verification/tests/doc_generator_test.exs",
-        "to": "verification/tests/compiler_test.exs",
-        "relation": "shared_dir:verification/tests",
+        "from": "test/doc_generator_test.exs",
+        "to": "test/compiler_test.exs",
+        "relation": "shared_dir:test",
         "weight": 1.0
       },
       {
-        "from": "verification/tests/compiler_test.exs",
-        "to": "verification/tests/analyzer_test.exs",
-        "relation": "shared_dir:verification/tests",
-        "weight": 1.0
-      },
-      {
-        "from": "lib/phronesis/consensus/raft.ex",
-        "to": "lib/phronesis/consensus/server.ex",
-        "relation": "shared_dir:lib/phronesis/consensus",
+        "from": "test/compiler_test.exs",
+        "to": "test/analyzer_test.exs",
+        "relation": "shared_dir:test",
         "weight": 1.0
       },
       {
@@ -1408,6 +1408,18 @@
   "taint_matrix": {
     "rows": [
       {
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "lib/phronesis/consensus/server/machine.ex"
+        ],
+        "frameworks": [
+          "OTP"
+        ],
+        "relation": "DynamicCodeExecution->Cpu"
+      },
+      {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
         "severity_value": 1.0,
@@ -1485,18 +1497,6 @@
           "OTP"
         ],
         "relation": "MutationGap->Cpu"
-      },
-      {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "lib/phronesis/consensus/server/machine.ex"
-        ],
-        "frameworks": [
-          "OTP"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
       }
     ]
   }

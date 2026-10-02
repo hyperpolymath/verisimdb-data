@@ -25,18 +25,6 @@
         "cpu",
         "disk"
       ],
-      "suppressed": true,
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "qubes-setup-advanced.sh",
-      "file": "qubes-setup-advanced.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in qubes-setup-advanced.sh",
-      "recommended_attack": [
-        "disk"
-      ],
       "test_context": "production"
     },
     {
@@ -108,23 +96,11 @@
         "cpu",
         "disk"
       ],
-      "suppressed": true,
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "qubes-setup.sh",
-      "file": "qubes-setup.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in qubes-setup.sh",
-      "recommended_attack": [
-        "disk"
-      ],
       "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 5758,
+    "total_lines": 5906,
     "unsafe_blocks": 36,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -175,7 +151,7 @@
     },
     {
       "file_path": "qubes-setup-advanced.sh",
-      "lines": 1281,
+      "lines": 1319,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -215,7 +191,7 @@
     },
     {
       "file_path": "qubes-setup.sh",
-      "lines": 442,
+      "lines": 460,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -235,8 +211,8 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
     "disk",
+    "cpu",
     "memory"
   ],
   "dependency_graph": {
@@ -270,18 +246,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "tools/qubes-policy-generator.sh",
-          "qubes-setup-advanced.sh",
-          "qubes-setup.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "CommandInjection",
         "sink_axis": "disk",
         "severity_value": 5.0,
@@ -297,14 +261,14 @@
         "relation": "CommandInjection->Disk"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
         "severity_value": 2.5,
         "files": [
-          "src/WikiMain.affine"
+          "tools/qubes-policy-generator.sh"
         ],
         "frameworks": [],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "PathTraversal->Disk"
       },
       {
         "source_category": "CommandInjection",
@@ -320,6 +284,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "src/WikiMain.affine"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }

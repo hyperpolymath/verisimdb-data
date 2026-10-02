@@ -3,9 +3,9 @@
   "program_path": "laniakea",
   "language": "elixir",
   "frameworks": [
-    "OTP",
     "Phoenix",
-    "WebServer"
+    "WebServer",
+    "OTP"
   ],
   "weak_points": [
     {
@@ -286,9 +286,9 @@
   ],
   "recommended_attacks": [
     "cpu",
-    "memory",
+    "network",
     "disk",
-    "network"
+    "memory"
   ],
   "dependency_graph": {
     "edges": [
@@ -300,12 +300,6 @@
       },
       {
         "from": "server/lib/laniakea/policy/engine.ex",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "server/lib/laniakea/policy/engine.ex",
         "to": "Phoenix",
         "relation": "framework",
         "weight": 2.0
@@ -317,7 +311,7 @@
         "weight": 2.0
       },
       {
-        "from": "server/lib/laniakea/crdt/registry.ex",
+        "from": "server/lib/laniakea/policy/engine.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
@@ -335,7 +329,7 @@
         "weight": 2.0
       },
       {
-        "from": "server/lib/laniakea/command/bus.ex",
+        "from": "server/lib/laniakea/crdt/registry.ex",
         "to": "OTP",
         "relation": "framework",
         "weight": 2.0
@@ -353,10 +347,10 @@
         "weight": 2.0
       },
       {
-        "from": "client/lib/bs/src/transport/Channel.affine",
+        "from": "server/lib/laniakea/command/bus.ex",
         "to": "OTP",
         "relation": "framework",
-        "weight": 33.0
+        "weight": 2.0
       },
       {
         "from": "client/lib/bs/src/transport/Channel.affine",
@@ -371,10 +365,10 @@
         "weight": 33.0
       },
       {
-        "from": "client/lib/bs/src/adapters/Capabilities.affine",
+        "from": "client/lib/bs/src/transport/Channel.affine",
         "to": "OTP",
         "relation": "framework",
-        "weight": 18.0
+        "weight": 33.0
       },
       {
         "from": "client/lib/bs/src/adapters/Capabilities.affine",
@@ -384,6 +378,24 @@
       },
       {
         "from": "client/lib/bs/src/adapters/Capabilities.affine",
+        "to": "WebServer",
+        "relation": "framework",
+        "weight": 18.0
+      },
+      {
+        "from": "client/lib/bs/src/adapters/Capabilities.affine",
+        "to": "OTP",
+        "relation": "framework",
+        "weight": 18.0
+      },
+      {
+        "from": "client/lib/ocaml/Capabilities.affine",
+        "to": "Phoenix",
+        "relation": "framework",
+        "weight": 18.0
+      },
+      {
+        "from": "client/lib/ocaml/Capabilities.affine",
         "to": "WebServer",
         "relation": "framework",
         "weight": 18.0
@@ -395,24 +407,6 @@
         "weight": 18.0
       },
       {
-        "from": "client/lib/ocaml/Capabilities.affine",
-        "to": "Phoenix",
-        "relation": "framework",
-        "weight": 18.0
-      },
-      {
-        "from": "client/lib/ocaml/Capabilities.affine",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 18.0
-      },
-      {
-        "from": "client/lib/ocaml/Channel.affine",
-        "to": "OTP",
-        "relation": "framework",
-        "weight": 33.0
-      },
-      {
         "from": "client/lib/ocaml/Channel.affine",
         "to": "Phoenix",
         "relation": "framework",
@@ -425,7 +419,7 @@
         "weight": 33.0
       },
       {
-        "from": "client/src/transport/Channel.affine",
+        "from": "client/lib/ocaml/Channel.affine",
         "to": "OTP",
         "relation": "framework",
         "weight": 33.0
@@ -443,10 +437,10 @@
         "weight": 33.0
       },
       {
-        "from": "client/src/adapters/Capabilities.affine",
+        "from": "client/src/transport/Channel.affine",
         "to": "OTP",
         "relation": "framework",
-        "weight": 18.0
+        "weight": 33.0
       },
       {
         "from": "client/src/adapters/Capabilities.affine",
@@ -461,10 +455,10 @@
         "weight": 18.0
       },
       {
-        "from": "setup.sh",
+        "from": "client/src/adapters/Capabilities.affine",
         "to": "OTP",
         "relation": "framework",
-        "weight": 1.0
+        "weight": 18.0
       },
       {
         "from": "setup.sh",
@@ -479,7 +473,7 @@
         "weight": 1.0
       },
       {
-        "from": "cli/laniakea.affine",
+        "from": "setup.sh",
         "to": "OTP",
         "relation": "framework",
         "weight": 1.0
@@ -493,6 +487,12 @@
       {
         "from": "cli/laniakea.affine",
         "to": "WebServer",
+        "relation": "framework",
+        "weight": 1.0
+      },
+      {
+        "from": "cli/laniakea.affine",
+        "to": "OTP",
         "relation": "framework",
         "weight": 1.0
       }
@@ -501,20 +501,6 @@
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "DynamicCodeExecution",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "server/lib/laniakea_web.ex"
-        ],
-        "frameworks": [
-          "OTP",
-          "Phoenix",
-          "WebServer"
-        ],
-        "relation": "DynamicCodeExecution->Cpu"
-      },
-      {
         "source_category": "HardcodedSecret",
         "sink_axis": "network",
         "severity_value": 5.0,
@@ -522,30 +508,25 @@
           "schemas/config.ncl"
         ],
         "frameworks": [
-          "OTP",
           "Phoenix",
-          "WebServer"
+          "WebServer",
+          "OTP"
         ],
         "relation": "HardcodedSecret->Network"
       },
       {
-        "source_category": "UnsafeFFI",
-        "sink_axis": "memory",
+        "source_category": "DynamicCodeExecution",
+        "sink_axis": "cpu",
         "severity_value": 2.5,
         "files": [
-          "client/lib/bs/src/transport/Channel.affine",
-          "client/lib/bs/src/adapters/Capabilities.affine",
-          "client/lib/ocaml/Capabilities.affine",
-          "client/lib/ocaml/Channel.affine",
-          "client/src/transport/Channel.affine",
-          "client/src/adapters/Capabilities.affine"
+          "server/lib/laniakea_web.ex"
         ],
         "frameworks": [
-          "OTP",
           "Phoenix",
-          "WebServer"
+          "WebServer",
+          "OTP"
         ],
-        "relation": "UnsafeFFI->Memory"
+        "relation": "DynamicCodeExecution->Cpu"
       },
       {
         "source_category": "MutationGap",
@@ -560,11 +541,30 @@
           "server/test/laniakea_web/controllers_test.exs"
         ],
         "frameworks": [
-          "OTP",
           "Phoenix",
-          "WebServer"
+          "WebServer",
+          "OTP"
         ],
         "relation": "MutationGap->Cpu"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "client/lib/bs/src/transport/Channel.affine",
+          "client/lib/bs/src/adapters/Capabilities.affine",
+          "client/lib/ocaml/Capabilities.affine",
+          "client/lib/ocaml/Channel.affine",
+          "client/src/transport/Channel.affine",
+          "client/src/adapters/Capabilities.affine"
+        ],
+        "frameworks": [
+          "Phoenix",
+          "WebServer",
+          "OTP"
+        ],
+        "relation": "UnsafeFFI->Memory"
       }
     ]
   }
