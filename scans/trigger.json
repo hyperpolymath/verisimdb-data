@@ -427,22 +427,28 @@
     }
   ],
   "recommended_attacks": [
-    "cpu",
+    "disk",
     "memory",
-    "disk"
+    "cpu"
   ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "src/trigger/platforms/twitter/twitter-platform.ads",
-        "to": "src/trigger/platforms/twitter/twitter-platform.adb",
-        "relation": "shared_dir:src/trigger/platforms/twitter",
+        "from": "tests/unit/test_cryptography.adb",
+        "to": "tests/unit/test_cryptography-body.adb",
+        "relation": "shared_dir:tests/unit",
         "weight": 1.0
       },
       {
-        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
-        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/telegram",
+        "from": "src/trigger/platforms/discord/discord-platform.adb",
+        "to": "src/trigger/platforms/discord/discord-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/discord",
+        "weight": 1.0
+      },
+      {
+        "from": "src/trigger/core/application.adb",
+        "to": "src/trigger/core/cryptography.adb",
+        "relation": "shared_dir:src/trigger/core",
         "weight": 1.0
       },
       {
@@ -464,27 +470,15 @@
         "weight": 1.0
       },
       {
-        "from": "src/trigger/platforms/discord/discord-platform.adb",
-        "to": "src/trigger/platforms/discord/discord-platform.ads",
-        "relation": "shared_dir:src/trigger/platforms/discord",
+        "from": "src/trigger/platforms/twitter/twitter-platform.ads",
+        "to": "src/trigger/platforms/twitter/twitter-platform.adb",
+        "relation": "shared_dir:src/trigger/platforms/twitter",
         "weight": 1.0
       },
       {
-        "from": "tests/unit/test_cryptography.adb",
-        "to": "tests/unit/test_cryptography-body.adb",
-        "relation": "shared_dir:tests/unit",
-        "weight": 1.0
-      },
-      {
-        "from": "src/trigger/diagnostics/self_healing.adb",
-        "to": "src/trigger/diagnostics/system_check.adb",
-        "relation": "shared_dir:src/trigger/diagnostics",
-        "weight": 1.0
-      },
-      {
-        "from": "src/trigger/core/application.adb",
-        "to": "src/trigger/core/cryptography.adb",
-        "relation": "shared_dir:src/trigger/core",
+        "from": "src/trigger/platforms/telegram/telegram-platform.adb",
+        "to": "src/trigger/platforms/telegram/telegram-platform.ads",
+        "relation": "shared_dir:src/trigger/platforms/telegram",
         "weight": 1.0
       },
       {
@@ -504,11 +498,40 @@
         "to": "tests/test_harness.adb",
         "relation": "shared_dir:tests",
         "weight": 1.0
+      },
+      {
+        "from": "src/trigger/diagnostics/self_healing.adb",
+        "to": "src/trigger/diagnostics/system_check.adb",
+        "relation": "shared_dir:src/trigger/diagnostics",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "UnsafeCode",
+        "sink_axis": "memory",
+        "severity_value": 3.5,
+        "files": [
+          "ffi/zig/twitter/twitter.zig",
+          "ffi/zig/discord/discord.zig",
+          "ffi/zig/telegram/telegram.zig"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeCode->Memory"
+      },
+      {
+        "source_category": "ProofDrift",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "proofs/agda/Trigger/API.agda",
+          "proofs/agda/Trigger/Epistemic.agda"
+        ],
+        "frameworks": [],
+        "relation": "ProofDrift->Cpu"
+      },
       {
         "source_category": "CommandInjection",
         "sink_axis": "cpu",
@@ -531,15 +554,14 @@
         "relation": "UnsafeFFI->Memory"
       },
       {
-        "source_category": "ProofDrift",
+        "source_category": "UncheckedError",
         "sink_axis": "cpu",
-        "severity_value": 2.5,
+        "severity_value": 1.0,
         "files": [
-          "proofs/agda/Trigger/API.agda",
-          "proofs/agda/Trigger/Epistemic.agda"
+          "ffi/zig/twitter/twitter.zig"
         ],
         "frameworks": [],
-        "relation": "ProofDrift->Cpu"
+        "relation": "UncheckedError->Cpu"
       },
       {
         "source_category": "CommandInjection",
@@ -550,28 +572,6 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Disk"
-      },
-      {
-        "source_category": "UnsafeCode",
-        "sink_axis": "memory",
-        "severity_value": 3.5,
-        "files": [
-          "ffi/zig/twitter/twitter.zig",
-          "ffi/zig/discord/discord.zig",
-          "ffi/zig/telegram/telegram.zig"
-        ],
-        "frameworks": [],
-        "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "UncheckedError",
-        "sink_axis": "cpu",
-        "severity_value": 1.0,
-        "files": [
-          "ffi/zig/twitter/twitter.zig"
-        ],
-        "frameworks": [],
-        "relation": "UncheckedError->Cpu"
       }
     ]
   }

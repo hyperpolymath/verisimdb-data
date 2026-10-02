@@ -197,7 +197,7 @@
     }
   ],
   "statistics": {
-    "total_lines": 21264,
+    "total_lines": 21328,
     "unsafe_blocks": 127,
     "panic_sites": 0,
     "unwrap_calls": 0,
@@ -338,7 +338,7 @@
     },
     {
       "file_path": "src/chapel/smoke.chpl",
-      "lines": 43,
+      "lines": 62,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -438,7 +438,7 @@
     },
     {
       "file_path": "src/chapel/FFIBridge.chpl",
-      "lines": 395,
+      "lines": 398,
       "unsafe_blocks": 0,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -578,7 +578,7 @@
     },
     {
       "file_path": "ffi/zig/src/stages.zig",
-      "lines": 1329,
+      "lines": 1371,
       "unsafe_blocks": 3,
       "panic_sites": 0,
       "unwrap_calls": 0,
@@ -658,25 +658,13 @@
     }
   ],
   "recommended_attacks": [
-    "memory",
+    "cpu",
     "disk",
-    "network",
-    "cpu"
+    "memory",
+    "network"
   ],
   "dependency_graph": {
     "edges": [
-      {
-        "from": "scripts/ci/test-ci.sh",
-        "to": "scripts/ci/install-chapel.sh",
-        "relation": "shared_dir:scripts/ci",
-        "weight": 1.0
-      },
-      {
-        "from": "src/julia/extract.jl",
-        "to": "src/julia/export.jl",
-        "relation": "shared_dir:src/julia",
-        "weight": 1.0
-      },
       {
         "from": "src/ada/document_model.ads",
         "to": "src/ada/terminal_utils.adb",
@@ -693,6 +681,18 @@
         "from": "src/ada/docudactyl_tui.adb",
         "to": "src/ada/document_model.adb",
         "relation": "shared_dir:src/ada",
+        "weight": 1.0
+      },
+      {
+        "from": "src/julia/extract.jl",
+        "to": "src/julia/export.jl",
+        "relation": "shared_dir:src/julia",
+        "weight": 1.0
+      },
+      {
+        "from": "src/abi/Foreign.idr",
+        "to": "src/abi/Types.idr",
+        "relation": "shared_dir:src/abi",
         "weight": 1.0
       },
       {
@@ -858,21 +858,31 @@
         "weight": 1.0
       },
       {
-        "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
-        "relation": "shared_dir:src/abi",
-        "weight": 1.0
-      },
-      {
         "from": "src/Docudactyl/ABI/Foreign.idr",
         "to": "src/Docudactyl/ABI/Types.idr",
         "relation": "shared_dir:src/Docudactyl/ABI",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/ci/test-ci.sh",
+        "to": "scripts/ci/install-chapel.sh",
+        "relation": "shared_dir:scripts/ci",
         "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
+      {
+        "source_category": "InsecureProtocol",
+        "sink_axis": "network",
+        "severity_value": 2.5,
+        "files": [
+          "ffi/zig/src/entity_graph.zig"
+        ],
+        "frameworks": [],
+        "relation": "InsecureProtocol->Network"
+      },
       {
         "source_category": "UnsafeFFI",
         "sink_axis": "memory",
@@ -905,16 +915,6 @@
         ],
         "frameworks": [],
         "relation": "UnsafeCode->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "ffi/zig/src/entity_graph.zig"
-        ],
-        "frameworks": [],
-        "relation": "InsecureProtocol->Network"
       }
     ]
   }

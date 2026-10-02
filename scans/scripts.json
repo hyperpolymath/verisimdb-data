@@ -41,15 +41,15 @@
       "test_context": "production"
     },
     {
-      "category": "PathTraversal",
-      "location": "check-language-compliance.sh",
-      "file": "check-language-compliance.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in check-language-compliance.sh",
+      "category": "ExcessivePermissions",
+      "location": "tests/check-language-compliance.sh",
+      "file": "tests/check-language-compliance.sh",
+      "severity": "High",
+      "description": "World-writable permissions in tests/check-language-compliance.sh",
       "recommended_attack": [
         "disk"
       ],
-      "test_context": "production"
+      "test_context": "test_only"
     },
     {
       "category": "InsecureProtocol",
@@ -61,15 +61,26 @@
         "network"
       ],
       "test_context": "production"
+    },
+    {
+      "category": "UnsafeFFI",
+      "location": "check-language-compliance-log.jl",
+      "file": "check-language-compliance-log.jl",
+      "severity": "Medium",
+      "description": "8 ccall/FFI calls in check-language-compliance-log.jl",
+      "recommended_attack": [
+        "memory"
+      ],
+      "test_context": "production"
     }
   ],
   "statistics": {
-    "total_lines": 7255,
-    "unsafe_blocks": 0,
+    "total_lines": 7514,
+    "unsafe_blocks": 8,
     "panic_sites": 0,
     "unwrap_calls": 0,
     "allocation_sites": 0,
-    "io_operations": 98,
+    "io_operations": 107,
     "threading_constructs": 0
   },
   "file_statistics": [
@@ -171,6 +182,16 @@
       "unwrap_calls": 0,
       "allocation_sites": 0,
       "io_operations": 6,
+      "threading_constructs": 0
+    },
+    {
+      "file_path": "tests/check-language-compliance.sh",
+      "lines": 141,
+      "unsafe_blocks": 0,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 7,
       "threading_constructs": 0
     },
     {
@@ -282,12 +303,23 @@
       "allocation_sites": 0,
       "io_operations": 3,
       "threading_constructs": 0
+    },
+    {
+      "file_path": "check-language-compliance-log.jl",
+      "lines": 98,
+      "unsafe_blocks": 8,
+      "panic_sites": 0,
+      "unwrap_calls": 0,
+      "allocation_sites": 0,
+      "io_operations": 2,
+      "threading_constructs": 0
     }
   ],
   "recommended_attacks": [
+    "cpu",
+    "memory",
     "network",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
@@ -410,6 +442,12 @@
         "to": "boj-unify-repos.sh",
         "relation": "shared_dir:",
         "weight": 1.0
+      },
+      {
+        "from": "boj-unify-repos.sh",
+        "to": "check-language-compliance-log.jl",
+        "relation": "shared_dir:",
+        "weight": 1.0
       }
     ]
   },
@@ -417,14 +455,44 @@
     "rows": [
       {
         "source_category": "CommandInjection",
-        "sink_axis": "disk",
+        "sink_axis": "cpu",
         "severity_value": 5.0,
         "files": [
           "setup-kinoite-dev.sh",
           "enhance-kinoite.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Disk"
+        "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "ExcessivePermissions",
+        "sink_axis": "disk",
+        "severity_value": 3.5,
+        "files": [
+          "tests/check-language-compliance.sh"
+        ],
+        "frameworks": [],
+        "relation": "ExcessivePermissions->Disk"
+      },
+      {
+        "source_category": "PathTraversal",
+        "sink_axis": "disk",
+        "severity_value": 2.5,
+        "files": [
+          "setup-kinoite-dev.sh"
+        ],
+        "frameworks": [],
+        "relation": "PathTraversal->Disk"
+      },
+      {
+        "source_category": "UnsafeFFI",
+        "sink_axis": "memory",
+        "severity_value": 2.5,
+        "files": [
+          "check-language-compliance-log.jl"
+        ],
+        "frameworks": [],
+        "relation": "UnsafeFFI->Memory"
       },
       {
         "source_category": "InsecureProtocol",
@@ -437,26 +505,15 @@
         "relation": "InsecureProtocol->Network"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "setup-kinoite-dev.sh",
-          "check-language-compliance.sh"
-        ],
-        "frameworks": [],
-        "relation": "PathTraversal->Disk"
-      },
-      {
         "source_category": "CommandInjection",
-        "sink_axis": "cpu",
+        "sink_axis": "disk",
         "severity_value": 5.0,
         "files": [
           "setup-kinoite-dev.sh",
           "enhance-kinoite.sh"
         ],
         "frameworks": [],
-        "relation": "CommandInjection->Cpu"
+        "relation": "CommandInjection->Disk"
       }
     ]
   }

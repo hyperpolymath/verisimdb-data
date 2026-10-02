@@ -413,12 +413,30 @@
     }
   ],
   "recommended_attacks": [
+    "cpu",
     "memory",
-    "disk",
-    "cpu"
+    "disk"
   ],
   "dependency_graph": {
     "edges": [
+      {
+        "from": "scripts/rsr-campaign.sh",
+        "to": "scripts/migrate-wellknown-to-www.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/migrate-wellknown-to-www.sh",
+        "to": "scripts/sweep-wellknown.sh",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
+      {
+        "from": "scripts/sweep-wellknown.sh",
+        "to": "scripts/prune-dependabot-ecosystems.rs",
+        "relation": "shared_dir:scripts",
+        "weight": 1.0
+      },
       {
         "from": ".machine_readable/coaptation/coapt.ncl",
         "to": ".machine_readable/coaptation/verify.sh",
@@ -444,9 +462,9 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/arrival-pack/generate.sh",
-        "to": ".machine_readable/arrival-pack/arrival-pack.ncl",
-        "relation": "shared_dir:.machine_readable/arrival-pack",
+        "from": ".machine_readable/contractiles/must/must.ncl",
+        "to": ".machine_readable/contractiles/must/must.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/must",
         "weight": 1.0
       },
       {
@@ -468,33 +486,9 @@
         "weight": 1.0
       },
       {
-        "from": ".machine_readable/contractiles/trust/trust.ncl",
-        "to": ".machine_readable/contractiles/trust/trust.k9.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/trust",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/rsr-campaign.sh",
-        "to": "scripts/migrate-wellknown-to-www.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/migrate-wellknown-to-www.sh",
-        "to": "scripts/sweep-wellknown.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/sweep-wellknown.sh",
-        "to": "scripts/prune-dependabot-ecosystems.rs",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": ".machine_readable/contractiles/must/must.ncl",
-        "to": ".machine_readable/contractiles/must/must.k9.ncl",
-        "relation": "shared_dir:.machine_readable/contractiles/must",
+        "from": ".machine_readable/arrival-pack/generate.sh",
+        "to": ".machine_readable/arrival-pack/arrival-pack.ncl",
+        "relation": "shared_dir:.machine_readable/arrival-pack",
         "weight": 1.0
       },
       {
@@ -502,21 +496,17 @@
         "to": ".machine_readable/contractiles/adjust/adjust.k9.ncl",
         "relation": "shared_dir:.machine_readable/contractiles/adjust",
         "weight": 1.0
+      },
+      {
+        "from": ".machine_readable/contractiles/trust/trust.ncl",
+        "to": ".machine_readable/contractiles/trust/trust.k9.ncl",
+        "relation": "shared_dir:.machine_readable/contractiles/trust",
+        "weight": 1.0
       }
     ]
   },
   "taint_matrix": {
     "rows": [
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "scripts/prune-dependabot-ecosystems.rs"
-        ],
-        "frameworks": [],
-        "relation": "UnboundedAllocation->Memory"
-      },
       {
         "source_category": "MutationGap",
         "sink_axis": "cpu",
@@ -529,13 +519,13 @@
       },
       {
         "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
+        "sink_axis": "memory",
         "severity_value": 2.5,
         "files": [
           "scripts/prune-dependabot-ecosystems.rs"
         ],
         "frameworks": [],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "UnboundedAllocation->Memory"
       },
       {
         "source_category": "CommandInjection",
@@ -548,6 +538,16 @@
         ],
         "frameworks": [],
         "relation": "CommandInjection->Cpu"
+      },
+      {
+        "source_category": "UnboundedAllocation",
+        "sink_axis": "cpu",
+        "severity_value": 2.5,
+        "files": [
+          "scripts/prune-dependabot-ecosystems.rs"
+        ],
+        "frameworks": [],
+        "relation": "UnboundedAllocation->Cpu"
       }
     ]
   }
