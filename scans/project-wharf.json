@@ -1,923 +1,4352 @@
 {
-  "schema_version": "2.5",
-  "program_path": "project-wharf",
-  "language": "rust",
-  "frameworks": [
-    "Networking",
-    "WebServer"
-  ],
-  "weak_points": [
-    {
-      "category": "PathTraversal",
-      "location": "deploy/local-test.sh",
-      "file": "deploy/local-test.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in deploy/local-test.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "deploy/setup.sh",
-      "file": "deploy/setup.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in deploy/setup.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PathTraversal",
-      "location": "scripts/smoke_test.sh",
-      "file": "scripts/smoke_test.sh",
-      "severity": "Medium",
-      "description": "Hardcoded /tmp/ path without mktemp in scripts/smoke_test.sh",
-      "recommended_attack": [
-        "disk"
-      ],
-      "suppressed": true,
-      "test_context": "production"
-    },
-    {
-      "category": "UnsafeCode",
-      "location": "crates/wharf-ebpf/src/main.rs",
-      "file": "crates/wharf-ebpf/src/main.rs",
-      "severity": "High",
-      "description": "14 unsafe blocks in crates/wharf-ebpf/src/main.rs",
-      "recommended_attack": [
-        "memory",
-        "concurrency"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UnsafeCode",
-      "location": "crates/wharf-ebpf/src/main.rs",
-      "file": "crates/wharf-ebpf/src/main.rs",
-      "severity": "High",
-      "description": "Raw pointer cast in crates/wharf-ebpf/src/main.rs",
-      "recommended_attack": [
-        "memory",
-        "concurrency"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "InsecureProtocol",
-      "location": "crates/wharf-core/tests/integration.rs",
-      "file": "crates/wharf-core/tests/integration.rs",
-      "severity": "Medium",
-      "description": "1 HTTP (non-HTTPS) URLs in crates/wharf-core/tests/integration.rs",
-      "recommended_attack": [
-        "network"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "UnboundedAllocation",
-      "location": "crates/wharf-core/src/config.rs",
-      "file": "crates/wharf-core/src/config.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in crates/wharf-core/src/config.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UnboundedAllocation",
-      "location": "crates/wharf-core/src/nebula.rs",
-      "file": "crates/wharf-core/src/nebula.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in crates/wharf-core/src/nebula.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "crates/wharf-core/src/crypto.rs",
-      "file": "crates/wharf-core/src/crypto.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 4 unwrap/expect calls in crates/wharf-core/src/crypto.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UnboundedAllocation",
-      "location": "crates/wharf-core/src/fleet.rs",
-      "file": "crates/wharf-core/src/fleet.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in crates/wharf-core/src/fleet.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UnboundedAllocation",
-      "location": "crates/wharf-core/src/integrity.rs",
-      "file": "crates/wharf-core/src/integrity.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in crates/wharf-core/src/integrity.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "xtask/src/main.rs",
-      "file": "xtask/src/main.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 3 unwrap/expect calls in xtask/src/main.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "bin/yacht-agent/src/main.rs",
-      "file": "bin/yacht-agent/src/main.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 3 unwrap/expect calls in bin/yacht-agent/src/main.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "UnboundedAllocation",
-      "location": "bin/yacht-agent/src/ebpf.rs",
-      "file": "bin/yacht-agent/src/ebpf.rs",
-      "severity": "Medium",
-      "description": "Potential unbounded allocation pattern detected in bin/yacht-agent/src/ebpf.rs",
-      "recommended_attack": [
-        "memory",
-        "cpu"
-      ],
-      "test_context": "production"
-    }
-  ],
-  "statistics": {
-    "total_lines": 12961,
-    "unsafe_blocks": 14,
-    "panic_sites": 0,
-    "unwrap_calls": 10,
-    "allocation_sites": 78,
-    "io_operations": 77,
-    "threading_constructs": 1
+  "coverage": {
+    "analyzed_files": 95,
+    "candidate_files": 97,
+    "inputs": [
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "74949ad4e1e95f67db2008af8b1a8e5c8110a85bbc34a7bc3cc42bdd108f6674",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.cargo/config.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.claude/CLAUDE.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "Containerfile instruction, JSON-exec and image-reference checks plus extracted shell/Python/JavaScript heuristics; no image resolution or build execution",
+        "content_blake3": "45582c8e1de323adff09ac91725e03c86380ee5f732faf1cca9d1a9da4745968",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.clusterfuzzlite/Containerfile",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "998b3e981c1c2cd53603dff0aaa9e7847ac87a1bddaeb2020c98f315029d1db7",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/.clusterfuzzlite/build.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "84322d51342a4f1146b67bf9d8557b2a641cd1d0f1ce7cef44f16ee0e822a2d6",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.clusterfuzzlite/project.yaml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.editorconfig",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "directory",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.git",
+        "reason": "build/vendor directory policy; subtree not enumerated",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.gitattributes",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/CODEOWNERS",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/CONTRIBUTING.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "12e081f1d7ba1e2ed7148ce76a6ceed2ccbc8a7cd584216cae393083f24c4c41",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/dependabot.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "06e3ffb142b2ea3f1c18185a154665cbdbacbd85899df33f5955bc6de8ed07fb",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/funding.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/hooks/pre-commit",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/hooks/pre-push",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "2a0d90a4022fa7e2b622e5bc1624dd5153db5b0bdf3b76a859f7072070198d0e",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/label-classifier.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "9fd1a4f4fb3c76956daf811b90554e6ed996fbe9b2dbf0abe2ceca1d11b93b12",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/labels.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/scripts/classify-issue.jq",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/actions.lock",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "765e6c3dfae910e3ab6403135cd1d7516a9f46525a401061d28cac0bb0cdec10",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/cargo-audit.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "ee447f4981f41dd0f19000692aa74f6bfdb2b91ee5b8a5a2d18698fcc961de17",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/codeql.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "e1e4b24e467fb509af0a11f9b3c7b94cc05264183032d313fd3b4ca1fe45e46c",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/generator-generic-ossf-slsa3-publish.yml",
+        "reason": "YAML configuration parse failed: error: line 69 column 7: duplicate mapping key: actions, set DuplicateKeyPolicy in Options if acceptable\n  --> <input>:69:7\n   |\n67 |       contents: read\n68 |       security-events: write\n69 |       actions: read   # To read the workflow path.\n   |       ^ duplicate mapping key: actions, set DuplicateKeyPolicy in Options if acceptable\n70 |       id-token: write # To sign the provenance.\n71 |       contents: write # To add assets to a release.\n   |: duplicate mapping key: actions, set DuplicateKeyPolicy in Options if acceptable at line 69, column 7",
+        "status": "parse_error"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "2b2d03a497e4f46f671c2dca70d6f3bfeb8a75fec803ccdef0a9818b982a5755",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/governance.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "742f0acb3016f167b2f35135339fe74bf2c6bdf895bf9c17ed89aaa405cd5867",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/hypatia-scan.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "6df88f50202e5dc5b743450d93a8f86a2897019e8c255f5f9980c24ab562a4cc",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/label-triage.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "cbf7b5bd903d989fa14a1e342694bf59a0c3434b10795eb84c0246120ebbc1bb",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/labels.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "0de5846e2700ddf3642344ac7dbdef96b2367673cf6b377521959bbc0159dbe5",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/pages.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "1d87dab04ba2dac7aefacca1724680b787a5820d7d549d8ab64af2d2fc381295",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/php.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "c125b11197058a88da07ccf8a8e4e182e4e2b657e86434b2b4f03f8ff1795f9b",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/push-email-notify.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "84e152fe697a7fb49c0d120ca24d3d650451516220f12076c73307d3cf43559c",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/rust.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "db7ac273c10999310ebadb1df379d9763f89c30f9aa0c47f9467acd3b44dd21f",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/secret-scanner.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "9fe898ccd6def28ec0b26dce89fb71b7bdb5e8b2d5f6d68dc7871d0b995accb0",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.github/workflows/workflow-linter.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.gitignore",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "558a1c146cf249dd40637e6e502fe60da6d938bc576db25a9913ca72e43276df",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.gitlab-ci.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.guix-channel",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/6a2/AGENTIC.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/6a2/ECOSYSTEM.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/6a2/META.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/6a2/NEUROSYM.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/6a2/PLAYBOOK.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/6a2/STATE.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "f97a98a27440d15b379e3e45ceb371c9c2a1bf873a05deaae285e39209b0f810",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/deploy-wharf.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "91173d4913209815add4f3b1342594309e54b9e6abcedffb21c660153c731932",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/deployment-params.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "213cc3a3b40c57663efd591e2c4a9921ed450d96f2c706173a0a3b1cfe8e33e1",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/examples/ci-config.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "26cc0f2f8aaf97438476e68edc41fd1e5eeb2d7f37d520676adadb1667039f2f",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/examples/project-metadata.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "3334371046c241ee397a6b6edf1262bcf4d9d40fffa3dca1d63a18833a328605",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/examples/setup-repo.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "e966e988f35466ba9dd9a26c6c7a994e452d166b23416baca67d351e72a2f3c1",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/template-hunt.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "3786dcd9b6b41d3415b950a3495c36c9d5b4c19d2d307a342e9af8f5e2823747",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/template-kennel.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "87cb571ef10e13298a7ce4d17637ba5c88c4a6b0c4b272f0d3874ca8df4b13a8",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/template-yard.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "fdb08c4660acb2257a52e9521cf9c0d9a347803f4d57a876bc8a490bd7078194",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/.machine_readable/svc/k9/yacht-config.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/.nojekyll",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/ARCHITECTURE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/CHANGELOG.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/CITATION.cff",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/CODE_OF_CONDUCT.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/Cargo.lock",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "e29128270c7bcc042f774ddc78aab787f8d9b80ab292b60113092051278604a2",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "Containerfile instruction, JSON-exec and image-reference checks plus extracted shell/Python/JavaScript heuristics; no image resolution or build execution",
+        "content_blake3": "ae3dee807da5ab8baadbf5f6bee62d78369276d0664ff389198471e6db81c364",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/Containerfile",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "87efede706043871bf0018f3ce6d990b027341de6d38898dec0f7d3e52401e6f",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/FUNDING.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/GOVERNANCE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "Just recipe/declaration extraction and interpreter-specific shell/Python/JavaScript heuristics; no import, interpolation or task execution",
+        "content_blake3": "8557e1bf418edda01c5179ea0d316e445d6b9864631ee284448fd69d6f451707",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/Justfile",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/LICENSE",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/LICENSES/AGPL-3.0-or-later.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/LICENSES/CC-BY-SA-4.0.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/LICENSES/MPL-2.0.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/MAINTAINERS",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/MAINTAINERS.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/REVERSIBILITY.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/ROADMAP.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/RSR_COMPLIANCE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/SECURITY.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/TOPOLOGY.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/adapters/wordpress-wharf/readme.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "tree-sitter-php 0.25.1; local T0 syntax checks; no cross-file taint",
+        "content_blake3": "f11bf9e008f4ce6b98a7ae575be98b87496f875819798a94bf2becd099bd90cd",
+        "kind": "file",
+        "language": "php",
+        "path": "/home/runner/work/_temp/work/project-wharf/adapters/wordpress-wharf/wharf-adapter.php",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/audits/assail-classifications.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "603d69decd63cb0c0a41bd5d057e9d8071f92d71fdf76637d0db8873945ba1b3",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/wharf-cli/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "d0fae537d9ccc4d66774167f58bda5d76ae072cf36f34eac075330bef7b2bcdd",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/wharf-cli/src/main.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "f1dd00e31c95edfb5fa464a07496e456b1e24aa6384f1523272b5dac9a61ec1a",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/wharf-cli/src/ops/fleet.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "26f42f757f86a928b98eb4472e070b79a167dde814a634fdc4a5c653dd2bbb0b",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/wharf-cli/src/ops/integrity.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "622338b05fd4cf7219740b8ab8c86c5608a51e13b44c1431d425907bbf54063f",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/wharf-cli/src/ops/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "0f89cbc0af7d36339562251235f17cbe9ca8ea604c93ab0c93d30848e5cb9a18",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/wharf-cli/src/ops/moor.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "5d590ac5e101310dd9c5ec723147038f17f207efeefca6c1279cb57e4b74a352",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/yacht-agent/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "929db33887c1e04e2d6d1a8d6498a08e2c7c5f3e84421eff31a63c0b6beaec46",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/yacht-agent/src/ebpf.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "b0743bde4f32009ef3ecac4af3c398627d3145d583e6b22a11a651c559609218",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/bin/yacht-agent/src/main.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "c69ead1aa2cb33df76d37bcca5a934fbe256a5dc40db6ae17c48ec9193ffae21",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/codemeta.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "0339f105e547b34b483a66d0995cc5b2866d36641b8c44bd0dff8c867125df4e",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/configs/fleet.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "0ad5c89d8bf390f9640c46b2df440756870ae2af864092b1f36565b20f52b8d2",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/configs/fleet.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "1ca897b511db59577f91413ca8fbb038747955c28c50d7ed3bb71420e25144c9",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/configs/policies/airlock.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "a0ecdbe97dadb37703c6d7bebd42c4473c4677fb5664b5eb1b10303a6ef1dff1",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/configs/policies/auth.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "aa30d2903ca8237ff3ca2e82d2871b2134386a43b438ad0911583a94c8f8b167",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/configs/policies/database.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "bf9fb488320a32988c849e129656e0f589e7d59d74fac8c729ea032e6da268a0",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/configs/policies/filesystem.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "ff32c7ec5e45e7ddf36812ed03025d2557dee41c50173722c87d9d7a75f8bba3",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/project-wharf/configs/policies/network.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/contractiles/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/contractiles/dust/Dustfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/contractiles/must/Mustfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "28bfb492eedaba15b341f23913a369de55c6ed739d847734bf42368610ece355",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "deb2f3c6fb3c15cba6086c032a537d20ddfea31f8ab50ee6fd1e254d08789293",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/config.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "a0868882c82b65a1fa84a4176e31f4be744031eb4a132669ab9be6eb2980cfa9",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/crypto.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "8ad47f0b43a4ca40a49d99909ca1f68070c0ff8a416082e1733a04d20f0814d9",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/db_policy.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "ebb61a363ed1d45ff481dd09990ef97113a322579acc012189fbec7771679ed8",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/errors.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "c7011fdc9857915a97a04a0feb8955feefeeca35f8a506d1c158deb2ffed2ea3",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/fleet.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "4a408b3c7042ff1f0bac5e7e729a718c88e49d5cdc5133f478d7b26a948a1563",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/integrity.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "c4072431be1d4b0b8aaec90cd775bee7f23cd2e9cedffb138b940560e133d36c",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/lib.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "08c39ec778b319d4ecb43e41738377c3f7c6523a8263b5a98eaafacce70c1854",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/mooring.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "2b8b1c3a1e9469f805712a10f5645ad1f5708dfe094527fa9920eecf7aa1b8e4",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/mooring_client.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "604dcc3b49e653956e02cff4a0c49015de61553e2b05611fb0589f66f86ff5ba",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/nebula.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "6b1af1f42e1ad2d4bbfff37bbaaad1a470fa787edc8a9535eb563819628bcfc0",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/snapshot.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "28cdc888b6a5b7a43ddb4638f692a683c2c5b4aa5ca1a3756c66207dac14d046",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/sync.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "ee707ff1a3fe8158212bb102d25a1492bd5a9c67d8ae75c1d86a21ff723e2d23",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/src/types.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "623b924484e99b413b5a45a3f3f64533f5c852a9b82cc0b2cffb2e3fb60c116b",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-core/tests/integration.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "2d5d78a4935c7e670fda6cf1c0be37f4ca6ffb8ca8478407b6cff910e3134bc8",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-ebpf/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "97ebb64ecee8b6597f0988ef1adf6ea2bc7a30ac2188d391e1328adf4757d580",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-ebpf/src/loader.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "07fc6f0bd3ba44ad6339bbb16ca9ca062e826c0f65a31597619d99b2b027a2d9",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/crates/wharf-ebpf/src/main.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "Containerfile instruction, JSON-exec and image-reference checks plus extracted shell/Python/JavaScript heuristics; no image resolution or build execution",
+        "content_blake3": "22ec5d991cc8d824343a167f13ecc199eaef284af63911f88e01e628be60c85f",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/Containerfile.ols-local",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/DEPLOY.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "9388412a6c72f85ac70c957abb9ca8b9023e59fb0e6bf7d1f5896f80f2d28922",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/compose.yaml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "d2e011daa73590d3d7ffa34533a5fb04bfeba799c3500fdcaf4db6943df5cd50",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/local-test.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "ae3464b886495f3081411e639b5020538830d6dc0d9296ecf32228441a6ff185",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/setup.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "b2f9e311c3d28b8124fecf8a9e006d57996f8c1179b6eec0f1f0eeabe372d34f",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/verify-sqli.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/.my-healthcheck.cnf",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/aria_log.00000001",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/aria_log_control",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/ib_buffer_pool",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/ib_logfile0",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/ibdata1",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/multi-master.info",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/column_stats.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/column_stats.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/column_stats.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/columns_priv.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/columns_priv.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/columns_priv.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/db.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/db.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/db.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/db.opt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/event.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/event.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/event.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/func.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/func.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/func.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/general_log.CSM",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/general_log.CSV",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/general_log.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/global_priv.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/global_priv.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/global_priv.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/gtid_slave_pos.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/gtid_slave_pos.ibd",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_category.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_category.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_category.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_keyword.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_keyword.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_keyword.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_relation.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_relation.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_relation.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_topic.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_topic.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/help_topic.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/index_stats.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/index_stats.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/index_stats.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/innodb_index_stats.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/innodb_index_stats.ibd",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/innodb_table_stats.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/innodb_table_stats.ibd",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/plugin.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/plugin.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/plugin.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/proc.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/proc.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/proc.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/procs_priv.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/procs_priv.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/procs_priv.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/proxies_priv.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/proxies_priv.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/proxies_priv.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/roles_mapping.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/roles_mapping.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/roles_mapping.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/servers.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/servers.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/servers.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/slow_log.CSM",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/slow_log.CSV",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/slow_log.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/table_stats.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/table_stats.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/table_stats.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/tables_priv.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/tables_priv.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/tables_priv.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_leap_second.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_leap_second.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_leap_second.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_name.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_name.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_name.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_transition.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_transition.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_transition.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_transition_type.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_transition_type.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/time_zone_transition_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/transaction_registry.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/transaction_registry.ibd",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql/user.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/mysql_upgrade_info",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/performance_schema/db.opt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/db.opt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/host_summary.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/host_summary_by_file_io.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/host_summary_by_file_io_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/host_summary_by_stages.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/host_summary_by_statement_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/host_summary_by_statement_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/innodb_buffer_stats_by_schema.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/innodb_buffer_stats_by_table.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/innodb_lock_waits.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/io_by_thread_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/io_global_by_file_by_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/io_global_by_file_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/io_global_by_wait_by_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/io_global_by_wait_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/latest_file_io.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/memory_by_host_by_current_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/memory_by_thread_by_current_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/memory_by_user_by_current_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/memory_global_by_current_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/memory_global_total.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/metrics.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/processlist.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/ps_check_lost_instrumentation.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_auto_increment_columns.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_index_statistics.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_object_overview.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_redundant_indexes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_table_lock_waits.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_table_statistics.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_table_statistics_with_buffer.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_tables_with_full_table_scans.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/schema_unused_indexes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/session.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/session_ssl_status.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/statement_analysis.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/statements_with_errors_or_warnings.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/statements_with_full_table_scans.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/statements_with_runtimes_in_95th_percentile.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/statements_with_sorting.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/statements_with_temp_tables.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/sys_config.MAD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/sys_config.MAI",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/sys_config.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/user_summary.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/user_summary_by_file_io.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/user_summary_by_file_io_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/user_summary_by_stages.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/user_summary_by_statement_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/user_summary_by_statement_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/version.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/wait_classes_global_by_avg_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/wait_classes_global_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/waits_by_host_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/waits_by_user_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/waits_global_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024host_summary.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024host_summary_by_file_io.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024host_summary_by_file_io_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024host_summary_by_stages.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024host_summary_by_statement_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024host_summary_by_statement_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024innodb_buffer_stats_by_schema.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024innodb_buffer_stats_by_table.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024innodb_lock_waits.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024io_by_thread_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024io_global_by_file_by_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024io_global_by_file_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024io_global_by_wait_by_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024io_global_by_wait_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024latest_file_io.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024memory_by_host_by_current_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024memory_by_thread_by_current_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024memory_by_user_by_current_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024memory_global_by_current_bytes.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024memory_global_total.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024processlist.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024ps_digest_95th_percentile_by_avg_us.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024ps_digest_avg_latency_distribution.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024ps_schema_table_statistics_io.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024schema_flattened_keys.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024schema_index_statistics.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024schema_table_lock_waits.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024schema_table_statistics.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024schema_table_statistics_with_buffer.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024schema_tables_with_full_table_scans.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024session.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024statement_analysis.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024statements_with_errors_or_warnings.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024statements_with_full_table_scans.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024statements_with_runtimes_in_95th_percentile.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024statements_with_sorting.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024statements_with_temp_tables.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024user_summary.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024user_summary_by_file_io.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024user_summary_by_file_io_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024user_summary_by_stages.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024user_summary_by_statement_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024user_summary_by_statement_type.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024wait_classes_global_by_avg_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024wait_classes_global_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024waits_by_host_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024waits_by_user_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/sys/x@0024waits_global_by_latency.frm",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/deploy/wharf-local/db/wordpress/db.opt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/docs/ARCHITECTURE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/docs/CITATIONS.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/docs/tech-debt-2026-05-26.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "a510a64c0567bab819878097c0134715198baa6caf96820e4ecb008b4988a2be",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/eclexiaiser.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "50c9b7f251edfa5a0845d05aef64e1dfbe6f31b4199efec5338a4f32639cbf4f",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/examples/wharf-cli.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "954aefcf2c16e03c52d63f35cf6b55f17102d1b6db3cf01bc0ed21d015b8c824",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/examples/yacht-agent.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "81c535050e68b71c52eae09a4a46f1b1704f973f24e3d9a8a5cd2fcf99725eaf",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/fuzz/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "57096d8f381c325b9e7c358f178c7cfc3bdf27d077dd839303af4ef938b2a118",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/fuzz/fuzz_targets/fuzz_integrity.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "db4f0819beac4d8ff8a216a8969fb57cb3d532de6a214eccff46b5f5aa4819ed",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/fuzz/fuzz_targets/fuzz_sql_policy.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/config/nginx.conf",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/config/openlitespeed/httpd_config.conf",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/config/openlitespeed/vhosts/wordpress/vhconf.conf",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/config/php-fpm.conf",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/config/wordpress-ols.conf",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/config/wordpress-rules.conf",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/containers/agent.Dockerfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/containers/nginx.Dockerfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/containers/openlitespeed.Dockerfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/containers/php.Dockerfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/nebula/.gitkeep",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/podman/.gitkeep",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "4023eae85896786481b37a454da9736e12c2571619d19edcbae74a4d5622b8a7",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/infra/podman/yacht.yaml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "ae7e4cc885010db40a5622cbe9b9a3e3c6590701cdd1d140ba817158ff0dee35",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/mise.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "e2a7dabc6ff89baead2dc5922494ccd5bed522c24988f330ba6bd0fcf087274c",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/project-wharf-launcher.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "ff285eb4efff75568e6e0caa614fb5be3a47e4a33a3cf646ea40388ca1b37f50",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/scripts/audit_zone.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "a2736f62a967645ea8e920cb93be9ff3b98f18af855cc171ea32cc6684d58a70",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/scripts/deploy_yacht.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "0690c63ab63a26f123a20a26c8f80a0a6899f4674f106227ff47f9a0fe2482e2",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/scripts/detect_env.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "c2007cb054e43f364ef247c62c187b659f3f321bb04d679cbf9b6daac3676672",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/scripts/gen_openpgpkey.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "00c3b9afb847bf1be99773e84e9e9bf6ee808add75053157bf1308b9d7b3d360",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/scripts/render_zone.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "34a11938fa1b12f0b067dc73ea9b748d7694a3b6789470b6fff564b251d30626",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/scripts/smoke_test.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "008b7625fac02b295f60170fdb35ea9fe1e76f9ed0f0853fc3329a7be35d4687",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/project-wharf/scripts/ssl-setup.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/templates/maximalist.tpl",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/templates/shared.tpl",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/templates/simple.tpl",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/templates/standard.tpl",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "835b596ab48dbbda790902b5d0df551edac9093b9e01c71a56c1a049aa1fc0f1",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/vars/example.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/www/.well-known/ai.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/www/.well-known/consent-required.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/www/.well-known/dc.xml",
+        "reason": "no source adapter; project manifest checks are not whole-file analysis",
+        "status": "unsupported"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/www/.well-known/humans.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "e1a09232ef956b52e3c8422cd4cbb2b0bbaac22ee61d2601dc49fa133194ed4c",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/www/.well-known/provenance.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/www/.well-known/security.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "cbff75aa316d4e235006ac2e53b62deb7eb67a84682d2658481b4d1ca95a5ff9",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/project-wharf/xtask/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "0940baf03a6d7c247d25ecd670b05c663e0183401b3d6aa6b8da0f849a939963",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/project-wharf/xtask/src/main.rs",
+        "reason": null,
+        "status": "analyzed"
+      }
+    ],
+    "mode": "static_assail",
+    "scope": "Explicit regular-file inventory; named build/vendor directories and symlinks excluded without following them. Selected unknown source/config formats are unsupported; other extensions are outside declared scope. Complete means every candidate finished its stated adapter, whose parsing and heuristic depth is recorded per input; it is not complete semantic security coverage, a dataflow proof or an execution result. No dynamic attacks executed.",
+    "status": "partial"
   },
-  "file_statistics": [
-    {
-      "file_path": "project-wharf-launcher.sh",
-      "lines": 111,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "deploy/local-test.sh",
-      "lines": 176,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "deploy/verify-sqli.sh",
-      "lines": 159,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "deploy/setup.sh",
-      "lines": 172,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/smoke_test.sh",
-      "lines": 228,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/deploy_yacht.sh",
-      "lines": 173,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "scripts/render_zone.sh",
-      "lines": 67,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-ebpf/src/main.rs",
-      "lines": 168,
-      "unsafe_blocks": 14,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/config.rs",
-      "lines": 466,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/nebula.rs",
-      "lines": 1023,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 13,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/crypto.rs",
-      "lines": 917,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 4,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 2,
-      "io_operations": 5,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/snapshot.rs",
-      "lines": 159,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 8,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/errors.rs",
-      "lines": 30,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/mooring.rs",
-      "lines": 549,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 5,
-      "allocation_sites": 8,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/sync.rs",
-      "lines": 249,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 2,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/fleet.rs",
-      "lines": 373,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 8,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/mooring_client.rs",
-      "lines": 242,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 5,
-      "allocation_sites": 8,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "crates/wharf-core/src/integrity.rs",
-      "lines": 539,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 7,
-      "allocation_sites": 34,
-      "io_operations": 4,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "xtask/src/main.rs",
-      "lines": 211,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 3,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "bin/wharf-cli/src/main.rs",
-      "lines": 1187,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 6,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "bin/wharf-cli/src/ops/moor.rs",
-      "lines": 323,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 6,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "bin/yacht-agent/src/main.rs",
-      "lines": 1499,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 3,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 6,
-      "io_operations": 10,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "bin/yacht-agent/src/ebpf.rs",
-      "lines": 220,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    }
-  ],
-  "recommended_attacks": [
-    "cpu",
-    "concurrency",
-    "network",
-    "memory",
-    "disk"
-  ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "crates/wharf-core/src/config.rs",
-        "to": "crates/wharf-core/src/nebula.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/nebula.rs",
-        "to": "crates/wharf-core/src/crypto.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/crypto.rs",
-        "to": "crates/wharf-core/src/snapshot.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/snapshot.rs",
-        "to": "crates/wharf-core/src/errors.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/errors.rs",
-        "to": "crates/wharf-core/src/mooring.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/mooring.rs",
-        "to": "crates/wharf-core/src/sync.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/sync.rs",
-        "to": "crates/wharf-core/src/fleet.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/fleet.rs",
-        "to": "crates/wharf-core/src/mooring_client.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/mooring_client.rs",
-        "to": "crates/wharf-core/src/integrity.rs",
-        "relation": "shared_dir:crates/wharf-core/src",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/smoke_test.sh",
-        "to": "scripts/deploy_yacht.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/deploy_yacht.sh",
-        "to": "scripts/render_zone.sh",
-        "relation": "shared_dir:scripts",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/local-test.sh",
-        "to": "deploy/verify-sqli.sh",
-        "relation": "shared_dir:deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/verify-sqli.sh",
-        "to": "deploy/setup.sh",
-        "relation": "shared_dir:deploy",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/yacht-agent/src/main.rs",
-        "to": "bin/yacht-agent/src/ebpf.rs",
+        "from": "bin/yacht-agent/src/ebpf.rs",
         "relation": "shared_dir:bin/yacht-agent/src",
-        "weight": 1.0
-      },
-      {
-        "from": "project-wharf-launcher.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "project-wharf-launcher.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/local-test.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/local-test.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/verify-sqli.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/verify-sqli.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/setup.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "deploy/setup.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/smoke_test.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/smoke_test.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/deploy_yacht.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/deploy_yacht.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/render_zone.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/render_zone.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-ebpf/src/main.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 42.0
-      },
-      {
-        "from": "crates/wharf-ebpf/src/main.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 42.0
+        "to": "bin/yacht-agent/src/main.rs",
+        "weight": 1
       },
       {
         "from": "crates/wharf-core/src/config.rs",
-        "to": "Networking",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/crypto.rs",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/crypto.rs",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/errors.rs",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/errors.rs",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/fleet.rs",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/fleet.rs",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/integrity.rs",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/integrity.rs",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/mooring.rs",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/mooring.rs",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/mooring_client.rs",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/mooring_client.rs",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/nebula.rs",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/nebula.rs",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/snapshot.rs",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/snapshot.rs",
+        "relation": "shared_dir:crates/wharf-core/src",
+        "to": "crates/wharf-core/src/sync.rs",
+        "weight": 1
+      },
+      {
+        "from": "deploy/Containerfile.ols-local",
+        "relation": "shared_dir:deploy",
+        "to": "deploy/local-test.sh",
+        "weight": 1
+      },
+      {
+        "from": "deploy/local-test.sh",
+        "relation": "shared_dir:deploy",
+        "to": "deploy/setup.sh",
+        "weight": 1
+      },
+      {
+        "from": "deploy/setup.sh",
+        "relation": "shared_dir:deploy",
+        "to": "deploy/verify-sqli.sh",
+        "weight": 1
+      },
+      {
+        "from": "scripts/deploy_yacht.sh",
+        "relation": "shared_dir:scripts",
+        "to": "scripts/render_zone.sh",
+        "weight": 1
+      },
+      {
+        "from": "scripts/render_zone.sh",
+        "relation": "shared_dir:scripts",
+        "to": "scripts/smoke_test.sh",
+        "weight": 1
+      },
+      {
+        "from": "bin/wharf-cli/src/main.rs",
         "relation": "framework",
-        "weight": 1.0
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "bin/wharf-cli/src/main.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "bin/wharf-cli/src/ops/moor.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "bin/wharf-cli/src/ops/moor.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "bin/yacht-agent/src/ebpf.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "bin/yacht-agent/src/ebpf.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "bin/yacht-agent/src/main.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 5
+      },
+      {
+        "from": "bin/yacht-agent/src/main.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 5
       },
       {
         "from": "crates/wharf-core/src/config.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
+        "to": "WebServer",
+        "weight": 1
       },
       {
-        "from": "crates/wharf-core/src/nebula.rs",
+        "from": "crates/wharf-core/src/config.rs",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/nebula.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "crates/wharf-core/src/crypto.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 4.0
+        "to": "WebServer",
+        "weight": 4
       },
       {
         "from": "crates/wharf-core/src/crypto.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 4.0
-      },
-      {
-        "from": "crates/wharf-core/src/snapshot.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/snapshot.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 4
       },
       {
         "from": "crates/wharf-core/src/errors.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "to": "WebServer",
+        "weight": 1
       },
       {
         "from": "crates/wharf-core/src/errors.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/mooring.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/mooring.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/sync.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/sync.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "crates/wharf-core/src/fleet.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "to": "WebServer",
+        "weight": 1
       },
       {
         "from": "crates/wharf-core/src/fleet.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/mooring_client.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "crates/wharf-core/src/mooring_client.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "crates/wharf-core/src/integrity.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "to": "WebServer",
+        "weight": 1
       },
       {
         "from": "crates/wharf-core/src/integrity.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/mooring.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/mooring.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/mooring_client.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/mooring_client.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/nebula.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/nebula.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/snapshot.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/snapshot.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/sync.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-core/src/sync.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "crates/wharf-ebpf/src/main.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 42
+      },
+      {
+        "from": "crates/wharf-ebpf/src/main.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 42
+      },
+      {
+        "from": "deploy/Containerfile.ols-local",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "deploy/Containerfile.ols-local",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "deploy/local-test.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "deploy/local-test.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "deploy/setup.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "deploy/setup.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "deploy/verify-sqli.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "deploy/verify-sqli.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "project-wharf-launcher.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "project-wharf-launcher.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "scripts/deploy_yacht.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "scripts/deploy_yacht.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "scripts/render_zone.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "scripts/render_zone.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "scripts/smoke_test.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "scripts/smoke_test.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
       },
       {
         "from": "xtask/src/main.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 3.0
+        "to": "WebServer",
+        "weight": 3
       },
       {
         "from": "xtask/src/main.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "bin/wharf-cli/src/main.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/wharf-cli/src/main.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/wharf-cli/src/ops/moor.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/wharf-cli/src/ops/moor.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/yacht-agent/src/main.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 5.0
-      },
-      {
-        "from": "bin/yacht-agent/src/main.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 5.0
-      },
-      {
-        "from": "bin/yacht-agent/src/ebpf.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "bin/yacht-agent/src/ebpf.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 3
       }
     ]
+  },
+  "file_statistics": [
+    {
+      "allocation_sites": 6,
+      "file_path": "bin/wharf-cli/src/main.rs",
+      "io_operations": 0,
+      "lines": 1187,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 2,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "bin/wharf-cli/src/ops/moor.rs",
+      "io_operations": 6,
+      "lines": 323,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 2,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "bin/yacht-agent/src/ebpf.rs",
+      "io_operations": 1,
+      "lines": 220,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 6,
+      "file_path": "bin/yacht-agent/src/main.rs",
+      "io_operations": 10,
+      "lines": 1499,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 3,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 3
+    },
+    {
+      "allocation_sites": 2,
+      "file_path": "crates/wharf-core/src/config.rs",
+      "io_operations": 4,
+      "lines": 466,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 2,
+      "file_path": "crates/wharf-core/src/crypto.rs",
+      "io_operations": 5,
+      "lines": 917,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 2,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 4
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "crates/wharf-core/src/errors.rs",
+      "io_operations": 1,
+      "lines": 30,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 8,
+      "file_path": "crates/wharf-core/src/fleet.rs",
+      "io_operations": 1,
+      "lines": 373,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 3,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 34,
+      "file_path": "crates/wharf-core/src/integrity.rs",
+      "io_operations": 4,
+      "lines": 539,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 7,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 8,
+      "file_path": "crates/wharf-core/src/mooring.rs",
+      "io_operations": 0,
+      "lines": 549,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 5,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 8,
+      "file_path": "crates/wharf-core/src/mooring_client.rs",
+      "io_operations": 0,
+      "lines": 242,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 5,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 2,
+      "file_path": "crates/wharf-core/src/nebula.rs",
+      "io_operations": 13,
+      "lines": 1023,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "crates/wharf-core/src/snapshot.rs",
+      "io_operations": 8,
+      "lines": 159,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 2,
+      "file_path": "crates/wharf-core/src/sync.rs",
+      "io_operations": 1,
+      "lines": 249,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 3,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "crates/wharf-ebpf/src/main.rs",
+      "io_operations": 0,
+      "lines": 168,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 14,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "deploy/Containerfile.ols-local",
+      "io_operations": 1,
+      "lines": 22,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "deploy/local-test.sh",
+      "io_operations": 6,
+      "lines": 176,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "deploy/setup.sh",
+      "io_operations": 6,
+      "lines": 172,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "deploy/verify-sqli.sh",
+      "io_operations": 1,
+      "lines": 159,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "project-wharf-launcher.sh",
+      "io_operations": 4,
+      "lines": 111,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "scripts/deploy_yacht.sh",
+      "io_operations": 2,
+      "lines": 173,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "scripts/render_zone.sh",
+      "io_operations": 1,
+      "lines": 67,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "scripts/smoke_test.sh",
+      "io_operations": 2,
+      "lines": 228,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "xtask/src/main.rs",
+      "io_operations": 1,
+      "lines": 211,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 3
+    }
+  ],
+  "frameworks": [
+    "WebServer",
+    "Networking"
+  ],
+  "language": "rust",
+  "program_path": "project-wharf",
+  "recommended_attacks": [
+    "cpu",
+    "memory",
+    "disk",
+    "network",
+    "concurrency"
+  ],
+  "schema_version": "2.6",
+  "statistics": {
+    "allocation_sites": 78,
+    "io_operations": 78,
+    "panic_sites": 0,
+    "threading_constructs": 1,
+    "total_lines": 16363,
+    "unsafe_blocks": 14,
+    "unwrap_calls": 10
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "UnsafeCode",
+        "files": [
+          "bin/yacht-agent/src/ebpf.rs",
+          "crates/wharf-core/src/config.rs",
+          "crates/wharf-core/src/fleet.rs",
+          "crates/wharf-core/src/integrity.rs",
+          "crates/wharf-core/src/nebula.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Cpu",
+        "severity_value": 2.5,
+        "sink_axis": "cpu",
+        "source_category": "UnboundedAllocation"
+      },
+      {
+        "files": [
+          "bin/yacht-agent/src/ebpf.rs",
+          "crates/wharf-core/src/config.rs",
+          "crates/wharf-core/src/fleet.rs",
+          "crates/wharf-core/src/integrity.rs",
+          "crates/wharf-core/src/nebula.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "UnboundedAllocation->Memory",
+        "severity_value": 2.5,
         "sink_axis": "memory",
-        "severity_value": 3.5,
+        "source_category": "UnboundedAllocation"
+      },
+      {
         "files": [
           "crates/wharf-ebpf/src/main.rs",
           "crates/wharf-ebpf/src/main.rs"
         ],
         "frameworks": [
-          "Networking",
-          "WebServer"
+          "WebServer",
+          "Networking"
         ],
-        "relation": "UnsafeCode->Memory"
+        "relation": "UnsafeCode->Memory",
+        "severity_value": 3.5,
+        "sink_axis": "memory",
+        "source_category": "UnsafeCode"
       },
       {
-        "source_category": "PathTraversal",
-        "sink_axis": "disk",
+        "files": [
+          "crates/wharf-ebpf/src/main.rs",
+          "crates/wharf-ebpf/src/main.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "UnsafeCode->Concurrency",
+        "severity_value": 3.5,
+        "sink_axis": "concurrency",
+        "source_category": "UnsafeCode"
+      },
+      {
+        "files": [
+          "bin/yacht-agent/src/main.rs",
+          "crates/wharf-core/src/crypto.rs",
+          "xtask/src/main.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "PanicPath->Memory",
         "severity_value": 2.5,
+        "sink_axis": "memory",
+        "source_category": "PanicPath"
+      },
+      {
+        "files": [
+          "bin/yacht-agent/src/main.rs",
+          "crates/wharf-core/src/crypto.rs",
+          "xtask/src/main.rs"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "PanicPath->Disk",
+        "severity_value": 2.5,
+        "sink_axis": "disk",
+        "source_category": "PanicPath"
+      },
+      {
+        "files": [
+          "crates/wharf-core/tests/integration.rs",
+          "deploy/compose.yaml"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Networking"
+        ],
+        "relation": "InsecureProtocol->Network",
+        "severity_value": 2.5,
+        "sink_axis": "network",
+        "source_category": "InsecureProtocol"
+      },
+      {
         "files": [
           "deploy/local-test.sh",
           "deploy/setup.sh",
           "scripts/smoke_test.sh"
         ],
         "frameworks": [
-          "Networking",
-          "WebServer"
+          "WebServer",
+          "Networking"
         ],
-        "relation": "PathTraversal->Disk"
-      },
-      {
-        "source_category": "PanicPath",
-        "sink_axis": "memory",
+        "relation": "PathTraversal->Disk",
         "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/src/crypto.rs",
-          "xtask/src/main.rs",
-          "bin/yacht-agent/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Memory"
-      },
-      {
-        "source_category": "InsecureProtocol",
-        "sink_axis": "network",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/tests/integration.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "InsecureProtocol->Network"
-      },
-      {
-        "source_category": "PanicPath",
         "sink_axis": "disk",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/src/crypto.rs",
-          "xtask/src/main.rs",
-          "bin/yacht-agent/src/main.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "PanicPath->Disk"
+        "source_category": "PathTraversal"
       },
       {
-        "source_category": "UnsafeCode",
-        "sink_axis": "concurrency",
-        "severity_value": 3.5,
         "files": [
-          "crates/wharf-ebpf/src/main.rs",
-          "crates/wharf-ebpf/src/main.rs"
+          "infra/podman/yacht.yaml"
         ],
         "frameworks": [
-          "Networking",
-          "WebServer"
+          "WebServer",
+          "Networking"
         ],
-        "relation": "UnsafeCode->Concurrency"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/src/config.rs",
-          "crates/wharf-core/src/nebula.rs",
-          "crates/wharf-core/src/fleet.rs",
-          "crates/wharf-core/src/integrity.rs",
-          "bin/yacht-agent/src/ebpf.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "UnboundedAllocation->Memory"
-      },
-      {
-        "source_category": "UnboundedAllocation",
-        "sink_axis": "cpu",
-        "severity_value": 2.5,
-        "files": [
-          "crates/wharf-core/src/config.rs",
-          "crates/wharf-core/src/nebula.rs",
-          "crates/wharf-core/src/fleet.rs",
-          "crates/wharf-core/src/integrity.rs",
-          "bin/yacht-agent/src/ebpf.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer"
-        ],
-        "relation": "UnboundedAllocation->Cpu"
+        "relation": "HardcodedSecret->Network",
+        "severity_value": 5,
+        "sink_axis": "network",
+        "source_category": "HardcodedSecret"
       }
     ]
-  }
+  },
+  "weak_points": [
+    {
+      "category": "SupplyChain",
+      "description": "Container base image lacks a complete SHA256 digest; local stage aliases are accepted",
+      "file": ".clusterfuzzlite/Containerfile",
+      "line": 6,
+      "location": ".clusterfuzzlite/Containerfile:6",
+      "recommended_attack": [],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "description": "Container base image lacks a complete SHA256 digest; local stage aliases are accepted",
+      "file": "Containerfile",
+      "line": 9,
+      "location": "Containerfile:9",
+      "recommended_attack": [],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "description": "Container base image lacks a complete SHA256 digest; local stage aliases are accepted",
+      "file": "Containerfile",
+      "line": 27,
+      "location": "Containerfile:27",
+      "recommended_attack": [],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "description": "Container base image lacks a complete SHA256 digest; local stage aliases are accepted",
+      "file": "Containerfile",
+      "line": 35,
+      "location": "Containerfile:35",
+      "recommended_attack": [],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "description": "Potential unbounded allocation pattern detected in bin/yacht-agent/src/ebpf.rs",
+      "file": "bin/yacht-agent/src/ebpf.rs",
+      "location": "bin/yacht-agent/src/ebpf.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "description": "0 panic sites and 3 unwrap/expect calls in bin/yacht-agent/src/main.rs",
+      "file": "bin/yacht-agent/src/main.rs",
+      "location": "bin/yacht-agent/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "description": "Potential unbounded allocation pattern detected in crates/wharf-core/src/config.rs",
+      "file": "crates/wharf-core/src/config.rs",
+      "location": "crates/wharf-core/src/config.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "description": "0 panic sites and 4 unwrap/expect calls in crates/wharf-core/src/crypto.rs",
+      "file": "crates/wharf-core/src/crypto.rs",
+      "location": "crates/wharf-core/src/crypto.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "description": "Potential unbounded allocation pattern detected in crates/wharf-core/src/fleet.rs",
+      "file": "crates/wharf-core/src/fleet.rs",
+      "location": "crates/wharf-core/src/fleet.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "description": "Potential unbounded allocation pattern detected in crates/wharf-core/src/integrity.rs",
+      "file": "crates/wharf-core/src/integrity.rs",
+      "location": "crates/wharf-core/src/integrity.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "UnboundedAllocation",
+      "description": "Potential unbounded allocation pattern detected in crates/wharf-core/src/nebula.rs",
+      "file": "crates/wharf-core/src/nebula.rs",
+      "location": "crates/wharf-core/src/nebula.rs",
+      "recommended_attack": [
+        "memory",
+        "cpu"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "InsecureProtocol",
+      "description": "1 HTTP (non-HTTPS) URLs in crates/wharf-core/tests/integration.rs",
+      "file": "crates/wharf-core/tests/integration.rs",
+      "location": "crates/wharf-core/tests/integration.rs",
+      "recommended_attack": [
+        "network"
+      ],
+      "severity": "Medium",
+      "test_context": "test_only"
+    },
+    {
+      "category": "UnsafeCode",
+      "description": "14 unsafe blocks in crates/wharf-ebpf/src/main.rs",
+      "file": "crates/wharf-ebpf/src/main.rs",
+      "location": "crates/wharf-ebpf/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "concurrency"
+      ],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "UnsafeCode",
+      "description": "Raw pointer cast in crates/wharf-ebpf/src/main.rs",
+      "file": "crates/wharf-ebpf/src/main.rs",
+      "location": "crates/wharf-ebpf/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "concurrency"
+      ],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "description": "Container base image lacks a complete SHA256 digest; local stage aliases are accepted",
+      "file": "deploy/Containerfile.ols-local",
+      "line": 7,
+      "location": "deploy/Containerfile.ols-local:7",
+      "recommended_attack": [],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "InsecureProtocol",
+      "description": "CONFIG: plaintext HTTP endpoint at document[0]/services/web/environment/WHARF_AGENT_URL in deploy/compose.yaml",
+      "file": "deploy/compose.yaml",
+      "location": "deploy/compose.yaml",
+      "recommended_attack": [
+        "network"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in deploy/local-test.sh",
+      "file": "deploy/local-test.sh",
+      "line": 43,
+      "location": "deploy/local-test.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in deploy/setup.sh",
+      "file": "deploy/setup.sh",
+      "line": 100,
+      "location": "deploy/setup.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "HardcodedSecret",
+      "description": "CONFIG: literal credential in a named field at document[2]/stringData/password in infra/podman/yacht.yaml",
+      "file": "infra/podman/yacht.yaml",
+      "location": "infra/podman/yacht.yaml",
+      "recommended_attack": [
+        "network"
+      ],
+      "severity": "Critical",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in scripts/smoke_test.sh",
+      "file": "scripts/smoke_test.sh",
+      "line": 170,
+      "location": "scripts/smoke_test.sh",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "suppressed": true,
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "description": "0 panic sites and 3 unwrap/expect calls in xtask/src/main.rs",
+      "file": "xtask/src/main.rs",
+      "location": "xtask/src/main.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    }
+  ]
 }
