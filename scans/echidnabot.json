@@ -1,1241 +1,4355 @@
 {
-  "schema_version": "2.5",
-  "program_path": "echidnabot",
-  "language": "rust",
-  "frameworks": [
-    "Networking",
-    "WebServer",
-    "Database"
-  ],
-  "weak_points": [
-    {
-      "category": "ProofDrift",
-      "location": "proofs/lean/sorry_stub.lean",
-      "file": "proofs/lean/sorry_stub.lean",
-      "severity": "Critical",
-      "description": "1 sorry (banned proof escape hatch — admits unproven proposition) in proofs/lean/sorry_stub.lean",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "ProofDrift",
-      "location": "proofs/coq/admitted_stub.v",
-      "file": "proofs/coq/admitted_stub.v",
-      "severity": "Critical",
-      "description": "1 Admitted (banned — unfinished Coq proof accepted as axiom) in proofs/coq/admitted_stub.v",
-      "recommended_attack": [
-        "cpu"
-      ],
-      "test_context": "test_only"
-    },
-    {
-      "category": "PanicPath",
-      "location": "src/dispatcher/echidna_client.rs",
-      "file": "src/dispatcher/echidna_client.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 1 unwrap/expect calls in src/dispatcher/echidna_client.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "src/scheduler/limiter.rs",
-      "file": "src/scheduler/limiter.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 2 unwrap/expect calls in src/scheduler/limiter.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "src/scheduler/job_queue.rs",
-      "file": "src/scheduler/job_queue.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 1 unwrap/expect calls in src/scheduler/job_queue.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "src/api/rate_limit.rs",
-      "file": "src/api/rate_limit.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 1 unwrap/expect calls in src/api/rate_limit.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "PanicPath",
-      "location": "fuzz/fuzz_targets/fuzz_hmac.rs",
-      "file": "fuzz/fuzz_targets/fuzz_hmac.rs",
-      "severity": "Medium",
-      "description": "0 panic sites and 1 unwrap/expect calls in fuzz/fuzz_targets/fuzz_hmac.rs",
-      "recommended_attack": [
-        "memory",
-        "disk"
-      ],
-      "test_context": "production"
-    },
-    {
-      "category": "MutationGap",
-      "location": "Cargo.toml",
-      "file": "Cargo.toml",
-      "severity": "Low",
-      "description": "Rust project has test infrastructure but no mutation-test configuration (cargo-mutants/.cargo-mutants.toml) — add `cargo mutants` to verify test suite kills mutations",
-      "recommended_attack": [],
-      "test_context": "production"
-    }
-  ],
-  "statistics": {
-    "total_lines": 21623,
-    "unsafe_blocks": 15,
-    "panic_sites": 0,
-    "unwrap_calls": 7,
-    "allocation_sites": 83,
-    "io_operations": 17,
-    "threading_constructs": 23
+  "coverage": {
+    "analyzed_files": 150,
+    "candidate_files": 157,
+    "inputs": [
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "a6d642cc13219b85bca70395b8b2dc94968efef63415158a185e939f83b47bdb",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.cargo/audit.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.claude/CLAUDE.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "2a61535edc4f9778c0a476533020f209974063b8738e909ca923e5abc950cfb4",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.claude/settings/mcp.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "Containerfile instruction, JSON-exec and image-reference checks plus extracted shell/Python/JavaScript heuristics; no image resolution or build execution",
+        "content_blake3": "bf9b8ed857f2ce7257c8c785a3d4bbf10f80fb1193e7c78233398b53df8cb4bd",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.clusterfuzzlite/Dockerfile",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "7ee758052d5b0003448b51432b62cc0a482ce3ee56f32b7321eae3de9c5e46a8",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/.clusterfuzzlite/build.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "5a757276293bb5430eadfb90220d63c94122e9f6a03fa127ebfde0b39692e685",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.clusterfuzzlite/project.yaml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.containerignore",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.editorconfig",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.env.example",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "directory",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.git",
+        "reason": "build/vendor directory policy; subtree not enumerated",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.gitattributes",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/CODEOWNERS",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "916cab493d4358b479dd0ecee895044b3bd41ba7fa91f9a731164d6feac49e3a",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/FUNDING.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "42ea6ffd9bd8b994ddd7c80e13c3ec12084b474b4c2787b07a16be8cb1e464c3",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/ISSUE_TEMPLATE/bug_report.yml",
+        "reason": "YAML configuration parse failed: error: line 17 column 1: did not find expected <document start>\n  --> <input>:17:1\n   |\n15 | ### Steps to Reproduce\n16 |\n17 | 1. \n   | ^ did not find expected <document start>\n18 | 2. \n19 | 3. \n   |: did not find expected <document start> at line 17, column 1",
+        "status": "parse_error"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "3a9e2f5645c2d41b0762cb069d541b6eba930d3d20e68cd288426235fdaffc29",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/ISSUE_TEMPLATE/documentation_request.yml",
+        "reason": "YAML configuration parse failed: error: line 18 column 1: did not find expected <document start>\n  --> <input>:18:1\n   |\n16 | ### Current State\n17 |\n18 | <!-- What currently exists or is missing -->\n   | ^ did not find expected <document start>\n19 |\n20 | ### Proposed Improvement\n   |: did not find expected <document start> at line 18, column 1",
+        "status": "parse_error"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "93489da0a960d33d1f652715b80cf5590679167d97286f900e911a35835fbeeb",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/ISSUE_TEMPLATE/feature_request.yml",
+        "reason": "YAML configuration parse failed: error: line 18 column 1: did not find expected <document start>\n  --> <input>:18:1\n   |\n16 | ### Problem Statement\n17 |\n18 | <!-- Describe the problem this feature would solve -->\n   | ^ did not find expected <document start>\n19 |\n20 | ### Target Area\n   |: did not find expected <document start> at line 18, column 1",
+        "status": "parse_error"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "74a786f3e2325da4f11afe534c875d2f09dc7e59f3df52b72a8ed530d575f4b2",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/copilot/coding-agent.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "26ad1077c4a02f9e7d1607d5d3d0b3f075f1c35b7cf4b07010c56455ddb41b33",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/dependabot.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "06e3ffb142b2ea3f1c18185a154665cbdbacbd85899df33f5955bc6de8ed07fb",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/funding.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "c88313796f8aecd68e1e9681cf785e07af8fe1fe84e9880563a3d44747799bdc",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/hooks/validate-a2ml.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "ccadcd75da2ab33d390b3f650020fd51ddb61fcf068e6b50b3e1746f1baf2467",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/hooks/validate-k9.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "2a0d90a4022fa7e2b622e5bc1624dd5153db5b0bdf3b76a859f7072070198d0e",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/label-classifier.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "9fd1a4f4fb3c76956daf811b90554e6ed996fbe9b2dbf0abe2ceca1d11b93b12",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/labels.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/scripts/classify-issue.jq",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/topics.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/actions.lock",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "db85fa472f9fa3c168dfd3030db9b9ae28654d89337b04b12dd680ff3edf273e",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/boj-build.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "561dab3461c2a56b97857ce4e45ba7542fd0313ee2c934791511131b0c4451b8",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/cargo-audit.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "570a1727771740177b777ed5a0d0054eaff0860a297d376bedc86a2907ccf1e7",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/casket-pages.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "c62ce7ae42af489ef75814abeb4982d6cf0ab33caf7531e3824a671f615f62b1",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/cflite_batch.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "2ed07fccc0b3237f568cd8469a260fa9c9e98ed99eda485d4b19409da0e5e1c7",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/cflite_pr.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "cae9e784c155b01456663b31be2ccc8725538f935da95c4cf0d5f108650463ee",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/codeql.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "186e621811465e6f0a1c0c2563547707751273c79b8898c76bcb69a927c7dca9",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/container.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "6bc040e34b6f9b98ac041c02868b621cbb42a6f5ddfd0fec67a27351cff0a68c",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/db-checks.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "5014941617fa905ff109be0066e22022589f73e1a07bfd5375d89683a7c94d86",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/dependabot-automerge.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "e3ed50720adcd17983a9776a73c9116f79dea5fa1ce41a41551cda8947ec35cf",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/docs.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "5daf3719801dd96e40b201b0b83142b690096af234714b9256608bc44581e2a9",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/dogfood-gate.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "bdb90b06fec9f7df9f82cba85421448ced0c5d5e1fc1a62413e0e490dc5cbc58",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/e2e.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "89e7d2567a36c0fd5950568cf2b0f35d61730f8bcf5d5239af06e03570e051e4",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/echidnabot.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "aa9e9dc87946c6b91d0ff2e2c818208d5e4d63f5a3972dee025ee70e6057468b",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/governance.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "eeb2b48a1487eb8ab0c2be87f146ee81e4ed956bcae87d9083286dd83081aae9",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/hypatia-scan.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "46be880bd9ee715280ee44c002886a39c71433dc1405be133703d12fd05a9a58",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/label-triage.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "63cb3408d127faad954cf0d4cf16c344875280ada6ffcaba45cf020681df28cb",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/labels.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "b9f26c194c310da8a24698da84597dade752d9efbd691dc6c320af1b3a2fdc67",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/mirror.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "24a767589d0ccd2db4f20c9522a3eaf9a99a43c3f5ae1b6dd6f44ee414f0c2e4",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/openssf-compliance.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "164be3107c6b5387d78f73ad1593e9d0600c74a3059fc88c911fc20dbe95d7d3",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/proof-safety.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "5975a1bee21b2c78143cd7580ea59b756ac529410274af3b73b8d69817529214",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/publish.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "7cd2398261da6d66eac577a3ab6b3116229bb63f65f50ed40eefa8aff49a5980",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/release.yml",
+        "reason": "Actions runner does not establish a supported default shell",
+        "status": "unsupported"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "be4925a19a6027405dd51625e68d24e009cf522e6207609f4b2f90d233689f07",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/rhodibot.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "9d6a39f8577892dcf10592194c19e43cffc83963cc53e2fa44fe7b4fee09f49d",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/rust-ci.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "82e3723e98fabd945f6181cfb5022a839bcaa7433739ff3b26a3553be91cac7b",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/scorecard.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "955a8db9f67cf5dc3cd5087cb9f80b88a9a7ef8111df8b7a089cd69c7a71e8a8",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/secret-scanner.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "45080623b803dd74966b7617b11ca86ec5e81a10afffc4c78f99768b7a6b9251",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/static-analysis-gate.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "680afac6019f7dc0d968d522d3b080bc7a5ec02be6575c47f1ad2a831c0f9a78",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/stress-test.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "785223ef2278d822dae0274e335187d834b401b4426aca0c151d8b3b3509465a",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.github/workflows/workflow-linter.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.gitignore",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.guix-channel",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/README.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/accessibilitybot.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/cipherbot.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/echidnabot.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/finishbot.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/glambot.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/hypatia.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/rhodibot.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/robot-repo-automaton.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/seambot.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/bot_directives/sustainabot.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/contractiles/Adjustfile.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/contractiles/Intentfile.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "Just recipe/declaration extraction and interpreter-specific shell/Python/JavaScript heuristics; no import, interpolation or task execution",
+        "content_blake3": "8fd3f12c347600745e893c4f60d906148ae8ad81bf45ccf1324fe6e70c9a5a74",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/contractiles/Justfile",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/contractiles/Mustfile.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/contractiles/Trustfile.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/contractiles/bust/Bustfile.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/contractiles/dust/Dustfile.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/0-AI-MANIFEST.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/AGENTIC.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/ECOSYSTEM.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/META.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/NEUROSYM.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/PLAYBOOK.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/STATE.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/anchor/0-AI-MANIFEST.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/anchor/ANCHOR.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/descriptiles/anchor/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/svc/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/svc/self-validating/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "4f6d4d5f89955b054a02762b0399f0efb4ae29afddf852bd8991a05d928b84d7",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/svc/self-validating/examples/ci-config.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "4505299c2e9ffcd1a1daaaddd8944abcbd5be3e0ca20ed8f70a4ac3881b1127d",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/svc/self-validating/examples/project-metadata.k9.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/svc/self-validating/examples/setup-repo.k9.ncl.in",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/svc/self-validating/template-hunt.k9.ncl.in",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/svc/self-validating/template-kennel.k9.ncl.in",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.machine_readable/svc/self-validating/template-yard.k9.ncl.in",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.nojekyll",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/.trusted-base-ignore",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/0-AI-MANIFEST.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/ABI-FFI-README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/ARCHITECTURE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/BRANDING.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/CANONICAL_SOURCE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/CHANGELOG.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/CITATION.cff",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/CODE_OF_CONDUCT.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/CONTRIBUTING.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/Cargo.lock",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "7e73eece256b441d48dd129269d4ec5f99d66802b8f10877056ec77765d0c0c7",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "Containerfile instruction, JSON-exec and image-reference checks plus extracted shell/Python/JavaScript heuristics; no image resolution or build execution",
+        "content_blake3": "321e250945068babbad6f46b68e2278876024c585a50357f6a592e086042767b",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/Containerfile",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/EXPLAINME.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/GOVERNANCE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "Just recipe/declaration extraction and interpreter-specific shell/Python/JavaScript heuristics; no import, interpolation or task execution",
+        "content_blake3": "79723673b69af0c0098aed5b4418f6ce3619f07383ed6a86bcbb79db5bee0e12",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/Justfile",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/LICENSE",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/LICENSES/AGPL-3.0-or-later.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/LICENSES/CC-BY-SA-4.0.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/LICENSES/MPL-2.0.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/MAINTAINERS",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/MAINTAINERS.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/Mustfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/PALIMPSEST.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/README.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/RELEASE_CHECKLIST.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/ROADMAP.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/RSR_COMPLIANCE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/RSR_OUTLINE.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/SECURITY.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/SESSION_SUMMARY_2026-01-29.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/SONNET-TASKS.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/TESTING-REPORT.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "dd040ed36ce26f55bda0443ac47d7c93c86402383a5260463d5463f1175053f0",
+        "kind": "file",
+        "language": "scheme",
+        "path": "/home/runner/work/_temp/work/echidnabot/TESTING-REPORT.scm",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "9f43458a79ac692b01361bcc394592c8ef5e7c993c63ecc698d362ea3a5589e7",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/benches/echidnabot_bench.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "5fb68fd988d921dd037faf8e98621effcf4fe8c046bd3055e5d24305c370edfd",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/codemeta.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "2a0152fb98974782b4899b2fa0ac8e75fcb538453f2570d743e1b2360c4c9953",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/compose.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "5c7ec9e26a3c68a936a1e154e811927ff8fbba049993d638f5ee175dc790aedc",
+        "kind": "file",
+        "language": "nickel",
+        "path": "/home/runner/work/_temp/work/echidnabot/config/echidnabot.ncl",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/contractiles/adjust/Adjustfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/contractiles/bust/Bustfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/contractiles/dust/Dustfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/contractiles/must/Mustfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "7bd2b2dea94f48179bcd3abcddaf0ee29127851cb7fe3db68637e2d719fca0a1",
+        "kind": "file",
+        "language": "haskell",
+        "path": "/home/runner/work/_temp/work/echidnabot/contractiles/trust/Trustfile.hs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/contrib/echidna-stub/Caddyfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "9b34adfefa422950b5a37d678345822daa0eebfa4e5d765aa390fb74ec2bcd7a",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/contrib/echidna-stub/responses/provers.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "3e3c715a58f01d7b66b967a4dc0816b1417c9a5c5b8153c2f8fe5c0d1dea4674",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/contrib/echidna-stub/responses/verify.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/CITATIONS.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/DEVELOPMENT.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/ECHIDNA-INTEGRATION.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/ESTATE-HANDOFFS.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/ESTATE-ROUTING-AUDIT.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/PROOF-STATUS.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "50d8065f01bf76aaaa0d7d5f6cbb01929b28dc8eaaad789cb9686b93ccab27c1",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/casket.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/content/api.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/content/configuration.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/content/getting-started.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/content/index.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/deployment.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/proof-debt.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/tech-debt-2026-05-26.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "tree-sitter-html 0.23.2; markup security checks, embedded CSS parser and JavaScript heuristics; no browser, template-expansion or dataflow proof",
+        "content_blake3": "11be7b70f758349c68b5c9a99d927e159ee77ffaf3491687f2c5208df59efcf3",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/docs/templates/default.html",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "4318174237b2e7adcc4ca2dfdff467d18331ede1b39cd2fe462f2a51dd0f934f",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/echidnabot.example.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "e809e8d973a0549cd4f1af88663013f366e6c1c76e9a2db460736c08da5cd82b",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/echidnabot.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "95e46f8e52b3e6470ef2074bd5591acfcf47d80bf9946e4cd087e7c8b88af6f7",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/examples/web-project-deno.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "2aa64aea497a245e7e30d7d6e15636c1c74b04d2abb591d877008c2bc235bd68",
+        "kind": "file",
+        "language": "zig",
+        "path": "/home/runner/work/_temp/work/echidnabot/ffi/zig/build.zig",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "d21361290c6d1d18f934a5baea4d7c10c2e4695ba38c56f6d8ffbc9d2a2238f3",
+        "kind": "file",
+        "language": "zig",
+        "path": "/home/runner/work/_temp/work/echidnabot/ffi/zig/src/main.zig",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "2150b4109081c8089ba995914aa17bb001a0a04ed3e08ad08f939f4c7855f42e",
+        "kind": "file",
+        "language": "zig",
+        "path": "/home/runner/work/_temp/work/echidnabot/ffi/zig/test/integration_test.zig",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "f140fb0ab578acc7cee87581cc5e3a7ca7659e74c23fb35f22230906649b8b8e",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/fuzz/Cargo.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "581498d4cfe2e4426520fb4e1ab96ef461d7421000f1a69a4c9d20e724217c5e",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/fuzz/fuzz_targets/fuzz_config.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "7bd75ff1439c3d8ffa26c1ec6d542e48fe691eac15a2f3974cc3cc84458f8d8d",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/fuzz/fuzz_targets/fuzz_hmac.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "55866e468f413e17c574d87cb1d9b03de54195192716a21b08e0c0a4e0be73aa",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/fuzz/fuzz_targets/fuzz_webhook_json.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "2f0508f437754d65f576ecf4d2b4a39d162da7021c04f4aed2d1bc5eb607eef5",
+        "kind": "file",
+        "language": "scheme",
+        "path": "/home/runner/work/_temp/work/echidnabot/guix/channels.scm",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "277e54e79e4d74e12b3f0255d4fbad4b6aee4f832f58998cc67683a96afb0912",
+        "kind": "file",
+        "language": "scheme",
+        "path": "/home/runner/work/_temp/work/echidnabot/guix/manifest.scm",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "a17b5bd3d0acd0d77b8eae304777596d34bf6122c690d04bedf7d01144621b93",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/hooks/pre-commit-tsjs-blocker.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "92c90459ee72807ca0c15ba682387f8b885f9ce3d9eaefa522affa1aa68e40d3",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/hooks/validate-codeql.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "128132f05be41b6f27c79158de53e9abf1eb2ce5e759ade0f746a7479286461e",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/hooks/validate-permissions.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "ef97c962b035ec84e3b20a0935493cb41331a656f1f0ae3c75fdc359be8d075a",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/hooks/validate-sha-pins.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "4ab5184751b81a3a18d97bc2aa639771955a12499f328047dcec2058d0d0da65",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/hooks/validate-spdx.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/migrations/20260602000001_initial_schema.sql",
+        "reason": "no source adapter; project manifest checks are not whole-file analysis",
+        "status": "unsupported"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/migrations/20261008000001_proof_obligations.sql",
+        "reason": "no source adapter; project manifest checks are not whole-file analysis",
+        "status": "unsupported"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "10ddccc8fa7adf5837091eb094c1b9ae001ac257d2cbf09efcb97b8f01e63a05",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/mise.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/arch/PKGBUILD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/aur/.SRCINFO",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/aur/PKGBUILD",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/chocolatey/echidnabot.nuspec",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/debian/control",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/debian/rules",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "086802a6f50f614b6d1720a7a41a53f3fe1fa0b1224519884552d9eddf34ae16",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/flatpak/dev.hyperpolymath.Echidnabot.yml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/macports/Portfile",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/rpm/echidnabot.spec",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "a0fb38e2b0073cf1717fcf7baf42820b7b95fc4a1d40e404865022cb08526fcd",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/scoop/echidnabot.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "YAML budgeted parser, recursive configuration security checks and recognized Actions run-step interpreter heuristics; duplicate keys rejected; no expression expansion, application-schema or dataflow proof",
+        "content_blake3": "09378bd696d0bc1048e67db9b2a094b26bbc37655a7d1f968d6ffafae748628b",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/packaging/winget/echidnabot.yaml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/ECHO-TYPES-AUDIT.adoc",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "bca505af2b518dd8e08e41a8121580bf8b58f23ebe6faf58c9448050c5a79a71",
+        "kind": "file",
+        "language": "agda",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/agda/FixtureIdentity.agda",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "28d163de7e1a53d637f3466d0495c96a96a4e21f9abb48bbb500fce4252685e2",
+        "kind": "file",
+        "language": "agda",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/agda/ReceiptBoundary.agda",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "b89fdb593d4fc2ac4137dd3e531ffce1650282bc08e0808febab269383bafb54",
+        "kind": "file",
+        "language": "coq",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/coq/admitted_stub.v",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "c09a1a5a61f673dabc0a0daf3561d3f67bccc38f2839612f83ff389aeb8aa88a",
+        "kind": "file",
+        "language": "coq",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/coq/trivial_ok.v",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "5183629cfe4e8edaf37b9e41074c997c2c86188063e3114de5a09f7f4ce60256",
+        "kind": "file",
+        "language": "lean",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/lean/sorry_stub.lean",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "f6baf98ea711bac94f68b3ca9b989d29ad86e78694a222473c5c601d64bb1f2a",
+        "kind": "file",
+        "language": "lean",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/lean/trivial_ok.lean",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "f4e289258b4edbeaed60d39ab86452f46183dff90b9ca5c8bfb028d32a9b1838",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/test_fixtures/trivial_coq.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "7be550cea6614bb485b0641172bb779a08f252c4cb67230dc783a92fbac51b4e",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/test_fixtures/trivial_lean.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "243f093c1f8f42e3b7500afd14ebebc1dbc2a2180dc0f65a926cec7ddeba411c",
+        "kind": "file",
+        "language": "lean",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/theory/lean/ReceiptBoundary.lean",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/theory/lean/lean-toolchain",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "0861e54ec77de03634e1070707b4e60e9b2cf97caeb6281ccfecdc6967066370",
+        "kind": "file",
+        "language": "coq",
+        "path": "/home/runner/work/_temp/work/echidnabot/proofs/theory/rocq/ReceiptBoundary.v",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/reports/audits/assail-classifications.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "TOML parser and recursive configuration security checks; duplicate keys rejected; no application-schema or dataflow proof",
+        "content_blake3": "56cf888252b46e4452940ad9b05a56e5280feeead2105086fcbeb1f6b0c7d74c",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/rust-toolchain.toml",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "196c0a5967cb7ad4aa5345b117948d473ddf3c5cbb8c51b4dd966e18756d37a3",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/scripts/bootstrap.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "d90952505fc02bad6ac888638d90f5aa17e6848c87e586771c10a7805c487a3a",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/scripts/check-agda-proofs.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "8c8cecf3e544983751d961bc8281264c8f393ff5d9f8d74afabbfba65aedfb1e",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/scripts/check-theory-rechecks.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "d96d53f7d65b95b88de1a40aa43a4a53f411e654c53e9a68e7b6cb8578bb3188",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/scripts/dev-container.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "f44f12c25dfd31a0d676d2292279603c40636416baaf1547176aeb53aeab66f9",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/scripts/governance/apply-branch-protection.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "4f85987213399c89c1383051094a82df1c7b35d36955b9dc4c013c34b4a3edb3",
+        "kind": "file",
+        "language": "idris",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/abi/Foreign.idr",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "297abe6554df60f48009ceb8a970a1e49b42775e6c4d90b9eacb472538baf0f2",
+        "kind": "file",
+        "language": "idris",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/abi/Layout.idr",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "df7fe660defc230bb68b334fe9b118b261cdaf3d67f45f708419096013ce1405",
+        "kind": "file",
+        "language": "idris",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/abi/Types.idr",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "6774650cb540ab4e35649cedd6f860d2ff1e05bb6cf86071985db19bb6761684",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/adapters/bitbucket.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "62153ea6003b2de326de8df6b05fb4df274eab5fd4e8442214269967bd492375",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/adapters/codeberg.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "06d18c80a2b61e400ebd826514806293eeb757eb49d4d371faa00884a4a3d1aa",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/adapters/github.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "55536b93a53cc90499371d60f0b11779244b9d919ce453d4508c4f70cea51ffa",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/adapters/gitlab.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "7fed52dab43e876a43874046b677467426d5c82d4a1c351865d6ca879ccdf6b4",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/adapters/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "b9e2b6249d804403650017f2fe36c12a3421c838d0a20661e438ef2d8733f05e",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/api/auth.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "cecfc974fc36dd84d6c139124817fb9093b2cf023d68c38c83d7e8bd35949ca1",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/api/graphql.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "9652d1b66a3b8c4f25302749ff111ee9308cf02c7c2adef6d605ebd484d8b404",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/api/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "3a9253646dda72cb73d3998b70644f60320b61bafcb1f85f5ede190c4b0c6945",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/api/rate_limit.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "d862838251406e4e3ee7580a8c99e51d21d57548427b8b7fb7db331b52a6d1c0",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/api/webhooks.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "9c7011e334e16a36b4cbaf52f6c8b0f43d603c6db1e61a6d7597d5703251e66b",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/config.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "eb6e8ded1ddd421ec9e2200fce483c7323092767cf2d18ace39d1222c40011e4",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/dispatcher/echidna_client.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "02a1c654ad4b76ea84fc12772a7fc9f6d64dcdba63366784089f0dd7d4926601",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/dispatcher/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "0070ebcc600c3bb12943f7eb6e2b864b243cc23f5029968f9cf0bce15908f18d",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/dispatcher/prove_result.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "fb088386f053b6bed350a13dcccfa86570e32d512a2788a51b0aae4d85002057",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/dispatcher/verisim_echidna.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "2c0b69530b95018b61fa6ee7b229660bfa6d0d64aa696ab2ad3d3903fd2cb17c",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/error.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "d522072cc8fff10b50bffeefae37d5a18d866b2ae243723858b416be1e0e679c",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/executor/container.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "f52e38ea531b370d99b90711a60f5c7b138aa2b487c86e755610fdd061fc8f8b",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/executor/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "1d9f95a386b55858307cc59ae9eaab347cab59687e96db29dcaf6b8d117529ea",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/feedback/corpus_delta.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "3108de66b4c093f6096cc9492a0a08cb6d3de7978246e981a7d3587581a0002b",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/feedback/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "2bc870e06a537e969d3e0c0cf9c4e6ffedaccf595d1436c3ecd57d5bcf7198a2",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/feedback/reranker.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "4c02967936e08ba2169494e656355ece242ae846339c79955cc04df023fa14f3",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/fleet/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "6cbd0d425f36d2db7d00d5ca28c6fd0a07dbc5823d933914c7a9ce3731b5a554",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/ids.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "dd4a6ebddf878909dc0da0db1d9105c697279198f14edae8e179e70a9d4637d0",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/lib.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "684940b3e3f0a0bdd013d53cef3573198c4474ea347b5980f118bbe1f9ba6c1c",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/llm.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "116cbe461258ba2e50dc12eabed608a1823abb7015e4fee579ca4fa945801ca0",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/main.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "198484c4f0691559773dcb44bb452528eafd58d97263f59185b5b00be52230ef",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/modes/directives.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "7d8260c6eee08419eab0dfb13c9f68e20c70c00d72ae39c840ee5b329a7f7355",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/modes/manifest.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "5641ccbc518d1d17d04e3f0a6c40c72c208f0dfeb916d21acc99cf2f886168ac",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/modes/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "031723a48e380dfb9bb962282797c85feff2ec61673eeb5d55606f10759828af",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/observability.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "858c17f4a564d34f0ebf3f1a5e68c3f7b45a4277c8504404f0b7c8152119ed58",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/result_formatter.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "f0acd4f9bfa09f4dfe3243ab689c53ee14bdd1c287ce2990e9ce736a538f065d",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/scheduler/job_queue.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "38436f1c92834e1fab930a38a2780a5f4d4b7eeab6cf4ed6a1ccba07074948b1",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/scheduler/limiter.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "5a5f665d42cae44ac50e7885bbf00614216bfe8c3eb185fcb0cb6ab191543f70",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/scheduler/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "891fb7ce6dedee3d774cdf752f7bce15cd32b85f81eabb5380d122e64bd0080b",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/scheduler/retry.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "359314ca771c2b87f82df322b59ac64bef7004f67ffdca1b7b7efb64bdb49cbf",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/shutdown.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "3dabe4ad2f1d136476ef9d8ff6db1298cd56a9bc1809a916823a9c831ba45710",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/store/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "acaf31ad9278e448933ef60e5e285c6c596a72abdef63b73f0d808de08488d84",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/store/models.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "dc4325c0d57f5e7ff87ed34a34659fb9a94e9c6fdf0c9972989bf99b6e1dd6f3",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/store/sqlite.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "eb4fc334fad650a233871fbdcb8ceb10082fc2ab1d25c1b9a8bcbba837c18f2b",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/trust/axiom_tracker.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "308715a304356253191f5c8b6238ee5df40ee93896fe93526354a41330ca97ef",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/trust/confidence.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "1cfd40fec5bc555e50186862e514426ada28c952adfda6e337fb955693b732ed",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/trust/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "2bfc62d880bab3a751c06103ed8d1baf5661e6b9735af4edb1d7f8dd8341683a",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/src/trust/solver_integrity.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "7b9991c44719416a10039d8774e2e24bc96d13e5fb61541ad730826730985909",
+        "kind": "file",
+        "language": "shell",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/dev-tools.sh",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/fixtures/manifest/ephapax.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/fixtures/manifest/valence-shell.a2ml",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "9f4cf7aae1cec2131fc813040984e13966a4200ab672ffb9600fa3ebd7893133",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/integration_tests.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "059386cde3902f5b87fd876546d9214d992a7fb879b9118981929a53c79101f6",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/lifecycle.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "76eb8082b08795ee18b8158c28b904fbf39101646c48bb0a7a1fb90829cc3c20",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/live_echidna.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "26cbc37b8928c550c62e3afbdd14dfc42d63ee2601fad952b355382ce1a8e25e",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/property_tests.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "8c5c72bb3fbfd8c863cf39774f14a7189ea31e714c971cfeaaf2a82975c82956",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/protocol_contract.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "f0ae33ffe3c87d3898b17ee0f7018d710f910b09d3277a6a144298e5e5198bef",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/regressions/mod.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "364a89f994d395a7eae460f5a8e42c6f000f7928b1e31f1350670cbfcae0e2da",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/seam_test.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": "language and cross-language heuristics; no parser coverage claim",
+        "content_blake3": "3e7161765a88e1812306ea44e458df8d968252a4afdbf0246f3ae47a5927a46b",
+        "kind": "file",
+        "language": "rust",
+        "path": "/home/runner/work/_temp/work/echidnabot/tests/smoke.rs",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/wiki/Architecture.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/wiki/ECHIDNA-Integration.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/wiki/FAQ.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/wiki/Getting-Started.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/wiki/Home.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/wiki/Supported-Provers.md",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/www/.well-known/ai.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/www/.well-known/consent-required.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/www/.well-known/dc.xml",
+        "reason": "no source adapter; project manifest checks are not whole-file analysis",
+        "status": "unsupported"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/www/.well-known/humans.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      },
+      {
+        "analysis": "JSON parser and recursive configuration security checks; package.json scripts receive POSIX-style shell heuristics; duplicate keys rejected; no platform-shell, application-schema or dataflow proof",
+        "content_blake3": "e2daa52925616baf92dca3472fe8ebf5f02440380db75a940bc5c02a19068d76",
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/www/.well-known/provenance.json",
+        "reason": null,
+        "status": "analyzed"
+      },
+      {
+        "analysis": null,
+        "content_blake3": null,
+        "kind": "file",
+        "language": "unknown",
+        "path": "/home/runner/work/_temp/work/echidnabot/www/.well-known/security.txt",
+        "reason": "extension outside declared source/config scope",
+        "status": "excluded"
+      }
+    ],
+    "mode": "static_assail",
+    "scope": "Explicit regular-file inventory; named build/vendor directories and symlinks excluded without following them. Selected unknown source/config formats are unsupported; other extensions are outside declared scope. Complete means every candidate finished its stated adapter, whose parsing and heuristic depth is recorded per input; it is not complete semantic security coverage, a dataflow proof or an execution result. No dynamic attacks executed.",
+    "status": "partial"
   },
-  "file_statistics": [
-    {
-      "file_path": "scripts/governance/apply-branch-protection.sh",
-      "lines": 97,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "contractiles/trust/Trustfile.hs",
-      "lines": 195,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "tests/seam_test.rs",
-      "lines": 756,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "tests/smoke.rs",
-      "lines": 217,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "tests/lifecycle.rs",
-      "lines": 499,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 3
-    },
-    {
-      "file_path": "tests/integration_tests.rs",
-      "lines": 646,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "proofs/lean/sorry_stub.lean",
-      "lines": 7,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "proofs/coq/admitted_stub.v",
-      "lines": 11,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/store/sqlite.rs",
-      "lines": 934,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 0,
-      "io_operations": 3,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/feedback/corpus_delta.rs",
-      "lines": 500,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "src/feedback/reranker.rs",
-      "lines": 362,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 7,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "src/main.rs",
-      "lines": 1550,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 8,
-      "allocation_sites": 14,
-      "io_operations": 2,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "src/dispatcher/echidna_client.rs",
-      "lines": 656,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/error.rs",
-      "lines": 67,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 1,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/adapters/bitbucket.rs",
-      "lines": 286,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/adapters/codeberg.rs",
-      "lines": 459,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 3,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/adapters/gitlab.rs",
-      "lines": 287,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/adapters/mod.rs",
-      "lines": 353,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 8,
-      "io_operations": 2,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/observability.rs",
-      "lines": 446,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/scheduler/retry.rs",
-      "lines": 619,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 3
-    },
-    {
-      "file_path": "src/scheduler/limiter.rs",
-      "lines": 248,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 2,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "src/scheduler/job_queue.rs",
-      "lines": 370,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "src/result_formatter.rs",
-      "lines": 283,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 2,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/trust/axiom_tracker.rs",
-      "lines": 411,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/shutdown.rs",
-      "lines": 413,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 3
-    },
-    {
-      "file_path": "src/api/graphql.rs",
-      "lines": 700,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 9,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "src/api/rate_limit.rs",
-      "lines": 158,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "safe_unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "src/api/webhooks.rs",
-      "lines": 1225,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 11,
-      "allocation_sites": 4,
-      "io_operations": 0,
-      "threading_constructs": 1
-    },
-    {
-      "file_path": "src/executor/container.rs",
-      "lines": 852,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "safe_unwrap_calls": 2,
-      "allocation_sites": 14,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Foreign.idr",
-      "lines": 210,
-      "unsafe_blocks": 12,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "src/abi/Types.idr",
-      "lines": 233,
-      "unsafe_blocks": 1,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "ffi/zig/test/integration_test.zig",
-      "lines": 183,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 2
-    },
-    {
-      "file_path": "ffi/zig/src/main.zig",
-      "lines": 275,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 0,
-      "allocation_sites": 1,
-      "io_operations": 0,
-      "threading_constructs": 0
-    },
-    {
-      "file_path": "fuzz/fuzz_targets/fuzz_hmac.rs",
-      "lines": 53,
-      "unsafe_blocks": 0,
-      "panic_sites": 0,
-      "unwrap_calls": 1,
-      "allocation_sites": 0,
-      "io_operations": 0,
-      "threading_constructs": 0
-    }
-  ],
-  "recommended_attacks": [
-    "cpu",
-    "disk",
-    "memory",
-    "concurrency"
-  ],
   "dependency_graph": {
     "edges": [
       {
-        "from": "tests/seam_test.rs",
-        "to": "tests/smoke.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
+        "from": "Containerfile",
+        "relation": "shared_dir:",
+        "to": "Justfile",
+        "weight": 1
       },
       {
-        "from": "tests/smoke.rs",
-        "to": "tests/lifecycle.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
+        "from": ".github/workflows/boj-build.yml",
+        "relation": "shared_dir:.github/workflows",
+        "to": ".github/workflows/casket-pages.yml",
+        "weight": 1
       },
       {
-        "from": "tests/lifecycle.rs",
-        "to": "tests/integration_tests.rs",
-        "relation": "shared_dir:tests",
-        "weight": 1.0
+        "from": ".github/workflows/casket-pages.yml",
+        "relation": "shared_dir:.github/workflows",
+        "to": ".github/workflows/db-checks.yml",
+        "weight": 1
       },
       {
-        "from": "src/scheduler/retry.rs",
-        "to": "src/scheduler/limiter.rs",
-        "relation": "shared_dir:src/scheduler",
-        "weight": 1.0
+        "from": ".github/workflows/db-checks.yml",
+        "relation": "shared_dir:.github/workflows",
+        "to": ".github/workflows/dogfood-gate.yml",
+        "weight": 1
       },
       {
-        "from": "src/scheduler/limiter.rs",
-        "to": "src/scheduler/job_queue.rs",
-        "relation": "shared_dir:src/scheduler",
-        "weight": 1.0
+        "from": ".github/workflows/dogfood-gate.yml",
+        "relation": "shared_dir:.github/workflows",
+        "to": ".github/workflows/echidnabot.yml",
+        "weight": 1
       },
       {
-        "from": "src/adapters/bitbucket.rs",
-        "to": "src/adapters/codeberg.rs",
-        "relation": "shared_dir:src/adapters",
-        "weight": 1.0
+        "from": ".github/workflows/echidnabot.yml",
+        "relation": "shared_dir:.github/workflows",
+        "to": ".github/workflows/proof-safety.yml",
+        "weight": 1
       },
       {
-        "from": "src/adapters/codeberg.rs",
-        "to": "src/adapters/gitlab.rs",
-        "relation": "shared_dir:src/adapters",
-        "weight": 1.0
+        "from": ".github/workflows/proof-safety.yml",
+        "relation": "shared_dir:.github/workflows",
+        "to": ".github/workflows/static-analysis-gate.yml",
+        "weight": 1
       },
       {
-        "from": "src/adapters/gitlab.rs",
-        "to": "src/adapters/mod.rs",
-        "relation": "shared_dir:src/adapters",
-        "weight": 1.0
-      },
-      {
-        "from": "src/main.rs",
+        "from": "src/config.rs",
+        "relation": "shared_dir:src",
         "to": "src/error.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "src/error.rs",
+        "relation": "shared_dir:src",
+        "to": "src/main.rs",
+        "weight": 1
+      },
+      {
+        "from": "src/main.rs",
+        "relation": "shared_dir:src",
         "to": "src/observability.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "src/observability.rs",
+        "relation": "shared_dir:src",
         "to": "src/result_formatter.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "src/result_formatter.rs",
+        "relation": "shared_dir:src",
         "to": "src/shutdown.rs",
-        "relation": "shared_dir:src",
-        "weight": 1.0
-      },
-      {
-        "from": "src/feedback/corpus_delta.rs",
-        "to": "src/feedback/reranker.rs",
-        "relation": "shared_dir:src/feedback",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "src/abi/Foreign.idr",
-        "to": "src/abi/Types.idr",
         "relation": "shared_dir:src/abi",
-        "weight": 1.0
+        "to": "src/abi/Types.idr",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/bitbucket.rs",
+        "relation": "shared_dir:src/adapters",
+        "to": "src/adapters/codeberg.rs",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/codeberg.rs",
+        "relation": "shared_dir:src/adapters",
+        "to": "src/adapters/gitlab.rs",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/gitlab.rs",
+        "relation": "shared_dir:src/adapters",
+        "to": "src/adapters/mod.rs",
+        "weight": 1
+      },
+      {
+        "from": "src/api/auth.rs",
+        "relation": "shared_dir:src/api",
+        "to": "src/api/graphql.rs",
+        "weight": 1
       },
       {
         "from": "src/api/graphql.rs",
+        "relation": "shared_dir:src/api",
         "to": "src/api/rate_limit.rs",
-        "relation": "shared_dir:src/api",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "src/api/rate_limit.rs",
+        "relation": "shared_dir:src/api",
         "to": "src/api/webhooks.rs",
-        "relation": "shared_dir:src/api",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/governance/apply-branch-protection.sh",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/governance/apply-branch-protection.sh",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "scripts/governance/apply-branch-protection.sh",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "contractiles/trust/Trustfile.hs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "contractiles/trust/Trustfile.hs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "contractiles/trust/Trustfile.hs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/seam_test.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "tests/seam_test.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "tests/seam_test.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "tests/smoke.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "tests/smoke.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "tests/smoke.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "tests/lifecycle.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "tests/lifecycle.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "tests/lifecycle.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "tests/integration_tests.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/integration_tests.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "tests/integration_tests.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "proofs/lean/sorry_stub.lean",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "proofs/lean/sorry_stub.lean",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "proofs/lean/sorry_stub.lean",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "proofs/coq/admitted_stub.v",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "proofs/coq/admitted_stub.v",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "proofs/coq/admitted_stub.v",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 3.0
-      },
-      {
-        "from": "src/store/sqlite.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/store/sqlite.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/store/sqlite.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 1
       },
       {
         "from": "src/feedback/corpus_delta.rs",
-        "to": "Networking",
+        "relation": "shared_dir:src/feedback",
+        "to": "src/feedback/reranker.rs",
+        "weight": 1
+      },
+      {
+        "from": "src/scheduler/job_queue.rs",
+        "relation": "shared_dir:src/scheduler",
+        "to": "src/scheduler/limiter.rs",
+        "weight": 1
+      },
+      {
+        "from": "src/scheduler/limiter.rs",
+        "relation": "shared_dir:src/scheduler",
+        "to": "src/scheduler/retry.rs",
+        "weight": 1
+      },
+      {
+        "from": "tests/dev-tools.sh",
+        "relation": "shared_dir:tests",
+        "to": "tests/integration_tests.rs",
+        "weight": 1
+      },
+      {
+        "from": "tests/integration_tests.rs",
+        "relation": "shared_dir:tests",
+        "to": "tests/lifecycle.rs",
+        "weight": 1
+      },
+      {
+        "from": "tests/lifecycle.rs",
+        "relation": "shared_dir:tests",
+        "to": "tests/protocol_contract.rs",
+        "weight": 1
+      },
+      {
+        "from": "tests/protocol_contract.rs",
+        "relation": "shared_dir:tests",
+        "to": "tests/seam_test.rs",
+        "weight": 1
+      },
+      {
+        "from": "tests/seam_test.rs",
+        "relation": "shared_dir:tests",
+        "to": "tests/smoke.rs",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/boj-build.yml",
         "relation": "framework",
-        "weight": 2.0
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/boj-build.yml",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/boj-build.yml",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/casket-pages.yml",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/casket-pages.yml",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/casket-pages.yml",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/db-checks.yml",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/db-checks.yml",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/db-checks.yml",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/dogfood-gate.yml",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/dogfood-gate.yml",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/dogfood-gate.yml",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/echidnabot.yml",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/echidnabot.yml",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/echidnabot.yml",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/proof-safety.yml",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/proof-safety.yml",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/proof-safety.yml",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/static-analysis-gate.yml",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/static-analysis-gate.yml",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": ".github/workflows/static-analysis-gate.yml",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": ".machine_readable/contractiles/Justfile",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": ".machine_readable/contractiles/Justfile",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": ".machine_readable/contractiles/Justfile",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "Containerfile",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "Containerfile",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "Containerfile",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "Justfile",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "Justfile",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "Justfile",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "contractiles/trust/Trustfile.hs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "contractiles/trust/Trustfile.hs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "contractiles/trust/Trustfile.hs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "ffi/zig/src/main.zig",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 4
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 4
+      },
+      {
+        "from": "ffi/zig/test/integration_test.zig",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 4
+      },
+      {
+        "from": "fuzz/fuzz_targets/fuzz_hmac.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "fuzz/fuzz_targets/fuzz_hmac.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "fuzz/fuzz_targets/fuzz_hmac.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "proofs/coq/admitted_stub.v",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 3
+      },
+      {
+        "from": "proofs/coq/admitted_stub.v",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 3
+      },
+      {
+        "from": "proofs/coq/admitted_stub.v",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 3
+      },
+      {
+        "from": "proofs/lean/sorry_stub.lean",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 3
+      },
+      {
+        "from": "proofs/lean/sorry_stub.lean",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 3
+      },
+      {
+        "from": "proofs/lean/sorry_stub.lean",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 3
+      },
+      {
+        "from": "scripts/bootstrap.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "scripts/bootstrap.sh",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "scripts/bootstrap.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "scripts/governance/apply-branch-protection.sh",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "scripts/governance/apply-branch-protection.sh",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "scripts/governance/apply-branch-protection.sh",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "src/abi/Foreign.idr",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 36
+      },
+      {
+        "from": "src/abi/Foreign.idr",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 36
+      },
+      {
+        "from": "src/abi/Foreign.idr",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 36
+      },
+      {
+        "from": "src/abi/Types.idr",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 3
+      },
+      {
+        "from": "src/abi/Types.idr",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 3
+      },
+      {
+        "from": "src/abi/Types.idr",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 3
+      },
+      {
+        "from": "src/adapters/bitbucket.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/bitbucket.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/bitbucket.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/codeberg.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/codeberg.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/codeberg.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/gitlab.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/gitlab.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/gitlab.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/mod.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/mod.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "src/adapters/mod.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "src/api/auth.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 2
+      },
+      {
+        "from": "src/api/auth.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 2
+      },
+      {
+        "from": "src/api/auth.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 2
+      },
+      {
+        "from": "src/api/graphql.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 2
+      },
+      {
+        "from": "src/api/graphql.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 2
+      },
+      {
+        "from": "src/api/graphql.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 2
+      },
+      {
+        "from": "src/api/rate_limit.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 5
+      },
+      {
+        "from": "src/api/rate_limit.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 5
+      },
+      {
+        "from": "src/api/rate_limit.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 5
+      },
+      {
+        "from": "src/api/webhooks.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 2
+      },
+      {
+        "from": "src/api/webhooks.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 2
+      },
+      {
+        "from": "src/api/webhooks.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 2
+      },
+      {
+        "from": "src/config.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "src/config.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "src/config.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "src/dispatcher/echidna_client.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 3
+      },
+      {
+        "from": "src/dispatcher/echidna_client.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 3
+      },
+      {
+        "from": "src/dispatcher/echidna_client.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 3
+      },
+      {
+        "from": "src/error.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "src/error.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "src/error.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
+      },
+      {
+        "from": "src/executor/container.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 1
+      },
+      {
+        "from": "src/executor/container.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 1
+      },
+      {
+        "from": "src/executor/container.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 1
       },
       {
         "from": "src/feedback/corpus_delta.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 2.0
+        "to": "WebServer",
+        "weight": 2
       },
       {
         "from": "src/feedback/corpus_delta.rs",
-        "to": "Database",
         "relation": "framework",
-        "weight": 2.0
+        "to": "Database",
+        "weight": 2
+      },
+      {
+        "from": "src/feedback/corpus_delta.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 2
       },
       {
         "from": "src/feedback/reranker.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 2.0
+        "to": "WebServer",
+        "weight": 2
       },
       {
         "from": "src/feedback/reranker.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 2.0
+        "to": "Database",
+        "weight": 2
       },
       {
         "from": "src/feedback/reranker.rs",
-        "to": "Database",
         "relation": "framework",
-        "weight": 2.0
+        "to": "Networking",
+        "weight": 2
       },
       {
         "from": "src/main.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 2.0
+        "to": "WebServer",
+        "weight": 2
       },
       {
         "from": "src/main.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 2.0
+        "to": "Database",
+        "weight": 2
       },
       {
         "from": "src/main.rs",
-        "to": "Database",
         "relation": "framework",
-        "weight": 2.0
-      },
-      {
-        "from": "src/dispatcher/echidna_client.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/dispatcher/echidna_client.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/dispatcher/echidna_client.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/error.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/error.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/error.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/bitbucket.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/bitbucket.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/bitbucket.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/codeberg.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/codeberg.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/codeberg.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/gitlab.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/gitlab.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/gitlab.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/mod.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/mod.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/adapters/mod.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 2
       },
       {
         "from": "src/observability.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "to": "WebServer",
+        "weight": 1
       },
       {
         "from": "src/observability.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
+        "to": "Database",
+        "weight": 1
       },
       {
         "from": "src/observability.rs",
-        "to": "Database",
         "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/scheduler/retry.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/scheduler/retry.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/scheduler/retry.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/scheduler/limiter.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/scheduler/limiter.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/scheduler/limiter.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/scheduler/job_queue.rs",
-        "to": "Networking",
-        "relation": "framework",
-        "weight": 5.0
-      },
-      {
-        "from": "src/scheduler/job_queue.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 5.0
-      },
-      {
-        "from": "src/scheduler/job_queue.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 5.0
+        "weight": 1
       },
       {
         "from": "src/result_formatter.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 1.0
+        "to": "WebServer",
+        "weight": 1
       },
       {
         "from": "src/result_formatter.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 1.0
+        "to": "Database",
+        "weight": 1
       },
       {
         "from": "src/result_formatter.rs",
-        "to": "Database",
         "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "src/trust/axiom_tracker.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 1
       },
       {
-        "from": "src/trust/axiom_tracker.rs",
+        "from": "src/scheduler/job_queue.rs",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 5
       },
       {
-        "from": "src/trust/axiom_tracker.rs",
-        "to": "Database",
+        "from": "src/scheduler/job_queue.rs",
         "relation": "framework",
-        "weight": 1.0
+        "to": "Database",
+        "weight": 5
+      },
+      {
+        "from": "src/scheduler/job_queue.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 5
+      },
+      {
+        "from": "src/scheduler/limiter.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 6
+      },
+      {
+        "from": "src/scheduler/limiter.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 6
+      },
+      {
+        "from": "src/scheduler/limiter.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 6
+      },
+      {
+        "from": "src/scheduler/retry.rs",
+        "relation": "framework",
+        "to": "WebServer",
+        "weight": 6
+      },
+      {
+        "from": "src/scheduler/retry.rs",
+        "relation": "framework",
+        "to": "Database",
+        "weight": 6
+      },
+      {
+        "from": "src/scheduler/retry.rs",
+        "relation": "framework",
+        "to": "Networking",
+        "weight": 6
       },
       {
         "from": "src/shutdown.rs",
-        "to": "Networking",
         "relation": "framework",
-        "weight": 6.0
+        "to": "WebServer",
+        "weight": 6
       },
       {
         "from": "src/shutdown.rs",
-        "to": "WebServer",
         "relation": "framework",
-        "weight": 6.0
+        "to": "Database",
+        "weight": 6
       },
       {
         "from": "src/shutdown.rs",
-        "to": "Database",
         "relation": "framework",
-        "weight": 6.0
-      },
-      {
-        "from": "src/api/graphql.rs",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
+        "weight": 6
       },
       {
-        "from": "src/api/graphql.rs",
+        "from": "src/store/sqlite.rs",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
+        "weight": 1
       },
       {
-        "from": "src/api/graphql.rs",
+        "from": "src/store/sqlite.rs",
+        "relation": "framework",
         "to": "Database",
-        "relation": "framework",
-        "weight": 2.0
+        "weight": 1
       },
       {
-        "from": "src/api/rate_limit.rs",
+        "from": "src/store/sqlite.rs",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 3.0
+        "weight": 1
       },
       {
-        "from": "src/api/rate_limit.rs",
+        "from": "src/trust/axiom_tracker.rs",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 3.0
+        "weight": 1
       },
       {
-        "from": "src/api/rate_limit.rs",
+        "from": "src/trust/axiom_tracker.rs",
+        "relation": "framework",
         "to": "Database",
-        "relation": "framework",
-        "weight": 3.0
+        "weight": 1
       },
       {
-        "from": "src/api/webhooks.rs",
+        "from": "src/trust/axiom_tracker.rs",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 2.0
+        "weight": 1
       },
       {
-        "from": "src/api/webhooks.rs",
+        "from": "tests/dev-tools.sh",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 2.0
+        "weight": 1
       },
       {
-        "from": "src/api/webhooks.rs",
+        "from": "tests/dev-tools.sh",
+        "relation": "framework",
         "to": "Database",
-        "relation": "framework",
-        "weight": 2.0
+        "weight": 1
       },
       {
-        "from": "src/executor/container.rs",
+        "from": "tests/dev-tools.sh",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 1
       },
       {
-        "from": "src/executor/container.rs",
+        "from": "tests/integration_tests.rs",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 1
       },
       {
-        "from": "src/executor/container.rs",
+        "from": "tests/integration_tests.rs",
+        "relation": "framework",
         "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 1
       },
       {
-        "from": "src/abi/Foreign.idr",
+        "from": "tests/integration_tests.rs",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 36.0
+        "weight": 1
       },
       {
-        "from": "src/abi/Foreign.idr",
+        "from": "tests/lifecycle.rs",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 36.0
+        "weight": 6
       },
       {
-        "from": "src/abi/Foreign.idr",
+        "from": "tests/lifecycle.rs",
+        "relation": "framework",
         "to": "Database",
-        "relation": "framework",
-        "weight": 36.0
+        "weight": 6
       },
       {
-        "from": "src/abi/Types.idr",
+        "from": "tests/lifecycle.rs",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 3.0
+        "weight": 6
       },
       {
-        "from": "src/abi/Types.idr",
+        "from": "tests/protocol_contract.rs",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 3.0
+        "weight": 2
       },
       {
-        "from": "src/abi/Types.idr",
+        "from": "tests/protocol_contract.rs",
+        "relation": "framework",
         "to": "Database",
-        "relation": "framework",
-        "weight": 3.0
+        "weight": 2
       },
       {
-        "from": "ffi/zig/test/integration_test.zig",
+        "from": "tests/protocol_contract.rs",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 4.0
+        "weight": 2
       },
       {
-        "from": "ffi/zig/test/integration_test.zig",
+        "from": "tests/seam_test.rs",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 4.0
+        "weight": 2
       },
       {
-        "from": "ffi/zig/test/integration_test.zig",
+        "from": "tests/seam_test.rs",
+        "relation": "framework",
         "to": "Database",
-        "relation": "framework",
-        "weight": 4.0
+        "weight": 2
       },
       {
-        "from": "ffi/zig/src/main.zig",
+        "from": "tests/seam_test.rs",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 2
       },
       {
-        "from": "ffi/zig/src/main.zig",
+        "from": "tests/smoke.rs",
+        "relation": "framework",
         "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 2
       },
       {
-        "from": "ffi/zig/src/main.zig",
+        "from": "tests/smoke.rs",
+        "relation": "framework",
         "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 2
       },
       {
-        "from": "fuzz/fuzz_targets/fuzz_hmac.rs",
+        "from": "tests/smoke.rs",
+        "relation": "framework",
         "to": "Networking",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "fuzz/fuzz_targets/fuzz_hmac.rs",
-        "to": "WebServer",
-        "relation": "framework",
-        "weight": 1.0
-      },
-      {
-        "from": "fuzz/fuzz_targets/fuzz_hmac.rs",
-        "to": "Database",
-        "relation": "framework",
-        "weight": 1.0
+        "weight": 2
       }
     ]
+  },
+  "file_statistics": [
+    {
+      "allocation_sites": 0,
+      "file_path": ".github/workflows/boj-build.yml",
+      "io_operations": 1,
+      "lines": 51,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": ".github/workflows/casket-pages.yml",
+      "io_operations": 2,
+      "lines": 94,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": ".github/workflows/db-checks.yml",
+      "io_operations": 2,
+      "lines": 148,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": ".github/workflows/dogfood-gate.yml",
+      "io_operations": 3,
+      "lines": 389,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": ".github/workflows/echidnabot.yml",
+      "io_operations": 1,
+      "lines": 200,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": ".github/workflows/proof-safety.yml",
+      "io_operations": 2,
+      "lines": 70,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": ".github/workflows/static-analysis-gate.yml",
+      "io_operations": 8,
+      "lines": 444,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": ".machine_readable/contractiles/Justfile",
+      "io_operations": 2,
+      "lines": 784,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "Containerfile",
+      "io_operations": 1,
+      "lines": 45,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "Justfile",
+      "io_operations": 2,
+      "lines": 746,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "contractiles/trust/Trustfile.hs",
+      "io_operations": 0,
+      "lines": 195,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 1
+    },
+    {
+      "allocation_sites": 1,
+      "file_path": "ffi/zig/src/main.zig",
+      "io_operations": 0,
+      "lines": 275,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "ffi/zig/test/integration_test.zig",
+      "io_operations": 0,
+      "lines": 183,
+      "panic_sites": 0,
+      "threading_constructs": 2,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "fuzz/fuzz_targets/fuzz_hmac.rs",
+      "io_operations": 0,
+      "lines": 53,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 1
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "proofs/coq/admitted_stub.v",
+      "io_operations": 0,
+      "lines": 11,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 1,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "proofs/lean/sorry_stub.lean",
+      "io_operations": 0,
+      "lines": 7,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 1,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "scripts/bootstrap.sh",
+      "io_operations": 2,
+      "lines": 46,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "scripts/governance/apply-branch-protection.sh",
+      "io_operations": 1,
+      "lines": 97,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "src/abi/Foreign.idr",
+      "io_operations": 0,
+      "lines": 210,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 12,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "src/abi/Types.idr",
+      "io_operations": 0,
+      "lines": 233,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 1,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/adapters/bitbucket.rs",
+      "io_operations": 0,
+      "lines": 286,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 3,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/adapters/codeberg.rs",
+      "io_operations": 0,
+      "lines": 459,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 3,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/adapters/gitlab.rs",
+      "io_operations": 0,
+      "lines": 287,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 2,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 8,
+      "file_path": "src/adapters/mod.rs",
+      "io_operations": 2,
+      "lines": 353,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/api/auth.rs",
+      "io_operations": 0,
+      "lines": 519,
+      "panic_sites": 0,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/api/graphql.rs",
+      "io_operations": 0,
+      "lines": 817,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 10,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "src/api/rate_limit.rs",
+      "io_operations": 0,
+      "lines": 237,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 2,
+      "threading_constructs": 2,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 1
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/api/webhooks.rs",
+      "io_operations": 0,
+      "lines": 1225,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 11,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 2,
+      "file_path": "src/config.rs",
+      "io_operations": 0,
+      "lines": 688,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 8,
+      "file_path": "src/dispatcher/echidna_client.rs",
+      "io_operations": 0,
+      "lines": 1043,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 1
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "src/error.rs",
+      "io_operations": 1,
+      "lines": 72,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 14,
+      "file_path": "src/executor/container.rs",
+      "io_operations": 0,
+      "lines": 852,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 2,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/feedback/corpus_delta.rs",
+      "io_operations": 0,
+      "lines": 499,
+      "panic_sites": 0,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "src/feedback/reranker.rs",
+      "io_operations": 7,
+      "lines": 363,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 14,
+      "file_path": "src/main.rs",
+      "io_operations": 2,
+      "lines": 1683,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 8,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 2,
+      "file_path": "src/observability.rs",
+      "io_operations": 0,
+      "lines": 449,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 2,
+      "file_path": "src/result_formatter.rs",
+      "io_operations": 0,
+      "lines": 285,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/scheduler/job_queue.rs",
+      "io_operations": 0,
+      "lines": 370,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 2,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 1
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "src/scheduler/limiter.rs",
+      "io_operations": 0,
+      "lines": 248,
+      "panic_sites": 0,
+      "threading_constructs": 2,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 2
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "src/scheduler/retry.rs",
+      "io_operations": 0,
+      "lines": 619,
+      "panic_sites": 0,
+      "threading_constructs": 3,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/shutdown.rs",
+      "io_operations": 0,
+      "lines": 413,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 3,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "src/store/sqlite.rs",
+      "io_operations": 4,
+      "lines": 1054,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 3,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 4,
+      "file_path": "src/trust/axiom_tracker.rs",
+      "io_operations": 0,
+      "lines": 592,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "tests/dev-tools.sh",
+      "io_operations": 3,
+      "lines": 71,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "tests/integration_tests.rs",
+      "io_operations": 1,
+      "lines": 654,
+      "panic_sites": 0,
+      "threading_constructs": 0,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 2,
+      "file_path": "tests/lifecycle.rs",
+      "io_operations": 0,
+      "lines": 500,
+      "panic_sites": 0,
+      "threading_constructs": 3,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "tests/protocol_contract.rs",
+      "io_operations": 0,
+      "lines": 400,
+      "panic_sites": 0,
+      "safe_unwrap_calls": 1,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "tests/seam_test.rs",
+      "io_operations": 0,
+      "lines": 756,
+      "panic_sites": 0,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    },
+    {
+      "allocation_sites": 0,
+      "file_path": "tests/smoke.rs",
+      "io_operations": 0,
+      "lines": 346,
+      "panic_sites": 0,
+      "threading_constructs": 1,
+      "unsafe_blocks": 0,
+      "unwrap_calls": 0
+    }
+  ],
+  "frameworks": [
+    "WebServer",
+    "Database",
+    "Networking"
+  ],
+  "language": "rust",
+  "program_path": "echidnabot",
+  "recommended_attacks": [
+    "cpu",
+    "memory",
+    "disk",
+    "concurrency"
+  ],
+  "schema_version": "2.6",
+  "statistics": {
+    "allocation_sites": 93,
+    "io_operations": 47,
+    "panic_sites": 0,
+    "threading_constructs": 27,
+    "total_lines": 30444,
+    "unsafe_blocks": 15,
+    "unwrap_calls": 7
   },
   "taint_matrix": {
     "rows": [
       {
-        "source_category": "ProofDrift",
-        "sink_axis": "cpu",
-        "severity_value": 5.0,
         "files": [
-          "proofs/lean/sorry_stub.lean",
-          "proofs/coq/admitted_stub.v"
+          "fuzz/fuzz_targets/fuzz_hmac.rs",
+          "src/api/rate_limit.rs",
+          "src/dispatcher/echidna_client.rs",
+          "src/scheduler/job_queue.rs",
+          "src/scheduler/limiter.rs"
         ],
         "frameworks": [
-          "Networking",
           "WebServer",
-          "Database"
+          "Database",
+          "Networking"
         ],
-        "relation": "ProofDrift->Cpu"
-      },
-      {
-        "source_category": "PanicPath",
+        "relation": "PanicPath->Memory",
+        "severity_value": 2.5,
         "sink_axis": "memory",
-        "severity_value": 2.5,
-        "files": [
-          "src/dispatcher/echidna_client.rs",
-          "src/scheduler/limiter.rs",
-          "src/scheduler/job_queue.rs",
-          "src/api/rate_limit.rs",
-          "fuzz/fuzz_targets/fuzz_hmac.rs"
-        ],
-        "frameworks": [
-          "Networking",
-          "WebServer",
-          "Database"
-        ],
-        "relation": "PanicPath->Memory"
+        "source_category": "PanicPath"
       },
       {
-        "source_category": "PanicPath",
-        "sink_axis": "disk",
-        "severity_value": 2.5,
         "files": [
-          "src/dispatcher/echidna_client.rs",
-          "src/scheduler/limiter.rs",
-          "src/scheduler/job_queue.rs",
+          "fuzz/fuzz_targets/fuzz_hmac.rs",
           "src/api/rate_limit.rs",
-          "fuzz/fuzz_targets/fuzz_hmac.rs"
+          "src/dispatcher/echidna_client.rs",
+          "src/scheduler/job_queue.rs",
+          "src/scheduler/limiter.rs"
         ],
         "frameworks": [
-          "Networking",
           "WebServer",
-          "Database"
+          "Database",
+          "Networking"
         ],
-        "relation": "PanicPath->Disk"
+        "relation": "PanicPath->Disk",
+        "severity_value": 2.5,
+        "sink_axis": "disk",
+        "source_category": "PanicPath"
+      },
+      {
+        "files": [
+          ".github/workflows/db-checks.yml",
+          ".github/workflows/db-checks.yml",
+          ".github/workflows/db-checks.yml",
+          ".github/workflows/db-checks.yml",
+          ".github/workflows/db-checks.yml",
+          ".github/workflows/db-checks.yml",
+          ".github/workflows/db-checks.yml",
+          ".github/workflows/dogfood-gate.yml",
+          ".github/workflows/static-analysis-gate.yml"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Database",
+          "Networking"
+        ],
+        "relation": "PathTraversal->Disk",
+        "severity_value": 2.5,
+        "sink_axis": "disk",
+        "source_category": "PathTraversal"
+      },
+      {
+        "files": [
+          "proofs/coq/admitted_stub.v",
+          "proofs/lean/sorry_stub.lean"
+        ],
+        "frameworks": [
+          "WebServer",
+          "Database",
+          "Networking"
+        ],
+        "relation": "ProofDrift->Cpu",
+        "severity_value": 5,
+        "sink_axis": "cpu",
+        "source_category": "ProofDrift"
       }
     ]
-  }
+  },
+  "weak_points": [
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/db-checks.yml (embedded Shell input at configuration field document[0]/jobs/migrations/steps/5/run)",
+      "file": ".github/workflows/db-checks.yml",
+      "location": ".github/workflows/db-checks.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/db-checks.yml (embedded Shell input at configuration field document[0]/jobs/migrations/steps/6/run)",
+      "file": ".github/workflows/db-checks.yml",
+      "location": ".github/workflows/db-checks.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/db-checks.yml (embedded Shell input at configuration field document[0]/jobs/migrations/steps/7/run)",
+      "file": ".github/workflows/db-checks.yml",
+      "location": ".github/workflows/db-checks.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/db-checks.yml (embedded Shell input at configuration field document[0]/jobs/migrations/steps/8/run)",
+      "file": ".github/workflows/db-checks.yml",
+      "location": ".github/workflows/db-checks.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/db-checks.yml (embedded Shell input at configuration field document[0]/jobs/migrations/steps/9/run)",
+      "file": ".github/workflows/db-checks.yml",
+      "location": ".github/workflows/db-checks.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/db-checks.yml (embedded Shell input at configuration field document[0]/jobs/migrations/steps/10/run)",
+      "file": ".github/workflows/db-checks.yml",
+      "location": ".github/workflows/db-checks.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/db-checks.yml (embedded Shell input at configuration field document[0]/jobs/migrations/steps/12/run)",
+      "file": ".github/workflows/db-checks.yml",
+      "location": ".github/workflows/db-checks.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/dogfood-gate.yml (embedded Shell input at configuration field document[0]/jobs/empty-lint/steps/1/run)",
+      "file": ".github/workflows/dogfood-gate.yml",
+      "location": ".github/workflows/dogfood-gate.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PathTraversal",
+      "description": "Hardcoded /tmp/ path without mktemp in .github/workflows/static-analysis-gate.yml (embedded Shell input at configuration field document[0]/jobs/deposit-findings/steps/3/run)",
+      "file": ".github/workflows/static-analysis-gate.yml",
+      "location": ".github/workflows/static-analysis-gate.yml",
+      "recommended_attack": [
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "description": "Container base image lacks a complete SHA256 digest; local stage aliases are accepted",
+      "file": "Containerfile",
+      "line": 5,
+      "location": "Containerfile:5",
+      "recommended_attack": [],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "SupplyChain",
+      "description": "Container base image lacks a complete SHA256 digest; local stage aliases are accepted",
+      "file": "Containerfile",
+      "line": 35,
+      "location": "Containerfile:35",
+      "recommended_attack": [],
+      "severity": "High",
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "description": "0 panic sites and 1 unwrap/expect calls in fuzz/fuzz_targets/fuzz_hmac.rs",
+      "file": "fuzz/fuzz_targets/fuzz_hmac.rs",
+      "location": "fuzz/fuzz_targets/fuzz_hmac.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "ProofDrift",
+      "description": "1 Admitted (banned — unfinished Coq proof accepted as axiom) in proofs/coq/admitted_stub.v",
+      "file": "proofs/coq/admitted_stub.v",
+      "location": "proofs/coq/admitted_stub.v",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "severity": "Critical",
+      "test_context": "test_only"
+    },
+    {
+      "category": "ProofDrift",
+      "description": "1 sorry (banned proof escape hatch — admits unproven proposition) in proofs/lean/sorry_stub.lean:7",
+      "file": "proofs/lean/sorry_stub.lean",
+      "line": 7,
+      "location": "proofs/lean/sorry_stub.lean",
+      "recommended_attack": [
+        "cpu"
+      ],
+      "severity": "Critical",
+      "test_context": "test_only"
+    },
+    {
+      "category": "PanicPath",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/api/rate_limit.rs",
+      "file": "src/api/rate_limit.rs",
+      "location": "src/api/rate_limit.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/dispatcher/echidna_client.rs",
+      "file": "src/dispatcher/echidna_client.rs",
+      "location": "src/dispatcher/echidna_client.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "description": "0 panic sites and 1 unwrap/expect calls in src/scheduler/job_queue.rs",
+      "file": "src/scheduler/job_queue.rs",
+      "location": "src/scheduler/job_queue.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "PanicPath",
+      "description": "0 panic sites and 2 unwrap/expect calls in src/scheduler/limiter.rs",
+      "file": "src/scheduler/limiter.rs",
+      "location": "src/scheduler/limiter.rs",
+      "recommended_attack": [
+        "memory",
+        "disk"
+      ],
+      "severity": "Medium",
+      "test_context": "production"
+    },
+    {
+      "category": "MutationGap",
+      "description": "Rust project has test infrastructure but no mutation-test configuration (cargo-mutants/.cargo-mutants.toml) — add `cargo mutants` to verify test suite kills mutations",
+      "file": "Cargo.toml",
+      "location": "Cargo.toml",
+      "recommended_attack": [],
+      "severity": "Low",
+      "test_context": "production"
+    }
+  ]
 }
