@@ -33,7 +33,7 @@ fi
 # One scan file per repo name: no empty, path-like, hidden or multi-line
 # names (regen-index.sh lists scans one per line).
 case "$REPO_NAME" in
-    ''|*/*|.*|*$'\n'*|*$'\r'*) echo "Error: invalid repo name"; exit 1 ;;
+    ''|*/*|.*|*$'\n'*|*$'\r'*) echo "Error: invalid repo name" >&2; exit 1 ;;
     *) ;;  # any other name is accepted
 esac
 
@@ -43,13 +43,15 @@ cd "$REPO_ROOT"
 
 # regen-index.sh reads scans/ from disk, so any other uncommitted scan
 # would land in index.json without being in the commit. Refuse that.
-if [ "$NO_COMMIT" = "false" ]; then
+if [[ "$NO_COMMIT" == "false" ]]; then
     OTHER_SCAN_CHANGES=$(git status --porcelain --untracked-files=all -- scans/ \
         | awk -v f="scans/${REPO_NAME}.json" 'substr($0, 4) != f')
     if [[ -n "$OTHER_SCAN_CHANGES" ]]; then
-        echo "Error: scans/ has other uncommitted changes:"
-        printf '%s\n' "$OTHER_SCAN_CHANGES"
-        echo "Commit or remove them first, or use --no-commit."
+        {
+            echo "Error: scans/ has other uncommitted changes:"
+            printf '%s\n' "$OTHER_SCAN_CHANGES"
+            echo "Commit or remove them first, or use --no-commit."
+        } >&2
         exit 1
     fi
 fi
