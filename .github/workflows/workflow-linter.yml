@@ -34,13 +34,15 @@ jobs:
           failed=0
           for file in .github/workflows/*.yml .github/workflows/*.yaml; do
             [ -f "$file" ] || continue
-            if ! head -1 "$file" | grep -q "^# SPDX-License-Identifier:"; then
+            # actions-lock may prepend its own comment. Require the licence
+            # in the leading comment block, before the workflow body.
+            if ! awk '/^# SPDX-License-Identifier:/ { found=1 } /^[[:space:]]*[^#[:space:]]/ { exit } END { exit !found }' "$file"; then
               echo "ERROR: $file missing SPDX header"
               failed=1
             fi
           done
           if [ $failed -eq 1 ]; then
-            echo "Add '# SPDX-License-Identifier: MPL-2.0' as first line"
+            echo "Add '# SPDX-License-Identifier: MPL-2.0' to the leading comment block"
             exit 1
           fi
           echo "All workflows have SPDX headers"
@@ -62,18 +64,32 @@ jobs:
           fi
           echo "All workflows have permissions declared"
 
+      # Bun is the estate's first-choice runtime (LANGUAGE-POLICY.adoc §1:
+      # Bun > Deno > pnpm > npm). It is the estate pin 1.4.2, downloaded and
+      # sha256-checked, so this gate runs no third-party action and no
+      # unpinned runtime.
+      - name: Install verified Bun 1.4.2
+        run: |
+          curl --proto '=https' --proto-redir '=https' --fail --silent --show-error --location \
+            https://github.com/oven-sh/bun/releases/download/bun-v1.4.2/bun-linux-x64.zip \
+            --output "$RUNNER_TEMP/bun.zip"
+          echo "36368faef7527875d5ffa52e53cd48021741f2a83eb6208a8dd64068d422a913  $RUNNER_TEMP/bun.zip" | sha256sum --check --strict
+          unzip -q "$RUNNER_TEMP/bun.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/bun-linux-x64" >> "$GITHUB_PATH"
+
       - name: Check SHA-Pinned Actions
         run: |
           echo "=== Checking Action Pinning ==="
-          # Find any uses: lines that don't have @SHA format
-          # Pattern: uses: owner/repo@<40-char-hex>
-          unpinned=$(grep -rnE "^[[:space:]]+uses:" .github/workflows/ | \
-            grep -v "@[a-f0-9]\{40\}" | \
-            grep -v "uses: \./\|uses: docker://\|uses: actions/github-script" || true)
+          # Delegated to scripts/check-action-pinning.js: a ref is pinned if it is an
+          # inline 40-hex SHA or actions.lock resolves it to one.
+          if ! bun scripts/check-action-pinning.js; then
+            unpinned="see above"
+          else
+            unpinned=""
+          fi
 
           if [ -n "$unpinned" ]; then
             echo "ERROR: Found unpinned actions:"
-            echo "$unpinned"
             echo ""
             echo "Replace version tags with SHA pins, e.g.:"
             echo "  uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.1"
