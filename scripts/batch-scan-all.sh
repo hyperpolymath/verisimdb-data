@@ -138,58 +138,23 @@ done
 echo "Copied ${INGESTED} scan files"
 echo
 
-# Phase 3: Rebuild index.json from all scans
-echo "--- Phase 3: Rebuilding index.json ---"
+# Phase 3: Count scans. index.json is owned by scripts/regen-index.sh and
+# is rebuilt after the scans are committed (see "Next steps" below).
+echo "--- Phase 3: Counting scans ---"
 
 TIMESTAMP="$(date -Iseconds)"
 
-# Build a fresh index from ALL scan files
 cd "${VERISIMDB_DATA}"
-
-# Start with base structure, preserve existing fields for repos that have them
-jq -n --arg time "$TIMESTAMP" '{
-    last_updated: $time,
-    total_scans: 0,
-    repos: {}
-}' > index.new.json
 
 total_wp=0
 total_repos=0
-
 for scan_file in scans/*.json; do
     [ -f "$scan_file" ] || continue
-    name=$(basename "$scan_file" .json)
-
     wp_count=$(jq '.weak_points | length' "$scan_file" 2>/dev/null || echo "0")
-    summary=$(jq -r '.summary // empty' "$scan_file" 2>/dev/null || echo "null")
     total_wp=$((total_wp + wp_count))
     total_repos=$((total_repos + 1))
-
-    # Get existing fields if repo was in old index
-    existing_fixes_applied=$(jq -r --arg r "$name" '.repos[$r].fixes_applied // 0' index.json 2>/dev/null || echo "0")
-    existing_fixes_pending=$(jq -r --arg r "$name" '.repos[$r].fixes_pending // 0' index.json 2>/dev/null || echo "0")
-
-    jq --arg repo "$name" \
-       --arg time "$TIMESTAMP" \
-       --argjson wp "$wp_count" \
-       --argjson fa "$existing_fixes_applied" \
-       --argjson fp "$existing_fixes_pending" \
-       '.repos[$repo] = {
-          last_scan: $time,
-          weak_points: $wp,
-          summary: null,
-          pattern_ids: [],
-          fixes_applied: $fa,
-          fixes_pending: $fp,
-          triangle_status: {"eliminate": 0, "substitute": 0, "control": 0}
-        } |
-        .total_scans += 1 |
-        .last_updated = $time' \
-       index.new.json > index.tmp && mv index.tmp index.new.json
 done
-
-mv index.new.json index.json
-echo "Index rebuilt: ${total_repos} repos, ${total_wp} total weak points"
+echo "Scans on disk: ${total_repos} repos, ${total_wp} total weak points"
 echo
 
 # Phase 4: Rebuild pattern registry from all scans
@@ -287,42 +252,6 @@ mv "${REGISTRY_FILE}.new" "${REGISTRY_FILE}"
 PATTERN_COUNT=$(jq '.patterns | length' "$REGISTRY_FILE")
 echo "Pattern registry rebuilt: ${PATTERN_COUNT} unique patterns"
 
-# Phase 5: Update index.json with pattern_ids per repo
-echo "--- Phase 5: Linking patterns to repos ---"
-
-for scan_file in scans/*.json; do
-    [ -f "$scan_file" ] || continue
-    name=$(basename "$scan_file" .json)
-
-    PATTERN_IDS=$(jq -r --arg repo "$name" \
-      '[.patterns | to_entries[] | select(.value.repos_affected_list | index($repo)) | .key]' \
-      "$REGISTRY_FILE")
-
-    # Count by triangle tier
-    ELIM=$(jq -r --arg repo "$name" \
-      '[.patterns | to_entries[] | select(.value.repos_affected_list | index($repo)) | select(.value.triangle_tier == "eliminate")] | length' \
-      "$REGISTRY_FILE")
-    SUBST=$(jq -r --arg repo "$name" \
-      '[.patterns | to_entries[] | select(.value.repos_affected_list | index($repo)) | select(.value.triangle_tier == "substitute")] | length' \
-      "$REGISTRY_FILE")
-    CTRL=$(jq -r --arg repo "$name" \
-      '[.patterns | to_entries[] | select(.value.repos_affected_list | index($repo)) | select(.value.triangle_tier == "control")] | length' \
-      "$REGISTRY_FILE")
-
-    jq --arg repo "$name" \
-       --argjson pids "$PATTERN_IDS" \
-       --argjson e "$ELIM" \
-       --argjson s "$SUBST" \
-       --argjson c "$CTRL" \
-       '.repos[$repo].pattern_ids = $pids |
-        .repos[$repo].triangle_status = {"eliminate": $e, "substitute": $s, "control": $c} |
-        .repos[$repo].fixes_pending = ($pids | length)' \
-       index.json > index.tmp && mv index.tmp index.json
-done
-
-echo "Pattern linkage complete"
-echo
-
 # Phase 6: Summary
 echo "=== Batch Scan Complete ==="
 echo
@@ -346,11 +275,10 @@ jq -r '
 ' "$REGISTRY_FILE"
 echo
 echo "Repos with most weak points:"
-jq -r '
-  [.repos | to_entries[] | {name: .key, wp: .value.weak_points}] |
-  sort_by(-.wp) | .[0:15] |
-  .[] | "  \(.wp)\t\(.name)"
-' index.json
+for scan_file in scans/*.json; do
+    [ -f "$scan_file" ] || continue
+    printf '%s\t%s\n' "$(jq '.weak_points | length' "$scan_file" 2>/dev/null || echo 0)" "$(basename "$scan_file" .json)"
+done | sort -rn | head -15 | sed 's/^/  /'
 echo
 
 # Cleanup
@@ -358,7 +286,9 @@ rm -rf "${SCAN_TMP}"
 
 echo "Next steps:"
 echo "  cd ${VERISIMDB_DATA}"
-echo "  git add -A && git commit -m 'scan: full fleet scan (${total_repos} repos)'"
+echo "  git add scans/ patterns/ && git commit -m 'scan: full fleet scan (${total_repos} repos)'"
+echo "  bash scripts/regen-index.sh && git add index.json"
+echo "  GIT_COMMITTER_DATE=\"\$(git log -1 --format=%cd --date=raw)\" git commit --amend --no-edit"
 echo "  git push && git push gitlab main"
 echo "  cd /var$REPOS_DIR/hypatia"
 echo "  mix run -e 'Hypatia.PatternAnalyzer.analyze_all_scans()'"
