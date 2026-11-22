@@ -41,15 +41,22 @@ esac
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
-# regen-index.sh reads scans/ from disk, so any other uncommitted scan
-# would land in index.json without being in the commit. Refuse that.
+# regen-index.sh lists the top-level scans/*.json names on disk, including
+# untracked and git-ignored ones. Refuse to commit unless, apart from this
+# repo's scan, those names match the scans in HEAD, so index.json never
+# lists a scan that is missing from the commit.
 if [[ "$NO_COMMIT" == "false" ]]; then
-    OTHER_SCAN_CHANGES=$(git status --porcelain --untracked-files=all -- scans/ \
-        | awk -v f="scans/${REPO_NAME}.json" 'substr($0, 4) != f')
-    if [[ -n "$OTHER_SCAN_CHANGES" ]]; then
+    SELF="${REPO_NAME}.json"
+    DISK_SCANS=$(find scans -maxdepth 1 -mindepth 1 -type f -name '*.json' -printf '%f\n' \
+        | { grep -vxF -- "$SELF" || true; } | LC_ALL=C sort)
+    HEAD_SCANS=$(git -c core.quotePath=false ls-tree --name-only HEAD scans/ \
+        | sed 's|^scans/||' | { grep -E '\.json$' || true; } \
+        | { grep -vxF -- "$SELF" || true; } | LC_ALL=C sort)
+    if [[ "$DISK_SCANS" != "$HEAD_SCANS" ]]; then
         {
-            echo "Error: scans/ has other uncommitted changes:"
-            printf '%s\n' "$OTHER_SCAN_CHANGES"
+            echo "Error: scans/ on disk does not match the last commit:"
+            diff <(printf '%s\n' "$HEAD_SCANS") <(printf '%s\n' "$DISK_SCANS") \
+                | sed -n 's/^> /  extra: scans\//p; s/^< /  missing: scans\//p'
             echo "Commit or remove them first, or use --no-commit."
         } >&2
         exit 1
