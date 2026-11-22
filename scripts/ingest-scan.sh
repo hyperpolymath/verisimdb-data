@@ -4,7 +4,8 @@
 # Manual scan ingestion helper for verisimdb-data
 # Usage: ./scripts/ingest-scan.sh <repo-name> <scan-result.json>
 #
-# Updates: scans/, index.json, and patterns/registry.json
+# Updates: scans/ and patterns/registry.json, then rebuilds index.json
+# with scripts/regen-index.sh after the commit.
 
 set -euo pipefail
 
@@ -29,9 +30,39 @@ if [[ ! -f "$SCAN_FILE" ]]; then
     exit 1
 fi
 
+# One scan file per repo name: no empty, path-like, hidden or multi-line
+# names (regen-index.sh lists scans one per line).
+case "$REPO_NAME" in
+    ''|*/*|.*|*$'\n'*|*$'\r'*) echo "Error: invalid repo name" >&2; exit 1 ;;
+    *) ;;  # any other name is accepted
+esac
+
 # Get repository root
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
+
+# regen-index.sh lists the top-level scans/*.json names on disk, including
+# untracked and git-ignored ones. Refuse to commit unless, apart from this
+# repo's scan, those names match the scans in the git index (what the
+# commit will hold, staged additions and deletions included), so
+# index.json never lists a scan that is missing from the commit.
+if [[ "$NO_COMMIT" == "false" ]]; then
+    SELF="${REPO_NAME}.json"
+    DISK_SCANS=$(find scans -maxdepth 1 -mindepth 1 -type f -name '*.json' -printf '%f\n' \
+        | { grep -vxF -- "$SELF" || true; } | LC_ALL=C sort)
+    STAGED_SCANS=$(git -c core.quotePath=false ls-files -- scans/ \
+        | sed 's|^scans/||' | { grep -E '^[^/]*\.json$' || true; } \
+        | { grep -vxF -- "$SELF" || true; } | LC_ALL=C sort)
+    if [[ "$DISK_SCANS" != "$STAGED_SCANS" ]]; then
+        {
+            echo "Error: scans/ on disk does not match what would be committed:"
+            diff <(printf '%s\n' "$STAGED_SCANS") <(printf '%s\n' "$DISK_SCANS") \
+                | sed -n 's/^> /  extra: scans\//p; s/^< /  missing: scans\//p'
+            echo "Commit or remove them first, or use --no-commit."
+        } >&2
+        exit 1
+    fi
+fi
 
 echo "Ingesting scan for $REPO_NAME..."
 
@@ -39,47 +70,12 @@ echo "Ingesting scan for $REPO_NAME..."
 cp "$SCAN_FILE" "scans/${REPO_NAME}.json"
 echo "  Copied scan to scans/${REPO_NAME}.json"
 
-# Update index.json with extended fields
 SCAN_DATA=$(cat "scans/${REPO_NAME}.json")
-TIMESTAMP="$(date -Iseconds)"
+TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-jq --arg repo "$REPO_NAME" \
-   --arg time "$TIMESTAMP" \
-   --arg scan_date "${TIMESTAMP:0:10}" \
-   --argjson scan_data "$SCAN_DATA" \
-   '
-    # Auto-generate summary from scan data (scan files do not carry a summary field)
-    ($scan_data.weak_points | length) as $wp_count |
-    ($scan_data.language // "unknown") as $lang |
-    (if $wp_count == 0 then
-       "0 weak points; clean scan; lang: \($lang); scanned: \($scan_date)"
-     else
-       # Severity breakdown
-       ([$scan_data.weak_points[].severity] | group_by(.) | map({(.[0]): length}) | add) as $sevs |
-       # Top 3 categories
-       ([$scan_data.weak_points[].category] | group_by(.) | map({key: .[0], count: length}) | sort_by(-.count) | .[0:3] |
-        map("\(.key) (\(.count))") | join(", ")) as $top_cats |
-       # Severity string (ordered: Critical, High, Medium, Low)
-       ([if $sevs.Critical then "\($sevs.Critical) Critical" else empty end,
-         if $sevs.High then "\($sevs.High) High" else empty end,
-         if $sevs.Medium then "\($sevs.Medium) Medium" else empty end,
-         if $sevs.Low then "\($sevs.Low) Low" else empty end] | join(", ")) as $sev_str |
-       "\($wp_count) weak points (\($sev_str)); top: \($top_cats); lang: \($lang); scanned: \($scan_date)"
-     end) as $summary |
-    .repos[$repo] = {
-      last_scan: $time,
-      weak_points: $wp_count,
-      summary: $summary,
-      pattern_ids: (.repos[$repo].pattern_ids // []),
-      fixes_applied: (.repos[$repo].fixes_applied // 0),
-      fixes_pending: (.repos[$repo].fixes_pending // 0),
-      triangle_status: (.repos[$repo].triangle_status // {"eliminate": 0, "substitute": 0, "control": 0})
-    } |
-    .total_scans += 1 |
-    .last_updated = $time' \
-   index.json > index.tmp && mv index.tmp index.json
-
-echo "  Updated index.json"
+# index.json is owned by scripts/regen-index.sh. Its last_updated is the
+# commit time of the latest scans/ commit, so it is rebuilt after the
+# commit below, not here.
 
 # Update pattern registry from scan weak_points
 REGISTRY_FILE="patterns/registry.json"
@@ -162,16 +158,6 @@ if [[ -f "$REGISTRY_FILE" && -f "$SUBSTITUTIONS_FILE" ]]; then
     .last_updated = $time
     ' "$REGISTRY_FILE" > "${REGISTRY_FILE}.tmp" && mv "${REGISTRY_FILE}.tmp" "$REGISTRY_FILE"
 
-    # Update index.json with pattern_ids for this repo
-    PATTERN_IDS=$(jq -r --arg repo "$REPO_NAME" \
-      '[.patterns | to_entries[] | select(.value.repos_affected_list | index($repo)) | .key]' \
-      "$REGISTRY_FILE")
-
-    jq --arg repo "$REPO_NAME" \
-       --argjson pids "$PATTERN_IDS" \
-       '.repos[$repo].pattern_ids = $pids' \
-       index.json > index.tmp && mv index.tmp index.json
-
     echo "  Updated pattern registry"
 fi
 
@@ -185,13 +171,21 @@ echo "  Found $WEAK_COUNT weak points in $REPO_NAME ($PATTERN_COUNT unique patte
 
 # Commit (unless --no-commit)
 if [ "$NO_COMMIT" = "false" ]; then
-    git add "scans/${REPO_NAME}.json" index.json patterns/ recipes/ outcomes/
-    git commit -m "scan: update ${REPO_NAME} results
-
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
+    git add "scans/${REPO_NAME}.json" patterns/ recipes/ outcomes/
+    git commit -m "scan: update ${REPO_NAME} results"
+    # Rebuild index.json from the commit that now holds the scan, then fold
+    # it into that commit. Keeping the committer date keeps last_updated
+    # equal to what regen-index.sh computes for the final commit.
+    bash scripts/regen-index.sh
+    git add index.json
+    GIT_COMMITTER_DATE="$(git log -1 --format=%cd --date=raw)" \
+        git commit --amend --no-edit --allow-empty
     echo "  Committed changes"
 else
     echo "  Skipped commit (--no-commit)"
+    echo "  After committing scans/, rebuild and fold in index.json:"
+    echo "    bash scripts/regen-index.sh && git add index.json"
+    echo '    GIT_COMMITTER_DATE="$(git log -1 --format=%cd --date=raw)" git commit --amend --no-edit --allow-empty'
 fi
 echo
 echo "Next steps:"
