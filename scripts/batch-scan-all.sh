@@ -149,7 +149,7 @@ cd "${VERISIMDB_DATA}"
 total_wp=0
 total_repos=0
 for scan_file in scans/*.json; do
-    [ -f "$scan_file" ] || continue
+    [[ -f "$scan_file" ]] || continue
     wp_count=$(jq '.weak_points | length' "$scan_file" 2>/dev/null || echo "0")
     total_wp=$((total_wp + wp_count))
     total_repos=$((total_repos + 1))
@@ -276,7 +276,7 @@ jq -r '
 echo
 echo "Repos with most weak points:"
 for scan_file in scans/*.json; do
-    [ -f "$scan_file" ] || continue
+    [[ -f "$scan_file" ]] || continue
     printf '%s\t%s\n' "$(jq '.weak_points | length' "$scan_file" 2>/dev/null || echo 0)" "$(basename "$scan_file" .json)"
 done | sort -rn | head -15 | sed 's/^/  /'
 echo

@@ -60,7 +60,7 @@ echo "=== Scan Complete ==="
 echo
 echo "Summary:"
 for scan_file in "$VERISIMDB_DATA"/scans/*.json; do
-    [ -f "$scan_file" ] || continue
+    [[ -f "$scan_file" ]] || continue
     echo "$(basename "$scan_file" .json): $(jq '.weak_points | length' "$scan_file") weak points"
 done
 echo
