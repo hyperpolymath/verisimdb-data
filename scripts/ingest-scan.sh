@@ -30,9 +30,29 @@ if [[ ! -f "$SCAN_FILE" ]]; then
     exit 1
 fi
 
+# One scan file per repo name: no empty, path-like, hidden or multi-line
+# names (regen-index.sh lists scans one per line).
+case "$REPO_NAME" in
+    ''|*/*|.*|*$'\n'*|*$'\r'*) echo "Error: invalid repo name"; exit 1 ;;
+    *) ;;  # any other name is accepted
+esac
+
 # Get repository root
 REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
+
+# regen-index.sh reads scans/ from disk, so any other uncommitted scan
+# would land in index.json without being in the commit. Refuse that.
+if [ "$NO_COMMIT" = "false" ]; then
+    OTHER_SCAN_CHANGES=$(git status --porcelain --untracked-files=all -- scans/ \
+        | awk -v f="scans/${REPO_NAME}.json" 'substr($0, 4) != f')
+    if [[ -n "$OTHER_SCAN_CHANGES" ]]; then
+        echo "Error: scans/ has other uncommitted changes:"
+        printf '%s\n' "$OTHER_SCAN_CHANGES"
+        echo "Commit or remove them first, or use --no-commit."
+        exit 1
+    fi
+fi
 
 echo "Ingesting scan for $REPO_NAME..."
 
@@ -153,8 +173,9 @@ if [ "$NO_COMMIT" = "false" ]; then
     echo "  Committed changes"
 else
     echo "  Skipped commit (--no-commit)"
-    echo "  After committing scans/, run: bash scripts/regen-index.sh"
-    echo "  and amend index.json into that commit."
+    echo "  After committing scans/, rebuild and fold in index.json:"
+    echo "    bash scripts/regen-index.sh && git add index.json"
+    echo '    GIT_COMMITTER_DATE="$(git log -1 --format=%cd --date=raw)" git commit --amend --no-edit --allow-empty'
 fi
 echo
 echo "Next steps:"
