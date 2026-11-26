@@ -37,19 +37,12 @@ pub const Result = enum(c_int) {
     null_pointer = 4,
 };
 
-/// Library handle (opaque to C callers; the state lives in `State`).
-/// Zig forbids fields on `opaque`, so the handle is an opaque pointer to a
-/// private, Zig-only state struct.
-pub const Handle = opaque {};
-
-const State = struct {
+/// Library handle. C callers treat it as an opaque pointer; the layout is
+/// private to Zig, so no pointer casts are needed on either side.
+pub const Handle = struct {
     allocator: std.mem.Allocator,
     initialized: bool,
 };
-
-fn stateOf(h: *Handle) *State {
-    return @ptrCast(@alignCast(h));
-}
 
 //==============================================================================
 // Library Lifecycle
@@ -60,7 +53,7 @@ fn stateOf(h: *Handle) *State {
 export fn verisimdb_data_init() ?*Handle {
     const allocator = std.heap.c_allocator;
 
-    const state = allocator.create(State) catch {
+    const state = allocator.create(Handle) catch {
         setError("Failed to allocate handle");
         return null;
     };
@@ -71,13 +64,13 @@ export fn verisimdb_data_init() ?*Handle {
     };
 
     clearError();
-    return @ptrCast(state);
+    return state;
 }
 
 /// Free the library handle
 export fn verisimdb_data_free(handle: ?*Handle) void {
     const h = handle orelse return;
-    const state = stateOf(h);
+    const state = h;
     const allocator = state.allocator;
 
     state.initialized = false;
@@ -97,7 +90,7 @@ export fn verisimdb_data_process(handle: ?*Handle, input: u32) Result {
         return .null_pointer;
     };
 
-    if (!stateOf(h).initialized) {
+    if (!h.initialized) {
         setError("Handle not initialized");
         return .@"error";
     }
@@ -121,13 +114,13 @@ export fn verisimdb_data_get_string(handle: ?*Handle) ?[*:0]const u8 {
         return null;
     };
 
-    if (!stateOf(h).initialized) {
+    if (!h.initialized) {
         setError("Handle not initialized");
         return null;
     }
 
     // Example: allocate and return a string
-    const result = stateOf(h).allocator.dupeZ(u8, "Example result") catch {
+    const result = h.allocator.dupeZ(u8, "Example result") catch {
         setError("Failed to allocate string");
         return null;
     };
@@ -165,7 +158,7 @@ export fn verisimdb_data_process_array(
         return .null_pointer;
     };
 
-    if (!stateOf(h).initialized) {
+    if (!h.initialized) {
         setError("Handle not initialized");
         return .@"error";
     }
@@ -231,7 +224,7 @@ export fn verisimdb_data_register_callback(
         return .null_pointer;
     };
 
-    if (!stateOf(h).initialized) {
+    if (!h.initialized) {
         setError("Handle not initialized");
         return .@"error";
     }
@@ -250,7 +243,7 @@ export fn verisimdb_data_register_callback(
 /// Check if handle is initialized
 export fn verisimdb_data_is_initialized(handle: ?*Handle) u32 {
     const h = handle orelse return 0;
-    return if (stateOf(h).initialized) 1 else 0;
+    return if (h.initialized) 1 else 0;
 }
 
 //==============================================================================
