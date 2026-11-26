@@ -1,6 +1,4 @@
-# This workflow is managed by gh actions-lock.
 # SPDX-License-Identifier: MPL-2.0
-# This workflow is managed by gh actions-lock.
 # This workflow is managed by gh actions-lock.
 
 name: Ingest Scan Results
@@ -29,42 +27,40 @@ concurrency:
 jobs:
   ingest:
     runs-on: ubuntu-latest
+    # This job commits the scan and pushes it, so it alone needs write.
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Store scan result
+        env:
+          REPO_NAME: ${{ github.event.client_payload.repo_name || github.event.inputs.repo_name }}
+          SCAN_DATA: ${{ github.event.client_payload.scan_data || github.event.inputs.scan_data }}
         run: |
-          REPO_NAME="${{ github.event.client_payload.repo_name || github.event.inputs.repo_name }}"
-          SCAN_DATA='${{ github.event.client_payload.scan_data || github.event.inputs.scan_data }}'
+          # Event values come in through env, never pasted into the script.
+          case "$REPO_NAME" in
+            ''|*/*|.*|*$'\n'*|*$'\r'*) echo "::error::invalid repo_name"; exit 1 ;;
+            *) ;;  # any other name is accepted
+          esac
+          printf '%s\n' "$SCAN_DATA" | jq . > "scans/${REPO_NAME}.json"
 
-          echo "$SCAN_DATA" > "scans/${REPO_NAME}.json"
-
-          # Update index.json (simple jq append)
-          jq --arg repo "$REPO_NAME" \
-             --arg time "$(date -Iseconds)" \
-             --argjson scan_data "$SCAN_DATA" \
-             '.repos[$repo] = {
-                last_scan: $time,
-                weak_points: ($scan_data.weak_points | length),
-                summary: $scan_data.summary
-              } |
-              .total_scans += 1 |
-              .last_updated = $time' \
-             index.json > index.tmp && mv index.tmp index.json
-
-      - name: Commit changes
+      - name: Commit scan, then rebuild index.json
+        env:
+          REPO_NAME: ${{ github.event.client_payload.repo_name || github.event.inputs.repo_name }}
         run: |
-          REPO_NAME="${{ github.event.client_payload.repo_name || github.event.inputs.repo_name }}"
-
           git config user.name "VeriSimDB Bot"
           git config user.email "bot@verisimdb.org"
-          git add scans/ index.json
-          git commit -m "$(cat <<'EOF'
-          scan: update ${REPO_NAME} results
-
-          Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-          EOF
-          )"
+          git add "scans/${REPO_NAME}.json"
+          git commit -m "scan: update ${REPO_NAME} results"
+          # index.json is owned by regen-index.sh: last_updated is the commit
+          # time of the latest scans/ commit. Fold the rebuilt index into the
+          # same commit and keep its committer date so the freshness check
+          # reproduces it exactly.
+          bash scripts/regen-index.sh
+          git add index.json
+          GIT_COMMITTER_DATE="$(git log -1 --format=%cd --date=raw)" \
+            git commit --amend --no-edit --allow-empty
           git push
