@@ -59,7 +59,10 @@ done
 echo "=== Scan Complete ==="
 echo
 echo "Summary:"
-jq -r '.repos | to_entries | map("\(.key): \(.value.weak_points) weak points") | .[]' "$VERISIMDB_DATA/index.json"
+for scan_file in "$VERISIMDB_DATA"/scans/*.json; do
+    [[ -f "$scan_file" ]] || continue
+    echo "$(basename "$scan_file" .json): $(jq '.weak_points | length' "$scan_file") weak points"
+done
 echo
 echo "Total scans: $(jq '.total_scans' "$VERISIMDB_DATA/index.json")"
 echo
