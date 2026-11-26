@@ -41,10 +41,10 @@ fi
 # Determine last_updated deterministically: ISO-8601 commit time of the
 # latest commit that touched scans/. Falls back to epoch if there is no
 # such commit yet (e.g. on a fresh clone before any scan landed).
-last_updated="$(git log -1 --format=%cI -- "$SCAN_DIR" 2>/dev/null || true)"
-if [[ -z "${last_updated}" ]]; then
-  last_updated="1970-01-01T00:00:00+00:00"
-fi
+last_updated="$(git log -1 --format=%ct -- "$SCAN_DIR" 2>/dev/null || true)"
+# Always UTC with a literal Z, so the output does not depend on the git
+# version or the committer's timezone (CI and local runs must agree).
+last_updated="$(date -u -d "@${last_updated:-0}" +%Y-%m-%dT%H:%M:%SZ)"
 
 # Collect top-level *.json files, strip extension, sort.
 mapfile -t repos < <(
