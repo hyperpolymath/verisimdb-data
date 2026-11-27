@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: MPL-2.0
+# Manifest for the proven umbrella (schema proven/manifest/v1). Sweep 1 only.
+schema = "proven/manifest/v1"
+
+# ---- Zig FFI (ffi/zig; needs the Zig 0.15 build from #177) ----
+[categories.unit.zig]
+command = "cd ffi/zig && zig build test"
+[categories.build.zig]
+command = "cd ffi/zig && zig build"
+[categories.smoke.zig]
+command = "cd ffi/zig && zig build check"
+[categories.p2p.zig.waiver]
+reason = "no p2p harness yet; sweep 1 tests arrive from proven-tests-and-benches"
+until = "2026-12-31"
+
+# ---- Node: package.json has no scripts; the repo is a JSON data store ----
+[categories.unit.node.waiver]
+reason = "scan and index JSON schema tests arrive from proven-tests-and-benches (sweep 1)"
+until = "2026-12-31"
+[categories.smoke.node.waiver]
+reason = "index smoke test arrives from proven-tests-and-benches (sweep 1)"
+until = "2026-12-31"
+[categories.p2p.node.waiver]
+reason = "ingest-to-index seam test arrives from proven-tests-and-benches (sweep 1)"
+until = "2026-12-31"
+[categories.build.node]
+na = "package.json defines no build script; the repo ships JSON and scripts, nothing to compile"
+
+# ---- Shell scripts (scripts/*.sh) ----
+[categories.unit.shell]
+na = "ingest and scan scripts are exercised through the ingest workflow; unit tests covered by the node waiver above"
+[categories.smoke.shell]
+na = "no service to smoke; scripts run in the ingest workflow"
+[categories.build.shell]
+na = "shell scripts have no build step"
+[categories.p2p.shell]
+na = "covered by the ingest-to-index seam test (node waiver)"
+
+# ---- Julia ----
+[languages.ignore.julia]
+reason = "scripts/generate-summaries.jl is a report helper; no julia runner in umbrella v0 (v0.2 ask)"
