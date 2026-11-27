@@ -1,94 +1,64 @@
-// {{PROJECT}} FFI Build Configuration
 // SPDX-License-Identifier: MPL-2.0
-
+// Zig 0.15 build for the verisimdb-data FFI library.
+//
+//   zig build         static + dynamic library
+//   zig build test    unit tests (src/main.zig, src/self_health.zig)
+//   zig build check   unit tests plus the C-ABI round-trip consumer
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    // Shared library (.so, .dylib, .dll)
-    const lib = b.addSharedLibrary(.{
-        .name = "{{project}}",
+    const lib_mod = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
+        .link_libc = true,
     });
 
-    // Set version
-    lib.version = .{ .major = 0, .minor = 1, .patch = 0 };
-
-    // Static library (.a)
-    const lib_static = b.addStaticLibrary(.{
-        .name = "{{project}}",
-        .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = optimize,
+    const static_lib = b.addLibrary(.{
+        .name = "verisimdb_data",
+        .linkage = .static,
+        .root_module = lib_mod,
     });
+    b.installArtifact(static_lib);
 
-    // Install artifacts
-    b.installArtifact(lib);
-    b.installArtifact(lib_static);
-
-    // Generate header file for C compatibility
-    const header = b.addInstallHeader(
-        b.path("include/{{project}}.h"),
-        "{{project}}.h",
-    );
-    b.getInstallStep().dependOn(&header.step);
-
-    // Unit tests
-    const lib_tests = b.addTest(.{
-        .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = optimize,
+    const shared_lib = b.addLibrary(.{
+        .name = "verisimdb_data",
+        .linkage = .dynamic,
+        .root_module = lib_mod,
     });
+    b.installArtifact(shared_lib);
 
-    const run_lib_tests = b.addRunArtifact(lib_tests);
+    // Unit tests.
+    const test_step = b.step("test", "Run unit tests");
+    for ([_][]const u8{ "src/main.zig", "src/self_health.zig" }) |path| {
+        const t = b.addTest(.{
+            .root_module = b.createModule(.{
+                .root_source_file = b.path(path),
+                .target = target,
+                .optimize = optimize,
+                .link_libc = true,
+            }),
+        });
+        test_step.dependOn(&b.addRunArtifact(t).step);
+    }
 
-    const test_step = b.step("test", "Run library tests");
-    test_step.dependOn(&run_lib_tests.step);
-
-    // Integration tests
-    const integration_tests = b.addTest(.{
-        .root_source_file = b.path("test/integration_test.zig"),
-        .target = target,
-        .optimize = optimize,
+    // Round-trip consumer: a separate executable that reaches the library only
+    // through its exported C ABI, so a symbol or layout break fails the build.
+    const consumer = b.addExecutable(.{
+        .name = "octad_consumer",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("test/octad_consumer.zig"),
+            .target = target,
+            .optimize = optimize,
+            .link_libc = true,
+        }),
     });
+    consumer.root_module.linkLibrary(static_lib);
 
-    integration_tests.linkLibrary(lib);
-
-    const run_integration_tests = b.addRunArtifact(integration_tests);
-
-    const integration_test_step = b.step("test-integration", "Run integration tests");
-    integration_test_step.dependOn(&run_integration_tests.step);
-
-    // Documentation
-    const docs = b.addTest(.{
-        .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = .Debug,
-    });
-
-    const docs_step = b.step("docs", "Generate documentation");
-    docs_step.dependOn(&b.addInstallDirectory(.{
-        .source_dir = docs.getEmittedDocs(),
-        .install_dir = .prefix,
-        .install_subdir = "docs",
-    }).step);
-
-    // Benchmark (if needed)
-    const bench = b.addExecutable(.{
-        .name = "{{project}}-bench",
-        .root_source_file = b.path("bench/bench.zig"),
-        .target = target,
-        .optimize = .ReleaseFast,
-    });
-
-    bench.linkLibrary(lib);
-
-    const run_bench = b.addRunArtifact(bench);
-
-    const bench_step = b.step("bench", "Run benchmarks");
-    bench_step.dependOn(&run_bench.step);
+    const check_step = b.step("check", "Unit tests plus the round-trip consumer");
+    check_step.dependOn(test_step);
+    check_step.dependOn(&b.addRunArtifact(consumer).step);
 }

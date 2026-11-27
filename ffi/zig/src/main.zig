@@ -37,12 +37,11 @@ pub const Result = enum(c_int) {
     null_pointer = 4,
 };
 
-/// Library handle (opaque to prevent direct access)
-pub const Handle = opaque {
-    // Internal state hidden from C
+/// Library handle. C callers treat it as an opaque pointer; the layout is
+/// private to Zig, so no pointer casts are needed on either side.
+pub const Handle = struct {
     allocator: std.mem.Allocator,
     initialized: bool,
-    // Add your fields here
 };
 
 //==============================================================================
@@ -54,30 +53,29 @@ pub const Handle = opaque {
 export fn verisimdb_data_init() ?*Handle {
     const allocator = std.heap.c_allocator;
 
-    const handle = allocator.create(Handle) catch {
+    const state = allocator.create(Handle) catch {
         setError("Failed to allocate handle");
         return null;
     };
 
-    // Initialize handle
-    handle.* = .{
+    state.* = .{
         .allocator = allocator,
         .initialized = true,
     };
 
     clearError();
-    return handle;
+    return state;
 }
 
 /// Free the library handle
 export fn verisimdb_data_free(handle: ?*Handle) void {
     const h = handle orelse return;
-    const allocator = h.allocator;
+    const state = h;
+    const allocator = state.allocator;
 
-    // Clean up resources
-    h.initialized = false;
+    state.initialized = false;
 
-    allocator.destroy(h);
+    allocator.destroy(state);
     clearError();
 }
 
@@ -209,7 +207,7 @@ export fn verisimdb_data_build_info() [*:0]const u8 {
 //==============================================================================
 
 /// Callback function type (C ABI)
-pub const Callback = *const fn (u64, u32) callconv(.C) u32;
+pub const Callback = *const fn (u64, u32) callconv(.c) u32;
 
 /// Register a callback
 export fn verisimdb_data_register_callback(
@@ -249,8 +247,202 @@ export fn verisimdb_data_is_initialized(handle: ?*Handle) u32 {
 }
 
 //==============================================================================
+// Wire format: OctadDimension and ProvenanceEntry
+//==============================================================================
+//
+// Fixed-size, byte-oriented encodings used to move these records across the
+// FFI boundary without sharing struct layout assumptions.
+//
+//   OctadDimension  (8 bytes):  the eight u8 fields in declaration order.
+//   ProvenanceEntry (56 bytes): hash as u64 little-endian (8), tool (32),
+//                               version (16).
+//
+// Encoders return the number of bytes written, or -1 on a null argument or a
+// buffer shorter than the wire length (nothing is written in that case).
+// Decoders return Result.invalid_param for a buffer shorter than the wire
+// length and Result.null_pointer for a null argument.
+
+pub const OctadDimension = extern struct {
+    data: u8,
+    metadata: u8,
+    provenance: u8,
+    lineage: u8,
+    constraints: u8,
+    access_control: u8,
+    temporal: u8,
+    simulation: u8,
+};
+
+pub const ProvenanceEntry = extern struct {
+    hash: u64,
+    tool: [32]u8,
+    version: [16]u8,
+};
+
+pub const OCTAD_WIRE_LEN: usize = 8;
+pub const PROVENANCE_WIRE_LEN: usize = 8 + 32 + 16;
+
+export fn verisimdb_data_octad_encode(
+    src: ?*const OctadDimension,
+    out: ?[*]u8,
+    cap: usize,
+) isize {
+    const s = src orelse {
+        setError("Null octad");
+        return -1;
+    };
+    const o = out orelse {
+        setError("Null output buffer");
+        return -1;
+    };
+    if (cap < OCTAD_WIRE_LEN) {
+        setError("Output buffer too small for octad");
+        return -1;
+    }
+    o[0] = s.data;
+    o[1] = s.metadata;
+    o[2] = s.provenance;
+    o[3] = s.lineage;
+    o[4] = s.constraints;
+    o[5] = s.access_control;
+    o[6] = s.temporal;
+    o[7] = s.simulation;
+    clearError();
+    return @intCast(OCTAD_WIRE_LEN);
+}
+
+export fn verisimdb_data_octad_decode(
+    in: ?[*]const u8,
+    len: usize,
+    out: ?*OctadDimension,
+) Result {
+    const i = in orelse {
+        setError("Null input buffer");
+        return .null_pointer;
+    };
+    const d = out orelse {
+        setError("Null octad");
+        return .null_pointer;
+    };
+    if (len < OCTAD_WIRE_LEN) {
+        setError("Input buffer too small for octad");
+        return .invalid_param;
+    }
+    d.* = .{
+        .data = i[0],
+        .metadata = i[1],
+        .provenance = i[2],
+        .lineage = i[3],
+        .constraints = i[4],
+        .access_control = i[5],
+        .temporal = i[6],
+        .simulation = i[7],
+    };
+    clearError();
+    return .ok;
+}
+
+export fn verisimdb_data_provenance_encode(
+    src: ?*const ProvenanceEntry,
+    out: ?[*]u8,
+    cap: usize,
+) isize {
+    const s = src orelse {
+        setError("Null provenance entry");
+        return -1;
+    };
+    const o = out orelse {
+        setError("Null output buffer");
+        return -1;
+    };
+    if (cap < PROVENANCE_WIRE_LEN) {
+        setError("Output buffer too small for provenance entry");
+        return -1;
+    }
+    std.mem.writeInt(u64, o[0..8], s.hash, .little);
+    @memcpy(o[8..40], &s.tool);
+    @memcpy(o[40..56], &s.version);
+    clearError();
+    return @intCast(PROVENANCE_WIRE_LEN);
+}
+
+export fn verisimdb_data_provenance_decode(
+    in: ?[*]const u8,
+    len: usize,
+    out: ?*ProvenanceEntry,
+) Result {
+    const i = in orelse {
+        setError("Null input buffer");
+        return .null_pointer;
+    };
+    const p = out orelse {
+        setError("Null provenance entry");
+        return .null_pointer;
+    };
+    if (len < PROVENANCE_WIRE_LEN) {
+        setError("Input buffer too small for provenance entry");
+        return .invalid_param;
+    }
+    p.hash = std.mem.readInt(u64, i[0..8], .little);
+    @memcpy(&p.tool, i[8..40]);
+    @memcpy(&p.version, i[40..56]);
+    clearError();
+    return .ok;
+}
+
+//==============================================================================
 // Tests
 //==============================================================================
+
+test "octad wire round-trip and rejection paths" {
+    const in = OctadDimension{
+        .data = 1,
+        .metadata = 2,
+        .provenance = 3,
+        .lineage = 4,
+        .constraints = 5,
+        .access_control = 6,
+        .temporal = 7,
+        .simulation = 8,
+    };
+    var buf: [OCTAD_WIRE_LEN]u8 = undefined;
+    try std.testing.expectEqual(@as(isize, 8), verisimdb_data_octad_encode(&in, &buf, buf.len));
+    // Wire order is the declaration order: pins the format, not just symmetry.
+    try std.testing.expectEqualSlices(u8, &.{ 1, 2, 3, 4, 5, 6, 7, 8 }, &buf);
+
+    var out: OctadDimension = undefined;
+    try std.testing.expectEqual(Result.ok, verisimdb_data_octad_decode(&buf, buf.len, &out));
+    try std.testing.expect(std.meta.eql(in, out));
+
+    var tiny: [3]u8 = undefined;
+    try std.testing.expectEqual(@as(isize, -1), verisimdb_data_octad_encode(&in, &tiny, tiny.len));
+    try std.testing.expectEqual(@as(isize, -1), verisimdb_data_octad_encode(null, &buf, buf.len));
+    try std.testing.expectEqual(Result.invalid_param, verisimdb_data_octad_decode(&buf, 7, &out));
+    try std.testing.expectEqual(Result.null_pointer, verisimdb_data_octad_decode(null, buf.len, &out));
+    try std.testing.expectEqual(Result.null_pointer, verisimdb_data_octad_decode(&buf, buf.len, null));
+}
+
+test "provenance wire round-trip and rejection paths" {
+    var in = std.mem.zeroes(ProvenanceEntry);
+    in.hash = 0x0102_0304_0506_0708;
+    @memcpy(in.tool[0..7], "verisim");
+    @memcpy(in.version[0..5], "0.1.0");
+
+    var buf: [PROVENANCE_WIRE_LEN]u8 = undefined;
+    try std.testing.expectEqual(@as(isize, 56), verisimdb_data_provenance_encode(&in, &buf, buf.len));
+    // Little-endian hash first: pins the byte order.
+    try std.testing.expectEqualSlices(u8, &.{ 8, 7, 6, 5, 4, 3, 2, 1 }, buf[0..8]);
+
+    var out: ProvenanceEntry = undefined;
+    try std.testing.expectEqual(Result.ok, verisimdb_data_provenance_decode(&buf, buf.len, &out));
+    try std.testing.expectEqual(in.hash, out.hash);
+    try std.testing.expectEqualSlices(u8, &in.tool, &out.tool);
+    try std.testing.expectEqualSlices(u8, &in.version, &out.version);
+
+    var tiny: [55]u8 = undefined;
+    try std.testing.expectEqual(@as(isize, -1), verisimdb_data_provenance_encode(&in, &tiny, tiny.len));
+    try std.testing.expectEqual(Result.invalid_param, verisimdb_data_provenance_decode(&buf, 55, &out));
+}
 
 test "lifecycle" {
     const handle = verisimdb_data_init() orelse return error.InitFailed;
